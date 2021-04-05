@@ -1,10 +1,11 @@
 import React from "react";
 import "./App.scss";
+import Swap from "./pages/Swap";
 
 const App = () => {
   return (
     <div className="App">
-      <span>Welcome Our app</span>
+      <Swap />
     </div>
   );
 };
