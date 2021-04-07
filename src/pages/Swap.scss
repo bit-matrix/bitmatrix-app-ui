@@ -1,5 +1,7 @@
+@import "../style/constant.scss";
+
 .swap-main-div {
-  background-image: url('../images/background.png');
+  background-image: url("../images/background.png");
   background-size: cover;
   min-height: 100vh;
   display: flex;
@@ -30,7 +32,7 @@ bitcoin-button {
 .bch-div {
   background: #fff;
   height: 8rem;
-  border: 2px solid orange;
+  border: 2px solid $btcColor;
   border-radius: 13px;
 }
 
@@ -76,7 +78,7 @@ bitcoin-button {
 
 .divider {
   width: 100%;
-  border-bottom: 2px solid orange;
+  border-bottom: 2px solid $btcColor;
   border-radius: 4px;
   margin: 0.15rem 0;
 }
@@ -100,9 +102,9 @@ bitcoin-button {
 }
 
 .input-bch {
-  color: orange;
+  color: $btcColor;
   &::placeholder {
-    color: orange;
+    color: $btcColor;
     opacity: 0.5;
   }
 }
@@ -113,9 +115,9 @@ bitcoin-button {
 }
 
 .usd {
-  font-size: 1rem;
+  font-size: 1.4rem;
   align-self: flex-start;
-  font-weight: 500;
+  font-weight: bold;
   color: gray;
 }
 
@@ -129,10 +131,10 @@ bitcoin-button {
 }
 
 .bch {
-  color: orange;
-  font-size: 1rem;
+  color: $btcColor;
+  font-size: 1.4rem;
   align-self: flex-end;
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .arrow-icon {
@@ -314,7 +316,7 @@ bitcoin-button {
     background: #fff;
     height: 8rem;
     width: 20rem;
-    border: 2px solid orange;
+    border: 3px solid $btcColor;
     border-radius: 13px;
   }
 
@@ -330,7 +332,7 @@ bitcoin-button {
     background: #fff;
     height: 8rem;
     width: 20rem;
-    border: 2px solid gray;
+    border: 3px solid gray;
     border-radius: 13px;
   }
 

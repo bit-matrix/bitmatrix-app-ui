@@ -1,8 +1,8 @@
-import React from 'react';
-import Navbar from '../components/Navbar';
-import { Button, Content } from 'rsuite';
-import pentacle from '../images/pentacle.png';
-import './Swap.scss';
+import React from "react";
+import Navbar from "../components/Navbar";
+import { Button, Content } from "rsuite";
+import pentacle from "../images/pentacle.png";
+import "./Swap.scss";
 
 const Swap = () => {
   return (
@@ -29,7 +29,7 @@ const Swap = () => {
                     max="79"
                     spellCheck="false"
                   ></input>
-                  <div className="bch">BCH</div>
+                  <div className="bch">BTC</div>
                 </div>
                 <div className="divider" />
                 <div className="usd-div">
