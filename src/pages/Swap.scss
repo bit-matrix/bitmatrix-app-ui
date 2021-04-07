@@ -32,7 +32,7 @@ bitcoin-button {
 .bch-div {
   background: #fff;
   height: 8rem;
-  border: 2px solid $btcColor;
+  border: 3px solid $btcColor;
   border-radius: 13px;
 }
 
@@ -72,7 +72,7 @@ bitcoin-button {
   background: #fff;
   height: 8rem;
   width: 19rem;
-  border: 2px solid gray;
+  border: 3px solid gray;
   border-radius: 13px;
 }
 
@@ -144,9 +144,15 @@ bitcoin-button {
   margin: 1rem 0;
 }
 
+.bitcoin-div {
+  display: flex;
+  align-items: center;
+}
+
 .bch-image {
-  width: 3rem;
+  width: 2rem;
   height: 100%;
+  margin-left: 0.1rem;
 }
 
 .bottom-main-div {

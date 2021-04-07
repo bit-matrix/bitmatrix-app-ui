@@ -1,7 +1,9 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from "react";
 import Navbar from "../components/Navbar";
 import { Button, Content } from "rsuite";
 import pentacle from "../images/pentacle.png";
+import btcIcon from "../images/btcicon.png";
 import "./Swap.scss";
 
 const Swap = () => {
@@ -29,8 +31,12 @@ const Swap = () => {
                     max="79"
                     spellCheck="false"
                   ></input>
-                  <div className="bch">BTC</div>
+                  <div className="bitcoin-div">
+                    <img className="bch-image" src={btcIcon} />
+                    <div className="bch">BTC</div>
+                  </div>
                 </div>
+
                 <div className="divider" />
                 <div className="usd-div">
                   <input
