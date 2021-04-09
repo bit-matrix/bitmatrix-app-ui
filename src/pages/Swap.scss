@@ -29,14 +29,14 @@ bitcoin-button {
   z-index: 1;
 }
 
-.bch-div {
+.btc-main-div {
   background: #fff;
   height: 8rem;
   border: 3px solid $btcColor;
   border-radius: 13px;
 }
 
-.bch-input {
+.btc-input {
   width: 12rem;
   display: flex;
   justify-content: space-between;
@@ -50,7 +50,7 @@ bitcoin-button {
   color: #fff;
 }
 
-.bch-context {
+.btc-context {
   font-size: 1.25rem;
   font-weight: bold;
   display: flex;
@@ -69,7 +69,7 @@ bitcoin-button {
   align-items: center;
 }
 
-.spice-div {
+.token-main-div {
   background: #fff;
   height: 8rem;
   width: 19rem;
@@ -102,7 +102,7 @@ bitcoin-button {
   }
 }
 
-.input-bch {
+.input-btc {
   color: $btcColor;
   &::placeholder {
     color: $btcColor;
@@ -131,7 +131,7 @@ bitcoin-button {
   text-align: left;
 }
 
-.bch {
+.btc {
   color: $btcColor;
   font-size: 1.4rem;
   align-self: flex-end;
@@ -150,7 +150,7 @@ bitcoin-button {
   align-items: center;
 }
 
-.bch-image {
+.btc-image {
   width: 2rem;
   height: 100%;
   padding-right: 0.25rem;
@@ -319,7 +319,7 @@ bitcoin-button {
     border-radius: 2.5rem;
   }
 
-  .bch-div {
+  .btc-main-div {
     background: #fff;
     height: 8rem;
     width: 20rem;
@@ -327,7 +327,7 @@ bitcoin-button {
     border-radius: 13px;
   }
 
-  .bch-input {
+  .btc-input {
     width: 13rem;
   }
 
@@ -335,7 +335,7 @@ bitcoin-button {
     width: 13rem;
   }
 
-  .spice-div {
+  .token-main-div {
     background: #fff;
     height: 8rem;
     width: 20rem;
