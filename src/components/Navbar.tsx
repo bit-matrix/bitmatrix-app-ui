@@ -12,13 +12,13 @@ const Navbar = () => {
         <Button className="navbar-item-button">Pool</Button>
       </li>
       <li className="navbar-item">
-        <Button className="navbar-item-button">Hedge</Button>
+        <Button className="navbar-item-button">Stats</Button>
       </li>
-      <li className="navbar-item">
-        <Button className="navbar-item-button">Redeem</Button>
+      <li className="navbar-item mobile-hidden">
+        <Button className="navbar-item-button">Wallet</Button>
       </li>
-      <li className="navbar-item">
-        <Button className="navbar-item-button">Vote</Button>
+      <li className="navbar-item mobile-hidden">
+        <Button className="navbar-item-button">Settings</Button>
       </li>
     </ul>
   );
