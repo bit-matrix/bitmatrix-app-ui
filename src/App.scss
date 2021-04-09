@@ -2,3 +2,9 @@
   text-align: center;
   min-height: 100vh;
 }
+
+@media only screen and (max-width: 798px) {
+  .mobile-hidden {
+    display: none;
+  }
+}
