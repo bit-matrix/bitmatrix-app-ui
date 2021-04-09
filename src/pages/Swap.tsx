@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { Button, Content } from 'rsuite';
+import { Button, Content, Toggle } from 'rsuite';
 import pentacle from '../images/pentacle.png';
 import btcIcon from '../images/btcicon.png';
 import './Swap.scss';
@@ -10,6 +10,7 @@ const Swap = () => {
   return (
     <div className="swap-main-div">
       <Navbar />
+
       <Content>
         <div className="content">
           <img className="pentacle-icon" src={pentacle} alt="" />

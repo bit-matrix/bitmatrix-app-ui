@@ -1,14 +1,15 @@
 @import '../style/constant.scss';
 
 .swap-main-div {
-  background-image: url('../images/background.png');
+  // background-image: url('../images/background.png');
+  background-color: #fff;
   background-size: cover;
   min-height: 100vh;
   display: flex;
   justify-content: center;
 }
 
-bitcoin-button {
+.bitcoin-button {
   border-radius: 1.5rem !important;
   display: flex !important;
   align-items: center;
