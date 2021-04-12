@@ -3,4 +3,4 @@
 :sparkles:  :star2:
 
 
-[Try live demo](demo.pentacle.app)
+[Try live demo](https://demo.pentacle.app)
