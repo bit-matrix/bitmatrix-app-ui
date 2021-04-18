@@ -1,14 +1,14 @@
-@import url("//fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+@import url('//fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
 
 body {
   margin: 0;
-  font-family: "Noto Sans JP", sans-serif !important;
+  font-family: 'Noto Sans JP', sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: "Noto Sans JP", sans-serif !important;
+  font-family: 'Noto Sans JP', sans-serif !important;
 }
 
 .root {
@@ -16,4 +16,8 @@ code {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+
+.pt-2 {
+  padding-top: 2rem;
 }

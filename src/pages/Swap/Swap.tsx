@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Content, Divider, Dropdown } from 'rsuite';
+import { Button, Content, Divider, Dropdown, Radio, RadioGroup } from 'rsuite';
 import lbtc from '../../images/liquid_btc.png';
-import usdt from '.../../images/tether_usd.png';
+import usdt from '../../images/tether_usd.png';
 import './Swap.scss';
 
 const Swap = () => {
@@ -9,7 +9,18 @@ const Swap = () => {
     <div className="swap-page-main">
       <Content>
         <div className="swap-page-content">
-          <div className="from-content">
+          <div className="from-content pt-2">
+            <RadioGroup className="swap-amount-rate" name="radioList" inline appearance="picker">
+              <Radio className="left-radio-item" value="A">
+                ALL
+              </Radio>
+              <Radio className="middle-radio-item" value="B">
+                HALF
+              </Radio>
+              <Radio className="right-radio-item" value="C">
+                MIN
+              </Radio>
+            </RadioGroup>
             <div className="from-amount-div">
               <div className="from-text">From</div>
               <input
@@ -38,8 +49,8 @@ const Swap = () => {
                 <Dropdown.Item eventKey="a">
                   {
                     <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={lbtc} />
-                      <span>L-BTC</span>
+                      <img className="swap-dropdown-item-img" src={usdt} />
+                      <span>USDT</span>
                     </div>
                   }
                 </Dropdown.Item>
@@ -75,7 +86,7 @@ const Swap = () => {
                 title={
                   <div className="swap-dropdown-item">
                     <img className="swap-dropdown-item-img" src={lbtc} />
-                    <span>L-BTC</span>
+                    <span>USDT</span>
                   </div>
                 }
                 activeKey="a"
@@ -91,7 +102,7 @@ const Swap = () => {
               </Dropdown>
             </div>
           </div>
-          <Button appearance="default" className="button" onClick={() => {}}>
+          <Button appearance="default" className="swap-button" onClick={() => {}}>
             Swap
           </Button>
         </div>
