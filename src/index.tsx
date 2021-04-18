@@ -4,11 +4,13 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'rsuite/dist/styles/rsuite-default.css';
+import { ThemeProvider } from './context/ThemeProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
+
   document.getElementById('root')
 );
 
