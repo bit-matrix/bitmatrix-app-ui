@@ -1,0 +1,85 @@
+@import '../../style/constant.scss';
+
+.swap-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $swapBackgroundColor;
+  text-align: center;
+}
+
+.swap-page-content {
+  position: relative;
+  margin: 0 auto;
+  display: flex;
+  border: 1px solid $liquidNeonColor;
+  border-radius: 0.5rem;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 25rem;
+  transform: translateY(50%);
+  padding: 1.5rem;
+}
+
+.from-content {
+  display: flex;
+  align-items: center;
+  border: 1px solid #666;
+  border-radius: 0.5rem;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.from-amount-div {
+  padding: 0.5rem;
+}
+
+.from-selection {
+  padding: 0.5rem;
+}
+
+.from-text {
+  text-align: left;
+}
+
+.button {
+  width: 100%;
+  height: 2.5rem;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  color: $swapBackgroundColor !important;
+  background: $liquidNeonColor !important;
+  border-width: 0 !important;
+  margin-top: 16px;
+}
+
+.from-input {
+  width: 6rem;
+  height: 2rem;
+  background: #000;
+  border-width: 0px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  outline: none;
+  color: $swapGrayColor;
+  &::placeholder {
+    color: $swapGrayColor !important;
+  }
+}
+
+.swap-arrow-icon {
+  margin: 1rem 0;
+}
+
+.swap-dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.swap-dropdown-item-img {
+  height: 1.75rem;
+  margin-right: 0.5rem;
+}
