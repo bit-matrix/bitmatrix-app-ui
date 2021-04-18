@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from 'react';
-import Navbar from '../components/Navbar';
-import { Button, Content } from 'rsuite';
-import pentacle from '../images/pentacle.png';
-import btcIcon from '../images/btcicon.png';
-import './Swap.scss';
+import React from "react";
+import { Button, Content } from "rsuite";
+import pentacle from "../images/pentacle.png";
+import btcIcon from "../images/btcicon.png";
+import "./LightSwap.scss";
+import Navbar from "../../components/Navbar";
 
-const Swap = () => {
+const LightSwap = () => {
   return (
     <div className="swap-main-div">
       <Navbar />
@@ -85,4 +85,4 @@ const Swap = () => {
   );
 };
 
-export default Swap;
+export default LightSwap;

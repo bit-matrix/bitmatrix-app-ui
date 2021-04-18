@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.scss";
-import Swap from "./pages/Swap";
+import Swap from "./pages/Swap/Swap";
 
 const App = () => {
   return (
