@@ -244,20 +244,15 @@
 
 .swap-footer-tab-one:after {
   content: '';
-  position: absolute;
-  right: 0;
-  border-top: 100px solid transparent;
-}
-
-.swap-footer-tab-two::before {
+  border-top: 38px solid transparent;
+  border-left: 17px solid #333;
+  right: -17px;
   content: '';
-  display: block;
+  width: 0px;
+  height: 0px;
+  top: 0px;
   position: absolute;
-  left: 0;
-  bottom: 0;
-  border: 19px solid #333;
-  border-top-color: transparent;
-  border-right-color: transparent;
+  z-index: 5;
 }
 
 .swap-footer-tab-two {
