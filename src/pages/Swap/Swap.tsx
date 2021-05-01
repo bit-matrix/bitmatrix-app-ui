@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Content, Dropdown, Radio, RadioGroup } from 'rsuite';
+import { Icon } from 'rsuite';
 import lbtc from '../../images/liquid_btc.png';
 import usdt from '../../images/usdt.png';
 import info from '../../images/info.png';
@@ -132,6 +133,23 @@ const Swap = () => {
           </div>
         </div>
       </Content>
+
+      <div className="swap-page-footer">
+        <div className="swap-page-footer-icons">
+          <a className="swap-page-footer-icon-item">
+            <Icon icon="medium" size="3x" />
+          </a>
+          <a href="https://twitter.com/bitmatrix_" className="swap-page-footer-icon-item">
+            <Icon icon="twitter" size="3x" />
+          </a>
+          <a className="swap-page-footer-icon-item">
+            <Icon icon="telegram" size="3x" />
+          </a>
+          <a href="https://github.com/swap-cash" className="swap-page-footer-icon-item">
+            <Icon icon="github" size="3x" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
