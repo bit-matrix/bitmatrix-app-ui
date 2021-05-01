@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import "../../style/constant.scss";
 
 .swap-page-main {
   display: flex;
@@ -8,6 +8,11 @@
   min-height: 100vh;
   background: $swapBackgroundColor;
   text-align: center;
+}
+
+.bitmatrix-icon {
+  width: 4rem;
+  margin-top: 2rem;
 }
 
 .swap-page-content {
@@ -132,7 +137,7 @@
 }
 
 .swap-page-layout {
-  transform: translateY(50%);
+  transform: translateY(40%);
 }
 
 .swap-page-tabs {
@@ -157,7 +162,7 @@
 }
 
 .swap-page-tab-left::after {
-  content: '';
+  content: "";
   position: absolute;
   display: block;
   left: 40%;
@@ -189,7 +194,7 @@
 }
 
 .swap-page-tab-right::before {
-  content: '';
+  content: "";
   position: absolute;
   display: block;
   right: 40%;
@@ -232,7 +237,7 @@
 }
 
 .swap-footer-tab-one:after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   // border-right: 30px solid black;
@@ -240,7 +245,7 @@
 }
 
 .swap-footer-tab-two::before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   left: 0;

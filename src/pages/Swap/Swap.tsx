@@ -1,14 +1,16 @@
-import React from 'react';
-import { Button, Content, Dropdown, Radio, RadioGroup } from 'rsuite';
-import lbtc from '../../images/liquid_btc.png';
-import usdt from '../../images/tether_usd.png';
-import info from '../../images/info.png';
-import './Swap.scss';
+import React from "react";
+import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
+import lbtc from "../../images/liquid_btc.png";
+import usdt from "../../images/tether_usd.png";
+import info from "../../images/info.png";
+import bitmatrix_icon from "../../images/bitmatrix_icon.png";
+import "./Swap.scss";
 
 const Swap = () => {
   return (
     <div className="swap-page-main">
       <Content>
+        <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
           <div className="swap-page-tabs">
             <div className="swap-page-tab-left">Swap</div>
