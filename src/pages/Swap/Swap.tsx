@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Content, Dropdown, Radio, RadioGroup } from 'rsuite';
+import { Icon } from 'rsuite';
 import lbtc from '../../images/liquid_btc.png';
 import usdt from '../../images/usdt.png';
 import info from '../../images/info.png';
@@ -7,15 +8,21 @@ import bitmatrix_icon from '../../images/bitmatrix_icon.png';
 import './Swap.scss';
 
 const Swap = () => {
+  const [selectedTab, setSelectedTab] = useState('swap');
+
   return (
     <div className="swap-page-main">
       <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
           <div className="swap-page-tabs">
-            <div className="swap-page-tab-left">Swap</div>
+            <div onClick={() => setSelectedTab('swap')} className={`swap-page-tab-left ${selectedTab === 'swap' ? 'selected' : ''}`}>
+              <span>Swap</span>
+            </div>
             <div className="swap-page-tab-middle"></div>
-            <div className="swap-page-tab-right">Pool</div>
+            <div onClick={() => setSelectedTab('pool')} className={`swap-page-tab-right ${selectedTab === 'pool' ? 'selected' : ''}`}>
+              <span>Pool</span>
+            </div>
           </div>
           <div className="swap-page-content">
             <div className="from-content pt-2">
@@ -126,6 +133,23 @@ const Swap = () => {
           </div>
         </div>
       </Content>
+
+      <div className="swap-page-footer">
+        <div className="swap-page-footer-icons">
+          <a className="swap-page-footer-icon-item">
+            <Icon icon="medium" size="3x" />
+          </a>
+          <a href="https://twitter.com/bitmatrix_" className="swap-page-footer-icon-item">
+            <Icon icon="twitter" size="3x" />
+          </a>
+          <a className="swap-page-footer-icon-item">
+            <Icon icon="telegram" size="3x" />
+          </a>
+          <a href="https://github.com/swap-cash" className="swap-page-footer-icon-item">
+            <Icon icon="github" size="3x" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 };
