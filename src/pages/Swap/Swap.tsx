@@ -58,7 +58,7 @@ const Swap = () => {
                   <Dropdown.Item eventKey="a">
                     {
                       <div className="swap-dropdown-item">
-                        <img className="swap-dropdown-item-img" src={usdt} />
+                        <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
                         <span>USDT</span>
                       </div>
                     }
@@ -76,7 +76,7 @@ const Swap = () => {
             </div>
             <div className="from-content">
               <div className="from-amount-div">
-                <div className="from-text">From</div>
+                <div className="from-text">To</div>
                 <input
                   className="from-input"
                   inputMode="decimal"
@@ -94,7 +94,7 @@ const Swap = () => {
                 <Dropdown
                   title={
                     <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={usdt} />
+                      <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
                       <span>USDT</span>
                     </div>
                   }
