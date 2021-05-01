@@ -94,7 +94,7 @@ const Swap = () => {
                 <Dropdown
                   title={
                     <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={lbtc} />
+                      <img className="swap-dropdown-item-img" src={usdt} />
                       <span>USDT</span>
                     </div>
                   }
