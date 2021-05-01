@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import "../../style/constant.scss";
 
 .swap-page-main {
   display: flex;
@@ -162,10 +162,10 @@
 }
 
 .swap-page-tab-left span:after {
-  border-top: 41px solid transparent;
+  border-top: 2.5rem solid transparent;
   border-left: 29px solid #121f18;
   right: 195px;
-  content: '';
+  content: "";
   width: 0px;
   height: 0px;
   top: 0px;
@@ -202,10 +202,10 @@
 }
 
 .swap-page-tab-right span:after {
-  border-top: 41px solid transparent;
+  border-top: 2.5rem solid transparent;
   border-right: 29px solid #121f18;
   left: 195px;
-  content: '';
+  content: "";
   width: 0px;
   height: 0px;
   top: 0px;
@@ -243,11 +243,11 @@
 }
 
 .swap-footer-tab-one:after {
-  content: '';
+  content: "";
   border-top: 38px solid transparent;
   border-left: 17px solid #333;
   right: -17px;
-  content: '';
+  content: "";
   width: 0px;
   height: 0px;
   top: 0px;
@@ -272,7 +272,7 @@
 }
 
 .swap-page-footer {
-  bottom: 2rem;
+  bottom: 0.5rem;
   position: absolute;
 }
 
@@ -285,4 +285,14 @@
 
 .swap-page-footer-icon-item {
   color: unset !important;
+}
+
+.swap-page-footer-icon {
+  font-size: 2rem !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .swap-page-footer {
+    bottom: 2rem;
+  }
 }
