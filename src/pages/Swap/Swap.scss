@@ -11,8 +11,8 @@
 }
 
 .bitmatrix-icon {
-  width: 4rem;
-  margin-top: 2rem;
+  width: 6rem;
+  margin-bottom: -13rem;
 }
 
 .swap-page-content {
@@ -159,6 +159,7 @@
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .swap-page-tab-left::after {
@@ -191,6 +192,7 @@
   justify-content: center;
   font-weight: 600;
   font-size: 0.875rem;
+  cursor: pointer;
 }
 
 .swap-page-tab-right::before {
