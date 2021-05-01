@@ -1,4 +1,4 @@
-@import "../../style/constant.scss";
+@import '../../style/constant.scss';
 
 .swap-page-main {
   display: flex;
@@ -10,9 +10,13 @@
   text-align: center;
 }
 
+.swap-page-main-content {
+  flex: unset !important;
+}
+
 .bitmatrix-icon {
   width: 6rem;
-  margin-bottom: -13rem;
+  margin-bottom: 3rem;
 }
 
 .swap-page-content {
@@ -136,13 +140,14 @@
   font-weight: 600 !important;
 }
 
-.swap-page-layout {
-  transform: translateY(40%);
-}
+// .swap-page-layout {
+//   transform: translateY(40%);
+// }
 
 .swap-page-tabs {
   height: 2.5rem;
   display: flex;
+  position: relative;
 }
 
 .swap-page-tab-left {
@@ -163,7 +168,7 @@
 }
 
 .swap-page-tab-left::after {
-  content: "";
+  content: '';
   position: absolute;
   display: block;
   left: 40%;
@@ -196,7 +201,7 @@
 }
 
 .swap-page-tab-right::before {
-  content: "";
+  content: '';
   position: absolute;
   display: block;
   right: 40%;
@@ -239,7 +244,7 @@
 }
 
 .swap-footer-tab-one:after {
-  content: "";
+  content: '';
   position: absolute;
   right: 0;
   // border-right: 30px solid black;
@@ -247,7 +252,7 @@
 }
 
 .swap-footer-tab-two::before {
-  content: "";
+  content: '';
   display: block;
   position: absolute;
   left: 0;

@@ -1,15 +1,15 @@
-import React from "react";
-import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
-import lbtc from "../../images/liquid_btc.png";
-import usdt from "../../images/usdt.png";
-import info from "../../images/info.png";
-import bitmatrix_icon from "../../images/bitmatrix_icon.png";
-import "./Swap.scss";
+import React from 'react';
+import { Button, Content, Dropdown, Radio, RadioGroup } from 'rsuite';
+import lbtc from '../../images/liquid_btc.png';
+import usdt from '../../images/usdt.png';
+import info from '../../images/info.png';
+import bitmatrix_icon from '../../images/bitmatrix_icon.png';
+import './Swap.scss';
 
 const Swap = () => {
   return (
     <div className="swap-page-main">
-      <Content>
+      <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
           <div className="swap-page-tabs">
@@ -58,7 +58,7 @@ const Swap = () => {
                   <Dropdown.Item eventKey="a">
                     {
                       <div className="swap-dropdown-item">
-                        <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
+                        <img className="swap-dropdown-item-img" src={usdt} style={{ height: '1.65rem' }} />
                         <span>USDT</span>
                       </div>
                     }
@@ -94,7 +94,7 @@ const Swap = () => {
                 <Dropdown
                   title={
                     <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
+                      <img className="swap-dropdown-item-img" src={usdt} style={{ height: '1.65rem' }} />
                       <span>USDT</span>
                     </div>
                   }
