@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
 import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
 import { Icon } from "rsuite";
@@ -145,7 +147,7 @@ const Swap = () => {
           <a className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="telegram" />
           </a>
-          <a href="https://github.com/swap-cash" className="swap-page-footer-icon-item">
+          <a href="https://https://github.com/bit-matrix" className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="github" />
           </a>
         </div>
