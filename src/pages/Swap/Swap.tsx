@@ -144,10 +144,10 @@ const Swap = () => {
           <a href="https://twitter.com/bitmatrix_" className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="twitter" />
           </a>
-          <a className="swap-page-footer-icon-item">
+          <a href="https://t.me/bitmatrix_community" className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="telegram" />
           </a>
-          <a href="https://https://github.com/bit-matrix" className="swap-page-footer-icon-item">
+          <a href="https://github.com/bit-matrix" className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="github" />
           </a>
         </div>
