@@ -1,6 +1,6 @@
-# pentacle-app-ui
+# bitmatrix-app-ui
 
 :sparkles:  :star2:
 
 
-[Try live demo](https://demo.pentacle.app)
+[Try live demo](https://bitmatrix.app)
