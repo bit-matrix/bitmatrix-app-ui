@@ -138,7 +138,7 @@ const Swap = () => {
 
       <div className="swap-page-footer">
         <div className="swap-page-footer-icons">
-          <a className="swap-page-footer-icon-item">
+          <a href="https://medium.com/bit-matrix" className="swap-page-footer-icon-item">
             <Icon className="swap-page-footer-icon" icon="medium" />
           </a>
           <a href="https://twitter.com/bitmatrix_" className="swap-page-footer-icon-item">
