@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
 import { Icon } from "rsuite";
 import lbtc from "../../images/liquid_btc.png";
@@ -8,9 +8,17 @@ import usdt from "../../images/usdt.png";
 import info from "../../images/info.png";
 import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
+import { IWallet } from "../../lib/wallet/IWallet";
+import { Wallet } from "../../lib/wallet";
+import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
 
 const Swap = () => {
   const [selectedTab, setSelectedTab] = useState("swap");
+  const [wallet, setWallet] = useState<IWallet>();
+
+  useEffect(() => {
+    setWallet(new Wallet(WALLET_NAME.MARINA));
+  }, []);
 
   return (
     <div className="swap-page-main">
@@ -120,8 +128,14 @@ const Swap = () => {
                 </Dropdown>
               </div>
             </div>
-            <Button appearance="default" className="swap-button" onClick={() => {}}>
-              Swap
+            <Button
+              appearance="default"
+              className="swap-button"
+              onClick={() => {
+                if (wallet?.exist()) wallet.enable();
+              }}
+            >
+              {wallet?.exist() ? "Connect Marina Wallet" : "Install Marina Wallet"}
             </Button>
           </div>
 
