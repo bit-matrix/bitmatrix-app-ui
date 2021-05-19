@@ -29,19 +29,14 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
         <Panel className="agreement-text" bordered>
           By connecting a wallet, you agree to Bitmatrix Terms of Service and acknowledge that you have read and understand the Bitmatrix protocol disclaimer.
         </Panel>
-        <Panel
-          className="wallet-list-item"
-          bordered
-          // onSelect={() => (wallet?.exist() ? wallet.enable() : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related"))}
+        <div
+          className="rs-panel rs-panel-default rs-panel-body wallet-list-item"
+          onClick={() => (wallet?.exist() ? wallet.enable() : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related"))}
         >
           MarinaWallet
-        </Panel>
-        <Panel className="wallet-list-item disabled" bordered>
-          Import Seed
-        </Panel>
-        <Panel className="wallet-list-item disabled" bordered>
-          Generate Seed
-        </Panel>
+        </div>
+        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">Import Seed</div>
+        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">Generate Seed</div>
       </Modal.Body>
     </Modal>
   );
