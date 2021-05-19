@@ -9,20 +9,16 @@ import info from "../../images/info.png";
 import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
 import WalletListModal from "../../components/WalletListModal/WalletListModal";
+import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
 
 const Swap = () => {
   const [selectedTab, setSelectedTab] = useState("swap");
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
-  // const [wallet, setWallet] = useState<IWallet>();
-
-  // useEffect(() => {
-  //   setWallet(new Wallet(WALLET_NAME.MARINA));
-  // }, []);
 
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
-      <WalletListModal show={showWalletList} close={() => setShowWalletList(false)} />
+      <WalletListModal show={showWalletList} walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)} close={() => setShowWalletList(false)} />
 
       <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
@@ -130,15 +126,6 @@ const Swap = () => {
                 </Dropdown>
               </div>
             </div>
-            {/* <Button
-              appearance="default"
-              className="swap-button"
-              onClick={() => {
-                wallet?.exist() ? wallet.enable() : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related");
-              }}
-            >
-              {wallet?.exist() ? "Connect Marina Wallet" : "Install Marina Wallet"}
-            </Button> */}
             <Button
               appearance="default"
               className="swap-button"
