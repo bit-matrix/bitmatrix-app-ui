@@ -132,7 +132,7 @@ const Swap = () => {
               appearance="default"
               className="swap-button"
               onClick={() => {
-                if (wallet?.exist()) wallet.enable();
+                wallet?.exist() ? wallet.enable() : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related");
               }}
             >
               {wallet?.exist() ? "Connect Marina Wallet" : "Install Marina Wallet"}
