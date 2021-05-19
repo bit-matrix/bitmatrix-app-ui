@@ -20,10 +20,10 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, close }) => {
         <Panel className="wallet-list-item" bordered>
           MarinaWallet
         </Panel>
-        <Panel className="wallet-list-item" bordered>
+        <Panel className="wallet-list-item disabled" bordered>
           Import Seed
         </Panel>
-        <Panel className="wallet-list-item" bordered>
+        <Panel className="wallet-list-item disabled" bordered>
           Generate Seed
         </Panel>
       </Modal.Body>

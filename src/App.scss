@@ -3,6 +3,11 @@
   height: 100% !important;
 }
 
+.disabled {
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+}
+
 @media only screen and (max-width: 798px) {
   .mobile-hidden {
     display: none;
