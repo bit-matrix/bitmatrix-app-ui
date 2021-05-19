@@ -4,7 +4,7 @@ import { Button, Content } from "rsuite";
 import pentacle from "../images/pentacle.png";
 import btcIcon from "../images/btcicon.png";
 import "./LightSwap.scss";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/Navbar/Navbar";
 
 const LightSwap = () => {
   return (
