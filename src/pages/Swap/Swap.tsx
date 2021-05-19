@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
 import { Icon } from "rsuite";
 import lbtc from "../../images/liquid_btc.png";
@@ -8,20 +8,22 @@ import usdt from "../../images/usdt.png";
 import info from "../../images/info.png";
 import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
-import { IWallet } from "../../lib/wallet/IWallet";
-import { Wallet } from "../../lib/wallet";
-import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
+import WalletListModal from "../../components/WalletListModal/WalletListModal";
 
 const Swap = () => {
   const [selectedTab, setSelectedTab] = useState("swap");
-  const [wallet, setWallet] = useState<IWallet>();
+  const [showWalletList, setShowWalletList] = useState<boolean>(false);
+  // const [wallet, setWallet] = useState<IWallet>();
 
-  useEffect(() => {
-    setWallet(new Wallet(WALLET_NAME.MARINA));
-  }, []);
+  // useEffect(() => {
+  //   setWallet(new Wallet(WALLET_NAME.MARINA));
+  // }, []);
 
   return (
     <div className="swap-page-main">
+      {/* Wallet list modal */}
+      <WalletListModal show={showWalletList} close={() => setShowWalletList(false)} />
+
       <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
@@ -128,7 +130,7 @@ const Swap = () => {
                 </Dropdown>
               </div>
             </div>
-            <Button
+            {/* <Button
               appearance="default"
               className="swap-button"
               onClick={() => {
@@ -136,6 +138,15 @@ const Swap = () => {
               }}
             >
               {wallet?.exist() ? "Connect Marina Wallet" : "Install Marina Wallet"}
+            </Button> */}
+            <Button
+              appearance="default"
+              className="swap-button"
+              onClick={() => {
+                setShowWalletList(true);
+              }}
+            >
+              Connect Wallet
             </Button>
           </div>
 
