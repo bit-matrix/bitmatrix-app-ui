@@ -31,7 +31,11 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
         </Panel>
         <div
           className="rs-panel rs-panel-default rs-panel-body wallet-list-item"
-          onClick={() => (wallet?.exist() ? wallet.enable() : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related"))}
+          onClick={() =>
+            wallet?.exist()
+              ? wallet.enable().then((value) => console.log("successLogin"))
+              : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related")
+          }
         >
           MarinaWallet
         </div>
