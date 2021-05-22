@@ -10,15 +10,27 @@ import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
 import WalletListModal from "../../components/WalletListModal/WalletListModal";
 import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
+import { UtxoInterface } from "ldk";
+import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 
 const Swap = () => {
   const [selectedTab, setSelectedTab] = useState("swap");
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
+  const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
+  const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
+
+  console.log("newAddress, utxos", newAddress, utxos);
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
-      <WalletListModal show={showWalletList} walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)} close={() => setShowWalletList(false)} />
+      <WalletListModal
+        show={showWalletList}
+        walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
+        close={() => setShowWalletList(false)}
+        setNewAddress={setNewAddress}
+        setUtxos={setUtxos}
+      />
 
       <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
