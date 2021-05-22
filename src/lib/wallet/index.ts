@@ -18,4 +18,8 @@ export class Wallet implements IWallet {
   public enable = () => this.wallet.enable();
 
   public disable = () => this.wallet.disable();
+
+  public getNextAddress = () => this.wallet.getNextAddress();
+
+  public getAddresses = () => this.wallet.getAddresses();
 }

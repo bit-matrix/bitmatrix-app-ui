@@ -1,3 +1,5 @@
+import { MarinaAddressInterface } from "./marina/IMarina";
+
 export interface IWallet {
   exist(): boolean;
 
@@ -6,4 +8,8 @@ export interface IWallet {
   enable(): Promise<void>;
 
   disable(): Promise<void>;
+
+  getNextAddress(): Promise<MarinaAddressInterface>;
+
+  getAddresses(): Promise<MarinaAddressInterface[]>;
 }
