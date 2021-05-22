@@ -1,5 +1,5 @@
 import { IWallet } from "../IWallet";
-import { MarinaProvider } from "./IMarina";
+import { MarinaAddressInterface, MarinaProvider } from "./IMarina";
 
 declare global {
   interface Window {
@@ -35,4 +35,16 @@ export default class Marina implements IWallet {
     // else throw "Install Marina first";
     return Promise.resolve();
   };
+
+  getNextAddress(): Promise<MarinaAddressInterface> {
+    if (this.exist() && marina) return marina.getNextAddress();
+    // else throw "Install Marina first";
+    throw new Error("Marina wallet disabled.");
+  }
+
+  getAddresses(): Promise<MarinaAddressInterface[]> {
+    if (this.exist() && marina) return marina.getAddresses();
+    // else throw "Install Marina first";
+    throw new Error("Marina wallet disabled.");
+  }
 }
