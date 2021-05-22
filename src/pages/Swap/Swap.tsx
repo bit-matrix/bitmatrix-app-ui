@@ -142,10 +142,14 @@ const Swap = () => {
               appearance="default"
               className="swap-button"
               onClick={() => {
-                setShowWalletList(true);
+                if (newAddress) {
+                  console.log("TODO");
+                } else {
+                  setShowWalletList(true);
+                }
               }}
             >
-              Connect Wallet
+              {newAddress ? "Swap" : "Connect Wallet"}
             </Button>
           </div>
 
