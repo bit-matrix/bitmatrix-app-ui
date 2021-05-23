@@ -5,15 +5,12 @@
   background-color: rgb(44, 47, 54);
   cursor: pointer;
   font-size: 1rem;
+  border: 1px solid $liquidNeonColor !important;
+  border-radius: 1.2rem !important;
 
-  &:hover {
-    border: 1px solid $liquidNeonColor !important;
+  .wallet-text-header {
+    color: $liquidNeonColor;
   }
-}
-
-.agreement-text {
-  background-color: rgb(44, 47, 54);
-  border-radius: 1px solid rgb(64, 68, 79);
 }
 
 .wallet-list-modal {

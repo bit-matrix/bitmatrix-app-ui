@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Modal, Panel } from "rsuite";
+import { Modal } from "rsuite";
 import { fetchUTXOS } from "../../lib/liquid-dev";
 import { Wallet } from "../../lib/wallet";
 import { IWallet } from "../../lib/wallet/IWallet";
@@ -28,12 +28,9 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
   return (
     <Modal className="wallet-list-modal" size="xs" backdrop={true} show={show} onHide={close}>
       <Modal.Header>
-        <Modal.Title>Connect to a wallet</Modal.Title>
+        <Modal.Title>Connect Wallet</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Panel className="agreement-text" bordered>
-          By connecting a wallet, you agree to Bitmatrix Terms of Service and acknowledge that you have read and understand the Bitmatrix protocol disclaimer.
-        </Panel>
         <div
           className="rs-panel rs-panel-default rs-panel-body wallet-list-item"
           onClick={() =>
@@ -59,10 +56,18 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
               : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related")
           }
         >
-          MarinaWallet
+          <span className="wallet-text-header">MarinaWallet</span>
+          {/* <span>
+            Connect to Marina wallet to access Bitmatrix
+            <br /> directly from your browser
+          </span> */}
         </div>
-        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">Import Seed</div>
-        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">Generate Seed</div>
+        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
+          <span className="wallet-text-header">Import Seed</span>
+        </div>
+        <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
+          <span className="wallet-text-header">Generate Seed</span>
+        </div>
       </Modal.Body>
     </Modal>
   );
