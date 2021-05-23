@@ -1,4 +1,3 @@
-import { UtxoInterface } from "ldk";
 import React, { useEffect, useState } from "react";
 import { Modal, Panel } from "rsuite";
 import { fetchUTXOS } from "../../lib/liquid-dev";
@@ -6,6 +5,7 @@ import { Wallet } from "../../lib/wallet";
 import { IWallet } from "../../lib/wallet/IWallet";
 import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
+import { UtxoInterface } from "ldk";
 import "./WalletListModal.scss";
 
 interface IWalletListModal {
