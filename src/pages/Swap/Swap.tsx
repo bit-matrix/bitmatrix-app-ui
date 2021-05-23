@@ -12,6 +12,7 @@ import WalletListModal from "../../components/WalletListModal/WalletListModal";
 import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
 import { UtxoInterface } from "ldk";
 import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
+import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
 
 const Swap = () => {
   const [selectedTab, setSelectedTab] = useState("swap");
@@ -163,7 +164,22 @@ const Swap = () => {
           </div>
         </div>
       </Content>
-
+      <div>
+        LBTC:
+        {utxos
+          .filter((ut) => ut.asset === ASSET_ID.LBTC)
+          .reduce((p, u) => {
+            return p + (u.value || 0);
+          }, 0)}
+      </div>
+      <div>
+        USDT:
+        {utxos
+          .filter((ut) => ut.asset === ASSET_ID.USDT)
+          .reduce((p, u) => {
+            return p + (u.value || 0);
+          }, 0)}
+      </div>
       <div className="swap-page-footer">
         <div className="swap-page-footer-icons">
           <a href="https://medium.com/bit-matrix" className="swap-page-footer-icon-item">
