@@ -145,7 +145,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={fromAmount === 0 ? undefined : fromAmount / 100000000}
+                      value={fromAmount / 100000000}
                       onChange={onChangeFromInput}
                     />
                   </div>
@@ -175,7 +175,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={toAmount === 0 ? undefined : toAmount / 100000000}
+                      value={toAmount / 100000000}
                       onChange={onChangeToInput}
                     />
                   </div>
