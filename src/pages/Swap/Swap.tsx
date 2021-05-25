@@ -1,10 +1,8 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { Button, Content, Dropdown } from "rsuite";
+import { Button, Content } from "rsuite";
 import { Icon } from "rsuite";
-import lbtc from "../../images/liquid_btc.png";
-import usdt from "../../images/usdt.png";
 import info from "../../images/info.png";
 import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
@@ -15,12 +13,19 @@ import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
 import SWAP_FROM_AMOUNT from "../../enum/SWAP_FROM_AMOUNT";
 import SwapFromTab from "../../components/SwapFromTab/SwapFromTab";
+import SWAP_ASSET from "../../enum/SWAP_ASSET";
+import SwapMainTab from "../../components/SwapMainTab/SwapMainTab";
+import SWAP_MAIN_TAB from "../../enum/SWAP_MAIN_TAB";
+import SwapAssetList from "../../components/SwapAssetList/SwapAssetList";
 
 const Swap = () => {
-  const [selectedMainTab, setSelectedMainTab] = useState("swap");
-
+  // <SwapMainTab />
+  const [selectedMainTab, setSelectedMainTab] = useState<SWAP_MAIN_TAB>(SWAP_MAIN_TAB.SWAP);
   // <SwapFromTab />
   const [selectedFromTab, setSelectedFromTab] = useState<SWAP_FROM_AMOUNT>(SWAP_FROM_AMOUNT.ALL);
+  // <SwapAssetList />
+  const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
+  const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
 
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
@@ -43,15 +48,7 @@ const Swap = () => {
       <Content className="swap-page-main-content">
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
-          <div className="swap-page-tabs">
-            <div onClick={() => setSelectedMainTab("swap")} className={`swap-page-tab-left ${selectedMainTab === "swap" ? "selected" : ""}`}>
-              <span>Swap</span>
-            </div>
-            <div className="swap-page-tab-middle"></div>
-            <div onClick={() => setSelectedMainTab("pool")} className={`swap-page-tab-right ${selectedMainTab === "pool" ? "selected" : ""}`}>
-              <span>Pool</span>
-            </div>
-          </div>
+          <SwapMainTab selectedMainTab={selectedMainTab} setSelectedMainTab={setSelectedMainTab} />
           <div className="swap-page-content">
             <div className="from-content pt-2">
               <SwapFromTab selectedFromTab={selectedFromTab} setSelectedFromTab={setSelectedFromTab} />
@@ -71,24 +68,7 @@ const Swap = () => {
                 />
               </div>
               <div className="from-selection">
-                <Dropdown
-                  title={
-                    <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={lbtc} />
-                      <span>L-BTC</span>
-                    </div>
-                  }
-                  activeKey="a"
-                >
-                  <Dropdown.Item eventKey="a">
-                    {
-                      <div className="swap-dropdown-item">
-                        <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
-                        <span>USDT</span>
-                      </div>
-                    }
-                  </Dropdown.Item>
-                </Dropdown>
+                <SwapAssetList selectedAsset={selectedAssetFrom} setSelectedAsset={setSelectedAssetFrom} />
               </div>
             </div>
             <div className="swap-arrow-icon">
@@ -116,24 +96,7 @@ const Swap = () => {
                 />
               </div>
               <div className="from-selection">
-                <Dropdown
-                  title={
-                    <div className="swap-dropdown-item">
-                      <img className="swap-dropdown-item-img" src={usdt} style={{ height: "1.65rem" }} />
-                      <span>USDT</span>
-                    </div>
-                  }
-                  activeKey="a"
-                >
-                  <Dropdown.Item eventKey="a">
-                    {
-                      <div className="swap-dropdown-item">
-                        <img className="swap-dropdown-item-img" src={lbtc} />
-                        <span>L-BTC</span>
-                      </div>
-                    }
-                  </Dropdown.Item>
-                </Dropdown>
+                <SwapAssetList selectedAsset={selectedAssetTo} setSelectedAsset={setSelectedAssetTo} />
               </div>
             </div>
             <Button
