@@ -87,8 +87,14 @@ const Swap = () => {
 
     if (newFromAmount >= 2500) {
       if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
-      else if (newFromAmount >= 5000 && selectedFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) newFromAmount *= 0.5;
-      else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
+      else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+        if (newFromAmount >= 5000) {
+          newFromAmount *= 0.5;
+        } else {
+          newFromAmount = 0;
+        }
+      }
+      // else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
     }
     setFromAmount(newFromAmount);
   };
@@ -170,14 +176,14 @@ const Swap = () => {
                   appearance="default"
                   className="swap-button"
                   onClick={() => {
-                    if (newAddress) {
+                    if (assetAmounts.length > 0) {
                       console.log("TODO");
                     } else {
                       setShowWalletList(true);
                     }
                   }}
                 >
-                  {newAddress ? "Swap" : "Connect Wallet"}
+                  {assetAmounts.length > 0 ? "Swap" : "Connect Wallet"}
                 </Button>
               </>
             ) : (
