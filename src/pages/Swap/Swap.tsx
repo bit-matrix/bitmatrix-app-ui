@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { Button, Content, Dropdown, Radio, RadioGroup } from "rsuite";
+import { Button, Content, Dropdown } from "rsuite";
 import { Icon } from "rsuite";
 import lbtc from "../../images/liquid_btc.png";
 import usdt from "../../images/usdt.png";
@@ -13,15 +13,22 @@ import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
 import { UtxoInterface } from "ldk";
 import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
+import SWAP_FROM_AMOUNT from "../../enum/SWAP_FROM_AMOUNT";
+import SwapFromTab from "../../components/SwapFromTab/SwapFromTab";
 
 const Swap = () => {
-  const [selectedTab, setSelectedTab] = useState("swap");
+  const [selectedMainTab, setSelectedMainTab] = useState("swap");
+
+  // <SwapFromTab />
+  const [selectedFromTab, setSelectedFromTab] = useState<SWAP_FROM_AMOUNT>(SWAP_FROM_AMOUNT.ALL);
+
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
   const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
 
   console.log("newAddress, utxos", newAddress, utxos);
+
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
@@ -37,27 +44,17 @@ const Swap = () => {
         <img className="bitmatrix-icon" src={bitmatrix_icon} alt="" />
         <div className="swap-page-layout">
           <div className="swap-page-tabs">
-            <div onClick={() => setSelectedTab("swap")} className={`swap-page-tab-left ${selectedTab === "swap" ? "selected" : ""}`}>
+            <div onClick={() => setSelectedMainTab("swap")} className={`swap-page-tab-left ${selectedMainTab === "swap" ? "selected" : ""}`}>
               <span>Swap</span>
             </div>
             <div className="swap-page-tab-middle"></div>
-            <div onClick={() => setSelectedTab("pool")} className={`swap-page-tab-right ${selectedTab === "pool" ? "selected" : ""}`}>
+            <div onClick={() => setSelectedMainTab("pool")} className={`swap-page-tab-right ${selectedMainTab === "pool" ? "selected" : ""}`}>
               <span>Pool</span>
             </div>
           </div>
           <div className="swap-page-content">
             <div className="from-content pt-2">
-              <RadioGroup className="swap-amount-rate" name="radioList" inline appearance="picker">
-                <Radio className="left-radio-item" value="A">
-                  ALL
-                </Radio>
-                <Radio className="middle-radio-item" value="B">
-                  HALF
-                </Radio>
-                <Radio className="right-radio-item" value="C">
-                  MIN
-                </Radio>
-              </RadioGroup>
+              <SwapFromTab selectedFromTab={selectedFromTab} setSelectedFromTab={setSelectedFromTab} />
               <div className="from-amount-div">
                 <div className="from-text">From</div>
                 <input
