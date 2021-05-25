@@ -18,7 +18,7 @@ interface IWalletListModal {
 
 const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, close, setNewAddress, setUtxos }) => {
   const [wallet, setWallet] = useState<IWallet>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (show) {
