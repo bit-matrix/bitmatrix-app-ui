@@ -80,7 +80,7 @@ const Swap = () => {
     if (!isNaN(inputNumber)) {
       newToAmount = inputNumber;
     }
-    setToAmount(newToAmount);
+    setToAmount(newToAmount * 100000000);
   };
 
   const setUtxosAll = (newUtxos: UtxoInterface[]) => {
@@ -145,7 +145,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={fromAmount / 100000000}
+                      value={fromAmount === 0 ? undefined : fromAmount / 100000000}
                       onChange={onChangeFromInput}
                     />
                   </div>
@@ -175,7 +175,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={toAmount}
+                      value={toAmount === 0 ? undefined : toAmount / 100000000}
                       onChange={onChangeToInput}
                     />
                   </div>
