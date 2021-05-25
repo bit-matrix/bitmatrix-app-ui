@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Content } from "rsuite";
 import { Icon } from "rsuite";
 import info from "../../images/info.png";
@@ -11,26 +11,87 @@ import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
 import { UtxoInterface } from "ldk";
 import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
-import SWAP_FROM_AMOUNT from "../../enum/SWAP_FROM_AMOUNT";
+import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
 import SwapFromTab from "../../components/SwapFromTab/SwapFromTab";
 import SWAP_ASSET from "../../enum/SWAP_ASSET";
 import SwapMainTab from "../../components/SwapMainTab/SwapMainTab";
 import SWAP_MAIN_TAB from "../../enum/SWAP_MAIN_TAB";
 import SwapAssetList from "../../components/SwapAssetList/SwapAssetList";
+import IAssetAmount from "../../model/AssetAmount";
 
 const Swap = () => {
   // <SwapMainTab />
   const [selectedMainTab, setSelectedMainTab] = useState<SWAP_MAIN_TAB>(SWAP_MAIN_TAB.SWAP);
   // <SwapFromTab />
-  const [selectedFromTab, setSelectedFromTab] = useState<SWAP_FROM_AMOUNT>(SWAP_FROM_AMOUNT.ALL);
+  const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
   // <SwapAssetList />
   const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
   const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
-
+  // <WalletListModal />
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
+
+  // Wallet Amounts
+  const [assetAmounts, setAssetAmounts] = useState<IAssetAmount[]>([]);
+
+  const [fromAmount, setFromAmount] = useState<number>(0);
+  const [toAmount, setToAmount] = useState<number>(0);
 
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
   const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
+
+  const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+    let newFromAmount: number = 0;
+    const inputNumber = Number(inputElement.target.value);
+    if (!isNaN(inputNumber)) {
+      newFromAmount = inputNumber;
+    }
+    setFromAmount(newFromAmount);
+  };
+
+  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+    let newToAmount: number = 0;
+    const inputNumber = Number(inputElement.target.value);
+    if (!isNaN(inputNumber)) {
+      newToAmount = inputNumber;
+    }
+    setToAmount(newToAmount);
+  };
+
+  const setUtxosAll = (newUtxos: UtxoInterface[]) => {
+    setUtxos(newUtxos);
+
+    const newAssetAmountList: IAssetAmount[] = [];
+    newAssetAmountList.push({
+      assetId: ASSET_ID.LBTC,
+      assetName: SWAP_ASSET.LBTC,
+      amount: newUtxos
+        .filter((ut) => ut.asset === ASSET_ID.LBTC)
+        .reduce((p, u) => {
+          return p + (u.value || 0);
+        }, 0),
+    });
+    newAssetAmountList.push({
+      assetId: ASSET_ID.USDT,
+      assetName: SWAP_ASSET.USDT,
+      amount: newUtxos
+        .filter((ut) => ut.asset === ASSET_ID.USDT)
+        .reduce((p, u) => {
+          return p + (u.value || 0);
+        }, 0),
+    });
+    setAssetAmounts(newAssetAmountList);
+
+    let newFromAmount: number = 0;
+    if (selectedAssetFrom === SWAP_ASSET.LBTC) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.LBTC)?.amount || 0;
+    else if (selectedAssetFrom === SWAP_ASSET.USDT) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
+
+    if (newFromAmount >= 2500) {
+      if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
+      else if (newFromAmount >= 5000 && selectedFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) newFromAmount *= 0.5;
+      else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
+    }
+    setFromAmount(newFromAmount);
+  };
 
   console.log("newAddress, utxos", newAddress, utxos);
 
@@ -42,7 +103,7 @@ const Swap = () => {
         walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
         close={() => setShowWalletList(false)}
         setNewAddress={setNewAddress}
-        setUtxos={setUtxos}
+        setUtxos={setUtxosAll}
       />
 
       <Content className="swap-page-main-content">
@@ -53,7 +114,7 @@ const Swap = () => {
             {selectedMainTab === SWAP_MAIN_TAB.SWAP ? (
               <>
                 <div className="from-content pt-2">
-                  <SwapFromTab selectedFromTab={selectedFromTab} setSelectedFromTab={setSelectedFromTab} />
+                  <SwapFromTab selectedFromAmountPercent={selectedFromAmountPercent} setselectedFromAmountPercent={setSelectedFromAmountPercent} />
                   <div className="from-amount-div">
                     <div className="from-text">From</div>
                     <input
@@ -67,6 +128,8 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
+                      value={fromAmount}
+                      onChange={onChangeFromInput}
                     />
                   </div>
                   <div className="from-selection">
@@ -95,6 +158,8 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
+                      value={toAmount}
+                      onChange={onChangeToInput}
                     />
                   </div>
                   <div className="from-selection">
@@ -116,7 +181,7 @@ const Swap = () => {
                 </Button>
               </>
             ) : (
-              <div>Pool desc</div>
+              <div>Pool is not live yet.</div>
             )}
           </div>
 

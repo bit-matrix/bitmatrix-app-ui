@@ -1,25 +1,25 @@
 import { Radio, RadioGroup } from "rsuite";
-import SWAP_FROM_AMOUNT from "../../enum/SWAP_FROM_AMOUNT";
+import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
 
 interface ISwapFromTab {
-  selectedFromTab: SWAP_FROM_AMOUNT;
-  setSelectedFromTab: (swapFromAount: SWAP_FROM_AMOUNT) => void;
+  selectedFromAmountPercent: FROM_AMOUNT_PERCENT;
+  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT) => void;
 }
 
-const SwapFromTab: React.FC<ISwapFromTab> = ({ selectedFromTab, setSelectedFromTab }) => {
+const SwapFromTab: React.FC<ISwapFromTab> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
   const onChangeSelectedFromTab = (value: any, checked: boolean, event: React.SyntheticEvent<HTMLInputElement, Event>) => {
-    setSelectedFromTab(value as SWAP_FROM_AMOUNT);
+    setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
   };
 
   return (
-    <RadioGroup className="swap-amount-rate" name="radioList" inline appearance="picker" defaultValue={selectedFromTab}>
-      <Radio className="left-radio-item " onChange={onChangeSelectedFromTab} value={SWAP_FROM_AMOUNT.ALL}>
+    <RadioGroup className="swap-amount-rate" name="radioList" inline appearance="picker" defaultValue={selectedFromAmountPercent}>
+      <Radio className="left-radio-item " onChange={onChangeSelectedFromTab} value={FROM_AMOUNT_PERCENT.ALL}>
         ALL
       </Radio>
-      <Radio className="middle-radio-item" onChange={onChangeSelectedFromTab} value={SWAP_FROM_AMOUNT.HALF}>
+      <Radio className="middle-radio-item" onChange={onChangeSelectedFromTab} value={FROM_AMOUNT_PERCENT.HALF}>
         HALF
       </Radio>
-      <Radio className="right-radio-item" onChange={onChangeSelectedFromTab} value={SWAP_FROM_AMOUNT.MIN}>
+      <Radio className="right-radio-item" onChange={onChangeSelectedFromTab} value={FROM_AMOUNT_PERCENT.MIN}>
         MIN
       </Radio>
     </RadioGroup>
