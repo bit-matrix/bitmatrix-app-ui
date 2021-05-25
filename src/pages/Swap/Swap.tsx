@@ -145,7 +145,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={fromAmount / 100000000}
+                      value={fromAmount === 0 ? "0.0" : (fromAmount / 100000000).toFixed(8)}
                       onChange={onChangeFromInput}
                     />
                   </div>
@@ -175,7 +175,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={toAmount / 100000000}
+                      value={toAmount === 0 ? "0.0" : (toAmount / 100000000).toFixed(8)}
                       onChange={onChangeToInput}
                     />
                   </div>
@@ -212,22 +212,17 @@ const Swap = () => {
           </div>
         </div>
       </Content>
-      <div>
-        LBTC:
-        {utxos
-          .filter((ut) => ut.asset === ASSET_ID.LBTC)
-          .reduce((p, u) => {
-            return p + (u.value || 0);
-          }, 0)}
-      </div>
-      <div>
-        USDT:
-        {utxos
-          .filter((ut) => ut.asset === ASSET_ID.USDT)
-          .reduce((p, u) => {
-            return p + (u.value || 0);
-          }, 0)}
-      </div>
+
+      {/* <div>
+        {assetAmounts.map((assetAmount) => (
+          <>
+            <span>
+              {assetAmount.assetName}: {assetAmount.amount}
+            </span>
+            <br />
+          </>
+        ))}
+      </div> */}
       <div className="swap-page-footer">
         <div className="swap-page-footer-icons">
           <a href="https://medium.com/bit-matrix" className="swap-page-footer-icon-item">
