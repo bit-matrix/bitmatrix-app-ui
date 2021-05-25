@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Content } from "rsuite";
 import { Icon } from "rsuite";
 import info from "../../images/info.png";
@@ -8,10 +8,10 @@ import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import "./Swap.scss";
 import WalletListModal from "../../components/WalletListModal/WalletListModal";
 import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
-import { toNumber, UtxoInterface } from "ldk";
+import { UtxoInterface } from "ldk";
 import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
 import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
-import SWAP_FROM_AMOUNT from "../../enum/SWAP_FROM_AMOUNT";
+import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
 import SwapFromTab from "../../components/SwapFromTab/SwapFromTab";
 import SWAP_ASSET from "../../enum/SWAP_ASSET";
 import SwapMainTab from "../../components/SwapMainTab/SwapMainTab";
@@ -23,7 +23,7 @@ const Swap = () => {
   // <SwapMainTab />
   const [selectedMainTab, setSelectedMainTab] = useState<SWAP_MAIN_TAB>(SWAP_MAIN_TAB.SWAP);
   // <SwapFromTab />
-  const [selectedFromTab, setSelectedFromTab] = useState<SWAP_FROM_AMOUNT>(SWAP_FROM_AMOUNT.ALL);
+  const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
   // <SwapAssetList />
   const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
   const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
@@ -86,9 +86,9 @@ const Swap = () => {
     else if (selectedAssetFrom === SWAP_ASSET.USDT) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
 
     if (newFromAmount >= 2500) {
-      if (selectedFromTab === SWAP_FROM_AMOUNT.MIN) newFromAmount = 2500;
-      else if (newFromAmount >= 5000 && selectedFromTab === SWAP_FROM_AMOUNT.HALF) newFromAmount *= 0.5;
-      else if (selectedFromTab === SWAP_FROM_AMOUNT.ALL) newFromAmount *= 1;
+      if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
+      else if (newFromAmount >= 5000 && selectedFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) newFromAmount *= 0.5;
+      else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
     }
     setFromAmount(newFromAmount);
   };
@@ -114,7 +114,7 @@ const Swap = () => {
             {selectedMainTab === SWAP_MAIN_TAB.SWAP ? (
               <>
                 <div className="from-content pt-2">
-                  <SwapFromTab selectedFromTab={selectedFromTab} setSelectedFromTab={setSelectedFromTab} />
+                  <SwapFromTab selectedFromAmountPercent={selectedFromAmountPercent} setselectedFromAmountPercent={setSelectedFromAmountPercent} />
                   <div className="from-amount-div">
                     <div className="from-text">From</div>
                     <input

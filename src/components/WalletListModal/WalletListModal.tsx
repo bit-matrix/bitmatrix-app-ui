@@ -38,20 +38,20 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
               ? wallet.enable().then(() => {
                   console.log("successLogin");
 
-                  wallet.getNextAddress().then((newAddress: MarinaAddressInterface) => {
-                    setNewAddress(newAddress);
+                  //wallet.getNextAddress().then((newAddress: MarinaAddressInterface) => {
+                  //  setNewAddress(newAddress);
 
-                    wallet.getAddresses().then((addresses) => {
-                      console.log("addresses", addresses);
+                  wallet.getAddresses().then((addresses) => {
+                    console.log("addresses", addresses);
 
-                      fetchUTXOS(addresses).then((utxos) => {
-                        console.log("UTXOS", utxos);
+                    fetchUTXOS(addresses).then((utxos) => {
+                      console.log("UTXOS", utxos);
 
-                        setUtxos(utxos);
-                        close();
-                      });
+                      setUtxos(utxos);
+                      close();
                     });
                   });
+                  //});
                 })
               : window.open("https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related")
           }
