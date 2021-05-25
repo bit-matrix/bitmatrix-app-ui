@@ -92,7 +92,7 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
           <img className="wallet-list-item-icon" src={generateSeed} alt="Generate Seed" />
           <div>
             <div className="wallet-text-header">Generate Seed</div>
-            <div className="wallet-list-item-description">Generate new 12-word mnemonic phrases and get strated with Bitmatri</div>
+            <div className="wallet-list-item-description">Generate new 12-word mnemonic phrases and get strated with Bitmatrix</div>
           </div>
         </div>
       </Modal.Body>
