@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Content } from "rsuite";
 import { Icon } from "rsuite";
 import info from "../../images/info.png";
@@ -39,13 +39,39 @@ const Swap = () => {
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
   const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
 
+  const assetAmountToFromAmount = useCallback(
+    (newAssetAmountList: IAssetAmount[], newFromAmountPercent: FROM_AMOUNT_PERCENT) => {
+      let newFromAmount: number = 0;
+      if (selectedAssetFrom === SWAP_ASSET.LBTC) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.LBTC)?.amount || 0;
+      else if (selectedAssetFrom === SWAP_ASSET.USDT) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
+
+      if (newFromAmount >= 2500) {
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
+        else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+          if (newFromAmount >= 5000) {
+            newFromAmount *= 0.5;
+          } else {
+            newFromAmount = 0;
+          }
+        }
+        // else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
+      }
+      setFromAmount(newFromAmount);
+    },
+    [selectedAssetFrom]
+  );
+
+  useEffect(() => {
+    assetAmountToFromAmount(assetAmounts, selectedFromAmountPercent);
+  }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
+
   const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     let newFromAmount: number = 0;
     const inputNumber = Number(inputElement.target.value);
     if (!isNaN(inputNumber)) {
       newFromAmount = inputNumber;
     }
-    setFromAmount(newFromAmount);
+    setFromAmount(newFromAmount * 100000000);
   };
 
   const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,22 +107,7 @@ const Swap = () => {
     });
     setAssetAmounts(newAssetAmountList);
 
-    let newFromAmount: number = 0;
-    if (selectedAssetFrom === SWAP_ASSET.LBTC) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.LBTC)?.amount || 0;
-    else if (selectedAssetFrom === SWAP_ASSET.USDT) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
-
-    if (newFromAmount >= 2500) {
-      if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
-      else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-        if (newFromAmount >= 5000) {
-          newFromAmount *= 0.5;
-        } else {
-          newFromAmount = 0;
-        }
-      }
-      // else if (selectedFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
-    }
-    setFromAmount(newFromAmount);
+    assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
   };
 
   console.log("newAddress, utxos", newAddress, utxos);
@@ -134,7 +145,7 @@ const Swap = () => {
                       min="1"
                       max="79"
                       spellCheck="false"
-                      value={fromAmount}
+                      value={fromAmount / 100000000}
                       onChange={onChangeFromInput}
                     />
                   </div>
