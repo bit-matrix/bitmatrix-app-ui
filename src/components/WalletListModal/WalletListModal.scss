@@ -1,26 +1,42 @@
 @import "../../style/constant.scss";
 
 .wallet-list-item {
-  margin-top: 1rem;
-  background-color: rgb(44, 47, 54);
-  cursor: pointer;
-  font-size: 1rem;
-  border: 1px solid $liquidNeonColor !important;
-  border-radius: 1.2rem !important;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem !important;
+    margin-top: 1rem;
+    background-color: rgb(44, 47, 54);
+    cursor: pointer;
+    font-size: 1rem;
+    border: 1px solid $liquidNeonColor !important;
+    border-radius: 1.2rem !important;
 
-  .wallet-text-header {
-    color: $liquidNeonColor;
-  }
+    .wallet-text-header {
+        color: $liquidNeonColor;
+        margin-bottom: 0.25rem;
+    }
 }
 
 .wallet-list-modal {
-  padding-top: 1rem !important;
-  .rs-modal-content {
-    background-color: #191b1f !important;
-  }
+    padding-top: 1rem !important;
+    .rs-modal-content {
+        background-color: #191b1f !important;
+    }
 }
 
 .wallet-list-loading {
-  z-index: 999;
-  position: fixed;
+    z-index: 999;
+    position: fixed;
+    background: rgba(25, 27, 31, 0.5);
+}
+
+.wallet-list-item-icon {
+    width: 3rem;
+    margin-right: 1rem;
+}
+
+.wallet-list-item-description {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #cbc9cd;
 }
