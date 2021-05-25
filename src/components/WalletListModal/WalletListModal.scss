@@ -19,3 +19,8 @@
     background-color: #191b1f !important;
   }
 }
+
+.wallet-list-loading {
+  z-index: 999;
+  position: fixed;
+}
