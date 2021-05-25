@@ -67,7 +67,7 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
         >
           <img className="wallet-list-item-icon" src={marinaWallet} alt="Generate Seed" />
           <div>
-            <div className="wallet-text-header">{wallet?.exist() ? "MarinaWallet" : "Install MarinaWallet"} </div>
+            <div className="wallet-text-header">{wallet?.exist() ? "Marina Wallet" : "Install Marina Wallet"} </div>
             <div className="wallet-list-item-description"> Connect to Marina wallet to access Bitmatrix directly from your browser.</div>
           </div>
         </div>
