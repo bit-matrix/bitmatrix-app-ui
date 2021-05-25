@@ -33,10 +33,15 @@ const Swap = () => {
   // Wallet Amounts
   const [assetAmounts, setAssetAmounts] = useState<IAssetAmount[]>([]);
 
-  const [fromAmount, setFromAmount] = useState<number>(0);
-  const [toAmount, setToAmount] = useState<number>(0);
+  // const [fromAmount, setFromAmount] = useState<number>(0);
+  // const [toAmount, setToAmount] = useState<number>(0);
 
+  const [inputFromAmount, setInputFromAmount] = useState<string>("0.0");
+  const [inputToAmount, setInputToAmount] = useState<string>("0.0");
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
 
   const assetAmountToFromAmount = useCallback(
@@ -56,7 +61,11 @@ const Swap = () => {
         }
         // else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
       }
-      setFromAmount(newFromAmount);
+      if (newFromAmount === 0) {
+        setInputFromAmount("0.0");
+      } else {
+        setInputFromAmount((newFromAmount / 100000000).toFixed(8).toString());
+      }
     },
     [selectedAssetFrom]
   );
@@ -66,21 +75,23 @@ const Swap = () => {
   }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
 
   const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    let newFromAmount: number = 0;
-    const inputNumber = Number(inputElement.target.value);
-    if (!isNaN(inputNumber)) {
-      newFromAmount = inputNumber;
-    }
-    setFromAmount(newFromAmount * 100000000);
+    setInputFromAmount(inputElement.target.value);
+    // let newFromAmount: number = 0;
+    // const inputNumber = Number(inputElement.target.value);
+    // if (!isNaN(inputNumber)) {
+    //   newFromAmount = inputNumber;
+    // }
+    // setFromAmount(newFromAmount * 100000000);
   };
 
   const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    let newToAmount: number = 0;
-    const inputNumber = Number(inputElement.target.value);
-    if (!isNaN(inputNumber)) {
-      newToAmount = inputNumber;
-    }
-    setToAmount(newToAmount * 100000000);
+    setInputToAmount(inputElement.target.value);
+    // let newToAmount: number = 0;
+    // const inputNumber = Number(inputElement.target.value);
+    // if (!isNaN(inputNumber)) {
+    //   newToAmount = inputNumber;
+    // }
+    // setToAmount(newToAmount * 100000000);
   };
 
   const setUtxosAll = (newUtxos: UtxoInterface[]) => {
@@ -109,8 +120,6 @@ const Swap = () => {
 
     assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
   };
-
-  console.log("newAddress, utxos", newAddress, utxos);
 
   return (
     <div className="swap-page-main">
@@ -141,11 +150,8 @@ const Swap = () => {
                       autoCorrect="off"
                       type="text"
                       pattern="^[0-9]*[.,]?[0-9]*$"
-                      placeholder="0.0"
-                      min="1"
-                      max="79"
                       spellCheck="false"
-                      value={fromAmount === 0 ? "0.0" : (fromAmount / 100000000).toFixed(8)}
+                      value={inputFromAmount}
                       onChange={onChangeFromInput}
                     />
                   </div>
@@ -171,11 +177,8 @@ const Swap = () => {
                       autoCorrect="off"
                       type="text"
                       pattern="^[0-9]*[.,]?[0-9]*$"
-                      placeholder="0.0"
-                      min="1"
-                      max="79"
                       spellCheck="false"
-                      value={toAmount === 0 ? "0.0" : (toAmount / 100000000).toFixed(8)}
+                      value={inputToAmount}
                       onChange={onChangeToInput}
                     />
                   </div>
