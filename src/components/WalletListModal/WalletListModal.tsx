@@ -54,10 +54,10 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
   return (
     <Modal className="wallet-list-modal" size="xs" backdrop={true} show={show} onHide={close}>
       {loading ? <Loader className="wallet-list-loading" inverse center /> : null}
-      <Modal.Header>
-        <Modal.Title>Connect Wallet</Modal.Title>
+      <Modal.Header className="connect-wallet-header">
+        <Modal.Title className="connect-wallet-title">Connect Wallet</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ marginTop: "1rem" }}>
         <div
           className="rs-panel rs-panel-default rs-panel-body wallet-list-item"
           onClick={() => {
