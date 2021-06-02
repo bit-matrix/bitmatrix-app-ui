@@ -353,3 +353,9 @@
         margin: 3rem auto;
     }
 }
+
+@media only screen and (max-height: 650px) {
+    .swap-page-main {
+        justify-content: unset;
+    }
+}

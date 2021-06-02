@@ -70,3 +70,12 @@
         width: 25rem !important;
     }
 }
+
+@media only screen and (max-height: 650px) {
+    .wallet-list-modal {
+        .rs-modal-dialog {
+            transform: translateY(-50%);
+            top: 40vh;
+        }
+    }
+}
