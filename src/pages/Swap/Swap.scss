@@ -3,7 +3,7 @@
 .swap-page-main {
     display: flex;
     align-items: center;
-    // justify-content: center;
+    justify-content: center;
     flex-direction: column;
     min-height: 100vh;
     background: $swapBackgroundColor;
@@ -351,9 +351,5 @@
 
     .swap-footer-tab {
         margin: 3rem auto;
-    }
-
-    .swap-page-main {
-        justify-content: center;
     }
 }
