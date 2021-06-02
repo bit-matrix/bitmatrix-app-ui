@@ -3,7 +3,7 @@
 .swap-page-main {
     display: flex;
     align-items: center;
-    justify-content: center;
+    // justify-content: center;
     flex-direction: column;
     min-height: 100vh;
     background: $swapBackgroundColor;
@@ -303,7 +303,7 @@
 
 .swap-page-footer {
     bottom: 0.5rem;
-    position: fixed;
+    position: absolute;
 }
 
 .swap-page-footer-icons {
@@ -351,5 +351,9 @@
 
     .swap-footer-tab {
         margin: 3rem auto;
+    }
+
+    .swap-page-main {
+        justify-content: center;
     }
 }
