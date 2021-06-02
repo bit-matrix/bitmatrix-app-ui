@@ -83,6 +83,7 @@
 .from-input {
     width: 9.25rem;
     height: 2rem;
+    line-height: 2rem;
     background: #00000000;
     border-width: 0px;
     font-size: 1.5rem;
@@ -246,7 +247,7 @@
     margin-top: 2.5rem;
     width: 70%;
     border: 1px solid;
-    margin: 3rem auto;
+    margin: 1rem auto 3rem;
     display: flex;
     align-items: center;
     border-radius: 0.8125rem;
@@ -302,7 +303,7 @@
 
 .swap-page-footer {
     bottom: 0.5rem;
-    position: absolute;
+    position: fixed;
 }
 
 .swap-page-footer-icons {
@@ -346,5 +347,9 @@
 
     .bitmatrix-icon {
         margin-bottom: 3rem;
+    }
+
+    .swap-footer-tab {
+        margin: 3rem auto;
     }
 }
