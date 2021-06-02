@@ -49,6 +49,7 @@
 }
 
 .from-selection {
+    align-self: center;
     padding: 0.5rem;
 
     .rs-btn-subtle:hover {
@@ -82,8 +83,7 @@
 
 .from-input {
     width: 9.25rem;
-    height: 2rem;
-    line-height: 2rem;
+    // height: 2rem;
     background: #00000000;
     border-width: 0px;
     font-size: 1.5rem;
@@ -92,6 +92,8 @@
     color: $swapGrayColor;
     &::placeholder {
         color: $swapGrayColor !important;
+        line-height: 2rem;
+        margin-bottom: 2rem;
     }
 }
 
@@ -107,6 +109,11 @@
 .swap-dropdown-item-img {
     height: 1.75rem;
     margin-right: 0.5rem;
+}
+
+.swap-dropdown-item-img-lbtc {
+    height: 1.75rem;
+    margin-right: 0.75rem;
 }
 
 .swap-amount-rate {
