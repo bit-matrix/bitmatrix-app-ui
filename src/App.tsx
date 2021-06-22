@@ -1,13 +1,9 @@
 import React from "react";
+import { AppRouter } from "./components/AppRouter/AppRouter";
 import "./App.scss";
-import { Swap } from "./pages/Swap/Swap";
 
 const App = () => {
-  return (
-    <div className="App">
-      <Swap />
-    </div>
-  );
+  return <AppRouter />;
 };
 
 export default App;
