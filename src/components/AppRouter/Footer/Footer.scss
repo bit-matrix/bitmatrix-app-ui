@@ -1,0 +1,25 @@
+.swap-page-footer {
+  bottom: 0.5rem;
+  position: absolute;
+}
+
+.swap-page-footer-icons {
+  position: relative;
+  display: flex;
+  width: 16rem;
+  justify-content: space-evenly;
+}
+
+.swap-page-footer-icon-item {
+  color: unset !important;
+}
+
+.swap-page-footer-icon {
+  font-size: 2rem !important;
+}
+
+@media only screen and (min-width: 768px) {
+  .swap-page-footer {
+    bottom: 2rem;
+  }
+}
