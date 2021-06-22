@@ -1,11 +1,11 @@
 import SWAP_MAIN_TAB from "../../enum/SWAP_MAIN_TAB";
 
-interface ISwapMainTab {
+type Props = {
   selectedMainTab: SWAP_MAIN_TAB;
   setSelectedMainTab: (swapMainTab: SWAP_MAIN_TAB) => void;
-}
+};
 
-const SwapMainTab: React.FC<ISwapMainTab> = ({ selectedMainTab, setSelectedMainTab }) => {
+export const SwapMainTab: React.FC<Props> = ({ selectedMainTab, setSelectedMainTab }) => {
   return (
     <div className="swap-page-tabs">
       <div
@@ -28,5 +28,3 @@ const SwapMainTab: React.FC<ISwapMainTab> = ({ selectedMainTab, setSelectedMainT
     </div>
   );
 };
-
-export default SwapMainTab;

@@ -1,8 +1,8 @@
-import React from 'react';
-import './Navbar.scss';
-import { Button } from 'rsuite';
+import React from "react";
+import "./Navbar.scss";
+import { Button } from "rsuite";
 
-const Navbar = () => {
+export const Navbar = () => {
   return (
     <ul className="navbar-main">
       <li className="navbar-item">
@@ -23,5 +23,3 @@ const Navbar = () => {
     </ul>
   );
 };
-
-export default Navbar;

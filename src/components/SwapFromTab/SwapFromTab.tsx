@@ -1,12 +1,12 @@
 import { Radio, RadioGroup } from "rsuite";
 import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
 
-interface ISwapFromTab {
+type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT;
   setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT) => void;
-}
+};
 
-const SwapFromTab: React.FC<ISwapFromTab> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
+export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
   const onChangeSelectedFromTab = (value: any, checked: boolean, event: React.SyntheticEvent<HTMLInputElement, Event>) => {
     setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
   };
@@ -25,5 +25,3 @@ const SwapFromTab: React.FC<ISwapFromTab> = ({ selectedFromAmountPercent, setsel
     </RadioGroup>
   );
 };
-
-export default SwapFromTab;

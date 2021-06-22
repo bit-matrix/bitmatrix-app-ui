@@ -12,15 +12,15 @@ import marinaWallet from "../../images/marina.png";
 import ledgerNano from "../../images/ledger.png";
 import generateSeed from "../../images/key_2.png";
 
-interface IWalletListModal {
+type Props = {
   show: boolean;
   walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
   setNewAddress: (newAddress: MarinaAddressInterface) => void;
   setUtxos: (utxos: UtxoInterface[]) => void;
-}
+};
 
-const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, close, setNewAddress, setUtxos }) => {
+export const WalletListModal: React.FC<Props> = ({ show, walletOnClick, close, setNewAddress, setUtxos }) => {
   const [wallet, setWallet] = useState<IWallet>();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -104,5 +104,3 @@ const WalletListModal: React.FC<IWalletListModal> = ({ show, walletOnClick, clos
     </Modal>
   );
 };
-
-export default WalletListModal;
