@@ -13,15 +13,23 @@ import SWAP_ASSET from "../../enum/SWAP_ASSET";
 import { SwapAssetList } from "../../components/SwapAssetList/SwapAssetList";
 import IAssetAmount from "../../model/AssetAmount";
 import { ROUTE_PATH_TITLE } from "../../enum/ROUTE_PATH.TITLE";
+import { Navbar } from "../../components/Navbar/Navbar";
 import "./Swap.scss";
 
 export const Swap = () => {
   // <SwapMainTab />
   // <SwapFromTab />
-  const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
+  const [
+    selectedFromAmountPercent,
+    setSelectedFromAmountPercent,
+  ] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
   // <SwapAssetList />
-  const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(SWAP_ASSET.LBTC);
-  const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(SWAP_ASSET.USDT);
+  const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(
+    SWAP_ASSET.LBTC
+  );
+  const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(
+    SWAP_ASSET.USDT
+  );
   // <WalletListModal />
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
@@ -42,13 +50,25 @@ export const Swap = () => {
   document.title = ROUTE_PATH_TITLE.HOME;
 
   const assetAmountToFromAmount = useCallback(
-    (newAssetAmountList: IAssetAmount[], newFromAmountPercent: FROM_AMOUNT_PERCENT) => {
+    (
+      newAssetAmountList: IAssetAmount[],
+      newFromAmountPercent: FROM_AMOUNT_PERCENT
+    ) => {
       let newFromAmount: number = 0;
-      if (selectedAssetFrom === SWAP_ASSET.LBTC) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.LBTC)?.amount || 0;
-      else if (selectedAssetFrom === SWAP_ASSET.USDT) newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
+      if (selectedAssetFrom === SWAP_ASSET.LBTC)
+        newFromAmount =
+          newAssetAmountList.find(
+            (assetAmount) => assetAmount.assetId === ASSET_ID.LBTC
+          )?.amount || 0;
+      else if (selectedAssetFrom === SWAP_ASSET.USDT)
+        newFromAmount =
+          newAssetAmountList.find(
+            (assetAmount) => assetAmount.assetId === ASSET_ID.USDT
+          )?.amount || 0;
 
       if (newFromAmount >= 2500) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN)
+          newFromAmount = 2500;
         else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
           if (newFromAmount >= 5000) {
             newFromAmount *= 0.5;
@@ -71,7 +91,9 @@ export const Swap = () => {
     assetAmountToFromAmount(assetAmounts, selectedFromAmountPercent);
   }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
 
-  const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeFromInput = (
+    inputElement: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setInputFromAmount(inputElement.target.value);
     // let newFromAmount: number = 0;
     // const inputNumber = Number(inputElement.target.value);
@@ -81,7 +103,9 @@ export const Swap = () => {
     // setFromAmount(newFromAmount * 100000000);
   };
 
-  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeToInput = (
+    inputElement: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setInputToAmount(inputElement.target.value);
     // let newToAmount: number = 0;
     // const inputNumber = Number(inputElement.target.value);
@@ -120,6 +144,8 @@ export const Swap = () => {
 
   return (
     <div className="swap-page-main">
+      <Navbar />
+
       {/* Wallet list modal */}
       <WalletListModal
         show={showWalletList}
@@ -133,7 +159,10 @@ export const Swap = () => {
         <div className="swap-page-layout">
           <div className="swap-page-content">
             <div className="from-content pt-2">
-              <SwapFromTab selectedFromAmountPercent={selectedFromAmountPercent} setselectedFromAmountPercent={setSelectedFromAmountPercent} />
+              <SwapFromTab
+                selectedFromAmountPercent={selectedFromAmountPercent}
+                setselectedFromAmountPercent={setSelectedFromAmountPercent}
+              />
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div className="from-amount-div">
                   <div className="from-text">From</div>
@@ -149,11 +178,22 @@ export const Swap = () => {
                     onChange={onChangeFromInput}
                   />
                 </div>
-                <SwapAssetList selectedAsset={selectedAssetFrom} setSelectedAsset={setSelectedAssetFrom} />
+                <SwapAssetList
+                  selectedAsset={selectedAssetFrom}
+                  setSelectedAsset={setSelectedAssetFrom}
+                />
               </div>
             </div>
             <div className="swap-arrow-icon">
-              <svg width="1.05rem" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="arrow-down" role="img" viewBox="0 0 448 512">
+              <svg
+                width="1.05rem"
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                data-icon="arrow-down"
+                role="img"
+                viewBox="0 0 448 512"
+              >
                 <path
                   fill="currentColor"
                   d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
@@ -175,7 +215,10 @@ export const Swap = () => {
                   onChange={onChangeToInput}
                 />
               </div>
-              <SwapAssetList selectedAsset={selectedAssetTo} setSelectedAsset={setSelectedAssetTo} />
+              <SwapAssetList
+                selectedAsset={selectedAssetTo}
+                setSelectedAsset={setSelectedAssetTo}
+              />
             </div>
             <Button
               appearance="default"
