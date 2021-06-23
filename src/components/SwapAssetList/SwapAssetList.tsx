@@ -1,3 +1,4 @@
+import React from "react";
 import { Dropdown } from "rsuite";
 import lbtcImage from "../../images/liquid_btc.png";
 import usdtImage from "../../images/usdt.png";
@@ -8,8 +9,14 @@ type Props = {
   setSelectedAsset: (asset: SWAP_ASSET) => void;
 };
 
-export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset }) => {
-  const onSelectAsset = (eventKey: any, event: React.SyntheticEvent<HTMLElement, Event>) => {
+export const SwapAssetList: React.FC<Props> = ({
+  selectedAsset,
+  setSelectedAsset,
+}) => {
+  const onSelectAsset = (
+    eventKey: any,
+    event: React.SyntheticEvent<HTMLElement, Event>
+  ) => {
     setSelectedAsset(eventKey as SWAP_ASSET);
   };
 
@@ -31,7 +38,15 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
       <Dropdown
         title={
           <div className="swap-dropdown-item">
-            <img className={`${selectedAsset === SWAP_ASSET.LBTC ? "swap-dropdown-item-img-lbtc" : "swap-dropdown-item-img"}`} src={getActiveIcon()} alt={selectedAsset} />
+            <img
+              className={`${
+                selectedAsset === SWAP_ASSET.LBTC
+                  ? "swap-dropdown-item-img-lbtc"
+                  : "swap-dropdown-item-img"
+              }`}
+              src={getActiveIcon()}
+              alt={selectedAsset}
+            />
             <span>{selectedAsset}</span>
           </div>
         }
@@ -40,7 +55,12 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         <Dropdown.Item eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
           {
             <div className="swap-dropdown-item">
-              <img className="swap-dropdown-item-img-lbtc" src={lbtcImage} style={{ height: "1.65rem" }} alt={SWAP_ASSET.LBTC} />
+              <img
+                className="swap-dropdown-item-img-lbtc"
+                src={lbtcImage}
+                style={{ height: "1.65rem" }}
+                alt={SWAP_ASSET.LBTC}
+              />
               <span>{SWAP_ASSET.LBTC}</span>
             </div>
           }
@@ -48,7 +68,12 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         <Dropdown.Item eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
           {
             <div className="swap-dropdown-item">
-              <img className="swap-dropdown-item-img" src={usdtImage} style={{ height: "1.65rem" }} alt={SWAP_ASSET.USDT} />
+              <img
+                className="swap-dropdown-item-img"
+                src={usdtImage}
+                style={{ height: "1.65rem" }}
+                alt={SWAP_ASSET.USDT}
+              />
               <span>{SWAP_ASSET.USDT}</span>
             </div>
           }
