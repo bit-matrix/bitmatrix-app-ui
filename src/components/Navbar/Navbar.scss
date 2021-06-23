@@ -1,3 +1,5 @@
+@import "../../style/constant.scss";
+
 .navbar-main {
   display: flex;
   align-items: center;
@@ -5,23 +7,50 @@
   list-style: none;
   height: 3rem;
   border-radius: 2rem;
-  background: #fff;
-  position: fixed;
-  bottom: 6vh;
   padding: 0 !important;
+  background: #333;
+  margin-bottom: 4rem;
 }
 
 .navbar-item-button {
   border-radius: 2rem !important;
   min-width: 7rem;
-  background: #fff !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  background: transparent !important;
 }
 
 .navbar-item-button:hover {
-  background-color: aliceblue !important;
+  background: $swapBackgroundColor !important;
+  color: $liquidNeonColor !important;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
 }
 
-// .navbar-item {
-//   padding: 0 1rem;
-// }
+.navbar-home-button {
+  background: transparent !important;
+  border-radius: 2rem !important;
+  height: 2.5rem;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-home-button:hover {
+  background: $swapBackgroundColor !important;
+  color: $liquidNeonColor !important;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+}
+
+.navbar-home-icon {
+  width: 3rem;
+}
+
+.navbar-item .mr-5 {
+  margin-right: 0.5rem;
+}
+
+.navbar-item .ml-5 {
+  margin-left: 0.5rem;
+}

@@ -1,10 +1,16 @@
 import React from "react";
-import "./Navbar.scss";
+import bitmatrix_icon from "../../images/bitmatrix_icon.png";
 import { Button } from "rsuite";
+import "./Navbar.scss";
 
 export const Navbar = () => {
   return (
     <ul className="navbar-main">
+      <li className="navbar-item">
+        <Button className="navbar-home-button ml-5">
+          <img className="navbar-home-icon" src={bitmatrix_icon} alt="" />
+        </Button>
+      </li>
       <li className="navbar-item">
         <Button className="navbar-item-button">Swap</Button>
       </li>
@@ -15,10 +21,7 @@ export const Navbar = () => {
         <Button className="navbar-item-button">Stats</Button>
       </li>
       <li className="navbar-item mobile-hidden">
-        <Button className="navbar-item-button">Wallet</Button>
-      </li>
-      <li className="navbar-item mobile-hidden">
-        <Button className="navbar-item-button">Settings</Button>
+        <Button className="navbar-item-button mr-5">Settings</Button>
       </li>
     </ul>
   );
