@@ -10,7 +10,11 @@
   padding: 0 !important;
   background: $navbarBackground;
   position: fixed;
-  top: 5rem;
+  top: 3.5rem;
+}
+
+.navbar-item {
+  margin: 0 0.25rem;
 }
 
 .navbar-item-button {
