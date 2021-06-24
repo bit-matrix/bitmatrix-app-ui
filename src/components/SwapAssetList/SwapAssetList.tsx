@@ -1,8 +1,8 @@
-import React from "react";
-import { Dropdown } from "rsuite";
-import lbtcImage from "../../images/liquid_btc.png";
-import usdtImage from "../../images/usdt.png";
-import SWAP_ASSET from "../../enum/SWAP_ASSET";
+import React from 'react';
+import { Dropdown } from 'rsuite';
+import lbtcImage from '../../images/liquid_btc.png';
+import usdtImage from '../../images/usdt.png';
+import SWAP_ASSET from '../../enum/SWAP_ASSET';
 
 type Props = {
   selectedAsset: SWAP_ASSET;
@@ -13,10 +13,7 @@ export const SwapAssetList: React.FC<Props> = ({
   selectedAsset,
   setSelectedAsset,
 }) => {
-  const onSelectAsset = (
-    eventKey: any,
-    event: React.SyntheticEvent<HTMLElement, Event>
-  ) => {
+  const onSelectAsset = (eventKey: any) => {
     setSelectedAsset(eventKey as SWAP_ASSET);
   };
 
@@ -29,7 +26,7 @@ export const SwapAssetList: React.FC<Props> = ({
         return usdtImage;
 
       default:
-        return "";
+        return '';
     }
   };
 
@@ -41,8 +38,8 @@ export const SwapAssetList: React.FC<Props> = ({
             <img
               className={`${
                 selectedAsset === SWAP_ASSET.LBTC
-                  ? "swap-dropdown-item-img-lbtc"
-                  : "swap-dropdown-item-img"
+                  ? 'swap-dropdown-item-img-lbtc'
+                  : 'swap-dropdown-item-img'
               }`}
               src={getActiveIcon()}
               alt={selectedAsset}
@@ -58,7 +55,7 @@ export const SwapAssetList: React.FC<Props> = ({
               <img
                 className="swap-dropdown-item-img-lbtc"
                 src={lbtcImage}
-                style={{ height: "1.65rem" }}
+                style={{ height: '1.65rem' }}
                 alt={SWAP_ASSET.LBTC}
               />
               <span>{SWAP_ASSET.LBTC}</span>
@@ -71,7 +68,7 @@ export const SwapAssetList: React.FC<Props> = ({
               <img
                 className="swap-dropdown-item-img"
                 src={usdtImage}
-                style={{ height: "1.65rem" }}
+                style={{ height: '1.65rem' }}
                 alt={SWAP_ASSET.USDT}
               />
               <span>{SWAP_ASSET.USDT}</span>

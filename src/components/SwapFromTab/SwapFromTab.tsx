@@ -1,11 +1,11 @@
-import React from "react";
-import { Radio, RadioGroup } from "rsuite";
-import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
+import React from 'react';
+import { Radio, RadioGroup } from 'rsuite';
+import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 
 type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT;
   setselectedFromAmountPercent: (
-    newFromAmountPercent: FROM_AMOUNT_PERCENT
+    newFromAmountPercent: FROM_AMOUNT_PERCENT,
   ) => void;
 };
 
@@ -13,11 +13,7 @@ export const SwapFromTab: React.FC<Props> = ({
   selectedFromAmountPercent,
   setselectedFromAmountPercent,
 }) => {
-  const onChangeSelectedFromTab = (
-    value: any,
-    checked: boolean,
-    event: React.SyntheticEvent<HTMLInputElement, Event>
-  ) => {
+  const onChangeSelectedFromTab = (value: any) => {
     setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
   };
 

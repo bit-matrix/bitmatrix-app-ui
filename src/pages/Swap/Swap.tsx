@@ -1,34 +1,30 @@
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useState } from "react";
-import { Button, Content } from "rsuite";
-import { WalletListModal } from "../../components/WalletListModal/WalletListModal";
-import { WALLET_NAME } from "../../lib/wallet/WALLET_NAME";
-import { UtxoInterface } from "ldk";
-import { MarinaAddressInterface } from "../../lib/wallet/marina/IMarina";
-import { ASSET_ID } from "../../lib/liquid-dev/ASSET_ID";
-import FROM_AMOUNT_PERCENT from "../../enum/FROM_AMOUNT_PERCENT";
-import { SwapFromTab } from "../../components/SwapFromTab/SwapFromTab";
-import SWAP_ASSET from "../../enum/SWAP_ASSET";
-import { SwapAssetList } from "../../components/SwapAssetList/SwapAssetList";
-import IAssetAmount from "../../model/AssetAmount";
-import { ROUTE_PATH_TITLE } from "../../enum/ROUTE_PATH.TITLE";
-import { Navbar } from "../../components/Navbar/Navbar";
-import "./Swap.scss";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, Content } from 'rsuite';
+import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
+import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
+import { UtxoInterface } from 'ldk';
+import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
+import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
+import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
+import SWAP_ASSET from '../../enum/SWAP_ASSET';
+import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
+import IAssetAmount from '../../model/AssetAmount';
+import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
+import { Navbar } from '../../components/Navbar/Navbar';
+import './Swap.scss';
 
-export const Swap = () => {
+export const Swap = (): JSX.Element => {
   // <SwapMainTab />
   // <SwapFromTab />
-  const [
-    selectedFromAmountPercent,
-    setSelectedFromAmountPercent,
-  ] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
+  const [selectedFromAmountPercent, setSelectedFromAmountPercent] =
+    useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
   // <SwapAssetList />
   const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(
-    SWAP_ASSET.LBTC
+    SWAP_ASSET.LBTC,
   );
   const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(
-    SWAP_ASSET.USDT
+    SWAP_ASSET.USDT,
   );
   // <WalletListModal />
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
@@ -39,8 +35,8 @@ export const Swap = () => {
   // const [fromAmount, setFromAmount] = useState<number>(0);
   // const [toAmount, setToAmount] = useState<number>(0);
 
-  const [inputFromAmount, setInputFromAmount] = useState<string>("0.0");
-  const [inputToAmount, setInputToAmount] = useState<string>("0.0");
+  const [inputFromAmount, setInputFromAmount] = useState<string>('0.0');
+  const [inputToAmount, setInputToAmount] = useState<string>('0.0');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
@@ -52,18 +48,18 @@ export const Swap = () => {
   const assetAmountToFromAmount = useCallback(
     (
       newAssetAmountList: IAssetAmount[],
-      newFromAmountPercent: FROM_AMOUNT_PERCENT
+      newFromAmountPercent: FROM_AMOUNT_PERCENT,
     ) => {
-      let newFromAmount: number = 0;
+      let newFromAmount = 0;
       if (selectedAssetFrom === SWAP_ASSET.LBTC)
         newFromAmount =
           newAssetAmountList.find(
-            (assetAmount) => assetAmount.assetId === ASSET_ID.LBTC
+            (assetAmount) => assetAmount.assetId === ASSET_ID.LBTC,
           )?.amount || 0;
       else if (selectedAssetFrom === SWAP_ASSET.USDT)
         newFromAmount =
           newAssetAmountList.find(
-            (assetAmount) => assetAmount.assetId === ASSET_ID.USDT
+            (assetAmount) => assetAmount.assetId === ASSET_ID.USDT,
           )?.amount || 0;
 
       if (newFromAmount >= 2500) {
@@ -79,12 +75,12 @@ export const Swap = () => {
         // else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
       }
       if (newFromAmount === 0) {
-        setInputFromAmount("0.0");
+        setInputFromAmount('0.0');
       } else {
         setInputFromAmount((newFromAmount / 100000000).toFixed(8).toString());
       }
     },
-    [selectedAssetFrom]
+    [selectedAssetFrom],
   );
 
   useEffect(() => {
@@ -92,7 +88,7 @@ export const Swap = () => {
   }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
 
   const onChangeFromInput = (
-    inputElement: React.ChangeEvent<HTMLInputElement>
+    inputElement: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setInputFromAmount(inputElement.target.value);
     // let newFromAmount: number = 0;
@@ -104,7 +100,7 @@ export const Swap = () => {
   };
 
   const onChangeToInput = (
-    inputElement: React.ChangeEvent<HTMLInputElement>
+    inputElement: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setInputToAmount(inputElement.target.value);
     // let newToAmount: number = 0;
@@ -163,7 +159,7 @@ export const Swap = () => {
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={setSelectedFromAmountPercent}
               />
-              <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="from-amount-div">
                   <div className="from-text">From</div>
                   <input
@@ -225,13 +221,13 @@ export const Swap = () => {
               className="swap-button"
               onClick={() => {
                 if (assetAmounts.length > 0) {
-                  console.log("TODO");
+                  console.log('TODO');
                 } else {
                   setShowWalletList(true);
                 }
               }}
             >
-              {assetAmounts.length > 0 ? "Swap" : "Connect Wallet"}
+              {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'}
             </Button>
           </div>
         </div>

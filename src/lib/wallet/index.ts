@@ -1,6 +1,7 @@
-import { IWallet } from "./IWallet";
-import Marina from "./marina/marina";
-import { WALLET_NAME } from "./WALLET_NAME";
+import { IWallet } from './IWallet';
+import { MarinaAddressInterface } from './marina/IMarina';
+import Marina from './marina/marina';
+import { WALLET_NAME } from './WALLET_NAME';
 
 export class Wallet implements IWallet {
   private wallet: IWallet;
@@ -11,15 +12,17 @@ export class Wallet implements IWallet {
     else this.wallet = new Marina();
   }
 
-  public exist = () => this.wallet.exist();
+  public exist = (): boolean => this.wallet.exist();
 
-  public isEnabled = () => this.wallet.isEnabled();
+  public isEnabled = (): Promise<boolean> => this.wallet.isEnabled();
 
-  public enable = () => this.wallet.enable();
+  public enable = (): Promise<void> => this.wallet.enable();
 
-  public disable = () => this.wallet.disable();
+  public disable = (): Promise<void> => this.wallet.disable();
 
-  public getNextAddress = () => this.wallet.getNextAddress();
+  public getNextAddress = (): Promise<MarinaAddressInterface> =>
+    this.wallet.getNextAddress();
 
-  public getAddresses = () => this.wallet.getAddresses();
+  public getAddresses = (): Promise<MarinaAddressInterface[]> =>
+    this.wallet.getAddresses();
 }

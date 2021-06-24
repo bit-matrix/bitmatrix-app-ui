@@ -1,5 +1,5 @@
-import React from "react";
-import SWAP_MAIN_TAB from "../../enum/SWAP_MAIN_TAB";
+import React from 'react';
+import SWAP_MAIN_TAB from '../../enum/SWAP_MAIN_TAB';
 
 type Props = {
   selectedMainTab: SWAP_MAIN_TAB;
@@ -17,7 +17,7 @@ export const SwapMainTab: React.FC<Props> = ({
           setSelectedMainTab(SWAP_MAIN_TAB.SWAP);
         }}
         className={`swap-page-tab-left ${
-          selectedMainTab === SWAP_MAIN_TAB.SWAP ? "selected" : ""
+          selectedMainTab === SWAP_MAIN_TAB.SWAP ? 'selected' : ''
         }`}
       >
         <span>Swap</span>
@@ -28,7 +28,7 @@ export const SwapMainTab: React.FC<Props> = ({
           setSelectedMainTab(SWAP_MAIN_TAB.POOL);
         }}
         className={`swap-page-tab-right ${
-          selectedMainTab === SWAP_MAIN_TAB.POOL ? "selected" : ""
+          selectedMainTab === SWAP_MAIN_TAB.POOL ? 'selected' : ''
         }`}
       >
         <span>Pool</span>

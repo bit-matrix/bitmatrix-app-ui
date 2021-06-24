@@ -1,9 +1,9 @@
-import React from "react";
-import bitmatrix_icon from "../../images/bitmatrix_icon.png";
-import { Button } from "rsuite";
-import "./Navbar.scss";
+import React from 'react';
+import bitmatrix_icon from '../../images/bitmatrix_icon.png';
+import { Button } from 'rsuite';
+import './Navbar.scss';
 
-export const Navbar = () => {
+export const Navbar = (): JSX.Element => {
   return (
     <ul className="navbar-main">
       <li className="navbar-item">
