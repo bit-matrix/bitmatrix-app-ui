@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import bitmatrix_icon from '../../images/bitmatrix_icon.png';
 import { Button } from 'rsuite';
 import { useHistory } from 'react-router';
@@ -6,13 +6,32 @@ import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './Navbar.scss';
 
 export const Navbar = (): JSX.Element => {
+  const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
+
+  useEffect(() => {
+    let unmounted = false;
+    let unregisterCallback: () => void;
+    if (!unmounted) {
+      //init tab selection
+      setSelectedTab(history.location.pathname as ROUTE_PATH);
+      unregisterCallback = history.listen((location) => {
+        setSelectedTab(location.pathname as ROUTE_PATH);
+      });
+    }
+    return () => {
+      unmounted = true;
+      if (unregisterCallback) unregisterCallback();
+    };
+  }, [history]);
 
   return (
     <ul className="navbar-main">
       <li className="navbar-item">
         <Button
-          className="navbar-home-button ml-5"
+          className={`navbar-home-button ml-5 ${
+            selectedTab === ROUTE_PATH.HOME && 'active'
+          }`}
           onClick={() => {
             history.push(ROUTE_PATH.HOME);
           }}
@@ -22,7 +41,9 @@ export const Navbar = (): JSX.Element => {
       </li>
       <li className="navbar-item">
         <Button
-          className="navbar-item-button"
+          className={`navbar-item-button ${
+            selectedTab === ROUTE_PATH.SWAP && 'active'
+          }`}
           onClick={() => {
             history.push(ROUTE_PATH.SWAP);
           }}
@@ -32,7 +53,9 @@ export const Navbar = (): JSX.Element => {
       </li>
       <li className="navbar-item">
         <Button
-          className="navbar-item-button"
+          className={`navbar-item-button ${
+            selectedTab === ROUTE_PATH.POOL && 'active'
+          }`}
           // onClick={() => {
           //   history.push(ROUTE_PATH.POOL);
           // }}
@@ -42,7 +65,9 @@ export const Navbar = (): JSX.Element => {
       </li>
       <li className="navbar-item">
         <Button
-          className="navbar-item-button"
+          className={`navbar-item-button ${
+            selectedTab === ROUTE_PATH.STATS && 'active'
+          }`}
           // onClick={() => {
           //   history.push(ROUTE_PATH.STATS);
           // }}
@@ -52,7 +77,9 @@ export const Navbar = (): JSX.Element => {
       </li>
       <li className="navbar-item mobile-hidden">
         <Button
-          className="navbar-item-button mr-5"
+          className={`navbar-item-button mr-5 ${
+            selectedTab === ROUTE_PATH.SETTINGS && 'active'
+          }`}
           // onClick={() => {
           //   history.push(ROUTE_PATH.SETTINGS);
           // }}
