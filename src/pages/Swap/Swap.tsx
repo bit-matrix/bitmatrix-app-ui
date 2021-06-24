@@ -13,14 +13,13 @@ import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import info from '../../images/info.png';
 import './Swap.scss';
+import { Info } from '../../components/common/Info/Info';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
   // <SwapFromTab />
-  const [
-    selectedFromAmountPercent,
-    setSelectedFromAmountPercent,
-  ] = useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
+  const [selectedFromAmountPercent, setSelectedFromAmountPercent] =
+    useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
   // <SwapAssetList />
   const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(
     SWAP_ASSET.LBTC,
@@ -231,14 +230,7 @@ export const Swap = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        <div id="wrap" className="swap-footer-tab">
-          <div id="one" className="swap-footer-tab-one">
-            <img className="info-img" src={info} alt="" />
-          </div>
-          <div id="two" className="swap-footer-tab-two">
-            Network fee 0.1sat/byte $0.12
-          </div>
-        </div>
+        <Info content=" Network fee 0.1sat/byte $0.12" />
       </Content>
 
       {/* <div>
