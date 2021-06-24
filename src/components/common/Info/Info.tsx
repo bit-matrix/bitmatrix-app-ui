@@ -5,10 +5,9 @@ import './Info.scss';
 
 type Props = {
   content: string;
-  showCloseIcon?: boolean;
 };
 
-export const Info: React.FC<Props> = ({ content, showCloseIcon = false }) => {
+export const Info: React.FC<Props> = ({ content }) => {
   return (
     <div id="wrap" className="swap-footer-tab">
       <div id="one" className="swap-footer-tab-one">
@@ -17,7 +16,7 @@ export const Info: React.FC<Props> = ({ content, showCloseIcon = false }) => {
       <div id="two" className="swap-footer-tab-two">
         {content}
       </div>
-      {showCloseIcon && <Icon className="info-close-icon" icon="close" />}
+      <Icon className="info-close-icon" icon="close" />
     </div>
   );
 };

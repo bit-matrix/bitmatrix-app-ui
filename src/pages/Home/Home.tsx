@@ -41,10 +41,7 @@ export const Home = (): JSX.Element => {
         </div>
         <div className="home-page-img"></div>
       </div>
-      <Info
-        content="Always make sure your URL is 'bitmatrix.app'"
-        showCloseIcon
-      />
+      <Info content="Always make sure your URL is 'bitmatrix.app'" />
     </div>
   );
 };

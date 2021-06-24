@@ -11,9 +11,8 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import info from '../../images/info.png';
-import './Swap.scss';
 import { Info } from '../../components/common/Info/Info';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
