@@ -3,18 +3,25 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
+import { Navbar } from '../Navbar/Navbar';
+import { Home } from '../../pages/Home/Home';
+import { Content } from 'rsuite';
+import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   return (
     <Router>
-      <Switch>
-        <Route exact path={ROUTE_PATH.HOME} component={Swap} />
-        <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-        {/* <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+      <Content className="app-router-main">
+        <Navbar />
+        <Switch>
+          <Route exact path={ROUTE_PATH.HOME} component={Home} />
+          <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+          {/* <Route exact path={ROUTE_PATH.POOL} component={Pool} />
         <Route exact path={ROUTE_PATH.STATS} component={Stats} />
         <Route exact path={ROUTE_PATH.SETTINGS} component={Setting} /> */}
-      </Switch>
-      <Footer />
+        </Switch>
+        <Footer />
+      </Content>
     </Router>
   );
 };
