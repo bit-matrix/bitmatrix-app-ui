@@ -1,4 +1,4 @@
-@import "../../style/constant.scss";
+@import '../../style/constant.scss';
 
 .navbar-main {
   display: flex;
@@ -8,8 +8,9 @@
   height: 3rem;
   border-radius: 2rem;
   padding: 0 !important;
-  background: #333;
-  margin-bottom: 4rem;
+  background: $navbarBackground;
+  position: fixed;
+  top: 5rem;
 }
 
 .navbar-item-button {
@@ -20,10 +21,11 @@
   justify-content: center;
   height: 2.5rem;
   background: transparent !important;
+  color: $navbarTextColor !important;
 }
 
 .navbar-item-button:hover {
-  background: $swapBackgroundColor !important;
+  background: $navbarItemSelected !important;
   color: $liquidNeonColor !important;
   box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
 }
