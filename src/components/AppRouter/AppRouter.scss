@@ -1,0 +1,10 @@
+@import '../../style/constant.scss';
+
+.app-router-main {
+  background: #010403;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
