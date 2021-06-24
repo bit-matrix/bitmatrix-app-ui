@@ -1,0 +1,60 @@
+@import '../../../style/constant.scss';
+
+.swap-footer-tab {
+  height: 2.5rem;
+  margin-top: 2.5rem;
+  width: 70%;
+  border: 1px solid;
+  margin: 3rem auto 0;
+  display: flex;
+  align-items: center;
+  border-radius: 0.8125rem;
+  position: relative;
+}
+
+.swap-footer-tab div {
+  position: relative;
+  height: 100%;
+  float: left;
+  padding-left: 1rem;
+}
+
+.swap-footer-tab-one {
+  background: #333;
+  width: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+}
+
+.swap-footer-tab-one:after {
+  content: '';
+  border-top: 38px solid transparent;
+  border-left: 17px solid #333;
+  right: -17px;
+  content: '';
+  width: 0px;
+  height: 0px;
+  top: 0px;
+  position: absolute;
+  z-index: 5;
+}
+
+.swap-footer-tab-two {
+  background: #000;
+  width: 100%;
+  color: $swapGrayColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}
+
+.info-close-icon {
+  margin-right: 0.5rem;
+}
