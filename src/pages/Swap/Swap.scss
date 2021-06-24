@@ -1,4 +1,4 @@
-@import "../../style/constant.scss";
+@import '../../style/constant.scss';
 
 .swap-page-main {
   display: flex;
@@ -155,6 +155,25 @@
   position: relative;
 }
 
+.swap-footer-tab {
+  height: 2.5rem;
+  margin-top: 2.5rem;
+  width: 70%;
+  border: 1px solid;
+  margin: 1rem auto 3rem;
+  display: flex;
+  align-items: center;
+  border-radius: 0.8125rem;
+  position: relative;
+}
+
+.swap-footer-tab div {
+  position: relative;
+  height: 100%;
+  float: left;
+  padding-left: 1rem;
+}
+
 .swap-page-tab-left {
   border-left: 1px solid #fff;
   border-color: #adfbc4 !important;
@@ -175,7 +194,7 @@
   border-top: 2.5rem solid transparent;
   border-left: 29px solid #121f18;
   right: 195px;
-  content: "";
+  content: '';
   width: 0px;
   height: 0px;
   top: 0px;
@@ -186,7 +205,7 @@
   border-top: 49px solid;
   border-left: 1px solid;
   right: 209px;
-  content: "";
+  content: '';
   width: 0px;
   height: 0px;
   top: -4px;
@@ -229,7 +248,7 @@
   border-top: 2.5rem solid transparent;
   border-right: 29px solid #121f18;
   left: 195px;
-  content: "";
+  content: '';
   width: 0px;
   height: 0px;
   top: 0px;
@@ -240,7 +259,7 @@
   border-top: 49px solid;
   border-left: 1px solid;
   right: 150px;
-  content: "";
+  content: '';
   width: 0px;
   height: 0;
   top: -4px;

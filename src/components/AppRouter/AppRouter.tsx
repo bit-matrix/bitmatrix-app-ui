@@ -9,6 +9,7 @@ export const AppRouter = (): JSX.Element => {
     <Router>
       <Switch>
         <Route exact path={ROUTE_PATH.HOME} component={Swap} />
+        <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
         {/* <Route exact path={ROUTE_PATH.POOL} component={Pool} />
         <Route exact path={ROUTE_PATH.STATS} component={Stats} />
         <Route exact path={ROUTE_PATH.SETTINGS} component={Setting} /> */}

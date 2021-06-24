@@ -12,6 +12,7 @@ import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Navbar } from '../../components/Navbar/Navbar';
+import info from '../../images/info.png';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -43,7 +44,7 @@ export const Swap = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
 
-  document.title = ROUTE_PATH_TITLE.HOME;
+  document.title = ROUTE_PATH_TITLE.SWAP;
 
   const assetAmountToFromAmount = useCallback(
     (
@@ -229,6 +230,14 @@ export const Swap = (): JSX.Element => {
             >
               {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'}
             </Button>
+          </div>
+          <div id="wrap" className="swap-footer-tab">
+            <div id="one" className="swap-footer-tab-one">
+              <img className="info-img" src={info} alt="" />
+            </div>
+            <div id="two" className="swap-footer-tab-two">
+              Network fee 0.1sat/byte $0.12
+            </div>
           </div>
         </div>
       </Content>

@@ -1,7 +1,7 @@
 export enum ROUTE_PATH {
-  HOME = "/",
-  SWAP = "swap",
-  POOL = "pool",
-  STATS = "stats",
-  SETTINGS = "settings",
+  HOME = '/',
+  SWAP = '/swap',
+  POOL = '/pool',
+  STATS = '/stats',
+  SETTINGS = '/settings',
 }
