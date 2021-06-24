@@ -11,7 +11,6 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import { Navbar } from '../../components/Navbar/Navbar';
 import info from '../../images/info.png';
 import './Swap.scss';
 
@@ -141,8 +140,6 @@ export const Swap = (): JSX.Element => {
 
   return (
     <div className="swap-page-main">
-      <Navbar />
-
       {/* Wallet list modal */}
       <WalletListModal
         show={showWalletList}
