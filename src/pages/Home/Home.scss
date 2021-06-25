@@ -2,7 +2,7 @@
 
 .home-page-main {
   display: flex;
-  width: 40rem;
+  width: 47.5rem;
   border: 1px solid #000;
   height: 25rem;
   border-radius: 1.5rem;
@@ -24,7 +24,9 @@
   font-weight: 500;
 }
 
-.home-page-img {
+.home-page-img-content {
+  display: flex;
+  align-items: center;
   width: 40%;
 }
 
@@ -38,4 +40,8 @@
 
 .home-page-start-button:hover {
   opacity: 0.8;
+}
+
+.home-page-img {
+  width: 18rem;
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'rsuite';
 import { useHistory } from 'react-router-dom';
-import './Home.scss';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Info } from '../../components/common/Info/Info';
+import HomeIcon from '../../images/homeweb.png';
+import './Home.scss';
 
 export const Home = (): JSX.Element => {
   const history = useHistory();
@@ -39,7 +40,9 @@ export const Home = (): JSX.Element => {
             Start Swapping
           </Button>
         </div>
-        <div className="home-page-img"></div>
+        <div className="home-page-img-content">
+          <img className="home-page-img" src={HomeIcon} alt="Home" />
+        </div>
       </div>
       <Info content="Always make sure your URL is 'bitmatrix.app'" />
     </div>
