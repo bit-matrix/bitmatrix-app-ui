@@ -1,10 +1,10 @@
-import SWAP_ASSET from "../enum/SWAP_ASSET";
-import { ASSET_ID } from "../lib/liquid-dev/ASSET_ID";
+import SWAP_ASSET from '../enum/SWAP_ASSET';
+import { ASSET_ID } from '../lib/liquid-dev/ASSET_ID';
 
-interface IAssetAmount {
+type AssetAmount = {
   assetId: ASSET_ID;
   assetName: SWAP_ASSET;
   amount: number;
-}
+};
 
-export default IAssetAmount;
+export default AssetAmount;
