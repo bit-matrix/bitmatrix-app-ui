@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from 'rsuite';
 import info from '../../../images/info.png';
 import './Info.scss';
 
@@ -16,7 +15,6 @@ export const Info: React.FC<Props> = ({ content }) => {
       <div id="two" className="swap-footer-tab-two">
         {content}
       </div>
-      <Icon className="info-close-icon" icon="close" />
     </div>
   );
 };
