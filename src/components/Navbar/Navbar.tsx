@@ -56,9 +56,9 @@ export const Navbar = (): JSX.Element => {
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.POOL && 'active'
           }`}
-          // onClick={() => {
-          //   history.push(ROUTE_PATH.POOL);
-          // }}
+          onClick={() => {
+            history.push(ROUTE_PATH.POOL);
+          }}
         >
           Pool
         </Button>
