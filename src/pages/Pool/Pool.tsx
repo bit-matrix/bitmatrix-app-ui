@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Icon, IconButton, Nav } from 'rsuite';
+import { Icon, IconButton, Nav } from 'rsuite';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
+import { PoolMockData } from '../../data/PoolMockData';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import './Pool.scss';
 
@@ -23,9 +24,13 @@ export const Pool = () => {
         />
       </div>
       <div className="pool-page-content">
-        <div className="pool-page-card">
-          <PoolCard />
-        </div>
+        {PoolMockData.map((poolData) => {
+          return (
+            <div key={poolData.rank} className="pool-page-card">
+              <PoolCard data={poolData} onClick={() => console.log('xxx')} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
