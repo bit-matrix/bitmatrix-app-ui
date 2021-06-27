@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import bitmatrix_icon from '../../images/bitmatrix_icon.png';
-import { Button } from 'rsuite';
+import { Button, Progress } from 'rsuite';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './Navbar.scss';
+
+const { Circle } = Progress;
 
 export const Navbar = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
@@ -86,6 +88,19 @@ export const Navbar = (): JSX.Element => {
         >
           Settings
         </Button>
+      </li>
+      <li className="navbar-item">
+        <div className="navbar-item-circle-div">
+          <Circle
+            strokeColor="#818489"
+            className="navbar-item-circle"
+            percent={30}
+            gapDegree={10}
+            showInfo={false}
+            // trailColor="#333334"
+          />
+          <span className="navbar-item-info">1</span>
+        </div>
       </li>
     </ul>
   );

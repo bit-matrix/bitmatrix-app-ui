@@ -14,13 +14,15 @@ export const AppRouter = (): JSX.Element => {
     <Router>
       <Content className="app-router-main">
         <Navbar />
-        <Switch>
-          <Route exact path={ROUTE_PATH.HOME} component={Home} />
-          <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-          <Route exact path={ROUTE_PATH.POOL} component={Pool} />
-          {/*<Route exact path={ROUTE_PATH.STATS} component={Stats} />
+        <div className="app-container">
+          <Switch>
+            <Route exact path={ROUTE_PATH.HOME} component={Home} />
+            <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+            <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+            {/*<Route exact path={ROUTE_PATH.STATS} component={Stats} />
         <Route exact path={ROUTE_PATH.SETTINGS} component={Setting} /> */}
-        </Switch>
+          </Switch>
+        </div>
         <Footer />
       </Content>
     </Router>

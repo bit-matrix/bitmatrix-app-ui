@@ -9,8 +9,9 @@
   border-radius: 2rem;
   padding: 0 !important;
   background: $navbarBackground;
-  position: fixed;
-  top: 3.5rem;
+  // position: fixed;
+  // top: 3.5rem;
+  margin-top: 3.5rem;
 }
 
 .navbar-item {
@@ -64,4 +65,22 @@
 .navbar-main .active {
   background: $swapBackgroundColor !important;
   color: $liquidNeonColor !important;
+}
+
+.navbar-item-circle-div {
+  position: relative;
+  margin-right: 1rem;
+  border-left: 1px solid;
+  padding-left: 1rem;
+  cursor: pointer;
+}
+
+.navbar-item-circle {
+  width: 2rem;
+}
+
+.navbar-item-info {
+  position: absolute;
+  top: 5px;
+  right: 11px;
 }
