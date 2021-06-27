@@ -5,7 +5,7 @@ import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { PoolData } from '../../model/PoolData';
 import './Pool.scss';
 
-export const Pool = () => {
+export const Pool = (): JSX.Element => {
   const [selectedPool, setSelectedPool] = useState<PoolData>();
 
   document.title = ROUTE_PATH_TITLE.POOL;

@@ -14,7 +14,7 @@ type Props = {
   poolData: PoolData;
 };
 
-export const PoolDetail: React.FC<Props> = ({ back, poolData }) => {
+export const PoolDetail: React.FC<Props> = ({ back }) => {
   const [selectedTab, setSelectedTab] = useState<PoolDetailTabs>(
     PoolDetailTabs.PRICE,
   );
