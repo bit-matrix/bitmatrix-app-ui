@@ -3,6 +3,8 @@ import { Button, Icon, Nav } from 'rsuite';
 import { PoolData } from '../../model/PoolData';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
+import { ParentSize } from '@visx/responsive';
+import AreaChart from '../AreaChart/AreaChart';
 import './PoolDetail.scss';
 
 enum PoolDetailTabs {
@@ -70,34 +72,56 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
       <div className="pool-detail-content">
         <div className="pool-detail-content-left">
           <div>Pool Pairs</div>
-          <div className="pool-detail-item">
-            <div className="pool-detail-img-content">
-              <img className="pool-detail-img" src={lbtcImage} alt="" />
-              <span>L-BTC</span>
+          <div className="pool-detail-amount">
+            <div className="pool-detail-item">
+              <div className="pool-detail-img-content">
+                <img className="pool-detail-img" src={lbtcImage} alt="" />
+                <span>L-BTC</span>
+              </div>
+              82.54m
             </div>
-            82.54m
-          </div>
 
-          <div className="pool-detail-item">
-            <div className="pool-detail-img-content">
-              <img className="pool-detail-img" src={usdtImage} alt="" />
-              <span>USDT</span>
+            <div className="pool-detail-item">
+              <div className="pool-detail-img-content">
+                <img className="pool-detail-img" src={usdtImage} alt="" />
+                <span>USDT</span>
+              </div>
+              123.41k
             </div>
-            123.41k
           </div>
 
           <div className="pool-detail-volume-fee">
-            <div>
-              <div>Price</div>
-              <div>%12</div>
-              <div>1.35%</div>
-            </div>
+            <table className="pool-detail-table">
+              <tr>
+                <th>Price</th>
+                <th>Volume 24h</th>
+              </tr>
+              <tr>
+                <td>%12</td>
+                <td>%219.20m</td>
+              </tr>
+              <tr>
+                <td>1.35%</td>
+                <td>74.54%</td>
+              </tr>
+            </table>
+          </div>
 
-            <div>
-              <div>Volume 24h</div>
-              <div>%219.20m</div>
-              <div>74.53%</div>
-            </div>
+          <div className="pool-detail-volume-fee">
+            <table className="pool-detail-table">
+              <tr>
+                <th>TVL</th>
+                <th>Fees 24h</th>
+              </tr>
+              <tr>
+                <td>$357.77m</td>
+                <td>%657.61k</td>
+              </tr>
+              <tr>
+                <td>1.35%</td>
+                <td>74.54%</td>
+              </tr>
+            </table>
           </div>
 
           <Button
@@ -110,7 +134,11 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
             Add Liquidity
           </Button>
         </div>
-        <div className="pool-detail-content-right"></div>
+        <div className="pool-detail-content-right">
+          <ParentSize>
+            {({ width, height }) => <AreaChart width={width} height={height} />}
+          </ParentSize>
+        </div>
       </div>
     </div>
   );

@@ -1,15 +1,21 @@
+@import '../../style/constant.scss';
+
 .pool-detail-main {
   border: 1px solid #adfbc4;
   position: relative;
   border-radius: 1rem;
   margin-top: 1rem;
-  width: 50rem;
+  width: 60rem;
   height: 30rem;
 }
 
 .pool-detail-header-left {
   display: flex;
   align-items: center;
+}
+
+.pool-detail-tabs {
+  margin-right: 5rem;
 }
 
 .pool-detail-navbar-item {
@@ -25,11 +31,13 @@
 
 .pool-detail-page-text {
   margin-left: 1rem;
+  color: $liquidNeonColor;
 }
 
 .pool-detail-back-icon {
   height: 3rem !important;
   font-size: 3rem !important;
+  color: $liquidNeonColor !important;
 }
 
 .pool-detail-content {
@@ -41,15 +49,17 @@
 }
 
 .pool-detail-content-left {
-  width: calc(35% - 0.5rem);
+  width: calc(30% - 0.5rem);
   height: 100%;
   margin-right: 0.5rem;
   background: #171718;
   border-radius: 1rem;
+  padding: 1rem;
+  color: $navbarTextColor;
 }
 
 .pool-detail-content-right {
-  width: calc(65% - 0.5rem);
+  width: calc(70% - 0.5rem);
   margin-left: 0.5rem;
   height: 100%;
 }
@@ -58,6 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0.5rem;
 }
 
 .pool-detail-img-content {
@@ -67,10 +78,50 @@
 
 .pool-detail-img {
   width: 1.5rem;
+  margin-right: 1rem;
+}
+
+.pool-detail-amount {
+  margin: 1rem 0;
 }
 
 .pool-detail-volume-fee {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.pool-detail-table {
+  width: 100%;
+  text-align: center;
+}
+
+.pool-detail-table td,
+th {
+  text-align: center;
+  padding: 0.25rem 1rem !important;
+  min-width: 8rem;
+}
+
+.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
+.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content,
+.pool-detail-tabs
+  .rs-dropdown
+  .rs-dropdown-menu-active
+  ~ .rs-dropdown-toggle:hover,
+.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:hover,
+.pool-detail-tabs
+  .rs-dropdown
+  .rs-dropdown-menu-active
+  ~ .rs-dropdown-toggle:focus,
+.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
+.pool-detail-tabs
+  .rs-dropdown
+  .rs-dropdown-menu-active
+  ~ .rs-dropdown-toggle:active,
+.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:active {
+  color: $liquidNeonColor !important;
+}
+
+.pool-detail-tabs .rs-nav-item-content::before {
+  background-color: $liquidNeonColor !important;
 }
