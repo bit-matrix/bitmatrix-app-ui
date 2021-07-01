@@ -1,0 +1,76 @@
+.pool-detail-main {
+  border: 1px solid #adfbc4;
+  position: relative;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  width: 50rem;
+  height: 30rem;
+}
+
+.pool-detail-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.pool-detail-navbar-item {
+  margin: 0 1rem;
+}
+
+.pool-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0 1rem;
+}
+
+.pool-detail-page-text {
+  margin-left: 1rem;
+}
+
+.pool-detail-back-icon {
+  height: 3rem !important;
+  font-size: 3rem !important;
+}
+
+.pool-detail-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 4rem);
+  padding: 1rem;
+}
+
+.pool-detail-content-left {
+  width: calc(35% - 0.5rem);
+  height: 100%;
+  margin-right: 0.5rem;
+  background: #171718;
+  border-radius: 1rem;
+}
+
+.pool-detail-content-right {
+  width: calc(65% - 0.5rem);
+  margin-left: 0.5rem;
+  height: 100%;
+}
+
+.pool-detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pool-detail-img-content {
+  display: flex;
+  align-items: center;
+}
+
+.pool-detail-img {
+  width: 1.5rem;
+}
+
+.pool-detail-volume-fee {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
