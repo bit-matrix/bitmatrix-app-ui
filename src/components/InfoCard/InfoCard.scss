@@ -1,0 +1,38 @@
+@import '../../style/constant.scss';
+
+.info-card-main {
+  background: $navbarBackground;
+  border-radius: 1rem;
+  min-width: 25rem;
+}
+
+// .info-card-content {
+//   padding-top: 1px;
+// }
+
+.info-card-item {
+  background: #000;
+  padding: 1rem;
+  margin: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-card-item:first-child {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.info-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.info-card-item-icon {
+  font-size: 1rem !important;
+}
