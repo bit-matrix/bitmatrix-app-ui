@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import bitmatrix_icon from '../../images/bitmatrix_icon.png';
-import { Button, Progress } from 'rsuite';
+import { Button, ButtonToolbar, Popover, Progress, Whisper } from 'rsuite';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
+import { InfoCard } from '../InfoCard/InfoCard';
+import { Loading } from '../Loading/Loading';
 import './Navbar.scss';
 
 const { Circle } = Progress;
@@ -91,15 +93,24 @@ export const Navbar = (): JSX.Element => {
       </li>
       <li className="navbar-item">
         <div className="navbar-item-circle-div">
-          <Circle
-            strokeColor="#818489"
-            className="navbar-item-circle"
-            percent={30}
-            gapDegree={10}
-            showInfo={false}
-            // trailColor="#333334"
-          />
-          <span className="navbar-item-info">1</span>
+          <ButtonToolbar>
+            <Whisper
+              placement="bottom"
+              trigger="hover"
+              speaker={
+                <Popover className="navbar-popover">
+                  <InfoCard />
+                </Popover>
+              }
+              enterable
+            >
+              <Button className="navbar-hover-button">
+                <Loading width="2.5rem" height="2.5rem" />
+                {/* <div className="loader" /> */}
+                <span className="navbar-item-info">1</span>
+              </Button>
+            </Whisper>
+          </ButtonToolbar>
         </div>
       </li>
     </ul>

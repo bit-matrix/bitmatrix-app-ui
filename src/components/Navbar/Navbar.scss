@@ -73,6 +73,9 @@
   border-left: 1px solid;
   padding-left: 1rem;
   cursor: pointer;
+  height: 3rem;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-item-circle {
@@ -81,6 +84,42 @@
 
 .navbar-item-info {
   position: absolute;
-  top: 5px;
-  right: 11px;
+  top: 1rem;
+  right: 1.6875rem;
+}
+
+.loader {
+  border: 0.25rem solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 0.25rem solid $navbarTextColor;
+  width: 2.25rem;
+  height: 2.25rem;
+  animation: spin 2s linear infinite;
+
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.navbar-hover-button {
+  background: transparent !important;
+}
+
+.navbar-popover {
+  border-radius: 1rem !important;
+  padding: 0 !important;
 }
