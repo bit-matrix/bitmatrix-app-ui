@@ -104,7 +104,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <td>
                   <Icon
                     className="pool-detail-arrow-down-icon"
-                    icon="long-arrow-down"
+                    icon="arrow-down2"
                   />
                   <span className="pool-detail-table-arrow-down-text">
                     1.35%
@@ -113,7 +113,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <td>
                   <Icon
                     className="pool-detail-arrow-up-icon"
-                    icon="long-arrow-up"
+                    icon="arrow-up2"
                   />
                   <span className="pool-detail-table-arrow-up-text">
                     74.54%
@@ -137,7 +137,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <td>
                   <Icon
                     className="pool-detail-arrow-down-icon"
-                    icon="long-arrow-down"
+                    icon="arrow-down2"
                   />
                   <span className="pool-detail-table-arrow-down-text">
                     1.35%
@@ -146,7 +146,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <td>
                   <Icon
                     className="pool-detail-arrow-up-icon"
-                    icon="long-arrow-up"
+                    icon="arrow-up2"
                   />
                   <span className="pool-detail-table-arrow-up-text">
                     74.54%
