@@ -98,8 +98,36 @@
 .pool-detail-table td,
 th {
   text-align: center;
-  padding: 0.25rem 1rem !important;
+  padding: 0.25rem 1rem;
   min-width: 8rem;
+}
+
+.pool-detail-arrow-down-icon {
+  color: red;
+  font-size: 0.8rem !important;
+}
+
+.pool-detail-table-arrow-down-text {
+  margin-left: 0.25rem;
+  color: red;
+  font-size: 0.875rem;
+}
+
+.pool-detail-arrow-up-icon {
+  color: green;
+  font-size: 0.8rem !important;
+}
+
+.pool-detail-table-arrow-up-text {
+  margin-left: 0.25rem;
+  color: green;
+  font-size: 0.875rem;
+}
+
+.pool-detail-table-text {
+  color: #d4d4d4;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,

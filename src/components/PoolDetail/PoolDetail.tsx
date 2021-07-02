@@ -97,12 +97,28 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <th>Volume 24h</th>
               </tr>
               <tr>
-                <td>%12</td>
-                <td>%219.20m</td>
+                <td className="pool-detail-table-text">%12</td>
+                <td className="pool-detail-table-text">%219.20m</td>
               </tr>
               <tr>
-                <td>1.35%</td>
-                <td>74.54%</td>
+                <td>
+                  <Icon
+                    className="pool-detail-arrow-down-icon"
+                    icon="long-arrow-down"
+                  />
+                  <span className="pool-detail-table-arrow-down-text">
+                    1.35%
+                  </span>
+                </td>
+                <td>
+                  <Icon
+                    className="pool-detail-arrow-up-icon"
+                    icon="long-arrow-up"
+                  />
+                  <span className="pool-detail-table-arrow-up-text">
+                    74.54%
+                  </span>
+                </td>
               </tr>
             </table>
           </div>
@@ -114,12 +130,28 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <th>Fees 24h</th>
               </tr>
               <tr>
-                <td>$357.77m</td>
-                <td>%657.61k</td>
+                <td className="pool-detail-table-text">$357.77m</td>
+                <td className="pool-detail-table-text">%657.61k</td>
               </tr>
               <tr>
-                <td>1.35%</td>
-                <td>74.54%</td>
+                <td>
+                  <Icon
+                    className="pool-detail-arrow-down-icon"
+                    icon="long-arrow-down"
+                  />
+                  <span className="pool-detail-table-arrow-down-text">
+                    1.35%
+                  </span>
+                </td>
+                <td>
+                  <Icon
+                    className="pool-detail-arrow-up-icon"
+                    icon="long-arrow-up"
+                  />
+                  <span className="pool-detail-table-arrow-up-text">
+                    74.54%
+                  </span>
+                </td>
               </tr>
             </table>
           </div>
