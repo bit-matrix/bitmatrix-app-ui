@@ -15,10 +15,12 @@ import { localPoint } from '@visx/event';
 import { LinearGradient } from '@visx/gradient';
 import { max, extent, bisector } from 'd3-array';
 import { timeFormat } from 'd3-time-format';
+import { data } from './Data';
 
 type TooltipData = AppleStock;
 
-const stock = appleStock.slice(800);
+const stock = data;
+console.log(stock);
 export const background = '#000';
 export const background2 = '#455747';
 export const accentColor = '#adfbc4';
