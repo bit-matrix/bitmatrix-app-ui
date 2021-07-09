@@ -9,6 +9,19 @@
   min-height: 100vh;
 }
 
+// .app-container {
+//   height: 70vh;
+// }
+
 .app-container {
-  height: 70vh;
+  margin-top: 8rem;
+}
+
+.secret-div {
+  height: 9rem;
+  background: black;
+  z-index: 4;
+  width: 100%;
+  position: fixed;
+  top: 0rem;
 }

@@ -1,18 +1,29 @@
 @import '../../style/constant.scss';
 
 .home-page-main {
-  display: flex;
-  width: 47.5rem;
+  display: block;
+  width: 20rem;
   border: 1px solid #000;
-  height: 25rem;
+  height: 49rem;
   border-radius: 1.5rem;
   background-color: $liquidNeonColor;
   margin-top: 2rem;
 }
 
 .home-page-desc {
-  width: 60%;
-  padding: 2rem;
+  width: 100%;
+  padding: 1rem 2rem;
+}
+
+.home-page-img {
+  transform: rotate(-95deg);
+  width: 15rem;
+}
+
+.home-page-img-content {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .home-page-desc-header {
@@ -22,12 +33,6 @@
 .home-page-desc-content {
   margin: 1.25rem 0;
   font-weight: 500;
-}
-
-.home-page-img-content {
-  display: flex;
-  align-items: center;
-  width: 40%;
 }
 
 .home-page-start-button {
@@ -42,6 +47,30 @@
   opacity: 0.8;
 }
 
-.home-page-img {
-  width: 18rem;
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .home-page-main {
+    display: flex;
+    width: 47.5rem;
+    border: 1px solid #000;
+    height: 25rem;
+    border-radius: 1.5rem;
+    background-color: $liquidNeonColor;
+    margin-top: 2rem;
+  }
+
+  .home-page-desc {
+    width: 60%;
+    padding: 2rem;
+  }
+
+  .home-page-img-content {
+    display: flex;
+    align-items: center;
+    width: 40%;
+  }
+
+  .home-page-img {
+    width: 18rem;
+    transform: unset;
+  }
 }

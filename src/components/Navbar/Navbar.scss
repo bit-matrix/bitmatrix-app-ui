@@ -8,10 +8,11 @@
   height: 3rem;
   border-radius: 2rem;
   padding: 0 !important;
-  background: $navbarBackground;
-  // position: fixed;
-  // top: 3.5rem;
+  background: #333334;
   margin-top: 3.5rem;
+  position: fixed;
+  top: 2rem;
+  z-index: 5;
 }
 
 .navbar-item {
@@ -122,4 +123,7 @@
 .navbar-popover {
   border-radius: 1rem !important;
   padding: 0 !important;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
 }

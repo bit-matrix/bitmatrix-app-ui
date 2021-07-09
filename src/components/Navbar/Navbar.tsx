@@ -67,7 +67,7 @@ export const Navbar = (): JSX.Element => {
           Pool
         </Button>
       </li>
-      <li className="navbar-item">
+      <li className="navbar-item mobile-hidden">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.STATS && 'active'
@@ -91,7 +91,7 @@ export const Navbar = (): JSX.Element => {
           Settings
         </Button>
       </li>
-      <li className="navbar-item">
+      <li className="navbar-item mobile-hidden">
         <div className="navbar-item-circle-div">
           <ButtonToolbar>
             <Whisper

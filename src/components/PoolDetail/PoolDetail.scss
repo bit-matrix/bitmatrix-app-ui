@@ -5,8 +5,8 @@
   position: relative;
   border-radius: 1rem;
   margin-top: 1rem;
-  width: 60rem;
-  height: 30rem;
+  width: 20rem;
+  height: 60rem;
 }
 
 .pool-detail-header-left {
@@ -14,18 +14,7 @@
   align-items: center;
 }
 
-.pool-detail-tabs {
-  margin-right: 5rem;
-}
-
-.pool-detail-navbar-item {
-  margin: 0 1rem;
-}
-
 .pool-detail-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   padding: 1rem 1rem 0 1rem;
 }
 
@@ -42,27 +31,15 @@
 }
 
 .pool-detail-content {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: calc(100% - 4rem);
+  height: calc(100% - 3rem);
   padding: 1rem;
 }
 
 .pool-detail-content-left {
-  width: calc(30% - 0.5rem);
-  height: 100%;
-  margin-right: 0.5rem;
   background: #171718;
   border-radius: 1rem;
   padding: 1rem;
   color: $navbarTextColor;
-}
-
-.pool-detail-content-right {
-  width: calc(70% - 0.5rem);
-  margin-left: 0.5rem;
-  height: 100%;
 }
 
 .pool-detail-item {
@@ -153,4 +130,55 @@ th {
 
 .pool-detail-tabs .rs-nav-item-content::before {
   background-color: $liquidNeonColor !important;
+}
+
+.pool-detail-content-right {
+  margin-bottom: 1rem;
+  height: calc(100% - 28rem);
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .pool-detail-main {
+    width: 60rem;
+    height: 30rem;
+  }
+  .pool-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .pool-detail-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 4rem);
+    padding: 1rem;
+  }
+
+  .pool-detail-content-left {
+    width: calc(30% - 0.5rem);
+    height: 100%;
+    margin-right: 0.5rem;
+    background: #171718;
+    border-radius: 1rem;
+    padding: 1rem;
+    color: $navbarTextColor;
+  }
+
+  .pool-detail-tabs {
+    margin-right: 5rem;
+  }
+
+  .pool-detail-navbar-item {
+    margin: 0 1rem;
+  }
+
+  .pool-detail-content-right {
+    width: calc(70% - 0.5rem);
+    margin-left: 0.5rem;
+    height: 100%;
+    margin-bottom: unset;
+  }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Icon, Nav } from 'rsuite';
+import { Button, Divider, Icon, Nav } from 'rsuite';
 import { PoolData } from '../../model/PoolData';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
@@ -70,6 +70,11 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
         </Nav>
       </div>
       <div className="pool-detail-content">
+        <div className="pool-detail-content-right desktop-hidden">
+          <ParentSize>
+            {({ width, height }) => <AreaChart width={width} height={height} />}
+          </ParentSize>
+        </div>
         <div className="pool-detail-content-left">
           <div>Pool Pairs</div>
           <div className="pool-detail-amount">
@@ -166,7 +171,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
             Add Liquidity
           </Button>
         </div>
-        <div className="pool-detail-content-right">
+        <div className="pool-detail-content-right mobile-hidden">
           <ParentSize>
             {({ width, height }) => <AreaChart width={width} height={height} />}
           </ParentSize>

@@ -15,16 +15,17 @@ export const PoolCard: React.FC<Props> = ({ data, onClick }) => {
     <div className="pool-card-main" onClick={onClick}>
       <div className="pool-card-item column-1">
         <div className="column-1-item order-item">#{data.rank}</div>
-        <div className="column-1-item">
+        <div className="column-1-item ">
           <AssetIcon symbol={data.fromSymbol} />
           <AssetIcon symbol={data.toSymbol} />
         </div>
-        <div className="column-1-item">
+        <div className="column-1-item token-item">
           {data.fromSymbol}/{data.toSymbol}
         </div>
         <div className="column-1-item percent">{data.rate}%</div>
       </div>
-      <div className="pool-card-item column-2">
+
+      <div className="pool-card-item column-2 mobile-hidden">
         <tr>
           <th>TVL</th>
           <th>Volume 24h</th>

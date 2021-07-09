@@ -13,6 +13,7 @@ export const AppRouter = (): JSX.Element => {
   return (
     <Router>
       <Content className="app-router-main">
+        <div className="secret-div" />
         <Navbar />
         <div className="app-container">
           <Switch>

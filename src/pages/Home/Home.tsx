@@ -15,6 +15,9 @@ export const Home = (): JSX.Element => {
           <h3 className="home-page-desc-header">
             Anonymous liquidity provision here!
           </h3>
+          <div className="home-page-img-content desktop-hidden">
+            <img className="home-page-img" src={HomeIcon} alt="Home" />
+          </div>
           <div className="home-page-desc-content">
             <p>
               Bitmatrix is a constant product market maker built on Liquid
@@ -40,7 +43,7 @@ export const Home = (): JSX.Element => {
             Start Swapping
           </Button>
         </div>
-        <div className="home-page-img-content">
+        <div className="home-page-img-content mobile-hidden">
           <img className="home-page-img" src={HomeIcon} alt="Home" />
         </div>
       </div>
