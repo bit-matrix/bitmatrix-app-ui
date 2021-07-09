@@ -87,6 +87,8 @@
   position: absolute;
   top: 1rem;
   right: 1.6875rem;
+  font-size: 1rem;
+  line-height: 1.25rem;
 }
 
 .loader {
@@ -118,6 +120,10 @@
 
 .navbar-hover-button {
   background: transparent !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navbar-popover {
