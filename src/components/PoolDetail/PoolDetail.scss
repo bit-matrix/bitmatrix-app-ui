@@ -137,6 +137,16 @@ th {
   height: calc(100% - 28rem);
 }
 
+.pool-detail-content-right svg {
+  border-radius: 1rem;
+}
+
+.pool-detail-content-left-header {
+  padding-left: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-main {
     width: 60rem;

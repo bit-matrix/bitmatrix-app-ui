@@ -2,7 +2,6 @@ import React from 'react';
 import { PoolData } from '../../model/PoolData';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import Numeral from 'numeral';
-
 import './PoolCard.scss';
 
 type Props = {

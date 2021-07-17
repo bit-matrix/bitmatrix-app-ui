@@ -1,9 +1,9 @@
 @import '../../../style/constant.scss';
 
 .swap-footer-tab {
-  height: 2.5rem;
+  height: 3rem;
   margin-top: 2.5rem;
-  width: 70%;
+  width: fit-content;
   border: 1px solid;
   margin: 3rem auto 0;
   display: flex;
@@ -16,7 +16,8 @@
   position: relative;
   height: 100%;
   float: left;
-  padding-left: 1rem;
+  padding: 0 1.5rem;
+  // padding-left: 1rem;
 }
 
 .swap-footer-tab-one {
@@ -32,7 +33,7 @@
 
 .swap-footer-tab-one:after {
   content: '';
-  border-top: 38px solid transparent;
+  border-top: 46px solid transparent;
   border-left: 17px solid #333;
   right: -17px;
   content: '';

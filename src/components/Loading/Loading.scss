@@ -1,9 +1,9 @@
 @import '../../style/constant.scss';
 
 .loading {
-  border: 0.25rem solid #f3f3f3;
+  border: 0.25rem solid #818489;
   border-radius: 50%;
-  border-top: 0.25rem solid $navbarTextColor;
+  border-top: 0.25rem solid $navbarBackground;
   // width: 2.25rem;
   // height: 2.25rem;
   animation: spin 2s linear infinite;

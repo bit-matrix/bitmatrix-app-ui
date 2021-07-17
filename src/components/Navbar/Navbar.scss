@@ -70,13 +70,23 @@
 
 .navbar-item-circle-div {
   position: relative;
-  margin-right: 1rem;
-  border-left: 1px solid;
-  padding-left: 1rem;
+  // margin-right: 1rem;
+  padding-left: 0.25rem;
   cursor: pointer;
   height: 3rem;
   display: flex;
   align-items: center;
+}
+
+.navbar-item-circle-div:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  height: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid $navbarItemSelected;
 }
 
 .navbar-item-circle {
@@ -85,10 +95,8 @@
 
 .navbar-item-info {
   position: absolute;
-  top: 1rem;
-  right: 1.6875rem;
-  font-size: 1rem;
-  line-height: 1.25rem;
+  color: $navbarTextColor;
+  font-weight: 600;
 }
 
 .loader {
@@ -121,7 +129,7 @@
 .navbar-hover-button {
   background: transparent !important;
   position: relative;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }

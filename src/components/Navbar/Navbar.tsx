@@ -7,8 +7,6 @@ import { InfoCard } from '../InfoCard/InfoCard';
 import { Loading } from '../Loading/Loading';
 import './Navbar.scss';
 
-const { Circle } = Progress;
-
 export const Navbar = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
@@ -33,7 +31,7 @@ export const Navbar = (): JSX.Element => {
     <ul className="navbar-main">
       <li className="navbar-item">
         <Button
-          className={`navbar-home-button ml-5 ${
+          className={`navbar-home-button  ${
             selectedTab === ROUTE_PATH.HOME && 'active'
           }`}
           onClick={() => {
@@ -105,7 +103,7 @@ export const Navbar = (): JSX.Element => {
               enterable
             >
               <Button className="navbar-hover-button">
-                <Loading width="2.5rem" height="2.5rem" />
+                <Loading width="2rem" height="2rem" />
                 {/* <div className="loader" /> */}
                 <span className="navbar-item-info">1</span>
               </Button>

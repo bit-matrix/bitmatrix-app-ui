@@ -76,7 +76,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
           </ParentSize>
         </div>
         <div className="pool-detail-content-left">
-          <div>Pool Pairs</div>
+          <div className="pool-detail-content-left-header">Pool Pairs</div>
           <div className="pool-detail-amount">
             <div className="pool-detail-item">
               <div className="pool-detail-img-content">
@@ -96,69 +96,51 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
           </div>
 
           <div className="pool-detail-volume-fee">
-            <table className="pool-detail-table">
-              <tr>
-                <th>Price</th>
-                <th>Volume 24h</th>
-              </tr>
-              <tr>
-                <td className="pool-detail-table-text">%12</td>
-                <td className="pool-detail-table-text">%219.20m</td>
-              </tr>
-              <tr>
-                <td>
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
-                </td>
-                <td>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
-                </td>
-              </tr>
-            </table>
+            <div className="pool-detail-item">
+              <div>Price</div>
+              <div>Volume 24h</div>
+            </div>
+            <div className="pool-detail-item">
+              <div className="pool-detail-table-text">%12</div>
+              <div className="pool-detail-table-text">%219.20m</div>
+            </div>
+            <div className="pool-detail-item">
+              <div>
+                <Icon
+                  className="pool-detail-arrow-down-icon"
+                  icon="arrow-down2"
+                />
+                <span className="pool-detail-table-arrow-down-text">1.35%</span>
+              </div>
+              <div>
+                <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
+                <span className="pool-detail-table-arrow-up-text">74.54%</span>
+              </div>
+            </div>
           </div>
 
           <div className="pool-detail-volume-fee">
-            <table className="pool-detail-table">
-              <tr>
-                <th>TVL</th>
-                <th>Fees 24h</th>
-              </tr>
-              <tr>
-                <td className="pool-detail-table-text">$357.77m</td>
-                <td className="pool-detail-table-text">%657.61k</td>
-              </tr>
-              <tr>
-                <td>
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
-                </td>
-                <td>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
-                </td>
-              </tr>
-            </table>
+            <div className="pool-detail-item">
+              <div>TVL</div>
+              <div>Fees 24h</div>
+            </div>
+            <div className="pool-detail-item">
+              <div className="pool-detail-table-text">$357.77m</div>
+              <div className="pool-detail-table-text">%657.61k</div>
+            </div>
+            <div className="pool-detail-item">
+              <div>
+                <Icon
+                  className="pool-detail-arrow-down-icon"
+                  icon="arrow-down2"
+                />
+                <span className="pool-detail-table-arrow-down-text">1.35%</span>
+              </div>
+              <div>
+                <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
+                <span className="pool-detail-table-arrow-up-text">74.54%</span>
+              </div>
+            </div>
           </div>
 
           <Button

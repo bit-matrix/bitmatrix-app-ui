@@ -58,7 +58,7 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
         </Nav>
         <IconButton
           className="pool-page-button"
-          icon={<Icon className="pool-page-icon" icon="plus" />}
+          icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
         />
       </div>
       <div className="pool-page-content">{getPoolData()}</div>
