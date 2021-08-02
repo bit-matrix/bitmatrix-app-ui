@@ -5,9 +5,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 2rem;
-  // bottom: 0.5rem;
-  // position: absolute;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
 }
 
 .swap-page-footer-icons {
@@ -27,7 +27,8 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 2rem;
+    bottom: 0;
     margin-top: 3rem;
+    position: fixed;
   }
 }
