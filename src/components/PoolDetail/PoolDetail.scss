@@ -1,9 +1,13 @@
 @import '../../style/constant.scss';
 
+.pool-detail-container {
+  margin-top: 10rem;
+}
+
 .pool-detail-main {
-  border: 1px solid #adfbc4;
+  border: 2px solid #adfbc4;
   position: relative;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   margin-top: 1rem;
   width: 20rem;
   height: 60rem;
@@ -45,8 +49,12 @@
 .pool-detail-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: start;
   margin: 0.5rem;
+
+  .left-side {
+    width: 65%;
+  }
 }
 
 .pool-detail-img-content {
@@ -88,7 +96,7 @@ th {
 .pool-detail-table-arrow-down-text {
   margin-left: 0.25rem;
   color: red;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .pool-detail-arrow-up-icon {
@@ -99,13 +107,24 @@ th {
 .pool-detail-table-arrow-up-text {
   margin-left: 0.25rem;
   color: green;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
 }
 
 .pool-detail-table-text {
   color: #d4d4d4;
   font-size: 1rem;
   font-weight: 600;
+}
+
+.pool-detail-item-detail {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  margin: 0.25rem 0.5rem;
+
+  .left-side {
+    width: 65%;
+  }
 }
 
 .pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
@@ -147,7 +166,16 @@ th {
   font-weight: 500;
 }
 
+.pool-detail-header-right {
+  margin-right: 5rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
+  .pool-detail-container {
+    margin-top: 5rem;
+    height: unset;
+  }
+
   .pool-detail-main {
     width: 60rem;
     height: 30rem;
@@ -181,8 +209,8 @@ th {
     margin-right: 5rem;
   }
 
-  .pool-detail-navbar-item {
-    margin: 0 1rem;
+  .pool-detail-navbar-item .rs-nav-item-content {
+    padding: 0.5rem 1.5rem !important;
   }
 
   .pool-detail-content-right {
