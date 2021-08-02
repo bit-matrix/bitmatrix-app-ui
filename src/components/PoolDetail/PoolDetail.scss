@@ -166,10 +166,6 @@ th {
   font-weight: 500;
 }
 
-.pool-detail-header-right {
-  margin-right: 5rem;
-}
-
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
     margin-top: 5rem;
@@ -185,6 +181,10 @@ th {
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1rem 0 1rem;
+  }
+
+  .pool-detail-header-right {
+    margin-right: 5rem;
   }
 
   .pool-detail-content {

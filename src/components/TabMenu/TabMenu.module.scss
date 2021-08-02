@@ -30,7 +30,7 @@
 .tabMenuItemText {
   vertical-align: middle;
   display: table-cell;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .selected {
@@ -55,4 +55,10 @@
   position: absolute;
   bottom: 0;
   width: 100%;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .tabMenuItemText {
+    padding: 0 2rem;
+  }
 }
