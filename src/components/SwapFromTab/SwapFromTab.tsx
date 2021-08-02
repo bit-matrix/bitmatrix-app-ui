@@ -1,6 +1,7 @@
 import React from 'react';
 import { Radio, RadioGroup } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import './SwapFromTab.scss';
 
 type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT;
@@ -26,21 +27,24 @@ export const SwapFromTab: React.FC<Props> = ({
       defaultValue={selectedFromAmountPercent}
     >
       <Radio
-        className="left-radio-item "
+        classPrefix="radio-item-prefix"
+        className="left-radio-item tab-radio"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.ALL}
       >
         ALL
       </Radio>
       <Radio
-        className="middle-radio-item"
+        classPrefix="radio-item-prefix"
+        className="middle-radio-item tab-radio"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.HALF}
       >
         HALF
       </Radio>
       <Radio
-        className="right-radio-item"
+        classPrefix="radio-item-prefix"
+        className="right-radio-item tab-radio"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.MIN}
       >
