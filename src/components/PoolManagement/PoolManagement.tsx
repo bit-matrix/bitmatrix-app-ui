@@ -3,6 +3,7 @@ import { Icon, IconButton, Nav } from 'rsuite';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
 import { PoolMockData } from '../../data/PoolMockData';
 import { PoolData } from '../../model/PoolData';
+import { TabMenu } from '../TabMenu/TabMenu';
 import './PoolManagement.scss';
 
 type Props = {
@@ -10,8 +11,8 @@ type Props = {
 };
 
 enum PoolManagementTabs {
-  TOP_POOLS = 'top_pools',
-  MY_POOLS = 'my_pools',
+  TOP_POOLS = 'Top Pools',
+  MY_POOLS = 'My Pools',
 }
 
 export const PoolManagement: React.FC<Props> = ({ onClick }) => {
@@ -23,14 +24,14 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
     if (selectedTab == PoolManagementTabs.TOP_POOLS) {
       return PoolMockData.map((poolData) => {
         return (
-          <div key={poolData.rank} className="pool-page-card">
+          <div key={poolData.rank} className="pool-page-card card-1">
             <PoolCard data={poolData} onClick={() => onClick(poolData)} />
           </div>
         );
       });
     } else if (selectedTab == PoolManagementTabs.MY_POOLS) {
       return (
-        <div key={PoolMockData[0].rank} className="pool-page-card">
+        <div key={PoolMockData[0].rank} className="pool-page-card card-2">
           <PoolCard
             data={PoolMockData[0]}
             onClick={() => onClick(PoolMockData[0])}
@@ -47,21 +48,29 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
           className="pool-page-button"
           icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />}
         />
-        <Nav
-          activeKey={selectedTab}
-          onSelect={(eventKey: any) => setSelectedTab(eventKey)}
-          className="pool-page-tabs"
-          appearance="subtle"
-        >
-          <Nav.Item eventKey={PoolManagementTabs.TOP_POOLS}>Top Pools</Nav.Item>
-          <Nav.Item eventKey={PoolManagementTabs.MY_POOLS}>My Pools</Nav.Item>
-        </Nav>
+        <TabMenu
+          menuItems={[
+            PoolManagementTabs.TOP_POOLS,
+            PoolManagementTabs.MY_POOLS,
+          ]}
+          selectedItem={selectedTab}
+          onClick={(eventKey: any) => setSelectedTab(eventKey)}
+        />
         <IconButton
           className="pool-page-button"
           icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
         />
       </div>
-      <div className="pool-page-content">{getPoolData()}</div>
+      <div className="pool-page-content">
+        <div
+          className={`${
+            selectedTab == PoolManagementTabs.TOP_POOLS ? 'tab-1' : 'tab-2'
+          }`}
+        >
+          {getPoolData()}
+        </div>{' '}
+      </div>
+      <div className="pool-page-shadow" />
     </div>
   );
 };
