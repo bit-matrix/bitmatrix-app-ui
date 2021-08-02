@@ -9,7 +9,7 @@ import './Home.scss';
 export const Home = (): JSX.Element => {
   const history = useHistory();
   return (
-    <div>
+    <div className="home-page-container">
       <div className="home-page-main">
         <div className="home-page-desc">
           <h3 className="home-page-desc-header">
