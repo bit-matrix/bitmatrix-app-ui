@@ -24,11 +24,11 @@
   margin: 0 auto;
   display: flex;
   border: 2px solid $liquidNeonColor;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 22.5rem;
+  width: 23rem;
   padding: 1.5rem;
   z-index: 6;
   min-height: 20.8125rem;
@@ -67,8 +67,8 @@
 
 .swap-button {
   width: 100%;
-  height: 2.5rem;
-  border-radius: 0.5rem !important;
+  height: 2.75rem;
+  border-radius: 1rem !important;
   font-weight: 600 !important;
   color: $swapBackgroundColor !important;
   background: $liquidNeonColor !important;
@@ -116,63 +116,10 @@
   margin-right: 0.75rem;
 }
 
-.swap-amount-rate {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  border: none !important;
-  border-radius: 0 0 1rem 1rem;
-}
-
-.left-radio-item {
-  border-left: 1px solid;
-  border-bottom: 1px solid;
-  border-bottom-left-radius: 0.5rem;
-}
-
-.middle-radio-item {
-  border-left: 1px solid;
-  border-bottom: 1px solid;
-  border-right: 1px solid;
-}
-
-.right-radio-item {
-  border-right: 1px solid;
-  border-bottom: 1px solid;
-  border-bottom-right-radius: 0.5rem;
-}
-
-.rs-radio-group-picker .rs-radio-checker > label {
-  line-height: 0.9 !important;
-  font-size: 0.75rem !important;
-  font-weight: 600 !important;
-}
-
 .swap-page-tabs {
   height: 2.5rem;
   display: flex;
   position: relative;
-}
-
-.swap-footer-tab {
-  height: 3rem;
-  margin-top: 2.5rem;
-  width: fit-content;
-  border: 1px solid;
-  margin: 3rem auto 0;
-  display: flex;
-  align-items: center;
-  border-radius: 0.8125rem;
-  position: relative;
-}
-
-.swap-footer-tab div {
-  position: relative;
-  height: 100%;
-  float: left;
-  padding: 0 1.5rem;
-  // padding-left: 1rem;
 }
 
 .swap-page-tab-left {
