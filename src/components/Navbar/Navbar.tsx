@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import bitmatrix_icon from '../../images/bitmatrix_icon.png';
-import { Button, ButtonToolbar, Popover, Progress, Whisper } from 'rsuite';
+import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Loading } from '../Loading/Loading';
+import bitmatrix_icon from '../../images/bitmatrix_icon.png';
+import bmx_gray from '../../images/bmx_gray.png';
 import './Navbar.scss';
 
 export const Navbar = (): JSX.Element => {
@@ -38,7 +39,11 @@ export const Navbar = (): JSX.Element => {
             history.push(ROUTE_PATH.HOME);
           }}
         >
-          <img className="navbar-home-icon" src={bitmatrix_icon} alt="" />
+          {selectedTab === ROUTE_PATH.HOME ? (
+            <img className="navbar-home-icon" src={bitmatrix_icon} alt="" />
+          ) : (
+            <img className="navbar-home-icon" src={bmx_gray} alt="" />
+          )}
         </Button>
       </li>
       <li className="navbar-item">
