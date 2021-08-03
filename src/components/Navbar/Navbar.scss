@@ -15,19 +15,16 @@
   z-index: 5;
 }
 
-.navbar-item {
-  margin: 0 0.25rem;
-}
-
 .navbar-item-button {
   border-radius: 2rem !important;
-  min-width: 7rem;
+  min-width: 4.5rem;
   display: flex !important;
   align-items: center;
   justify-content: center;
   height: 2.5rem;
   background: transparent !important;
   color: $navbarTextColor !important;
+  padding: 0 2px;
 }
 
 .navbar-item-button:hover {
@@ -139,5 +136,21 @@
   padding: 0 !important;
 }
 
+.navbar-mobile-icon {
+  width: 2rem;
+}
+
+.navbar-item {
+  margin: 0 0.0625rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
+  .navbar-item-button {
+    min-width: 7rem;
+    padding: 0;
+  }
+
+  .navbar-item {
+    margin: 0 0.25rem;
+  }
 }
