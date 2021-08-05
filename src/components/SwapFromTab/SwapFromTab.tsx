@@ -24,7 +24,7 @@ export const SwapFromTab: React.FC<Props> = ({
       name="radioList"
       inline
       appearance="picker"
-      defaultValue={selectedFromAmountPercent}
+      // defaultValue={selectedFromAmountPercent}
     >
       <Radio
         classPrefix="radio-item-prefix"

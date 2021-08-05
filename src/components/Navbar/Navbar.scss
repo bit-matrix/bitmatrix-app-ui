@@ -144,6 +144,11 @@
   margin: 0 0.0625rem;
 }
 
+.navbar-item-icon {
+  width: 2rem;
+  transform: scale(110%);
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .navbar-item-button {
     min-width: 7rem;

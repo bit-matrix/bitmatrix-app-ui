@@ -70,7 +70,7 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
           {getPoolData()}
         </div>{' '}
       </div>
-      <div className="pool-page-shadow" />
+      {/* <div className="pool-page-shadow" /> */}
     </div>
   );
 };

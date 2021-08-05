@@ -27,7 +27,7 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 0;
+    bottom: 1rem;
     margin-top: 3rem;
     position: fixed;
   }

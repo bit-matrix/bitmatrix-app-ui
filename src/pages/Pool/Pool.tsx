@@ -12,11 +12,21 @@ export const Pool = (): JSX.Element => {
 
   if (selectedPool !== undefined) {
     return (
-      <PoolDetail
-        back={() => setSelectedPool(undefined)}
-        poolData={selectedPool}
-      />
+      <div
+        className={`pool-main-div ${
+          selectedPool !== undefined && 'pool-detail-transition'
+        }`}
+      >
+        <PoolDetail
+          back={() => setSelectedPool(undefined)}
+          poolData={selectedPool}
+        />
+      </div>
     );
   }
-  return <PoolManagement onClick={(data) => setSelectedPool(data)} />;
+  return (
+    <div className="pool-main-div">
+      <PoolManagement onClick={(data) => setSelectedPool(data)} />;
+    </div>
+  );
 };

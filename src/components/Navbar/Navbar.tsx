@@ -9,6 +9,7 @@ import bmx_gray from '../../images/bmx_gray.png';
 import swap from '../../images/swap.png';
 import info from '../../images/info.png';
 import stats from '../../images/stats.png';
+import historyIcon from '../../images/history.png';
 import settings from '../../images/settings.png';
 import './Navbar.scss';
 
@@ -151,7 +152,7 @@ export const Navbar = (): JSX.Element => {
           <ButtonToolbar>
             <Whisper
               placement="bottom"
-              trigger="hover"
+              trigger="click"
               speaker={
                 <Popover className="navbar-popover">
                   <InfoCard />
@@ -159,11 +160,15 @@ export const Navbar = (): JSX.Element => {
               }
               enterable
             >
-              <Button className="navbar-hover-button">
+              {/* <Button className="navbar-hover-button">
                 <Loading width="2rem" height="2rem" />
-                {/* <div className="loader" /> */}
                 <span className="navbar-item-info">1</span>
-              </Button>
+              </Button> */}
+              <img
+                className="navbar-item-icon mr-5 ml-5"
+                src={historyIcon}
+                alt=""
+              />
             </Whisper>
           </ButtonToolbar>
         </div>
