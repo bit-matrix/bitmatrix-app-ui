@@ -1,7 +1,7 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .home-page-container {
-  margin-top: 10rem;
+  margin-top: 6rem;
 }
 
 .home-page-main {
@@ -11,7 +11,7 @@
   height: 49rem;
   border-radius: 1.5rem;
   background-color: $liquidNeonColor;
-  margin-top: 2rem;
+  // margin-top: 2rem;
 }
 
 .home-page-desc {
@@ -63,7 +63,8 @@
     height: 25rem;
     border-radius: 1.5rem;
     background-color: $liquidNeonColor;
-    margin-top: 2rem;
+    // margin-bottom: 3rem;
+    // margin-top: 2rem;
   }
 
   .home-page-desc {

@@ -1,0 +1,309 @@
+/**
+  *
+  * padding left
+  *
+  */
+.pl0 {
+  padding-left: 0 !important;
+}
+.pl1 {
+  padding-left: 0.25rem !important;
+}
+.pl2 {
+  padding-left: 0.5rem !important;
+}
+.pl3 {
+  padding-left: 0.75rem !important;
+}
+.pl4 {
+  padding-left: 1rem !important;
+}
+.pl5 {
+  padding-left: 1.25rem !important;
+}
+.pl6 {
+  padding-left: 1.5rem !important;
+}
+.pl7 {
+  padding-left: 1.75rem !important;
+}
+.pl8 {
+  padding-left: 2rem !important;
+}
+.pl9 {
+  padding-left: 2.25rem !important;
+}
+.pl10 {
+  padding-left: 2.5rem !important;
+}
+.pl11 {
+  padding-left: 2.75rem !important;
+}
+.pl12 {
+  padding-left: 3rem !important;
+}
+/**
+    *
+    * padding right
+    *
+    */
+.pr0 {
+  padding-right: 0 !important;
+}
+.pr1 {
+  padding-right: 0.25rem !important;
+}
+.pr2 {
+  padding-right: 0.5rem !important;
+}
+.pr3 {
+  padding-right: 0.75rem !important;
+}
+.pr4 {
+  padding-right: 1rem !important;
+}
+.pr5 {
+  padding-right: 1.25rem !important;
+}
+.pr6 {
+  padding-right: 1.5rem !important;
+}
+.pr7 {
+  padding-right: 1.75rem !important;
+}
+.pr8 {
+  padding-right: 2rem !important;
+}
+.pr9 {
+  padding-right: 2.25rem !important;
+}
+.pr10 {
+  padding-right: 2.5rem !important;
+}
+.pr11 {
+  padding-right: 2.75rem !important;
+}
+.pr12 {
+  padding-right: 3rem !important;
+}
+/**
+    *
+    * padding x
+    *
+    */
+.px0 {
+  @extend .pl0, .pr0;
+}
+.px1 {
+  @extend .pl1, .pr1;
+}
+.px2 {
+  @extend .pl2, .pr2;
+}
+.px3 {
+  @extend .pl3, .pr3;
+}
+.px4 {
+  @extend .pl4, .pr4;
+}
+.px5 {
+  @extend .pl5, .pr5;
+}
+.px6 {
+  @extend .pl6, .pr6;
+}
+.px7 {
+  @extend .pl7, .pr7;
+}
+.px8 {
+  @extend .pl8, .pr8;
+}
+.px9 {
+  @extend .pl9, .pr9;
+}
+.px10 {
+  @extend .pl10, .pr10;
+}
+.px11 {
+  @extend .pl11, .pr11;
+}
+.px12 {
+  @extend .pl12, .pr12;
+}
+
+/**
+    *
+    * padding top
+    *
+    */
+.pt0 {
+  padding-top: 0 !important;
+}
+.pt1 {
+  padding-top: 0.25rem !important;
+}
+.pt2 {
+  padding-top: 0.5rem !important;
+}
+.pt3 {
+  padding-top: 0.75rem !important;
+}
+.pt4 {
+  padding-top: 1rem !important;
+}
+.pt5 {
+  padding-top: 1.25rem !important;
+}
+.pt6 {
+  padding-top: 1.5rem !important;
+}
+.pt7 {
+  padding-top: 1.75rem !important;
+}
+.pt8 {
+  padding-top: 2rem !important;
+}
+.pt9 {
+  padding-top: 2.25rem !important;
+}
+.pt10 {
+  padding-top: 2.5rem !important;
+}
+.pt11 {
+  padding-top: 2.75rem !important;
+}
+.pt12 {
+  padding-top: 3rem !important;
+}
+/**
+    *
+    * padding bottom
+    *
+    */
+.pb0 {
+  padding-bottom: 0 !important;
+}
+.pb1 {
+  padding-bottom: 0.25rem !important;
+}
+.pb2 {
+  padding-bottom: 0.5rem !important;
+}
+.pb3 {
+  padding-bottom: 0.75rem !important;
+}
+.pb4 {
+  padding-bottom: 1rem !important;
+}
+.pb5 {
+  padding-bottom: 1.25rem !important;
+}
+.pb6 {
+  padding-bottom: 1.5rem !important;
+}
+.pb7 {
+  padding-bottom: 1.75rem !important;
+}
+.pb8 {
+  padding-bottom: 2rem !important;
+}
+.pb9 {
+  padding-bottom: 2.25rem !important;
+}
+.pb10 {
+  padding-bottom: 2.5rem !important;
+}
+.pb11 {
+  padding-bottom: 2.75rem !important;
+}
+.pb12 {
+  padding-bottom: 3rem !important;
+}
+/**
+    *
+    * padding y
+    *
+    */
+.py0 {
+  @extend .pt0, .pb0;
+}
+.py1 {
+  @extend .pt1, .pb1;
+}
+.py2 {
+  @extend .pt2, .pb2;
+}
+.py3 {
+  @extend .pt3, .pb3;
+}
+.py4 {
+  @extend .pt4, .pb4;
+}
+.py5 {
+  @extend .pt5, .pb5;
+}
+.py6 {
+  @extend .pt6, .pb6;
+}
+.py7 {
+  @extend .pt7, .pb7;
+}
+.py8 {
+  @extend .pt8, .pb8;
+}
+.py9 {
+  @extend .pt9, .pb9;
+}
+.py10 {
+  @extend .pt10, .pb10;
+}
+.py11 {
+  @extend .pt11, .pb11;
+}
+.py12 {
+  @extend .pt12, .pb12;
+}
+/**
+    *
+    * padding
+    *
+    */
+.p0 {
+  @extend .px0, .py0;
+}
+.p1 {
+  @extend .px1, .py1;
+}
+.p2 {
+  @extend .px2, .py2;
+}
+.p3 {
+  @extend .px3, .py3;
+}
+.p4 {
+  @extend .px4, .py4;
+}
+.p5 {
+  @extend .px5, .py5;
+}
+.p6 {
+  @extend .px6, .py6;
+}
+.p7 {
+  @extend .px7, .py7;
+}
+.p8 {
+  @extend .px8, .py8;
+}
+.p9 {
+  @extend .px9, .py9;
+}
+.p10 {
+  @extend .px10, .py10;
+}
+.p11 {
+  @extend .px11, .py11;
+}
+.p12 {
+  @extend .px12, .py12;
+}

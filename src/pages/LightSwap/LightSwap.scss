@@ -1,4 +1,4 @@
-@import '../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .swap-main-div {
   background-image: url('../images/background.png');
@@ -299,7 +299,7 @@ bitcoin-button {
   }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: $mobile-view-breakpoint) {
   .navbar-item {
     padding: 0 0.5rem !important;
   }

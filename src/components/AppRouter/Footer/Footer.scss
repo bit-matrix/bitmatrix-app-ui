@@ -1,12 +1,12 @@
-@import '../../../style/constant.scss';
+@import '../../../style/themes/bitmatrix.scss';
 
 .swap-page-footer {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 2.5rem;
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
@@ -27,8 +27,9 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 1rem;
+    bottom: 1.5rem;
     margin-top: 3rem;
+    margin-bottom: 1.5rem;
     position: fixed;
   }
 }

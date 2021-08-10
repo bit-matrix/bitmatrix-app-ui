@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .pool-card-main {
   display: flex;
@@ -11,7 +11,7 @@
 }
 
 .pool-card-item {
-  margin: 0 1rem;
+  margin: 0 1rem 0 1rem;
 }
 
 .order-item {
@@ -31,6 +31,7 @@
 .pool-card-item .column-1-item {
   margin: 0 0.5rem;
   display: flex;
+  color: #fff;
 }
 
 .pool-card-img {
@@ -42,12 +43,21 @@
   min-width: 5rem;
 }
 
+.pool-card-main .column-2 th,
+td {
+  color: #fff;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-card-item .percent {
     border: 1px solid gray;
     padding: 0.25rem;
     border-radius: 0.5rem;
     background-color: gray;
+  }
+
+  .pool-card-item {
+    margin: 0 0.5rem 0 1rem;
   }
 
   .column-2 {

@@ -1,0 +1,46 @@
+@import './themes/bitmatrix.scss';
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  outline: none;
+}
+
+*,
+html,
+body {
+  font-family: $fontFamily;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $defaultTextColor;
+}
+
+@media only screen and (max-width: $mobile-view-breakpoint) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .desktop-hidden {
+    display: none;
+  }
+}
+
+/**
+  *
+  * Margin Padding
+  *
+  */
+@import './global/margin.scss';
+@import './global/padding.scss';
+
+/**
+  *
+  * Buttons
+  *
+  */
+@import './global/buttons.scss';

@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .pool-page-main {
   width: 22rem;
@@ -20,7 +20,7 @@
 
 .pool-page-content {
   position: relative;
-  height: 55vh;
+  height: 48vh;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 1rem 1rem 0.5rem 1rem;
@@ -101,7 +101,7 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  left: 5%;
+  left: 6%;
 }
 
 .tab-2 {
@@ -110,7 +110,7 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  right: 95%;
+  right: 94%;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
@@ -118,11 +118,15 @@
     width: 48rem;
   }
 
+  .pool-page-content {
+    height: 52vh;
+  }
+
   .tab-1 {
-    left: 2%;
+    left: 3%;
   }
 
   .tab-2 {
-    right: 98%;
+    right: 97%;
   }
 }

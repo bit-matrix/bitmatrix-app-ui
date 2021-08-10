@@ -152,7 +152,7 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            <div className="from-content pt-2">
+            <div className="from-content pt8">
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={setSelectedFromAmountPercent}

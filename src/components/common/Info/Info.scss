@@ -1,4 +1,4 @@
-@import '../../../style/constant.scss';
+@import '../../../style/themes/bitmatrix.scss';
 
 .swap-footer-tab {
   height: 3rem;
@@ -12,7 +12,7 @@
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 6rem;
+  bottom: 7.5rem;
 }
 
 .swap-footer-tab div {

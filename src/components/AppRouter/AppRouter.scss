@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .app-router-main {
   background: #010403;
@@ -9,10 +9,10 @@
   min-height: 100vh;
 }
 
-// .app-container {
-//   height: 70vh;
-//   margin-top: 8rem;
-// }
+.app-container {
+  margin-top: 4rem;
+  margin-bottom: 0;
+}
 
 .secret-div {
   height: 9rem;
@@ -21,4 +21,11 @@
   width: 100%;
   position: fixed;
   top: 0rem;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .app-container {
+    margin-bottom: 3rem;
+    margin-top: 0;
+  }
 }

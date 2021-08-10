@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .swap-page-main {
   display: flex;
@@ -239,14 +239,12 @@
   }
 }
 
-@media only screen and (min-width: 768px) {
+@media only screen and (min-width: $mobile-view-breakpoint) {
   .bitmatrix-icon {
     margin-bottom: 3rem;
   }
-}
-
-@media only screen and (max-height: 672px) {
   .swap-page-main {
     justify-content: unset;
+    margin-top: 0;
   }
 }

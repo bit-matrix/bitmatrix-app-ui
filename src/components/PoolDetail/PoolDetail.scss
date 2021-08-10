@@ -1,7 +1,7 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  margin-top: 10rem;
+  margin-top: 7rem;
 }
 
 .pool-detail-main {
@@ -174,7 +174,7 @@ th {
 
   .pool-detail-main {
     width: 60rem;
-    height: 30rem;
+    height: 29rem;
   }
   .pool-detail-header {
     display: flex;
