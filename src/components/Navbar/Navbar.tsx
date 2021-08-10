@@ -3,13 +3,12 @@ import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
-import { Loading } from '../Loading/Loading';
 import bitmatrix_icon from '../../images/bitmatrix_icon.png';
 import bmx_gray from '../../images/bmx_gray.png';
 import swap from '../../images/swap.png';
 import info from '../../images/info.png';
 import stats from '../../images/stats.png';
-import historyIcon from '../../images/history.png';
+import more from '../../images/more.png';
 import settings from '../../images/settings.png';
 import './Navbar.scss';
 
@@ -51,7 +50,7 @@ export const Navbar = (): JSX.Element => {
           )}
         </Button>
       </li>
-      <li className="navbar-item mobile-hidden">
+      <li className="navbar-item ">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.SWAP && 'active'
@@ -63,7 +62,7 @@ export const Navbar = (): JSX.Element => {
           Swap
         </Button>
       </li>
-      <li className="navbar-item desktop-hidden">
+      {/* <li className="navbar-item desktop-hidden">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.SWAP && 'active'
@@ -74,8 +73,8 @@ export const Navbar = (): JSX.Element => {
         >
           <img className="navbar-mobile-icon" src={swap} alt="" />
         </Button>
-      </li>
-      <li className="navbar-item mobile-hidden">
+      </li> */}
+      <li className="navbar-item ">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.POOL && 'active'
@@ -87,7 +86,7 @@ export const Navbar = (): JSX.Element => {
           Pool
         </Button>
       </li>
-      <li className="navbar-item desktop-hidden">
+      {/* <li className="navbar-item desktop-hidden">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.POOL && 'active'
@@ -98,8 +97,8 @@ export const Navbar = (): JSX.Element => {
         >
           <img className="navbar-mobile-icon" src={info} alt="" />
         </Button>
-      </li>
-      <li className="navbar-item mobile-hidden">
+      </li> */}
+      <li className="navbar-item mobile-hidden ">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.STATS && 'active'
@@ -111,7 +110,7 @@ export const Navbar = (): JSX.Element => {
           Stats
         </Button>
       </li>
-      <li className="navbar-item desktop-hidden">
+      {/*  <li className="navbar-item desktop-hidden">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.STATS && 'active'
@@ -122,8 +121,8 @@ export const Navbar = (): JSX.Element => {
         >
           <img className="navbar-mobile-icon" src={stats} alt="" />
         </Button>
-      </li>
-      <li className="navbar-item mobile-hidden">
+        </li> */}
+      <li className="navbar-item ">
         <Button
           className={`navbar-item-button mr-5 ${
             selectedTab === ROUTE_PATH.SETTINGS && 'active'
@@ -135,7 +134,7 @@ export const Navbar = (): JSX.Element => {
           Settings
         </Button>
       </li>
-      <li className="navbar-item desktop-hidden">
+      {/*   <li className="navbar-item desktop-hidden">
         <Button
           className={`navbar-item-button ${
             selectedTab === ROUTE_PATH.SETTINGS && 'active'
@@ -146,7 +145,7 @@ export const Navbar = (): JSX.Element => {
         >
           <img className="navbar-mobile-icon" src={settings} alt="" />
         </Button>
-      </li>
+      </li> */}
       <li className="navbar-item mobile-hidden">
         <div className="navbar-item-circle-div">
           <ButtonToolbar>
@@ -164,11 +163,7 @@ export const Navbar = (): JSX.Element => {
                 <Loading width="2rem" height="2rem" />
                 <span className="navbar-item-info">1</span>
               </Button> */}
-              <img
-                className="navbar-item-icon mr-5 ml-5"
-                src={historyIcon}
-                alt=""
-              />
+              <img className="navbar-item-icon mr-75 ml-5" src={more} alt="" />
             </Whisper>
           </ButtonToolbar>
         </div>
