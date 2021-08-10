@@ -1,4 +1,4 @@
-@import '../../style/constant.scss';
+@import '../../style/themes/bitmatrix.scss';
 
 .navbar-main {
   display: flex;
@@ -11,7 +11,7 @@
   background: #333334;
   margin-top: 3.5rem;
   position: fixed;
-  top: 2rem;
+  top: 1rem;
   z-index: 5;
 }
 
@@ -52,8 +52,16 @@
   width: 3rem;
 }
 
+.navbar-home-icon:hover {
+  background-image: url('../../images/bitmatrix_icon.png') !important;
+}
+
 .navbar-item .mr-5 {
   margin-right: 0.5rem;
+}
+
+.navbar-item .mr-75 {
+  margin-right: 0.75rem;
 }
 
 .navbar-item .ml-5 {
@@ -145,7 +153,7 @@
 }
 
 .navbar-item-icon {
-  width: 2rem;
+  width: 1.25rem;
   transform: scale(110%);
 }
 
