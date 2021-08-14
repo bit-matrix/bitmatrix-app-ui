@@ -217,15 +217,16 @@ export const Swap = (): JSX.Element => {
             <Button
               appearance="default"
               className="swap-button"
-              onClick={() => {
-                if (assetAmounts.length > 0) {
-                  console.log('TODO');
-                } else {
-                  setShowWalletList(true);
-                }
-              }}
+              // onClick={() => {
+              //   if (assetAmounts.length > 0) {
+              //     console.log('TODO');
+              //   } else {
+              //     setShowWalletList(true);
+              //   }
+              // }}
             >
-              {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'}
+              {/* {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'} */}
+              Coming soon
             </Button>
           </div>
         </div>
