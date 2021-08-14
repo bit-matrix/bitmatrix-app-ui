@@ -61,7 +61,7 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
           icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
         />
       </div>
-      <div className="pool-page-content">
+      {/* <div className="pool-page-content">
         <div
           className={`${
             selectedTab == PoolManagementTabs.TOP_POOLS ? 'tab-1' : 'tab-2'
@@ -69,6 +69,9 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
         >
           {getPoolData()}
         </div>{' '}
+      </div> */}
+      <div className="pool-page-content">
+        <div className="no-pool-text">No pool live yet.</div>
       </div>
       {/* <div className="pool-page-shadow" /> */}
     </div>

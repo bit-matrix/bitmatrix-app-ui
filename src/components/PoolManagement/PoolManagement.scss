@@ -25,6 +25,15 @@
   overflow-x: hidden;
   padding: 1rem 1rem 0.5rem 1rem;
   margin-bottom: 0.75rem;
+
+  // for demo
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-pool-text {
+  font-size: 1.5rem;
 }
 
 .pool-page-content::-webkit-scrollbar {
