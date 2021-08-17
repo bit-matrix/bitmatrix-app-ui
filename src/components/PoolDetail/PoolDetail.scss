@@ -73,7 +73,7 @@
 
 .pool-detail-volume-fee {
   width: 100%;
-  margin: 1rem 0;
+  margin: 1rem 0 0.5rem 0;
 }
 
 .pool-detail-table {
@@ -166,6 +166,19 @@ th {
   font-weight: 500;
 }
 
+.pool-detail-button {
+  display: flex !important;
+  align-items: center;
+  width: 17rem;
+  height: 2.75rem;
+  border-radius: 1rem !important;
+  background: #171718 !important;
+  opacity: 0.8;
+  &:hover {
+    opacity: 1;
+  }
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
     margin-top: 5rem;
@@ -196,7 +209,8 @@ th {
   }
 
   .pool-detail-content-left {
-    width: calc(30% - 0.5rem);
+    // width: calc(30% - 0.5rem);
+    width: 17rem;
     height: 100%;
     margin-right: 0.5rem;
     background: #171718;
@@ -214,7 +228,7 @@ th {
   }
 
   .pool-detail-content-right {
-    width: calc(70% - 0.5rem);
+    width: calc(100% - 18rem);
     margin-left: 0.5rem;
     height: 100%;
     margin-bottom: unset;
