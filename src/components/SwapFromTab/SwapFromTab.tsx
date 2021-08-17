@@ -1,12 +1,12 @@
 import React from 'react';
-import { Radio, RadioGroup } from 'rsuite';
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import './SwapFromTab.scss';
 
 type Props = {
-  selectedFromAmountPercent: FROM_AMOUNT_PERCENT;
+  selectedFromAmountPercent: FROM_AMOUNT_PERCENT | undefined;
   setselectedFromAmountPercent: (
-    newFromAmountPercent: FROM_AMOUNT_PERCENT,
+    newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined,
   ) => void;
 };
 
@@ -15,41 +15,83 @@ export const SwapFromTab: React.FC<Props> = ({
   setselectedFromAmountPercent,
 }) => {
   const onChangeSelectedFromTab = (value: any) => {
-    setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
+    if (value === selectedFromAmountPercent) {
+      setselectedFromAmountPercent(undefined);
+      console.log(value);
+    } else {
+      setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
+    }
   };
 
   return (
-    <RadioGroup
+    // <RadioGroup
+    //   className="swap-amount-rate"
+    //   name="radioList"
+    //   inline
+    //   appearance="picker"
+    //   // defaultValue={selectedFromAmountPercent}
+    // >
+    //   <Radio
+    //     classPrefix="radio-item-prefix"
+    //     className="left-radio-item tab-radio"
+    //     onChange={onChangeSelectedFromTab}
+    //     value={FROM_AMOUNT_PERCENT.ALL}
+    //   >
+    //     ALL
+    //   </Radio>
+    //   <Radio
+    //     classPrefix="radio-item-prefix"
+    //     className="middle-radio-item tab-radio"
+    //     onChange={onChangeSelectedFromTab}
+    //     value={FROM_AMOUNT_PERCENT.HALF}
+    //   >
+    //     HALF
+    //   </Radio>
+    //   <Radio
+    //     classPrefix="radio-item-prefix"
+    //     className="right-radio-item tab-radio"
+    //     onChange={onChangeSelectedFromTab}
+    //     value={FROM_AMOUNT_PERCENT.MIN}
+    //   >
+    //     MIN
+    //   </Radio>
+    // </RadioGroup>
+    <CheckboxGroup
       className="swap-amount-rate"
-      name="radioList"
       inline
-      appearance="picker"
-      // defaultValue={selectedFromAmountPercent}
+      name="checkboxList"
+      value={[selectedFromAmountPercent]}
+      onChange={(
+        value: any[],
+        event: React.SyntheticEvent<HTMLElement, Event>,
+      ) => {
+        // console.log(value);
+      }}
     >
-      <Radio
-        classPrefix="radio-item-prefix"
+      <Checkbox
         className="left-radio-item tab-radio"
+        classPrefix="radio-item-prefix"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.ALL}
       >
         ALL
-      </Radio>
-      <Radio
-        classPrefix="radio-item-prefix"
+      </Checkbox>
+      <Checkbox
         className="middle-radio-item tab-radio"
+        classPrefix="radio-item-prefix"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.HALF}
       >
         HALF
-      </Radio>
-      <Radio
-        classPrefix="radio-item-prefix"
+      </Checkbox>
+      <Checkbox
         className="right-radio-item tab-radio"
+        classPrefix="radio-item-prefix"
         onChange={onChangeSelectedFromTab}
         value={FROM_AMOUNT_PERCENT.MIN}
       >
         MIN
-      </Radio>
-    </RadioGroup>
+      </Checkbox>
+    </CheckboxGroup>
   );
 };
