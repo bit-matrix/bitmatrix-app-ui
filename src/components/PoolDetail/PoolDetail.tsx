@@ -30,14 +30,14 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
       <div className="pool-detail-main">
         <div className="pool-detail-header">
           <div className="pool-detail-header-left">
-            <a className="pool-detail-button" onClick={back}>
+            <Button className="pool-detail-button" onClick={back}>
               <Icon
                 className="pool-detail-back-icon"
                 icon="angle-left"
                 size="4x"
               />
-            </a>
-            <div className="pool-detail-page-text">L-BTC/USDT</div>
+              <div className="pool-detail-page-text">L-BTC/USDT</div>
+            </Button>
           </div>
           <div className="pool-detail-header-right">
             <TabMenu

@@ -18,7 +18,7 @@ export const Swap = (): JSX.Element => {
   // <SwapMainTab />
   // <SwapFromTab />
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] =
-    useState<FROM_AMOUNT_PERCENT>(FROM_AMOUNT_PERCENT.ALL);
+    useState<FROM_AMOUNT_PERCENT>();
   // <SwapAssetList />
   const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(
     SWAP_ASSET.LBTC,
@@ -48,7 +48,7 @@ export const Swap = (): JSX.Element => {
   const assetAmountToFromAmount = useCallback(
     (
       newAssetAmountList: IAssetAmount[],
-      newFromAmountPercent: FROM_AMOUNT_PERCENT,
+      newFromAmountPercent?: FROM_AMOUNT_PERCENT,
     ) => {
       let newFromAmount = 0;
       if (selectedAssetFrom === SWAP_ASSET.LBTC)
