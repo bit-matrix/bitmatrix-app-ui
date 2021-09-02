@@ -11,7 +11,7 @@
   position: relative;
 }
 
-label {
+.slider-option-label {
   width: 80px;
   display: block;
 }
@@ -32,8 +32,8 @@ li:not(:last-child):after {
   left: -9999px;
 }
 
-[type='radio']:checked + label,
-[type='radio']:not(:checked) + label {
+[type='radio']:checked + .slider-option-label,
+[type='radio']:not(:checked) + .slider-option-label {
   position: relative;
   padding-top: 30px;
   padding-right: 60px;
@@ -43,8 +43,8 @@ li:not(:last-child):after {
   color: green;
 }
 
-[type='radio']:checked + label:before,
-[type='radio']:not(:checked) + label:before {
+[type='radio']:checked + .slider-option-label:before,
+[type='radio']:not(:checked) + .slider-option-label:before {
   content: '';
   position: absolute;
   left: 0;
@@ -56,8 +56,8 @@ li:not(:last-child):after {
   background: #fff;
 }
 
-[type='radio']:checked + label:after,
-[type='radio']:not(:checked) + label:after {
+[type='radio']:checked + .slider-option-label:after,
+[type='radio']:not(:checked) + .slider-option-label:after {
   content: '';
   width: 12px;
   height: 12px;
@@ -70,13 +70,13 @@ li:not(:last-child):after {
   transition: all 0.2s ease;
 }
 
-[type='radio']:not(:checked) + label:after {
+[type='radio']:not(:checked) + .slider-option-label:after {
   opacity: 0;
   -webkit-transform: scale(0);
   transform: scale(0);
 }
 
-[type='radio']:checked + label:after {
+[type='radio']:checked + .slider-option-label:after {
   opacity: 1;
   -webkit-transform: scale(1);
   transform: scale(1);

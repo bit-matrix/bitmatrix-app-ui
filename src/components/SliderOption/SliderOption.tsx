@@ -12,7 +12,9 @@ export const SliderOption: React.FC<Props> = ({ options }) => {
         return (
           <li className="slider-item">
             <input type="radio" id="f-option" name="rb" />
-            <label htmlFor="f-option">{option}</label>
+            <label className="slider-option-label" htmlFor="f-option">
+              {option}
+            </label>
           </li>
         );
       })}
