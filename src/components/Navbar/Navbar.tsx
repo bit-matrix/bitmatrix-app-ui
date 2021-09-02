@@ -127,9 +127,9 @@ export const Navbar = (): JSX.Element => {
           className={`navbar-item-button mr-5 ${
             selectedTab === ROUTE_PATH.SETTINGS && 'active'
           }`}
-          // onClick={() => {
-          //   history.push(ROUTE_PATH.SETTINGS);
-          // }}
+          onClick={() => {
+            history.push(ROUTE_PATH.SETTINGS);
+          }}
         >
           Settings
         </Button>
