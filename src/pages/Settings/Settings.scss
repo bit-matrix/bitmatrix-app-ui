@@ -1,0 +1,22 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.settings-page-main {
+  // display: flex;
+  // justify-content: center;
+  width: 38rem;
+  border: 2px solid #adfbc4;
+  position: relative;
+  border-radius: 1.5rem;
+  margin-top: 6rem;
+  height: 26rem;
+  background-color: #010403;
+}
+
+.settings-page-header {
+  display: flex;
+  justify-content: center;
+}
+
+.settings-page-content {
+  padding: 1rem;
+}
