@@ -11,7 +11,7 @@ type Props = {
 export const CheckBox: React.FC<Props> = ({ onChange, checked, title }) => {
   return (
     <label className="custom-checkbox-container">
-      <span>{title}</span>
+      <span className="custom-checkbox-title">{title}</span>
       <input onChange={onChange} checked={checked} type="checkbox" />
       <span className="checkmark"></span>
     </label>
