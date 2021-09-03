@@ -1,8 +1,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 30px;
-  height: 17px;
+  width: 35px;
+  height: 19px;
 }
 
 .switch input {
@@ -28,12 +28,11 @@
   position: absolute;
   content: '';
   border-radius: 50%;
-  height: 13px;
-  width: 13px;
+  height: 15px;
+  width: 15px;
   left: 2px;
   bottom: 2px;
   background-color: #000;
-  -webkit-transition: 0.4s;
   transition: 0.4s;
 }
 
@@ -46,7 +45,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(13px);
-  -ms-transform: translateX(13px);
-  transform: translateX(13px);
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(15px);
 }
