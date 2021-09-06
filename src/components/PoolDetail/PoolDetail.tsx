@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Divider, Icon, Nav } from 'rsuite';
+import { Button, Icon } from 'rsuite';
 import { PoolData } from '../../model/PoolData';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';

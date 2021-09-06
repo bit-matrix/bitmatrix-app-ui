@@ -49,7 +49,7 @@
 .pool-detail-item {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 0.5rem;
 
   .left-side {
@@ -119,7 +119,7 @@ th {
 .pool-detail-item-detail {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 0.25rem 0.5rem;
 
   .left-side {
