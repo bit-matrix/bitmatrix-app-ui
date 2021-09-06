@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, CheckboxGroup, Radio, RadioGroup } from 'rsuite';
+import { Checkbox, CheckboxGroup } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import './SwapFromTab.scss';
 
@@ -61,12 +61,13 @@ export const SwapFromTab: React.FC<Props> = ({
       inline
       name="checkboxList"
       value={[selectedFromAmountPercent]}
-      onChange={(
-        value: any[],
-        event: React.SyntheticEvent<HTMLElement, Event>,
-      ) => {
-        // console.log(value);
-      }}
+      onChange={() =>
+        // value: any[],
+        // event: React.SyntheticEvent<HTMLElement, Event>,
+        {
+          // console.log(value);
+        }
+      }
     >
       <Checkbox
         className="left-radio-item tab-radio"
