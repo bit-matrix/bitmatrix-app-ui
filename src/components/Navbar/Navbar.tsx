@@ -5,11 +5,11 @@ import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
 import bitmatrix_icon from '../../images/bitmatrix_icon.png';
 import bmx_gray from '../../images/bmx_gray.png';
-import swap from '../../images/swap.png';
-import info from '../../images/info.png';
-import stats from '../../images/stats.png';
+// import swap from '../../images/swap.png';
+// import info from '../../images/info.png';
+// import stats from '../../images/stats.png';
+// import settings from '../../images/settings.png';
 import more from '../../images/more.png';
-import settings from '../../images/settings.png';
 import './Navbar.scss';
 
 export const Navbar = (): JSX.Element => {
