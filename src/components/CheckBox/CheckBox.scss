@@ -63,6 +63,10 @@
   transform: rotate(45deg);
 }
 
-.custom-checkbox-title {
+.custom-checkbox-unchecked {
   color: #ccc;
+}
+
+.custom-checkbox-checked {
+  color: $liquidNeonColor;
 }
