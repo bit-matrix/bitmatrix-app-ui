@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon, IconButton, Nav } from 'rsuite';
+import { Icon, IconButton } from 'rsuite';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
 import { PoolMockData } from '../../data/PoolMockData';
 import { PoolData } from '../../model/PoolData';
