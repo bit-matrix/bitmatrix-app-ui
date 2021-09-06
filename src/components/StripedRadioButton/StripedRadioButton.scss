@@ -75,3 +75,17 @@
   -webkit-transform: scale(1);
   transform: scale(1);
 }
+
+.selected-title {
+  color: $liquidNeonColor;
+}
+
+.unselected-title {
+  color: #ccc;
+}
+
+.slider-option-title {
+  position: absolute;
+  top: 2rem;
+  left: -0.3125rem;
+}
