@@ -1,10 +1,12 @@
 .general-item-head {
   display: flex;
   align-items: center;
-  margin: 1.85rem 0;
+  margin: 2rem 0;
 }
 
-.general-item-head:first {
+.general-item-first-head {
+  display: flex;
+  align-items: center;
   margin-top: 0.5rem;
   margin-bottom: 1.5rem;
 }
@@ -20,12 +22,10 @@
   margin-right: 0.5rem;
 }
 
-.prefferred-unit {
-  display: flex;
-  justify-content: space-between;
-  width: 60%;
-}
-
 .general-item {
   margin-left: 1rem;
+}
+
+.prefferred-unit {
+  width: 70%;
 }
