@@ -2,14 +2,20 @@ import React from 'react';
 import './ToggleSwitch.scss';
 
 type Props = {
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  checked?: boolean;
+  onChange: (checked: boolean) => void;
+  checked: boolean;
 };
 
 export const ToggleSwitch: React.FC<Props> = ({ onChange, checked }) => {
   return (
     <label className="switch">
-      <input checked={checked} type="checkbox" onChange={onChange} />
+      <input
+        checked={checked}
+        type="checkbox"
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+          onChange(event.target.checked)
+        }
+      />
       <span className="slider"></span>
     </label>
   );
