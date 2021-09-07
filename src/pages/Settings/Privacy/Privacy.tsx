@@ -4,15 +4,37 @@ import { ToggleSwitch } from '../../../components/ToggleSwitch/ToggleSwitch';
 import info from '../../../images/info2.png';
 import './Privacy.scss';
 
+enum Confidentiality {
+  VERY_LOW = 'Very Low',
+  LOW = 'Low',
+  MEDIUM = 'Medium',
+  HIGH = 'High',
+  VERY_HIGH = 'Very High',
+}
+
 const confidentialityOptions: Array<string> = [
-  'Very Low',
-  'Low',
-  'Medium',
-  'High',
-  'VeryHigh',
+  Confidentiality.VERY_LOW,
+  Confidentiality.LOW,
+  Confidentiality.MEDIUM,
+  Confidentiality.HIGH,
+  Confidentiality.VERY_HIGH,
 ];
 
-const obfiscationOptions: Array<string> = ['5x', '10x', '25x', '50x', '100x'];
+enum Obfiscation {
+  FIVE = '5x',
+  TEN = '10x',
+  TWENTYFIVE = '25x',
+  FIFTY = '50x',
+  HUNDRED = '100x',
+}
+
+const obfiscationOptions: Array<string> = [
+  Obfiscation.FIVE,
+  Obfiscation.TEN,
+  Obfiscation.TWENTYFIVE,
+  Obfiscation.FIFTY,
+  Obfiscation.HUNDRED,
+];
 
 export const Privacy = (): JSX.Element => {
   const [confidentalSwapsSwitch, setConfidentalSwapsSwitch] =
