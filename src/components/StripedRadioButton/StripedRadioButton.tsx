@@ -19,10 +19,10 @@ export const StripedRadioButton: React.FC<Props> = ({
           <li key={`${index}-${option}`} className="slider-option-item">
             <input
               type="radio"
-              checked={selectedOption === option}
+              defaultChecked={selectedOption === option}
               value={option}
               id={option}
-              name="rb"
+              name={option}
             />
             <label
               onClick={() => onChange(option)}
