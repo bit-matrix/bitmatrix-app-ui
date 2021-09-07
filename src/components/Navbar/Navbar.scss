@@ -53,7 +53,8 @@
 }
 
 .navbar-home-icon:hover {
-  background-image: url('../../images/bitmatrix_icon.png') !important;
+  // background-image: url('../../images/bitmatrix_icon.png') !important;
+  fill: gray !important;
 }
 
 .navbar-item .mr-5 {
@@ -155,6 +156,23 @@
 .navbar-item-icon {
   width: 1.25rem;
   transform: scale(110%);
+}
+
+.home-icon {
+  width: 3rem !important;
+  height: 2rem !important;
+}
+
+.home-icon:hover {
+  fill: $liquidNeonColor !important;
+}
+
+.selected-home-icon {
+  fill: $liquidNeonColor !important;
+}
+
+.unselected-home-icon {
+  fill: $swapGrayColor !important;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
