@@ -70,6 +70,7 @@ export const Privacy = (): JSX.Element => {
           options={confidentialityOptions}
           selectedOption={confidentialityOption}
           onChange={(option) => setConfidentialityOption(option)}
+          name="confidentiality"
         />
       </div>
       <div className="privacy-third-item">
@@ -91,6 +92,7 @@ export const Privacy = (): JSX.Element => {
           options={obfiscationOptions}
           selectedOption={obfiscationOption}
           onChange={(option) => setObfiscationOption(option)}
+          name="obfiscation"
         />
       </div>
       <div className="privacy-item">

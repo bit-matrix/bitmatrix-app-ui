@@ -5,12 +5,14 @@ type Props = {
   options: Array<string>;
   onChange: (option: string) => void;
   selectedOption: string;
+  name?: string;
 };
 
 export const StripedRadioButton: React.FC<Props> = ({
   options,
   selectedOption,
   onChange,
+  name = 'stripedRadio',
 }) => {
   return (
     <ul className="slider-option-main">
@@ -22,7 +24,7 @@ export const StripedRadioButton: React.FC<Props> = ({
               defaultChecked={selectedOption === option}
               value={option}
               id={option}
-              name={option}
+              name={name}
             />
             <label
               onClick={() => onChange(option)}
