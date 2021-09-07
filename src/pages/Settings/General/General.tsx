@@ -5,8 +5,35 @@ import { ToggleSwitch } from '../../../components/ToggleSwitch/ToggleSwitch';
 import info from '../../../images/info2.png';
 import './General.scss';
 
-const radioButtonOptions = ['%0.5', '%0.75', '%1', '%1.25', '%1.5'];
-const checkboxOptions = ['L-BTC', 'mBTC', 'µBTC', 'SAT'];
+enum PreferredUnit {
+  LBTC = 'L-BTC',
+  mBTC = 'mBTC',
+  uBTC = 'µBTC',
+  SAT = 'SAT',
+}
+
+const preferredUnitOptions = [
+  PreferredUnit.LBTC,
+  PreferredUnit.mBTC,
+  PreferredUnit.uBTC,
+  PreferredUnit.SAT,
+];
+
+enum SlippageFee {
+  ZEROPOINTFIVE = '%0.5',
+  ZEROPOINTSEVENTYFIVE = '%0.75',
+  ONEPOINT = '%1',
+  ONEPOINTTWENTYFIVE = '%1.25',
+  ONEPOINTFIVE = '%1.5',
+}
+
+const slippageFeeOptions = [
+  SlippageFee.ZEROPOINTFIVE,
+  SlippageFee.ZEROPOINTSEVENTYFIVE,
+  SlippageFee.ONEPOINT,
+  SlippageFee.ONEPOINTTWENTYFIVE,
+  SlippageFee.ONEPOINTFIVE,
+];
 
 export const General = (): JSX.Element => {
   const [radioOption, setRadioOption] = useState<string>('');
@@ -23,7 +50,7 @@ export const General = (): JSX.Element => {
           <img className="general-icon" src={info} alt="info" />
         </div>
         <StripedRadioButton
-          options={radioButtonOptions}
+          options={slippageFeeOptions}
           selectedOption={radioOption}
           onChange={(option) => setRadioOption(option)}
         />
@@ -36,7 +63,7 @@ export const General = (): JSX.Element => {
 
         <CheckBoxGroup
           className="prefferred-unit"
-          options={checkboxOptions}
+          options={preferredUnitOptions}
           onChange={(checkedValues: Array<string>) => {
             setCheckedValues(checkedValues);
           }}
