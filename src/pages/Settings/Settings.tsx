@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { General } from './General/General';
+import { Privacy } from './Privacy/Privacy';
 import './Settings.scss';
 
 enum SettingsDetailTabs {
@@ -21,7 +22,7 @@ export const Settings = (): JSX.Element => {
         return <General />;
         break;
       case SettingsDetailTabs.PRIVACY:
-        return <div></div>;
+        return <Privacy />;
         break;
       case SettingsDetailTabs.THEME:
         return <div></div>;
