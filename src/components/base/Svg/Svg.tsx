@@ -8,9 +8,6 @@ interface ISvg {
   color?: string;
   size?: string;
   viewBox?: string;
-  svgAttribute?: JSX.Element;
-  xmlns?: string;
-  xmlnsXlink?: string;
   width?: string;
   height?: string;
   className?: string;
@@ -23,10 +20,10 @@ const Svg: React.FC<ISvg> = ({
   color,
   size,
   viewBox = '0 0 24 24',
-  children,
   width,
   height,
   className,
+  children,
 }) => {
   const style = {
     fill: fill as 'fill',
