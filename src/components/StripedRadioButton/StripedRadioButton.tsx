@@ -14,20 +14,20 @@ export const StripedRadioButton: React.FC<Props> = ({
 }) => {
   return (
     <ul className="slider-option-main">
-      {options.map((option, i) => {
+      {options.map((option, index) => {
         return (
-          <li key={i} className="slider-option-item">
+          <li key={`${index}-${option}`} className="slider-option-item">
             <input
               type="radio"
               checked={selectedOption === option}
               value={option}
-              id="f-option"
+              id={option}
               name="rb"
             />
             <label
               onClick={() => onChange(option)}
               className="slider-option-label"
-              htmlFor="f-option"
+              htmlFor={option}
             />
             <span
               className={`slider-option-title ${
