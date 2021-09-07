@@ -4,11 +4,16 @@ import './ToggleSwitch.scss';
 type Props = {
   onChange: (checked: boolean) => void;
   checked: boolean;
+  className?: string;
 };
 
-export const ToggleSwitch: React.FC<Props> = ({ onChange, checked }) => {
+export const ToggleSwitch: React.FC<Props> = ({
+  onChange,
+  checked,
+  className,
+}) => {
   return (
-    <label className="switch">
+    <label className={`switch ${className}`}>
       <input
         checked={checked}
         type="checkbox"
