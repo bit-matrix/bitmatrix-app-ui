@@ -22,6 +22,7 @@ export const CheckBox: React.FC<Props> = ({ onChange, checked, option }) => {
         checked={checked}
         type="checkbox"
         id={option}
+        name={option}
       />
       <span className="checkmark"></span>
     </label>
