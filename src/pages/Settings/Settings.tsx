@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
+import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { General } from './General/General';
 import { Privacy } from './Privacy/Privacy';
 import './Settings.scss';
@@ -15,6 +16,8 @@ export const Settings = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<SettingsDetailTabs>(
     SettingsDetailTabs.GENERAL,
   );
+
+  document.title = ROUTE_PATH_TITLE.SETTINGS;
 
   const getSettingsData = () => {
     switch (selectedTab) {
