@@ -4,7 +4,7 @@ import './CheckBoxGroup.scss';
 
 type Props = {
   options: Array<string>;
-  onChange: (checkedValues: string[]) => void;
+  onChange: (checkedValues: Array<string>) => void;
   checkedValues: Array<string>;
   className?: string;
   style?: React.CSSProperties;

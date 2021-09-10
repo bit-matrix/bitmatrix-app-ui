@@ -8,8 +8,8 @@ import { InfoCard } from '../InfoCard/InfoCard';
 // import stats from '../../images/stats.png';
 // import settings from '../../images/settings.png';
 import more from '../../images/more.png';
-import './Navbar.scss';
 import Svg from '../base/Svg/Svg';
+import './Navbar.scss';
 
 export const Navbar = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);

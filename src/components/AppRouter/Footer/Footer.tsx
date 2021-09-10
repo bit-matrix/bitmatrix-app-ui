@@ -1,6 +1,7 @@
-import { Icon } from 'rsuite';
 import React from 'react';
+import { Icon } from 'rsuite';
 import './Footer.scss';
+
 export const Footer = (): JSX.Element => {
   return (
     <div className="swap-page-footer">
