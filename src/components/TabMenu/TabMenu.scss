@@ -1,6 +1,6 @@
 @import '../../style/themes/bitmatrix.scss';
 
-.tabMenu {
+.tab-menu {
   height: 36px;
   display: flex;
   white-space: nowrap;
@@ -9,7 +9,7 @@
   font-size: 0.85rem;
 }
 
-.tabMenuItem {
+.tab-menu-item {
   flex: 1;
   margin: 0 auto;
   text-align: center;
@@ -27,13 +27,13 @@
   }
 }
 
-.tabMenuItemText {
+.tab-menu-item-text {
   vertical-align: middle;
   display: table-cell;
   padding: 0 1rem;
 }
 
-.selected {
+.tab-menu-item-selected {
   border-bottom: 2px solid $liquidNeonColor;
   color: $liquidNeonColor;
   height: 100%;
@@ -50,7 +50,7 @@
   }
 }
 
-.tabMenuLine {
+.tab-menu-line {
   border-top: 2px solid #3c3f43;
   position: absolute;
   bottom: 0;
@@ -58,7 +58,7 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .tabMenuItemText {
+  .tab-menu-item-text {
     padding: 0 2rem;
   }
 }
