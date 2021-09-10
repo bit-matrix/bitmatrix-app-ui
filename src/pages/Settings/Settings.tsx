@@ -1,36 +1,30 @@
 import React, { useState } from 'react';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
+import { SETTINGS_DETAIL_TABS } from '../../enum/SETTINGS_DETAIL_TABS';
 import { General } from './General/General';
 import { Privacy } from './Privacy/Privacy';
 import './Settings.scss';
 
-enum SettingsDetailTabs {
-  GENERAL = 'General',
-  PRIVACY = 'Privacy',
-  THEME = 'Theme',
-  ADVANCED = 'Advanced',
-}
-
 export const Settings = (): JSX.Element => {
-  const [selectedTab, setSelectedTab] = useState<SettingsDetailTabs>(
-    SettingsDetailTabs.GENERAL,
+  const [selectedTab, setSelectedTab] = useState<SETTINGS_DETAIL_TABS>(
+    SETTINGS_DETAIL_TABS.GENERAL,
   );
 
   document.title = ROUTE_PATH_TITLE.SETTINGS;
 
   const getSettingsData = () => {
     switch (selectedTab) {
-      case SettingsDetailTabs.GENERAL:
+      case SETTINGS_DETAIL_TABS.GENERAL:
         return <General />;
         break;
-      case SettingsDetailTabs.PRIVACY:
+      case SETTINGS_DETAIL_TABS.PRIVACY:
         return <Privacy />;
         break;
-      case SettingsDetailTabs.THEME:
+      case SETTINGS_DETAIL_TABS.THEME:
         return <div></div>;
         break;
-      case SettingsDetailTabs.ADVANCED:
+      case SETTINGS_DETAIL_TABS.ADVANCED:
         return <div></div>;
         break;
       default:
@@ -43,10 +37,10 @@ export const Settings = (): JSX.Element => {
       <div className="settings-page-header">
         <TabMenu
           menuItems={[
-            SettingsDetailTabs.GENERAL,
-            SettingsDetailTabs.PRIVACY,
-            SettingsDetailTabs.THEME,
-            SettingsDetailTabs.ADVANCED,
+            SETTINGS_DETAIL_TABS.GENERAL,
+            SETTINGS_DETAIL_TABS.PRIVACY,
+            SETTINGS_DETAIL_TABS.THEME,
+            SETTINGS_DETAIL_TABS.ADVANCED,
           ]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
