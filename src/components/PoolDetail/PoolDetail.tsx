@@ -5,15 +5,9 @@ import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
 import { ParentSize } from '@visx/responsive';
 import AreaChart from '../AreaChart/AreaChart';
-import './PoolDetail.scss';
 import { TabMenu } from '../TabMenu/TabMenu';
-
-enum PoolDetailTabs {
-  PRICE = 'Price',
-  VOLUME = 'Volume',
-  LIQUIDITY = 'Liquidity',
-  FEES = 'Fees',
-}
+import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
+import './PoolDetail.scss';
 
 type Props = {
   back: () => void;
@@ -21,8 +15,8 @@ type Props = {
 };
 
 export const PoolDetail: React.FC<Props> = ({ back }) => {
-  const [selectedTab, setSelectedTab] = useState<PoolDetailTabs>(
-    PoolDetailTabs.PRICE,
+  const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(
+    POOL_DETAIL_TABS.PRICE,
   );
 
   return (
@@ -42,10 +36,10 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
           <div className="pool-detail-header-right">
             <TabMenu
               menuItems={[
-                PoolDetailTabs.PRICE,
-                PoolDetailTabs.VOLUME,
-                PoolDetailTabs.LIQUIDITY,
-                PoolDetailTabs.FEES,
+                POOL_DETAIL_TABS.PRICE,
+                POOL_DETAIL_TABS.VOLUME,
+                POOL_DETAIL_TABS.LIQUIDITY,
+                POOL_DETAIL_TABS.FEES,
               ]}
               selectedItem={selectedTab}
               onClick={(eventKey: any) => setSelectedTab(eventKey)}
