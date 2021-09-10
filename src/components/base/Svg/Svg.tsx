@@ -1,19 +1,8 @@
 import React from 'react';
+import { SvgType } from '../../../model/SvgType';
 import './Svg.scss';
 
-interface ISvg {
-  path: string;
-  fill?: string;
-  bgColor?: string;
-  color?: string;
-  size?: string;
-  viewBox?: string;
-  width?: string;
-  height?: string;
-  className?: string;
-}
-
-const Svg: React.FC<ISvg> = ({
+const Svg: React.FC<SvgType> = ({
   path,
   fill,
   bgColor,
