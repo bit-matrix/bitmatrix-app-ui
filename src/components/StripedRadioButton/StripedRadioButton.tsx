@@ -14,6 +14,20 @@ export const StripedRadioButton: React.FC<Props> = ({
   onChange,
   name = 'stripedRadio',
 }) => {
+  const calculateOptionLength = (option: string): string => {
+    if (option.length <= 2) {
+      return 'short-title';
+    } else if (option.length > 2 && option.length < 4) {
+      return 'middle-title';
+    } else if (option.length >= 4 && option.length < 6) {
+      return 'long-title';
+    } else if (option.length >= 6) {
+      return 'too-long-title';
+    } else {
+      return 'default-title';
+    }
+  };
+
   return (
     <ul className="slider-option-main">
       {options.map((option, index) => {
@@ -36,7 +50,7 @@ export const StripedRadioButton: React.FC<Props> = ({
                 selectedOption === option
                   ? 'selected-title'
                   : 'unselected-title'
-              }`}
+              } ${calculateOptionLength(option)}`}
             >
               {option}
             </span>
