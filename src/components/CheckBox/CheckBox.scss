@@ -12,6 +12,7 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  margin-right: 0.5rem;
 }
 
 .custom-checkbox-container input {
@@ -65,8 +66,10 @@
 
 .custom-checkbox-unchecked {
   color: #ccc;
+  min-width: 3rem;
 }
 
 .custom-checkbox-checked {
   color: $liquidNeonColor;
+  min-width: 3rem;
 }
