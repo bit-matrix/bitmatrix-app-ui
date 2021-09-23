@@ -14,7 +14,7 @@ export const StripedRadioButton: React.FC<Props> = ({
   onChange,
   name = 'stripedRadio',
 }) => {
-  const calculateOptionLength = (option: string): string => {
+  const defineOptionTitleClassName = (option: string): string => {
     if (option.length <= 2) {
       return 'short-title';
     } else if (option.length > 2 && option.length < 4) {
@@ -50,7 +50,7 @@ export const StripedRadioButton: React.FC<Props> = ({
                 selectedOption === option
                   ? 'selected-title'
                   : 'unselected-title'
-              } ${calculateOptionLength(option)}`}
+              } ${defineOptionTitleClassName(option)}`}
             >
               {option}
             </span>
