@@ -100,7 +100,9 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  left: 6%;
+  left: 0;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 .tab-2 {
@@ -109,7 +111,9 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  right: 94%;
+  right: 100%;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
@@ -120,13 +124,5 @@
 
   .pool-page-content {
     height: 52vh;
-  }
-
-  .tab-1 {
-    left: 3%;
-  }
-
-  .tab-2 {
-    right: 97%;
   }
 }
