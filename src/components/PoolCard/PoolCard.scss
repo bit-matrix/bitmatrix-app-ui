@@ -17,7 +17,12 @@
 .order-item {
   display: flex;
   align-items: center;
-  border-right: 3px dashed #000;
+  border-top-color: #333;
+  border-left-color: #333;
+  border-bottom-color: #333;
+  border-style: dashed;
+  border-right-width: 3;
+  border-right-color: #000;
   padding: 1rem 1rem 1rem 0;
   margin-right: 1rem;
   height: 5rem;

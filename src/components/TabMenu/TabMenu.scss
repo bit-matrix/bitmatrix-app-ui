@@ -1,19 +1,20 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .tab-menu {
-  height: 36px;
+  height: 30px;
   display: flex;
   white-space: nowrap;
   position: relative;
   // text-transform: uppercase;
   font-size: 0.85rem;
+  margin-top: 1rem;
 }
 
 .tab-menu-item {
   flex: 1;
   margin: 0 auto;
   text-align: center;
-  display: table;
+  display: flex;
   height: 100%;
   cursor: pointer;
   max-width: 100%;
@@ -30,7 +31,7 @@
 .tab-menu-item-text {
   vertical-align: middle;
   display: table-cell;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
 
 .tab-menu-item-selected {
