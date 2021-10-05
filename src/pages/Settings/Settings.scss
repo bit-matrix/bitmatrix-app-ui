@@ -3,12 +3,13 @@
 .settings-page-main {
   // display: flex;
   // justify-content: center;
-  width: 22rem;
+  width: 100%;
   border: 2px solid #adfbc4;
   position: relative;
   border-radius: 1.5rem;
   height: 100%;
   background-color: #010403;
+  margin: 0 auto;
 }
 
 .settings-page-header {

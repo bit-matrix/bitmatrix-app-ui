@@ -1,7 +1,9 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  margin-top: 7rem;
+  margin-top: 5rem;
+  height: 35rem;
+  overflow: auto;
 }
 
 .pool-detail-main {
@@ -181,7 +183,7 @@ th {
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
-    margin-top: 5rem;
+    margin-top: 3rem;
     height: unset;
   }
 
