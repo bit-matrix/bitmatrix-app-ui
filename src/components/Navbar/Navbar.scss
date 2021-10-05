@@ -13,6 +13,11 @@
   position: fixed;
   top: 1rem;
   z-index: 5;
+
+  .active {
+    background: $swapBackgroundColor !important;
+    color: $liquidNeonColor !important;
+  }
 }
 
 .navbar-item-button {
@@ -25,12 +30,12 @@
   background: transparent !important;
   color: $navbarTextColor !important;
   padding: 0 2px;
-}
 
-.navbar-item-button:hover {
-  background: $navbarItemSelected !important;
-  color: $liquidNeonColor !important;
-  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+  &:hover {
+    background: $navbarItemSelected !important;
+    color: $liquidNeonColor !important;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+  }
 }
 
 .navbar-home-button {
@@ -40,21 +45,21 @@
   display: flex !important;
   align-items: center;
   justify-content: center;
-}
 
-.navbar-home-button:hover {
-  background: $swapBackgroundColor !important;
-  color: $liquidNeonColor !important;
-  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+  &:hover {
+    background: $swapBackgroundColor !important;
+    color: $liquidNeonColor !important;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+  }
 }
 
 .navbar-home-icon {
   width: 3rem;
-}
 
-.navbar-home-icon:hover {
-  // background-image: url('../../images/bitmatrix_icon.png') !important;
-  fill: gray !important;
+  &:hover {
+    // background-image: url('../../images/bitmatrix_icon.png') !important;
+    fill: gray !important;
+  }
 }
 
 .navbar-item .mr-5 {
@@ -69,11 +74,6 @@
   margin-left: 0.5rem;
 }
 
-.navbar-main .active {
-  background: $swapBackgroundColor !important;
-  color: $liquidNeonColor !important;
-}
-
 .navbar-item-circle-div {
   position: relative;
   // margin-right: 1rem;
@@ -82,17 +82,17 @@
   height: 3rem;
   display: flex;
   align-items: center;
-}
 
-.navbar-item-circle-div:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  height: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-left: 1px solid $navbarItemSelected;
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    height: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid $navbarItemSelected;
+  }
 }
 
 .navbar-item-circle {

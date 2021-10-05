@@ -7,7 +7,7 @@
   border: 2px solid #adfbc4;
   position: relative;
   border-radius: 1.5rem;
-  margin-top: 2rem;
+  margin-top: 6rem;
   height: 100%;
   background-color: #010403;
 }
@@ -20,11 +20,16 @@
 
 .settings-page-content {
   padding: 1rem 1rem 0 1rem;
+  font-size: 1rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .settings-page-main {
-    margin-top: 6rem;
     width: 38rem;
+  }
+
+  .settings-page-content {
+    padding: 1rem 1rem 0 1rem;
+    font-size: 0.875rem;
   }
 }
