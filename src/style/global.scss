@@ -18,15 +18,13 @@ body {
   color: $defaultTextColor;
 }
 
-@media only screen and (max-width: $mobile-view-breakpoint) {
-  .mobile-hidden {
-    display: none;
-  }
+body {
+  overflow-y: hidden;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .desktop-hidden {
-    display: none;
+  body {
+    overflow-y: unset;
   }
 }
 

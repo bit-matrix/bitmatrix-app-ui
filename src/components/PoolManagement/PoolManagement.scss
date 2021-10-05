@@ -5,7 +5,6 @@
   border: 2px solid #adfbc4;
   position: relative;
   border-radius: 1.5rem;
-  margin-top: 6rem;
   height: 100%;
   background-color: #010403;
 }
@@ -116,6 +115,7 @@
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-page-main {
     width: 48rem;
+    margin-top: 6rem;
   }
 
   .pool-page-content {
