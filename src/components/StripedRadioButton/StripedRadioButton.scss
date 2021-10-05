@@ -35,6 +35,7 @@
         cursor: pointer;
         display: inline-block;
         color: $liquidNeonColor;
+        left: 3px;
         &:before {
           content: '';
           position: absolute;
@@ -151,6 +152,7 @@
     &:checked {
       + {
         .slider-option-label {
+          left: 0;
           &:before {
             content: '';
             position: absolute;
