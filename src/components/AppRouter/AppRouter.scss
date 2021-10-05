@@ -6,16 +6,12 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-}
-
-.app-container {
-  margin-top: 2rem;
-  margin-bottom: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .secret-div {
-  height: 7rem;
+  height: 6rem;
   background: black;
   z-index: 4;
   width: 100%;
@@ -24,11 +20,6 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .app-container {
-    margin-bottom: 3rem;
-    margin-top: 0;
-  }
-
   .secret-div {
     height: 9rem;
     background: black;

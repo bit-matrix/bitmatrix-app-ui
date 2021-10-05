@@ -18,12 +18,17 @@ body {
   color: $defaultTextColor;
 }
 
-body {
+html,
+body,
+#root {
   overflow: hidden;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: #010403 !important;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  body {
+  html {
     overflow: hidden;
   }
 }
