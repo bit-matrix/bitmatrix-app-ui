@@ -14,7 +14,7 @@ export const AppRouter = (): JSX.Element => {
   return (
     <Router>
       <Content className="app-router-main">
-        <div className="secret-div" />
+        <div className="secret-top-div" />
         <Navbar />
         <div className="app-container">
           <Switch>
@@ -25,7 +25,9 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
           </Switch>
         </div>
+
         <Footer />
+        <div className="secret-footer-div" />
       </Content>
     </Router>
   );

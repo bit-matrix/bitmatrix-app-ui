@@ -10,7 +10,7 @@
   height: 100%;
 }
 
-.secret-div {
+.secret-top-div {
   height: 6rem;
   background: black;
   z-index: 4;
@@ -19,8 +19,25 @@
   top: 0rem;
 }
 
+.secret-footer-div {
+  height: 3rem;
+  background: black;
+  z-index: 4;
+  width: 100%;
+  position: fixed;
+  bottom: 0rem;
+}
+
+.app-container {
+  width: 95%;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .secret-div {
+  .app-container {
+    width: 100%;
+  }
+
+  .secret-top-div {
     height: 9rem;
     background: black;
     z-index: 4;
