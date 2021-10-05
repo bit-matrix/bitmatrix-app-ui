@@ -138,7 +138,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
 
             <Button
               appearance="default"
-              className="primary-button"
+              className="primary-button pool-detail-add-button"
               onClick={() => {
                 console.log('add liquidity');
               }}
