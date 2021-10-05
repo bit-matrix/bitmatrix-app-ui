@@ -11,5 +11,11 @@
 }
 
 .pool-detail-transition {
-  transform: scale(105%);
+  transform: scale(103%);
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .pool-detail-transition {
+    transform: scale(105%);
+  }
 }
