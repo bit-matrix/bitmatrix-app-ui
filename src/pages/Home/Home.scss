@@ -1,14 +1,10 @@
 @import '../../style/themes/bitmatrix.scss';
 
-.home-page-container {
-  margin-top: 6rem;
-}
-
 .home-page-main {
   display: block;
   width: 20rem;
   border: 1px solid #000;
-  height: 49rem;
+  // height: 49rem;
   border-radius: 1.5rem;
   background-color: $liquidNeonColor;
   // margin-top: 2rem;
@@ -21,13 +17,14 @@
 
 .home-page-img {
   transform: rotate(-95deg);
-  width: 15rem;
+  width: 13rem;
 }
 
 .home-page-img-content {
   width: 100%;
   display: flex;
   justify-content: center;
+  padding-bottom: 0.5rem;
 }
 
 .home-page-desc-header {
@@ -35,6 +32,7 @@
 }
 
 .home-page-desc-content {
+  display: none;
   margin: 1rem 0;
   font-weight: 500;
 }
@@ -45,6 +43,9 @@
   height: 2.75rem;
   border-radius: 1rem !important;
   color: $liquidNeonColor !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .home-page-start-button:hover {
@@ -72,10 +73,15 @@
     padding: 2rem;
   }
 
+  .home-page-desc-content {
+    display: block;
+  }
+
   .home-page-img-content {
     display: flex;
     align-items: center;
     width: 40%;
+    padding-bottom: 0;
   }
 
   .home-page-img {
