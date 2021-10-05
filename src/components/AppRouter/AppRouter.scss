@@ -10,12 +10,12 @@
 }
 
 .app-container {
-  margin-top: 5rem;
+  margin-top: 2rem;
   margin-bottom: 0;
 }
 
 .secret-div {
-  height: 9rem;
+  height: 7rem;
   background: black;
   z-index: 4;
   width: 100%;
@@ -27,5 +27,14 @@
   .app-container {
     margin-bottom: 3rem;
     margin-top: 0;
+  }
+
+  .secret-div {
+    height: 9rem;
+    background: black;
+    z-index: 4;
+    width: 100%;
+    position: fixed;
+    top: 0rem;
   }
 }

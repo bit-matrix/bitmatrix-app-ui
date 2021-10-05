@@ -9,7 +9,7 @@
   border-radius: 2rem;
   padding: 0 !important;
   background: #333334;
-  margin-top: 3.5rem;
+  margin-top: 1rem;
   position: fixed;
   top: 1rem;
   z-index: 5;
@@ -176,6 +176,10 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
+  .navbar-main {
+    margin-top: 3.5rem;
+  }
+
   .navbar-item-button {
     min-width: 7rem;
     padding: 0;

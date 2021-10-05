@@ -19,12 +19,12 @@ body {
 }
 
 body {
-  overflow-y: hidden;
+  overflow: hidden;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   body {
-    overflow-y: unset;
+    overflow: hidden;
   }
 }
 
