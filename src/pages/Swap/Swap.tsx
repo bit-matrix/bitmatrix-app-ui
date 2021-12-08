@@ -13,6 +13,7 @@ import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import './Swap.scss';
+import { lbtcToUsdtSwapAmountCalculate } from '../../lib/bitmatrix';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -35,8 +36,8 @@ export const Swap = (): JSX.Element => {
   // const [fromAmount, setFromAmount] = useState<number>(0);
   // const [toAmount, setToAmount] = useState<number>(0);
 
-  const [inputFromAmount, setInputFromAmount] = useState<string>('0.0');
-  const [inputToAmount, setInputToAmount] = useState<string>('0.0');
+  const [inputFromAmount, setInputFromAmount] = useState<string>('0');
+  const [inputToAmount, setInputToAmount] = useState<string>('0');
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
@@ -90,7 +91,12 @@ export const Swap = (): JSX.Element => {
   const onChangeFromInput = (
     inputElement: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    const inputNum = Number(inputElement.target.value);
+
+    const outPut = lbtcToUsdtSwapAmountCalculate(inputNum);
+
     setInputFromAmount(inputElement.target.value);
+    setInputToAmount(outPut.toString());
     // let newFromAmount: number = 0;
     // const inputNumber = Number(inputElement.target.value);
     // if (!isNaN(inputNumber)) {

@@ -8,6 +8,7 @@ import './Home.scss';
 
 export const Home = (): JSX.Element => {
   const history = useHistory();
+
   return (
     <div className="home-page-container">
       <div className="home-page-main">
