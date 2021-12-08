@@ -5,7 +5,7 @@ import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
-import { UtxoInterface } from 'ldk';
+import { UnblindedOutput } from 'ldk';
 import './WalletListModal.scss';
 import importSeed from '../../images/key_1.png';
 import marinaWallet from '../../images/marina.png';
@@ -17,7 +17,7 @@ type Props = {
   walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
   setNewAddress: (newAddress: MarinaAddressInterface) => void;
-  setUtxos: (utxos: UtxoInterface[]) => void;
+  setUtxos: (utxos: UnblindedOutput[]) => void;
 };
 
 export const WalletListModal: React.FC<Props> = ({ show, close, setUtxos }) => {

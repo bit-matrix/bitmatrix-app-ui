@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Content } from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
-import { UtxoInterface } from 'ldk';
+import { UnblindedOutput } from 'ldk';
 import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
@@ -41,7 +41,7 @@ export const Swap = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [utxos, setUtxos] = useState<UtxoInterface[]>([]);
+  const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
@@ -111,7 +111,7 @@ export const Swap = (): JSX.Element => {
     // setToAmount(newToAmount * 100000000);
   };
 
-  const setUtxosAll = (newUtxos: UtxoInterface[]) => {
+  const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
     setUtxos(newUtxos);
 
     const newAssetAmountList: IAssetAmount[] = [];
@@ -119,18 +119,22 @@ export const Swap = (): JSX.Element => {
       assetId: ASSET_ID.LBTC,
       assetName: SWAP_ASSET.LBTC,
       amount: newUtxos
-        .filter((ut) => ut.asset === ASSET_ID.LBTC)
+        .filter(
+          (ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.LBTC, 'hex'),
+        )
         .reduce((p, u) => {
-          return p + (u.value || 0);
+          return p + Number(u.unblindData.value);
         }, 0),
     });
     newAssetAmountList.push({
       assetId: ASSET_ID.USDT,
       assetName: SWAP_ASSET.USDT,
       amount: newUtxos
-        .filter((ut) => ut.asset === ASSET_ID.USDT)
+        .filter(
+          (ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.USDT, 'hex'),
+        )
         .reduce((p, u) => {
-          return p + (u.value || 0);
+          return p + Number(u.unblindData.value);
         }, 0),
     });
     setAssetAmounts(newAssetAmountList);
@@ -225,8 +229,8 @@ export const Swap = (): JSX.Element => {
               //   }
               // }}
             >
-              {/* {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'} */}
-              Coming soon
+              {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'}
+              {/* Coming soon */}
             </Button>
           </div>
         </div>

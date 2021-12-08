@@ -1,4 +1,4 @@
-import { fetchAndUnblindUtxos, UtxoInterface } from 'ldk';
+import { fetchAndUnblindUtxos, UnblindedOutput } from 'ldk';
 import { MarinaAddressInterface } from '../wallet/marina/IMarina';
 
 const ESPLORA_API_URL = 'https://blockstream.info/liquid/api';
@@ -10,7 +10,7 @@ const ESPLORA_API_URL = 'https://blockstream.info/liquid/api';
 
 export const fetchUTXOS = async (
   addresses: MarinaAddressInterface[],
-): Promise<UtxoInterface[]> => {
+): Promise<UnblindedOutput[]> => {
   // fetch and unblind all utxos for given array of address
   //
   // THIS CAN TAKE A LOT OF TIME TO COMPLETE!
