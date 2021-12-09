@@ -46,7 +46,7 @@ export const General = (): JSX.Element => {
     <div>
       <div className="general-item">
         <div className="general-item-first-head">
-          <span className="general-title">Slippage & Fee</span>
+          <span className="general-title">Slippage Tolerance</span>
           <img className="general-icon" src={info} alt="info" />
         </div>
         <StripedRadioButton

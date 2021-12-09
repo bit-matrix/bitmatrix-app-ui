@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Icon, IconButton } from 'rsuite';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
@@ -57,7 +58,7 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
           icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
         />
       </div>
-      {/* <div className="pool-page-content">
+      <div className="pool-page-content">
         <div
           className={`${
             selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'
@@ -66,7 +67,6 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
           {getPoolData()}
         </div>
       </div>
-      {/* <div className="pool-page-shadow" /> */}
     </div>
   );
 };
