@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
 import { fetchUTXOS } from '../../lib/liquid-dev';
-import { Wallet } from '../../lib/wallet';
-import { IWallet } from '../../lib/wallet/IWallet';
 import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
@@ -11,24 +9,24 @@ import importSeed from '../../images/key_1.png';
 import marinaWallet from '../../images/marina.png';
 import ledgerNano from '../../images/ledger.png';
 import generateSeed from '../../images/key_2.png';
+import { IWallet } from '../../lib/wallet/IWallet';
 
 type Props = {
   show: boolean;
+  wallet?: IWallet;
   walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
   setNewAddress: (newAddress: MarinaAddressInterface) => void;
   setUtxos: (utxos: UnblindedOutput[]) => void;
 };
 
-export const WalletListModal: React.FC<Props> = ({ show, close, setUtxos }) => {
-  const [wallet, setWallet] = useState<IWallet>();
+export const WalletListModal: React.FC<Props> = ({
+  show,
+  wallet,
+  close,
+  setUtxos,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (show) {
-      setWallet(new Wallet(WALLET_NAME.MARINA));
-    }
-  }, [show]);
 
   const connectWalletOnClick = (): void => {
     wallet?.exist()

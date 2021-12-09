@@ -14,9 +14,12 @@ import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import './Swap.scss';
 import {
+  lbtcToUsdtSwap,
   lbtcToUsdtSwapAmountCalculate,
   usdtToLbtcSwapAmountCalculate,
 } from '../../lib/bitmatrix';
+import { IWallet } from '../../lib/wallet/IWallet';
+import { Wallet } from '../../lib/wallet';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -47,7 +50,13 @@ export const Swap = (): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
 
+  const [wallet, setWallet] = useState<IWallet>();
+
   document.title = ROUTE_PATH_TITLE.SWAP;
+
+  useEffect(() => {
+    setWallet(new Wallet(WALLET_NAME.MARINA));
+  }, []);
 
   const assetAmountToFromAmount = useCallback(
     (
@@ -125,6 +134,25 @@ export const Swap = (): JSX.Element => {
     // setToAmount(newToAmount * 100000000);
   };
 
+  const swapClick = async () => {
+    const input = lbtcToUsdtSwap(Number(inputFromAmount));
+
+    const rawTxHexSecond = await wallet?.sendTransaction([
+      {
+        address: input.fundingOutput1Address,
+        value: input.fundingOutput1Value,
+        asset: input.fundingOutput1AssetId,
+      },
+      {
+        address: input.fundingOutput2Address,
+        value: input.fundingOutput2Value,
+        asset: input.fundingOutput2AssetId,
+      },
+    ]);
+
+    console.log('1', rawTxHexSecond);
+  };
+
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
     setUtxos(newUtxos);
 
@@ -161,7 +189,10 @@ export const Swap = (): JSX.Element => {
       {/* Wallet list modal */}
       <WalletListModal
         show={showWalletList}
-        walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
+        wallet={wallet}
+        walletOnClick={(walletName: WALLET_NAME) =>
+          setWallet(new Wallet(walletName))
+        }
         close={() => setShowWalletList(false)}
         setNewAddress={setNewAddress}
         setUtxos={setUtxosAll}
@@ -235,15 +266,15 @@ export const Swap = (): JSX.Element => {
             <Button
               appearance="default"
               className="swap-button"
-              // onClick={() => {
-              //   if (assetAmounts.length > 0) {
-              //     console.log('TODO');
-              //   } else {
-              //     setShowWalletList(true);
-              //   }
-              // }}
+              onClick={() => {
+                if (wallet) {
+                  swapClick();
+                } else {
+                  setShowWalletList(true);
+                }
+              }}
             >
-              {assetAmounts.length > 0 ? 'Swap' : 'Connect Wallet'}
+              {wallet ? 'Swap' : 'Connect Wallet'}
               {/* Coming soon */}
             </Button>
           </div>
