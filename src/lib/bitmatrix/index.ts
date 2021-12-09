@@ -63,7 +63,11 @@ export const lbtcToUsdtSwapAmountCalculate = (
   //step11 ( step 10 - 1milion)
   const usdtAmount = finalTetherPoolLiquidity - 1000000;
 
-  return usdtAmount;
+  const slippageAmount = div(usdtAmount, 200);
+
+  console.log(usdtAmount);
+  console.log(slippageAmount);
+  return usdtAmount - slippageAmount;
 };
 
 export const usdtToLbtcSwapAmountCalculate = (
