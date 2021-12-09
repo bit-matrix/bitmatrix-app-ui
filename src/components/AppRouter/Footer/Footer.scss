@@ -1,13 +1,9 @@
 @import '../../../style/themes/bitmatrix.scss';
 
 .swap-page-footer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2.5rem;
-  margin-bottom: 2.5rem;
-  position: relative;
+  bottom: 0.5rem;
+  position: fixed;
+  z-index: 5;
 }
 
 .swap-page-footer-icons {

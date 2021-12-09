@@ -35,13 +35,21 @@ export const Home = (): JSX.Element => {
             </p>
           </div>
           <Button
-            className="home-page-start-button"
+            className="home-page-start-button mobile-hidden"
             appearance="default"
             onClick={() => {
               history.push(ROUTE_PATH.SWAP);
             }}
           >
             Start Swapping
+          </Button>
+          <Button
+            className="home-page-start-button desktop-hidden"
+            appearance="default"
+            href="https://link.medium.com/q5kUJd5E6jb"
+            target="_blank"
+          >
+            Learn More
           </Button>
         </div>
         <div className="home-page-img-content mobile-hidden">

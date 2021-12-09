@@ -1,11 +1,10 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-page-main {
-  width: 22rem;
+  width: 100%;
   border: 2px solid #adfbc4;
   position: relative;
   border-radius: 1.5rem;
-  margin-top: 6rem;
   height: 100%;
   background-color: #010403;
 }
@@ -110,7 +109,9 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  left: 6%;
+  left: 0;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 .tab-2 {
@@ -119,23 +120,18 @@
   position: absolute;
   bottom: 0;
   top: 0;
-  right: 94%;
+  right: 100%;
+  width: 100%;
+  padding: 0 1rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-page-main {
     width: 48rem;
+    margin-top: 3rem;
   }
 
   .pool-page-content {
     height: 52vh;
-  }
-
-  .tab-1 {
-    left: 3%;
-  }
-
-  .tab-2 {
-    right: 97%;
   }
 }

@@ -9,7 +9,7 @@ import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
-import IAssetAmount from '../../model/AssetAmount';
+import { AssetAmount } from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import './Swap.scss';
@@ -37,7 +37,7 @@ export const Swap = (): JSX.Element => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
   // Wallet Amounts
-  const [assetAmounts, setAssetAmounts] = useState<IAssetAmount[]>([]);
+  const [assetAmounts, setAssetAmounts] = useState<AssetAmount[]>([]);
 
   // const [fromAmount, setFromAmount] = useState<number>(0);
   // const [toAmount, setToAmount] = useState<number>(0);
@@ -60,7 +60,7 @@ export const Swap = (): JSX.Element => {
 
   const assetAmountToFromAmount = useCallback(
     (
-      newAssetAmountList: IAssetAmount[],
+      newAssetAmountList: AssetAmount[],
       newFromAmountPercent?: FROM_AMOUNT_PERCENT,
     ) => {
       let newFromAmount = 0;
@@ -156,7 +156,7 @@ export const Swap = (): JSX.Element => {
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
     setUtxos(newUtxos);
 
-    const newAssetAmountList: IAssetAmount[] = [];
+    const newAssetAmountList: AssetAmount[] = [];
     newAssetAmountList.push({
       assetId: ASSET_ID.LBTC,
       assetName: SWAP_ASSET.LBTC,

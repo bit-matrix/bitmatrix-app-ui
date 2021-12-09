@@ -1,0 +1,227 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.slider-option-main {
+  display: flex;
+  margin: 0 auto;
+  // margin-left: 20px;
+}
+.slider-option-item {
+  flex: 0 1 33%;
+  list-style: none;
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    background: $liquidNeonColor;
+    top: 14px;
+    left: -20%;
+    right: 0;
+  }
+}
+.slider-option-label {
+  width: 60px;
+  display: block;
+}
+[type='radio'] {
+  &:checked {
+    position: absolute;
+    left: -9999px;
+    + {
+      .slider-option-label {
+        position: relative;
+        padding-top: 30px;
+        cursor: pointer;
+        display: inline-block;
+        color: $liquidNeonColor;
+        left: 3px;
+        &:before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 30px;
+          height: 30px;
+          border: 3px solid $liquidNeonColor;
+          border-radius: 100%;
+          background: #000;
+        }
+        &:after {
+          content: '';
+          width: 18px;
+          height: 18px;
+          background: $liquidNeonColor;
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          border-radius: 100%;
+          transition: all 0.2s ease;
+          opacity: 1;
+          -webkit-transform: scale(1);
+          transform: scale(1);
+        }
+      }
+    }
+  }
+  &:not(:checked) {
+    position: absolute;
+    left: -9999px;
+    + {
+      .slider-option-label {
+        position: relative;
+        padding-top: 30px;
+        cursor: pointer;
+        display: inline-block;
+        color: $liquidNeonColor;
+        left: 3px;
+        &:before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 30px;
+          height: 30px;
+          border: 3px solid $liquidNeonColor;
+          border-radius: 100%;
+          background: #000;
+        }
+        &:after {
+          content: '';
+          width: 18px;
+          height: 18px;
+          background: $liquidNeonColor;
+          position: absolute;
+          top: 6px;
+          left: 6px;
+          border-radius: 100%;
+          transition: all 0.2s ease;
+          opacity: 0;
+          -webkit-transform: scale(0);
+          transform: scale(0);
+        }
+      }
+    }
+  }
+}
+.selected-title {
+  color: $liquidNeonColor;
+}
+.unselected-title {
+  color: #ccc;
+}
+.slider-option-title {
+  position: absolute;
+  top: 2rem;
+}
+.short-title {
+  left: 0.275rem;
+}
+.middle-title {
+  left: 0.275rem;
+}
+.long-title {
+  left: -0.1rem;
+}
+.too-long-title {
+  left: -0.75rem;
+}
+.default {
+  left: 0;
+}
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .slider-option-main {
+    margin-left: 40px;
+  }
+  .slider-option-item {
+    &:before {
+      left: -40%;
+      position: absolute;
+      height: 2px;
+      width: 100%;
+      background: $liquidNeonColor;
+      top: 8px;
+      left: -34%;
+      right: 0;
+    }
+  }
+  .slider-option-label {
+    width: 100px;
+  }
+  [type='radio'] {
+    &:checked {
+      + {
+        .slider-option-label {
+          left: 0;
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 3px solid $liquidNeonColor;
+            border-radius: 100%;
+            background: #000;
+          }
+          &:after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: $liquidNeonColor;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            border-radius: 100%;
+            transition: all 0.2s ease;
+          }
+        }
+      }
+    }
+    &:not(:checked) {
+      + {
+        .slider-option-label {
+          left: 0;
+          &:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border: 3px solid $liquidNeonColor;
+            border-radius: 100%;
+            background: #000;
+          }
+          &:after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: $liquidNeonColor;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            border-radius: 100%;
+            transition: all 0.2s ease;
+          }
+        }
+      }
+    }
+  }
+
+  .short-title {
+    left: -0.0625rem;
+  }
+  .middle-title {
+    left: -0.25rem;
+  }
+  .long-title {
+    left: -0.5rem;
+  }
+  .too-long-title {
+    left: -1.25rem;
+  }
+  .default {
+    left: 0;
+  }
+}

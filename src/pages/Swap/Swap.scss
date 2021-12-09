@@ -7,7 +7,6 @@
   flex-direction: column;
   background: $swapBackgroundColor;
   text-align: center;
-  margin-top: 2rem;
 }
 
 .swap-page-main-content {
@@ -246,5 +245,6 @@
   .swap-page-main {
     justify-content: unset;
     margin-top: 0;
+    margin-bottom: 2.5rem;
   }
 }

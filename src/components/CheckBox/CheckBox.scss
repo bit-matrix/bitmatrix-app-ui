@@ -1,0 +1,103 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.custom-checkbox-container {
+  display: flex;
+  height: 23px;
+  align-items: center;
+  position: relative;
+  padding-left: 27px;
+  cursor: pointer;
+  font-size: 1rem;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  margin-right: 0.25rem;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  &:hover {
+    input ~ .checkmark {
+      background-color: #000;
+    }
+  }
+
+  input:checked ~ .checkmark {
+    background-color: #adfbc4;
+    border: none;
+  }
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 23px;
+  width: 23px;
+  background-color: #000;
+  border: 2px solid #fff;
+
+  &:after {
+    content: '';
+    position: absolute;
+    display: none;
+    left: 8px;
+    top: 3px;
+    width: 8px;
+    height: 14px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+}
+
+.custom-checkbox-unchecked {
+  color: #ccc;
+  min-width: 3rem;
+}
+
+.custom-checkbox-checked {
+  color: $liquidNeonColor;
+  min-width: 3rem;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .custom-checkbox-container {
+    height: 18px;
+    margin-right: 0.5rem;
+  }
+
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 18px;
+    width: 18px;
+    background-color: #000;
+    border: 2px solid #fff;
+  }
+
+  .custom-checkbox-container .checkmark:after {
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 11px;
+    border: solid #000;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+}

@@ -1,0 +1,37 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.settings-page-main {
+  // display: flex;
+  // justify-content: center;
+  width: 100%;
+  border: 2px solid #adfbc4;
+  position: relative;
+  border-radius: 1.5rem;
+  height: 100%;
+  background-color: #010403;
+  margin: 0 auto;
+  transform: translateY(5%);
+}
+
+.settings-page-header {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.settings-page-content {
+  padding: 1rem 1rem 0 1rem;
+  font-size: 1rem;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .settings-page-main {
+    width: 38rem;
+    margin-top: 0;
+  }
+
+  .settings-page-content {
+    padding: 1rem 1rem 0 1rem;
+    font-size: 0.875rem;
+  }
+}

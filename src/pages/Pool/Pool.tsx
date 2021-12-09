@@ -26,7 +26,7 @@ export const Pool = (): JSX.Element => {
   }
   return (
     <div className="pool-main-div">
-      <PoolManagement onClick={(data) => setSelectedPool(data)} />;
+      <PoolManagement onClick={(data) => setSelectedPool(data)} />
     </div>
   );
 };
