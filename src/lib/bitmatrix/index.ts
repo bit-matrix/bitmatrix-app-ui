@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const poolLbtcLiquidity = 1000000;
 const poolUsdtLiquidity = 50000000000;
 const lpFeeRate = 400;
