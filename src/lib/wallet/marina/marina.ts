@@ -1,5 +1,10 @@
-import { IWallet } from "../IWallet";
-import { MarinaAddressInterface, MarinaProvider } from "./IMarina";
+import { IWallet } from '../IWallet';
+import {
+  MarinaAddressInterface,
+  MarinaProvider,
+  MarinaTransactionHex,
+  Recipient,
+} from './IMarina';
 
 declare global {
   interface Window {
@@ -16,7 +21,7 @@ export default class Marina implements IWallet {
     this.marina = window.marina;
   }
 
-  exist = (): boolean => typeof window.marina !== "undefined";
+  exist = (): boolean => typeof window.marina !== 'undefined';
 
   isEnabled = (): Promise<boolean> => {
     if (this.exist() && marina) return marina.isEnabled();
@@ -39,12 +44,18 @@ export default class Marina implements IWallet {
   getNextAddress(): Promise<MarinaAddressInterface> {
     if (this.exist() && marina) return marina.getNextAddress();
     // else throw "Install Marina first";
-    throw new Error("Marina wallet disabled.");
+    throw new Error('Marina wallet disabled.');
   }
 
   getAddresses(): Promise<MarinaAddressInterface[]> {
     if (this.exist() && marina) return marina.getAddresses();
     // else throw "Install Marina first";
-    throw new Error("Marina wallet disabled.");
+    throw new Error('Marina wallet disabled.');
+  }
+
+  sendTransaction(receipent: Recipient[]): Promise<MarinaTransactionHex> {
+    if (this.exist() && marina) return marina.sendTransaction(receipent);
+    // else throw "Install Marina first";
+    throw new Error('Marina wallet disabled.');
   }
 }

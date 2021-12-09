@@ -1,7 +1,7 @@
 import { fetchAndUnblindUtxos, UnblindedOutput } from 'ldk';
 import { MarinaAddressInterface } from '../wallet/marina/IMarina';
 
-const ESPLORA_API_URL = 'https://blockstream.info/liquid/api';
+const ESPLORA_API_URL = 'http://157.230.101.158:3000';
 
 //...
 

@@ -1,5 +1,9 @@
 import { IWallet } from './IWallet';
-import { MarinaAddressInterface } from './marina/IMarina';
+import {
+  MarinaAddressInterface,
+  MarinaTransactionHex,
+  Recipient,
+} from './marina/IMarina';
 import Marina from './marina/marina';
 import { WALLET_NAME } from './WALLET_NAME';
 
@@ -25,4 +29,8 @@ export class Wallet implements IWallet {
 
   public getAddresses = (): Promise<MarinaAddressInterface[]> =>
     this.wallet.getAddresses();
+
+  public sendTransaction = (
+    recipient: Recipient[],
+  ): Promise<MarinaTransactionHex> => this.wallet.sendTransaction(recipient);
 }
