@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const poolLbtcLiquidity = 1000000;
 const poolUsdtLiquidity = 50000000000;
-const lpFeeRate = 400;
+const lpFeeRate = 500;
 
 const fees = {
   baseFee: 1200,
@@ -28,7 +28,6 @@ export const lbtcToUsdtSwapAmountCalculate = (
 ): number => {
   // step1   (lp fee calculate)
   const lpFee = div(lbtcAmount, lpFeeRate);
-  console.log(lpFee);
 
   // step 2 (sub fee amount)
   const lbtcAmountSubFee = lbtcAmount - lpFee;
@@ -76,7 +75,7 @@ export const usdtToLbtcSwapAmountCalculate = (
     console.log('Usdt amount must greaten or at least minimum equal 50000000');
 
   // step1 (fee calculation)
-  const lpFee = div(usdtAmount, 400);
+  const lpFee = div(usdtAmount, lpFeeRate);
 
   // step2 (input new value without fee  input - step1)
   const usdtAmountWithoutFee = usdtAmount - lpFee;
