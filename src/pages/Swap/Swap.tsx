@@ -13,7 +13,10 @@ import IAssetAmount from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import './Swap.scss';
-import { lbtcToUsdtSwapAmountCalculate } from '../../lib/bitmatrix';
+import {
+  lbtcToUsdtSwapAmountCalculate,
+  usdtToLbtcSwapAmountCalculate,
+} from '../../lib/bitmatrix';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -93,7 +96,12 @@ export const Swap = (): JSX.Element => {
   ) => {
     const inputNum = Number(inputElement.target.value);
 
-    const outPut = lbtcToUsdtSwapAmountCalculate(inputNum);
+    console.log(selectedAssetFrom);
+
+    const outPut =
+      selectedAssetFrom === SWAP_ASSET.LBTC
+        ? lbtcToUsdtSwapAmountCalculate(inputNum)
+        : usdtToLbtcSwapAmountCalculate(inputNum);
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(outPut.toString());
