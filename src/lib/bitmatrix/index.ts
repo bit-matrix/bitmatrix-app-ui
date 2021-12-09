@@ -3,7 +3,23 @@ const poolLbtcLiquidity = 1000000;
 const poolUsdtLiquidity = 50000000000;
 const lpFeeRate = 400;
 
+const fees = {
+  baseFee: 1200,
+  orderingFee: 1,
+  serviceFee: 650,
+  commitmentTxFee: 100,
+};
+
 const div = (input1: number, input2: number) => Math.floor(input1 / input2);
+
+export type FundingOutput = {
+  fundingOutput1Value: number;
+  fundingOutput2Value: number;
+  fundingOutput1Address: string;
+  fundingOutput2Address: string;
+  fundingOutput1AssetId: string;
+  fundingOutput2AssetId: string;
+};
 
 // all amounts satoshi
 export const lbtcToUsdtSwapAmountCalculate = (
@@ -90,4 +106,31 @@ export const usdtToLbtcSwapAmountCalculate = (
   const remainingLbtcAmount = poolLbtcLiquidity - lbtcAmount;
 
   return remainingLbtcAmount;
+};
+
+// step1
+export const lbtcToUsdtSwap = (lbtcAmount: number): FundingOutput => {
+  const fundingOutput1Value = lbtcAmount;
+  const fundingOutput2Value =
+    fees.baseFee + fees.commitmentTxFee + fees.orderingFee + fees.serviceFee;
+
+  const fundingOutput1Address =
+    'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg';
+  const fundingOutput2Address =
+    'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg';
+
+  const fundingOutput1AssetId =
+    '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49';
+
+  const fundingOutput2AssetId =
+    '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49';
+
+  return {
+    fundingOutput1Value,
+    fundingOutput2Value,
+    fundingOutput1Address,
+    fundingOutput2Address,
+    fundingOutput1AssetId,
+    fundingOutput2AssetId,
+  };
 };
