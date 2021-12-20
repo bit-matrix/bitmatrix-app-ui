@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { CheckBoxGroup } from '../../../components/CheckBoxGroup/CheckBoxGroup';
 import { StripedRadioButton } from '../../../components/StripedRadioButton/StripedRadioButton';
 import { ToggleSwitch } from '../../../components/ToggleSwitch/ToggleSwitch';
+import SettingsContext from '../../../context/SettingsContext';
+import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
 import info from '../../../images/info2.png';
 import './General.scss';
 
@@ -27,6 +30,29 @@ enum SlippageFee {
   ONEPOINTFIVE = '%1.5',
 }
 
+const SlippageFeeList = [
+  {
+    text: SlippageFee.ZEROPOINTFIVE,
+    value: 200,
+  },
+  {
+    text: SlippageFee.ZEROPOINTSEVENTYFIVE,
+    value: 133,
+  },
+  {
+    text: SlippageFee.ONEPOINT,
+    value: 100,
+  },
+  {
+    text: SlippageFee.ONEPOINTTWENTYFIVE,
+    value: 80,
+  },
+  {
+    text: SlippageFee.ONEPOINTFIVE,
+    value: 66,
+  },
+];
+
 const slippageFeeOptions = [
   SlippageFee.ZEROPOINTFIVE,
   SlippageFee.ZEROPOINTSEVENTYFIVE,
@@ -36,11 +62,11 @@ const slippageFeeOptions = [
 ];
 
 export const General = (): JSX.Element => {
-  const [radioOption, setRadioOption] = useState<string>('');
   const [checkedValues, setCheckedValues] = useState<Array<string>>([]);
   const [pushNotificationsSwitch, setPushNotificationsSwitch] =
     useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
+  const { dispatch, payloadData } = useContext(SettingsContext);
 
   return (
     <div>
@@ -51,8 +77,20 @@ export const General = (): JSX.Element => {
         </div>
         <StripedRadioButton
           options={slippageFeeOptions}
-          selectedOption={radioOption}
-          onChange={(option) => setRadioOption(option)}
+          selectedOption={
+            SlippageFeeList.find((sf) => sf.value === payloadData.slippage)
+              ?.text || ''
+          }
+          onChange={(option) => {
+            const selectedoOption = SlippageFeeList.find(
+              (sf) => sf.text === option,
+            )?.value;
+
+            dispatch({
+              type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
+              payload: { slippage: selectedoOption },
+            });
+          }}
         />
       </div>
       <div className="general-item">
