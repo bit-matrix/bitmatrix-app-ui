@@ -3,7 +3,7 @@ import SETTINGS_ACTION_TYPES from './SETTINGS_ACTION_TYPES';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const reducer = (
-  state: PayloadData = {},
+  state: PayloadData = { slippage: 200 },
   action: {
     type: SETTINGS_ACTION_TYPES;
     payload: PayloadData;

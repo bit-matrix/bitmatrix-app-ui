@@ -9,7 +9,7 @@ const SettingsContext = createContext<{
     payload: PayloadData;
   }>;
 }>({
-  payloadData: {},
+  payloadData: { slippage: 200 },
   dispatch: () => null,
 });
 

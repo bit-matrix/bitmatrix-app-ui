@@ -88,7 +88,7 @@ export const General = (): JSX.Element => {
 
             dispatch({
               type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
-              payload: { slippage: selectedoOption },
+              payload: { slippage: selectedoOption || 200 },
             });
           }}
         />

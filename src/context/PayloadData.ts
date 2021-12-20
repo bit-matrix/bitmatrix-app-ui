@@ -1,5 +1,5 @@
 interface PayloadData {
-  slippage?: number;
+  slippage: number;
 }
 
 export default PayloadData;
