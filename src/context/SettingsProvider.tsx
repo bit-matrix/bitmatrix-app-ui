@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import reducer from './reducer';
 import SettingsContext from './SettingsContext';
 
-const UserProvider: React.FC = ({ children }) => {
+const SettingsProvider: React.FC = ({ children }) => {
   const [payloadData, dispatch] = useReducer(reducer, { slippage: 200 });
 
   return (
@@ -12,4 +12,4 @@ const UserProvider: React.FC = ({ children }) => {
   );
 };
 
-export default UserProvider;
+export default SettingsProvider;
