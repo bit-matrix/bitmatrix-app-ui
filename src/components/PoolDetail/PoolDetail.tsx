@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Button, Icon } from 'rsuite';
 import { PoolData } from '../../model/PoolData';
-import lbtcImage from '../../images/liquid_btc.png';
-import usdtImage from '../../images/usdt.png';
 import { ParentSize } from '@visx/responsive';
 import AreaChart from '../AreaChart/AreaChart';
 import { TabMenu } from '../TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
+import lbtcImage from '../../images/liquid_btc.png';
+import usdtImage from '../../images/usdt.png';
 import './PoolDetail.scss';
 
 type Props = {
@@ -18,6 +20,8 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(
     POOL_DETAIL_TABS.PRICE,
   );
+
+  const history = useHistory();
 
   return (
     <div className="pool-detail-container">
@@ -140,7 +144,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
               appearance="default"
               className="primary-button pool-detail-add-button"
               onClick={() => {
-                console.log('add liquidity');
+                history.push(ROUTE_PATH.LIQUIDITY);
               }}
             >
               Add Liquidity
