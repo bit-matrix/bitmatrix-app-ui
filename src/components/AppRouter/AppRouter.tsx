@@ -8,6 +8,7 @@ import { Home } from '../../pages/Home/Home';
 import { Pool } from '../../pages/Pool/Pool';
 import { Content } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
+import Liquidity from '../../pages/Liquidity/Liquidity';
 import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
@@ -23,6 +24,7 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.POOL} component={Pool} />
             {/*<Route exact path={ROUTE_PATH.STATS} component={Stats} />*/}
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
+            <Route exact path={ROUTE_PATH.LIQUIDITY} component={Liquidity} />
           </Switch>
         </div>
 
