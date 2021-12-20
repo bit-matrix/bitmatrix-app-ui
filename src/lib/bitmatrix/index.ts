@@ -58,7 +58,7 @@ export const lbtcToTokenSwap = (lbtcAmount: number): FundingOutput => {
 // all amounts satoshi
 export const lbtcToTokenSwapAmountCalculate = (
   lbtcAmount: number,
-  slippage?: number,
+  slippage: number,
 ): number => {
   // step1   (lp fee calculate)
   const lpFee = div(lbtcAmount, lpFeeRate);
@@ -98,7 +98,7 @@ export const lbtcToTokenSwapAmountCalculate = (
   const tokenAmount = finalTokenPoolLiquidity - 1000000;
 
   // step 12 slippage amount calculation with slippage
-  const slippageAmount = div(tokenAmount, 200);
+  const slippageAmount = div(tokenAmount, slippage);
 
   console.log('tokenAmount', tokenAmount);
   console.log('slippageAmount', slippageAmount);

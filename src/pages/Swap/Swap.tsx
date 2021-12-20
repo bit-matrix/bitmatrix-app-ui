@@ -12,7 +12,6 @@ import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { AssetAmount } from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import './Swap.scss';
 import {
   lbtcToTokenSwap,
   lbtcToTokenSwapAmountCalculate,
@@ -20,6 +19,9 @@ import {
 } from '../../lib/bitmatrix';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
+import { useContext } from 'react';
+import SettingsContext from '../../context/SettingsContext';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -51,6 +53,8 @@ export const Swap = (): JSX.Element => {
   const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
 
   const [wallet, setWallet] = useState<IWallet>();
+
+  const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
@@ -107,8 +111,8 @@ export const Swap = (): JSX.Element => {
 
     const output =
       selectedAssetFrom === SWAP_ASSET.LBTC
-        ? lbtcToTokenSwapAmountCalculate(inputNum)
-        : usdtToLbtcSwapAmountCalculate(inputNum);
+        ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
+        : usdtToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(output.toString());
