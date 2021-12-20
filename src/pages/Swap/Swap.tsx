@@ -14,15 +14,12 @@ import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import './Swap.scss';
 import {
-  createCommitmentTx,
-  lbtcToUsdtSwap,
-  lbtcToUsdtSwapAmountCalculate,
+  lbtcToTokenSwap,
+  lbtcToTokenSwapAmountCalculate,
   usdtToLbtcSwapAmountCalculate,
 } from '../../lib/bitmatrix';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
-import axios from 'axios';
-import { data } from '../../components/AreaChart/Data';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -60,8 +57,6 @@ export const Swap = (): JSX.Element => {
   useEffect(() => {
     setWallet(new Wallet(WALLET_NAME.MARINA));
   }, []);
-
-  createCommitmentTx();
 
   const assetAmountToFromAmount = useCallback(
     (
@@ -110,21 +105,13 @@ export const Swap = (): JSX.Element => {
   ) => {
     const inputNum = Number(inputElement.target.value);
 
-    console.log(selectedAssetFrom);
-
-    const outPut =
+    const output =
       selectedAssetFrom === SWAP_ASSET.LBTC
-        ? lbtcToUsdtSwapAmountCalculate(inputNum)
+        ? lbtcToTokenSwapAmountCalculate(inputNum)
         : usdtToLbtcSwapAmountCalculate(inputNum);
 
     setInputFromAmount(inputElement.target.value);
-    setInputToAmount(outPut.toString());
-    // let newFromAmount: number = 0;
-    // const inputNumber = Number(inputElement.target.value);
-    // if (!isNaN(inputNumber)) {
-    //   newFromAmount = inputNumber;
-    // }
-    // setFromAmount(newFromAmount * 100000000);
+    setInputToAmount(output.toString());
   };
 
   const onChangeToInput = (
@@ -140,7 +127,8 @@ export const Swap = (): JSX.Element => {
   };
 
   const swapClick = async () => {
-    const input = lbtcToUsdtSwap(Number(inputFromAmount));
+    const input1 = lbtcToTokenSwap(Number(inputFromAmount));
+    // const input2 = tokenToLBtcSwap(Number(inputFromAmount));
 
     // const data = await axios.post(
     //   'http://157.230.101.158:9485/rpc',
@@ -158,22 +146,18 @@ export const Swap = (): JSX.Element => {
     //     },
     //   },
     // );
-
-    // console.log(data.data);
-
     const rawTxHex = await wallet?.sendTransaction([
       {
-        address: input.fundingOutput1Address,
-        value: input.fundingOutput1Value,
-        asset: input.fundingOutput1AssetId,
+        address: input1.fundingOutput1Address,
+        value: input1.fundingOutput1Value,
+        asset: input1.fundingOutput1AssetId,
       },
       {
-        address: input.fundingOutput2Address,
-        value: input.fundingOutput2Value,
-        asset: input.fundingOutput2AssetId,
+        address: input1.fundingOutput2Address,
+        value: input1.fundingOutput2Value,
+        asset: input1.fundingOutput2AssetId,
       },
     ]);
-
     console.log(rawTxHex);
   };
 

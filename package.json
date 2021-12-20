@@ -20,6 +20,7 @@
     "@visx/scale": "^1.14.0",
     "@visx/shape": "^1.14.0",
     "@visx/tooltip": "^1.7.2",
+    "axios": "^0.24.0",
     "ldk": "0.4.0",
     "node-sass": "^5.0.0",
     "numeral": "^2.0.6",
