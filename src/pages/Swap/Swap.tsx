@@ -140,32 +140,24 @@ export const Swap = (): JSX.Element => {
   };
 
   const swapClick = async () => {
-    const input1 = lbtcToTokenSwap(Number(inputFromAmount));
-    const input2 = tokenToLBtcSwap(Number(inputFromAmount));
+    let input;
 
-    const rawTxHex1 = await wallet?.sendTransaction([
-      {
-        address: input1.fundingOutput1Address,
-        value: input1.fundingOutput1Value,
-        asset: input1.fundingOutput1AssetId,
-      },
-      {
-        address: input1.fundingOutput2Address,
-        value: input1.fundingOutput2Value,
-        asset: input1.fundingOutput2AssetId,
-      },
-    ]);
+    if (selectedAssetFrom === SWAP_ASSET.LBTC) {
+      input = lbtcToTokenSwap(Number(inputFromAmount));
+    } else {
+      input = tokenToLBtcSwap(Number(inputFromAmount));
+    }
 
-    const rawTxHex2 = await wallet?.sendTransaction([
+    const rawTxHex = await wallet?.sendTransaction([
       {
-        address: input2.fundingOutput1Address,
-        value: input2.fundingOutput1Value,
-        asset: input2.fundingOutput1AssetId,
+        address: input.fundingOutput1Address,
+        value: input.fundingOutput1Value,
+        asset: input.fundingOutput1AssetId,
       },
       {
-        address: input2.fundingOutput2Address,
-        value: input2.fundingOutput2Value,
-        asset: input2.fundingOutput2AssetId,
+        address: input.fundingOutput2Address,
+        value: input.fundingOutput2Value,
+        asset: input.fundingOutput2AssetId,
       },
     ]);
 
@@ -176,9 +168,7 @@ export const Swap = (): JSX.Element => {
           jsonrpc: '1.0',
           id: 'curltest',
           method: 'sendrawtransaction',
-          params: [
-            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
-          ],
+          params: [rawTxHex],
         }),
         {
           headers: {
@@ -190,16 +180,14 @@ export const Swap = (): JSX.Element => {
         return response.data.result;
       });
 
-    const transactionDetail = await axios
+    const transactionDetails = await axios
       .post(
         'http://157.230.101.158:9485/rpc',
         JSON.stringify({
           jsonrpc: '1.0',
           id: 'curltest',
           method: 'decoderawtransaction',
-          params: [
-            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
-          ],
+          params: [rawTxHex],
         }),
         {
           headers: {
@@ -212,7 +200,7 @@ export const Swap = (): JSX.Element => {
       });
 
     console.log(transactionId);
-    console.log(transactionDetail);
+    console.log(transactionDetails);
   };
 
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
