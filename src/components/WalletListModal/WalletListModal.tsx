@@ -49,6 +49,7 @@ export const WalletListModal: React.FC<Props> = ({
             //});
           })
           .catch(() => {
+            wallet.disable();
             setLoading(false);
           })
       : window.open(
