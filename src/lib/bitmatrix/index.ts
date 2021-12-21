@@ -107,7 +107,7 @@ export const lbtcToTokenSwapAmountCalculate = (
 
 export const tokenToLbtcSwapAmountCalculate = (
   usdtAmount: number,
-  slippage?: number,
+  slippage: number,
 ): number => {
   // validation
   if (usdtAmount < 50000000)
@@ -143,7 +143,11 @@ export const tokenToLbtcSwapAmountCalculate = (
   //step 10 (poolLbtcLiquidity - step9)
   const remainingLbtcAmount = poolLbtcLiquidity - lbtcAmount;
 
-  return remainingLbtcAmount;
+  const slippageAmount = div(remainingLbtcAmount, slippage);
+
+  const finalAmount = remainingLbtcAmount - slippageAmount;
+
+  return finalAmount;
 };
 
 export const tokenToLBtcSwap = (usdtAmount: number): FundingOutput => {
