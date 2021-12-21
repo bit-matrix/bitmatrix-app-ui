@@ -15,7 +15,8 @@ import { Info } from '../../components/common/Info/Info';
 import {
   lbtcToTokenSwap,
   lbtcToTokenSwapAmountCalculate,
-  usdtToLbtcSwapAmountCalculate,
+  tokenToLbtcSwapAmountCalculate,
+  tokenToLBtcSwap,
 } from '../../lib/bitmatrix';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
@@ -113,7 +114,7 @@ export const Swap = (): JSX.Element => {
     const output =
       selectedAssetFrom === SWAP_ASSET.LBTC
         ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
-        : usdtToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
+        : tokenToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(output.toString());
@@ -133,9 +134,9 @@ export const Swap = (): JSX.Element => {
 
   const swapClick = async () => {
     const input1 = lbtcToTokenSwap(Number(inputFromAmount));
-    // const input2 = tokenToLBtcSwap(Number(inputFromAmount));
+    const input2 = tokenToLBtcSwap(Number(inputFromAmount));
 
-    const rawTxHex = await wallet?.sendTransaction([
+    const rawTxHex1 = await wallet?.sendTransaction([
       {
         address: input1.fundingOutput1Address,
         value: input1.fundingOutput1Value,
@@ -148,6 +149,19 @@ export const Swap = (): JSX.Element => {
       },
     ]);
 
+    const rawTxHex2 = await wallet?.sendTransaction([
+      {
+        address: input2.fundingOutput1Address,
+        value: input2.fundingOutput1Value,
+        asset: input2.fundingOutput1AssetId,
+      },
+      {
+        address: input2.fundingOutput2Address,
+        value: input2.fundingOutput2Value,
+        asset: input2.fundingOutput2AssetId,
+      },
+    ]);
+
     const transactionId = await axios
       .post(
         'http://157.230.101.158:9485/rpc',
@@ -155,7 +169,9 @@ export const Swap = (): JSX.Element => {
           jsonrpc: '1.0',
           id: 'curltest',
           method: 'sendrawtransaction',
-          params: [rawTxHex],
+          params: [
+            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
+          ],
         }),
         {
           headers: {
@@ -174,7 +190,9 @@ export const Swap = (): JSX.Element => {
           jsonrpc: '1.0',
           id: 'curltest',
           method: 'decoderawtransaction',
-          params: [rawTxHex],
+          params: [
+            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
+          ],
         }),
         {
           headers: {

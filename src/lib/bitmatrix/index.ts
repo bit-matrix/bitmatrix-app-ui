@@ -105,7 +105,7 @@ export const lbtcToTokenSwapAmountCalculate = (
   return tokenAmount - slippageAmount;
 };
 
-export const usdtToLbtcSwapAmountCalculate = (
+export const tokenToLbtcSwapAmountCalculate = (
   usdtAmount: number,
   slippage?: number,
 ): number => {
