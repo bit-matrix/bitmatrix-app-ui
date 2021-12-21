@@ -56,13 +56,20 @@ export const Swap = (): JSX.Element => {
 
   const [wallet, setWallet] = useState<IWallet>();
 
+  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
+
   const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    setWallet(new Wallet(WALLET_NAME.MARINA));
-  }, []);
+    const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+    setWallet(marinaWallet);
+
+    marinaWallet.isEnabled().then((enabled) => {
+      setWalletIsEnabled(enabled);
+    });
+  }, [walletIsEnabled]);
 
   const assetAmountToFromAmount = useCallback(
     (
@@ -322,14 +329,14 @@ export const Swap = (): JSX.Element => {
               appearance="default"
               className="swap-button"
               onClick={() => {
-                if (wallet) {
+                if (walletIsEnabled) {
                   swapClick();
                 } else {
                   setShowWalletList(true);
                 }
               }}
             >
-              {wallet ? 'Swap' : 'Connect Wallet'}
+              {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
               {/* Coming soon */}
             </Button>
           </div>
