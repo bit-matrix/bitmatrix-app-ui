@@ -31,12 +31,11 @@ export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] =
     useState<FROM_AMOUNT_PERCENT>();
   // <SwapAssetList />
-  const [selectedAssetFrom, setSelectedAssetFrom] = useState<SWAP_ASSET>(
-    SWAP_ASSET.LBTC,
-  );
-  const [selectedAssetTo, setSelectedAssetTo] = useState<SWAP_ASSET>(
-    SWAP_ASSET.USDT,
-  );
+  const [selectedAsset, setSelectedAsset] = useState<{
+    from: SWAP_ASSET;
+    to: SWAP_ASSET;
+  }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
+
   // <WalletListModal />
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
@@ -77,12 +76,12 @@ export const Swap = (): JSX.Element => {
       newFromAmountPercent?: FROM_AMOUNT_PERCENT,
     ) => {
       let newFromAmount = 0;
-      if (selectedAssetFrom === SWAP_ASSET.LBTC)
+      if (selectedAsset.from === SWAP_ASSET.LBTC)
         newFromAmount =
           newAssetAmountList.find(
             (assetAmount) => assetAmount.assetId === ASSET_ID.LBTC,
           )?.amount || 0;
-      else if (selectedAssetFrom === SWAP_ASSET.USDT)
+      else if (selectedAsset.from === SWAP_ASSET.USDT)
         newFromAmount =
           newAssetAmountList.find(
             (assetAmount) => assetAmount.assetId === ASSET_ID.USDT,
@@ -106,7 +105,7 @@ export const Swap = (): JSX.Element => {
         setInputFromAmount((newFromAmount / 100000000).toFixed(8).toString());
       }
     },
-    [selectedAssetFrom],
+    [selectedAsset],
   );
 
   useEffect(() => {
@@ -119,7 +118,7 @@ export const Swap = (): JSX.Element => {
     const inputNum = Number(inputElement.target.value);
 
     const output =
-      selectedAssetFrom === SWAP_ASSET.LBTC
+      selectedAsset.from === SWAP_ASSET.LBTC
         ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
         : tokenToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
 
@@ -130,13 +129,15 @@ export const Swap = (): JSX.Element => {
   const onChangeToInput = (
     inputElement: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    const inputNum = Number(inputElement.target.value);
+
+    const output =
+      selectedAsset.to === SWAP_ASSET.LBTC
+        ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
+        : tokenToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
+
+    setInputFromAmount(output.toString());
     setInputToAmount(inputElement.target.value);
-    // let newToAmount: number = 0;
-    // const inputNumber = Number(inputElement.target.value);
-    // if (!isNaN(inputNumber)) {
-    //   newToAmount = inputNumber;
-    // }
-    // setToAmount(newToAmount * 100000000);
   };
 
   const swapClick = async () => {
@@ -177,7 +178,7 @@ export const Swap = (): JSX.Element => {
           id: 'curltest',
           method: 'sendrawtransaction',
           params: [
-            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
+            selectedAsset.from === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
           ],
         }),
         {
@@ -198,7 +199,7 @@ export const Swap = (): JSX.Element => {
           id: 'curltest',
           method: 'decoderawtransaction',
           params: [
-            selectedAssetFrom === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
+            selectedAsset.from === SWAP_ASSET.LBTC ? rawTxHex1 : rawTxHex2,
           ],
         }),
         {
@@ -284,8 +285,20 @@ export const Swap = (): JSX.Element => {
                   />
                 </div>
                 <SwapAssetList
-                  selectedAsset={selectedAssetFrom}
-                  setSelectedAsset={setSelectedAssetFrom}
+                  selectedAsset={selectedAsset.from}
+                  setSelectedAsset={(asset: SWAP_ASSET) => {
+                    if (asset === SWAP_ASSET.LBTC) {
+                      setSelectedAsset({
+                        from: asset,
+                        to: SWAP_ASSET.USDT,
+                      });
+                    } else {
+                      setSelectedAsset({
+                        from: asset,
+                        to: SWAP_ASSET.LBTC,
+                      });
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -321,8 +334,20 @@ export const Swap = (): JSX.Element => {
                 />
               </div>
               <SwapAssetList
-                selectedAsset={selectedAssetTo}
-                setSelectedAsset={setSelectedAssetTo}
+                selectedAsset={selectedAsset.to}
+                setSelectedAsset={(asset: SWAP_ASSET) => {
+                  if (asset === SWAP_ASSET.LBTC) {
+                    setSelectedAsset({
+                      from: SWAP_ASSET.USDT,
+                      to: asset,
+                    });
+                  } else {
+                    setSelectedAsset({
+                      from: SWAP_ASSET.LBTC,
+                      to: asset,
+                    });
+                  }
+                }}
               />
             </div>
             <Button
