@@ -60,6 +60,12 @@ export const lbtcToTokenSwapAmountCalculate = (
   lbtcAmount: number,
   slippage: number,
 ): number => {
+  // validation
+  if (lbtcAmount < 1000) {
+    console.log('Lbtc amount must greater or at least minimum equal 1000');
+    return 0;
+  }
+
   // step1   (lp fee calculate)
   const lpFee = div(lbtcAmount, lpFeeRate);
 
@@ -100,9 +106,9 @@ export const lbtcToTokenSwapAmountCalculate = (
   // step 12 slippage amount calculation with slippage
   const slippageAmount = div(tokenAmount, slippage);
 
-  console.log('tokenAmount', tokenAmount);
-  console.log('slippageAmount', slippageAmount);
-  return tokenAmount - slippageAmount;
+  const finalAmount = tokenAmount - slippageAmount;
+
+  return finalAmount;
 };
 
 export const tokenToLbtcSwapAmountCalculate = (
@@ -110,8 +116,10 @@ export const tokenToLbtcSwapAmountCalculate = (
   slippage: number,
 ): number => {
   // validation
-  if (usdtAmount < 50000000)
-    console.log('Usdt amount must greaten or at least minimum equal 50000000');
+  if (usdtAmount < 50000000) {
+    console.log('Usdt amount must greater or at least minimum equal 50000000');
+    return 0;
+  }
 
   // step1 (fee calculation)
   const lpFee = div(usdtAmount, lpFeeRate);
@@ -184,24 +192,27 @@ export const tokenToLBtcSwap = (usdtAmount: number): FundingOutput => {
 // }
 
 // case1
-export const createCommitmentTx = () => {
+export const lbtcToTokenCreateCommitmentTx = (
+  inputAmount: string,
+  txId: string,
+  publicKey: string,
+  calculatedAmountWithSlippage: string,
+): string => {
   // case1
-  const txId =
-    'e9e6cb2b46152684ca2c3f58622f63d5eb45806edced1a0769f2fe895ffc2b53';
 
   const targetAssetId =
     '43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd';
 
   const methodCall = '01';
 
-  const pubkey =
-    '0253b4443cb73ac1dbe0d0e31c9db5cdce831280fd94ba9c13eb1ea0791819d70e';
-
-  const slippage = '8813a60e00000000';
-
   const orderingFee = '01000000';
 
-  const callData = targetAssetId + methodCall + pubkey + slippage + orderingFee;
+  const callData =
+    targetAssetId +
+    methodCall +
+    publicKey +
+    calculatedAmountWithSlippage +
+    orderingFee;
 
   const commitmentOutputTapscriptTemplate =
     '630401000000b200c86920' +
@@ -209,7 +220,7 @@ export const createCommitmentTx = () => {
     '876700c86920' +
     targetAssetId +
     '879169043c000000b221' +
-    pubkey +
+    publicKey +
     'ac68';
 
   console.log('calldata ', callData);
@@ -265,6 +276,8 @@ export const createCommitmentTx = () => {
 
   // send raw transaction
   console.log(templateResult);
+
+  return templateResult;
 };
 
 // case2
