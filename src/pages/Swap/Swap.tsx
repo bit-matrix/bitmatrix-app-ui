@@ -17,6 +17,7 @@ import {
   lbtcToTokenSwapAmountCalculate,
   tokenToLbtcSwapAmountCalculate,
   tokenToLBtcSwap,
+  lbtcToTokenCreateCommitmentTx,
 } from '../../lib/bitmatrix';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
@@ -200,8 +201,35 @@ export const Swap = (): JSX.Element => {
         return response.data.result;
       });
 
-    console.log(transactionId);
-    console.log(transactionDetails);
+    const publicKey = transactionDetails.vin[0].txinwitness[1];
+
+    const commitmentTx = lbtcToTokenCreateCommitmentTx(
+      selectedAsset.from,
+      transactionId,
+      publicKey,
+      selectedAsset.to,
+    );
+
+    const commitmentTxId = await axios
+      .post(
+        'http://157.230.101.158:9485/rpc',
+        JSON.stringify({
+          jsonrpc: '1.0',
+          id: 'curltest',
+          method: 'sendrawtransaction',
+          params: [commitmentTx],
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      .then((response) => {
+        return response.data.result;
+      });
+
+    console.log('commitmentTxId', commitmentTxId);
   };
 
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
@@ -231,7 +259,6 @@ export const Swap = (): JSX.Element => {
         }, 0),
     });
     setAssetAmounts(newAssetAmountList);
-
     assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
   };
 
