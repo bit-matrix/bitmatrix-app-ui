@@ -12,19 +12,40 @@ import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { AssetAmount } from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import {
-  lbtcToTokenSwap,
-  lbtcToTokenSwapAmountCalculate,
-  tokenToLbtcSwapAmountCalculate,
-  tokenToLBtcSwap,
-  lbtcToTokenCreateCommitmentTx,
-} from '../../lib/bitmatrix';
 import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
+import { commitmentTx, fundingTx } from '@bitmatrix/lib';
 import './Swap.scss';
 import axios from 'axios';
+import { BmConfig } from '@bitmatrix/models';
+
+const poolConfigs: BmConfig = {
+  id: '43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd',
+  minRemainingSupply: 1000,
+  minTokenValue: 50000000,
+  baseFee: {
+    number: 1200,
+    hex: '',
+  },
+  serviceFee: {
+    number: 650,
+    hex: '',
+  },
+  commitmentTxFee: {
+    number: 100,
+    hex: '0000000000000064',
+  },
+  defaultOrderingFee: {
+    number: 1,
+    hex: '01000000',
+  },
+  fundingOutputAddress:
+    'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+  innerPublicKey:
+    '1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624',
+};
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -120,8 +141,12 @@ export const Swap = (): JSX.Element => {
 
     const output =
       selectedAsset.from === SWAP_ASSET.LBTC
-        ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
-        : tokenToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
+        ? fundingTx.lbtcToTokenAmount(inputNum, payloadData.slippage, '1000')
+        : fundingTx.tokenToLbtcAmount(
+            inputNum,
+            payloadData.slippage,
+            '50000000',
+          );
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(output.toString());
@@ -134,8 +159,12 @@ export const Swap = (): JSX.Element => {
 
     const output =
       selectedAsset.to === SWAP_ASSET.LBTC
-        ? lbtcToTokenSwapAmountCalculate(inputNum, payloadData.slippage)
-        : tokenToLbtcSwapAmountCalculate(inputNum, payloadData.slippage);
+        ? fundingTx.lbtcToTokenAmount(inputNum, payloadData.slippage, '1000')
+        : fundingTx.tokenToLbtcAmount(
+            inputNum,
+            payloadData.slippage,
+            '50000000',
+          );
 
     setInputFromAmount(output.toString());
     setInputToAmount(inputElement.target.value);
@@ -145,9 +174,26 @@ export const Swap = (): JSX.Element => {
     let input;
 
     if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      input = lbtcToTokenSwap(Number(inputFromAmount));
+      input = fundingTx.lbtcToToken(
+        Number(inputFromAmount),
+        'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+        '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+        1200,
+        650,
+        100,
+        1,
+      );
     } else {
-      input = tokenToLBtcSwap(Number(inputFromAmount));
+      input = fundingTx.tokenToLBtc(
+        Number(inputFromAmount),
+        'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+        '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+        '213cbc4df83abc230852526b1156877f60324da869f0affaee73b6a6a32ad025',
+        1200,
+        650,
+        100,
+        1,
+      );
     }
 
     const rawTxHex = await wallet?.sendTransaction([
@@ -182,54 +228,54 @@ export const Swap = (): JSX.Element => {
         return response.data.result;
       });
 
-    const transactionDetails = await axios
-      .post(
-        'http://157.230.101.158:9485/rpc',
-        JSON.stringify({
-          jsonrpc: '1.0',
-          id: 'curltest',
-          method: 'decoderawtransaction',
-          params: [rawTxHex],
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
+    if (transactionId) {
+      axios
+        .post(
+          'http://157.230.101.158:9485/rpc',
+          JSON.stringify({
+            jsonrpc: '1.0',
+            id: 'curltest',
+            method: 'decoderawtransaction',
+            params: [rawTxHex],
+          }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        },
-      )
-      .then((response) => {
-        return response.data.result;
-      });
+        )
+        .then((response) => {
+          console.log(transactionId);
+          const publicKey = response.data.result.vin[0].txinwitness[1];
+          let commitment;
+          if (selectedAsset.from === SWAP_ASSET.LBTC) {
+            commitment = commitmentTx.lbtcToTokenCreateCommitmentTx(
+              Number(inputFromAmount),
+              transactionId,
+              publicKey,
+              Number(inputToAmount),
+              poolConfigs.defaultOrderingFee,
+              poolConfigs.baseFee,
+              poolConfigs.commitmentTxFee,
+              poolConfigs.innerPublicKey,
+            );
+          } else {
+            commitment = commitmentTx.tokenToLbtcCreateCommitmentTx(
+              Number(inputFromAmount),
+              transactionId,
+              publicKey,
+              Number(inputToAmount),
+              poolConfigs.defaultOrderingFee,
+              poolConfigs.baseFee,
+              poolConfigs.serviceFee,
+              poolConfigs.commitmentTxFee,
+              poolConfigs.innerPublicKey,
+            );
+          }
 
-    const publicKey = transactionDetails.vin[0].txinwitness[1];
-
-    const commitmentTx = lbtcToTokenCreateCommitmentTx(
-      selectedAsset.from,
-      transactionId,
-      publicKey,
-      selectedAsset.to,
-    );
-
-    const commitmentTxId = await axios
-      .post(
-        'http://157.230.101.158:9485/rpc',
-        JSON.stringify({
-          jsonrpc: '1.0',
-          id: 'curltest',
-          method: 'sendrawtransaction',
-          params: [commitmentTx],
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      .then((response) => {
-        return response.data.result;
-      });
-
-    console.log('commitmentTxId', commitmentTxId);
+          console.log(commitment);
+        });
+    }
   };
 
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
@@ -259,6 +305,7 @@ export const Swap = (): JSX.Element => {
         }, 0),
     });
     setAssetAmounts(newAssetAmountList);
+
     assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
   };
 
