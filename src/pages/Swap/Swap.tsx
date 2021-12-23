@@ -19,7 +19,6 @@ import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import './Swap.scss';
-import axios from 'axios';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
 import { poolId } from '../../data/env';
 
@@ -194,101 +193,52 @@ export const Swap = (): JSX.Element => {
         },
       ])
       .then((rawTxHex) => {
-        axios
-          .post(
-            'http://157.230.101.158:9485/rpc',
-            JSON.stringify({
-              jsonrpc: '1.0',
-              id: 'curltest',
-              method: 'sendrawtransaction',
-              params: [rawTxHex],
-            }),
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
-          )
-          .then((response) => {
-            const txId = response.data.result;
+        api.sendRawTransaction(rawTxHex).then((response) => {
+          const txId = response;
 
-            Notification.open({
-              title: 'Funding Tx Id : ',
-              description: <div className="notificationTx">{txId}</div>,
-              duration: 20000,
-            });
-
-            axios
-              .post(
-                'http://157.230.101.158:9485/rpc',
-                JSON.stringify({
-                  jsonrpc: '1.0',
-                  id: 'curltest',
-                  method: 'decoderawtransaction',
-                  params: [rawTxHex],
-                }),
-                {
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                },
-              )
-              .then((response) => {
-                const publicKey = response.data.result.vin[0].txinwitness[1];
-
-                let commitment;
-
-                if (selectedAsset.from === SWAP_ASSET.LBTC) {
-                  commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
-                    Number(inputFromAmount),
-                    txId,
-                    publicKey,
-                    Number(inputToAmount),
-                    poolConfigs!,
-                    pool!.quote.asset,
-                  );
-                } else {
-                  commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-                    Number(inputFromAmount),
-                    txId,
-                    publicKey,
-                    pool!.token.asset,
-                    pool!.quote.asset,
-                    Number(inputToAmount),
-                    poolConfigs!,
-                  );
-                }
-
-                console.log(commitment);
-
-                axios
-                  .post(
-                    'http://157.230.101.158:9485/rpc',
-                    JSON.stringify({
-                      jsonrpc: '1.0',
-                      id: 'curltest',
-                      method: 'sendrawtransaction',
-                      params: [commitment],
-                    }),
-                    {
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                    },
-                  )
-                  .then((response) => {
-                    Notification.open({
-                      title: 'Commitment Tx Id : ',
-                      description: (
-                        <div className="notificationTx">
-                          {response.data.result}
-                        </div>
-                      ),
-                      duration: 20000,
-                    });
-                  });
-              });
+          Notification.open({
+            title: 'Funding Tx Id : ',
+            description: <div className="notificationTx">{txId}</div>,
+            duration: 20000,
           });
+
+          api.decodeRawTransaction(rawTxHex).then((response) => {
+            const publicKey = response.vin[0].txinwitness[1];
+
+            let commitment;
+
+            if (selectedAsset.from === SWAP_ASSET.LBTC) {
+              commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
+                Number(inputFromAmount),
+                txId,
+                publicKey,
+                Number(inputToAmount),
+                poolConfigs!,
+                pool!.quote.asset,
+              );
+            } else {
+              commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
+                Number(inputFromAmount),
+                txId,
+                publicKey,
+                pool!.token.asset,
+                pool!.quote.asset,
+                Number(inputToAmount),
+                poolConfigs!,
+              );
+            }
+
+            console.log(commitment);
+
+            api.sendRawTransaction(commitment).then((response) => {
+              Notification.open({
+                title: 'Commitment Tx Id : ',
+                description: <div className="notificationTx">{response}</div>,
+                duration: 20000,
+              });
+            });
+          });
+        });
       });
   };
 
