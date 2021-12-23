@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Content } from 'rsuite';
+import {
+  Notification,
+  Button,
+  Content,
+  Panel,
+  PanelGroup,
+  Placeholder,
+} from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
@@ -224,7 +231,13 @@ export const Swap = (): JSX.Element => {
           )
           .then((response) => {
             const txId = response.data.result;
-            console.log('marinatx', txId);
+
+            Notification.open({
+              title: 'Funding Tx Id : ',
+              description: <div className="notificationTx">{txId}</div>,
+              duration: 20000,
+            });
+
             axios
               .post(
                 'http://157.230.101.158:9485/rpc',
@@ -269,6 +282,33 @@ export const Swap = (): JSX.Element => {
                     poolConfigs!.innerPublicKey,
                   );
                 }
+
+                axios
+                  .post(
+                    'http://157.230.101.158:9485/rpc',
+                    JSON.stringify({
+                      jsonrpc: '1.0',
+                      id: 'curltest',
+                      method: 'sendrawtransaction',
+                      params: [commitment],
+                    }),
+                    {
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                    },
+                  )
+                  .then((response) => {
+                    Notification.open({
+                      title: 'Commitment Tx Id : ',
+                      description: (
+                        <div className="notificationTx">
+                          {response.data.result}
+                        </div>
+                      ),
+                      duration: 20000,
+                    });
+                  });
               });
           });
       });

@@ -242,6 +242,10 @@
   }
 }
 
+.notificationTx {
+  overflow-wrap: break-word;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .bitmatrix-icon {
     margin-bottom: 3rem;
