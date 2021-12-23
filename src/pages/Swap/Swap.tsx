@@ -239,28 +239,21 @@ export const Swap = (): JSX.Element => {
                 let commitment;
 
                 if (selectedAsset.from === SWAP_ASSET.LBTC) {
-                  commitment = commitmentTx.lbtcToTokenCreateCommitmentTx(
+                  commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
                     Number(inputFromAmount),
                     txId,
                     publicKey,
                     Number(inputToAmount),
-                    poolConfigs!.defaultOrderingFee,
-                    poolConfigs!.baseFee,
-                    poolConfigs!.commitmentTxFee,
-                    poolConfigs!.innerPublicKey,
+                    poolConfigs!,
                   );
                 } else {
-                  commitment = commitmentTx.tokenToLbtcCreateCommitmentTx(
+                  commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
                     Number(inputFromAmount),
                     txId,
                     publicKey,
                     pool!.token.asset,
                     Number(inputToAmount),
-                    poolConfigs!.defaultOrderingFee,
-                    poolConfigs!.baseFee,
-                    poolConfigs!.serviceFee,
-                    poolConfigs!.commitmentTxFee,
-                    poolConfigs!.innerPublicKey,
+                    poolConfigs!,
                   );
                 }
 
