@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Content } from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
@@ -16,36 +17,11 @@ import { IWallet } from '../../lib/wallet/IWallet';
 import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
-import { commitmentTx, fundingTx } from '@bitmatrix/lib';
+import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import './Swap.scss';
 import axios from 'axios';
-import { BmConfig } from '@bitmatrix/models';
-
-const poolConfigs: BmConfig = {
-  id: '43a2f4ef8ce286e57ab3e39e6da3741382ba542854a1b28231a7a5b8ba337fcd',
-  minRemainingSupply: 1000,
-  minTokenValue: 50000000,
-  baseFee: {
-    number: 1200,
-    hex: '',
-  },
-  serviceFee: {
-    number: 650,
-    hex: '',
-  },
-  commitmentTxFee: {
-    number: 100,
-    hex: '0000000000000064',
-  },
-  defaultOrderingFee: {
-    number: 1,
-    hex: '01000000',
-  },
-  fundingOutputAddress:
-    'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
-  innerPublicKey:
-    '1dae61a4a8f841952be3a511502d4f56e889ffa0685aa0098773ea2d4309f624',
-};
+import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
+import { poolId } from '../../data/env';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -79,6 +55,9 @@ export const Swap = (): JSX.Element => {
 
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
+  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
+  const [pool, setPool] = useState<Pool>();
+
   const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
@@ -91,6 +70,16 @@ export const Swap = (): JSX.Element => {
       setWalletIsEnabled(enabled);
     });
   }, [walletIsEnabled]);
+
+  useEffect(() => {
+    api.getBmConfigs(poolId).then((response: BmConfig) => {
+      setPoolConfigs(response);
+    });
+
+    api.getPools(poolId).then((response: Pool) => {
+      setPool(response);
+    });
+  }, [poolId]);
 
   const assetAmountToFromAmount = useCallback(
     (
@@ -139,14 +128,18 @@ export const Swap = (): JSX.Element => {
   ) => {
     const inputNum = Number(inputElement.target.value);
 
-    const output =
+    const methodCall =
       selectedAsset.from === SWAP_ASSET.LBTC
-        ? fundingTx.lbtcToTokenAmount(inputNum, payloadData.slippage, '1000')
-        : fundingTx.tokenToLbtcAmount(
-            inputNum,
-            payloadData.slippage,
-            '50000000',
-          );
+        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
+        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+
+    const output = convertion.convertForCtx(
+      inputNum,
+      payloadData.slippage,
+      pool!,
+      poolConfigs!,
+      methodCall,
+    );
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(output.toString());
@@ -157,14 +150,18 @@ export const Swap = (): JSX.Element => {
   ) => {
     const inputNum = Number(inputElement.target.value);
 
-    const output =
+    const methodCall =
       selectedAsset.to === SWAP_ASSET.LBTC
-        ? fundingTx.lbtcToTokenAmount(inputNum, payloadData.slippage, '1000')
-        : fundingTx.tokenToLbtcAmount(
-            inputNum,
-            payloadData.slippage,
-            '50000000',
-          );
+        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
+        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+
+    const output = convertion.convertForCtx(
+      inputNum,
+      payloadData.slippage,
+      pool!,
+      poolConfigs!,
+      methodCall,
+    );
 
     setInputFromAmount(output.toString());
     setInputToAmount(inputElement.target.value);
@@ -176,8 +173,8 @@ export const Swap = (): JSX.Element => {
     if (selectedAsset.from === SWAP_ASSET.LBTC) {
       input = fundingTx.lbtcToToken(
         Number(inputFromAmount),
-        'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
-        '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+        poolConfigs!.fundingOutputAddress,
+        pool!.quote.asset,
         1200,
         650,
         100,
@@ -186,9 +183,9 @@ export const Swap = (): JSX.Element => {
     } else {
       input = fundingTx.tokenToLBtc(
         Number(inputFromAmount),
-        'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
-        '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-        '213cbc4df83abc230852526b1156877f60324da869f0affaee73b6a6a32ad025',
+        poolConfigs!.fundingOutputAddress,
+        pool!.quote.asset,
+        pool!.token.asset,
         1200,
         650,
         100,
@@ -196,86 +193,85 @@ export const Swap = (): JSX.Element => {
       );
     }
 
-    const rawTxHex = await wallet?.sendTransaction([
-      {
-        address: input.fundingOutput1Address,
-        value: input.fundingOutput1Value,
-        asset: input.fundingOutput1AssetId,
-      },
-      {
-        address: input.fundingOutput2Address,
-        value: input.fundingOutput2Value,
-        asset: input.fundingOutput2AssetId,
-      },
-    ]);
-
-    const transactionId = await axios
-      .post(
-        'http://157.230.101.158:9485/rpc',
-        JSON.stringify({
-          jsonrpc: '1.0',
-          id: 'curltest',
-          method: 'sendrawtransaction',
-          params: [rawTxHex],
-        }),
+    wallet
+      ?.sendTransaction([
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          address: input.fundingOutput1Address,
+          value: input.fundingOutput1Value,
+          asset: input.fundingOutput1AssetId,
         },
-      )
-      .then((response) => {
-        return response.data.result;
-      });
-
-    if (transactionId) {
-      axios
-        .post(
-          'http://157.230.101.158:9485/rpc',
-          JSON.stringify({
-            jsonrpc: '1.0',
-            id: 'curltest',
-            method: 'decoderawtransaction',
-            params: [rawTxHex],
-          }),
-          {
-            headers: {
-              'Content-Type': 'application/json',
+        {
+          address: input.fundingOutput2Address,
+          value: input.fundingOutput2Value,
+          asset: input.fundingOutput2AssetId,
+        },
+      ])
+      .then((rawTxHex) => {
+        axios
+          .post(
+            'http://157.230.101.158:9485/rpc',
+            JSON.stringify({
+              jsonrpc: '1.0',
+              id: 'curltest',
+              method: 'sendrawtransaction',
+              params: [rawTxHex],
+            }),
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
             },
-          },
-        )
-        .then((response) => {
-          console.log(transactionId);
-          const publicKey = response.data.result.vin[0].txinwitness[1];
-          let commitment;
-          if (selectedAsset.from === SWAP_ASSET.LBTC) {
-            commitment = commitmentTx.lbtcToTokenCreateCommitmentTx(
-              Number(inputFromAmount),
-              transactionId,
-              publicKey,
-              Number(inputToAmount),
-              poolConfigs.defaultOrderingFee,
-              poolConfigs.baseFee,
-              poolConfigs.commitmentTxFee,
-              poolConfigs.innerPublicKey,
-            );
-          } else {
-            commitment = commitmentTx.tokenToLbtcCreateCommitmentTx(
-              Number(inputFromAmount),
-              transactionId,
-              publicKey,
-              Number(inputToAmount),
-              poolConfigs.defaultOrderingFee,
-              poolConfigs.baseFee,
-              poolConfigs.serviceFee,
-              poolConfigs.commitmentTxFee,
-              poolConfigs.innerPublicKey,
-            );
-          }
+          )
+          .then((response) => {
+            const txId = response.data.result;
+            console.log('marinatx', txId);
+            axios
+              .post(
+                'http://157.230.101.158:9485/rpc',
+                JSON.stringify({
+                  jsonrpc: '1.0',
+                  id: 'curltest',
+                  method: 'decoderawtransaction',
+                  params: [rawTxHex],
+                }),
+                {
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                },
+              )
+              .then((response) => {
+                const publicKey = response.data.result.vin[0].txinwitness[1];
 
-          console.log(commitment);
-        });
-    }
+                let commitment;
+
+                if (selectedAsset.from === SWAP_ASSET.LBTC) {
+                  commitment = commitmentTx.lbtcToTokenCreateCommitmentTx(
+                    Number(inputFromAmount),
+                    txId,
+                    publicKey,
+                    Number(inputToAmount),
+                    poolConfigs!.defaultOrderingFee,
+                    poolConfigs!.baseFee,
+                    poolConfigs!.commitmentTxFee,
+                    poolConfigs!.innerPublicKey,
+                  );
+                } else {
+                  commitment = commitmentTx.tokenToLbtcCreateCommitmentTx(
+                    Number(inputFromAmount),
+                    txId,
+                    publicKey,
+                    Number(inputToAmount),
+                    poolConfigs!.defaultOrderingFee,
+                    poolConfigs!.baseFee,
+                    poolConfigs!.serviceFee,
+                    poolConfigs!.commitmentTxFee,
+                    poolConfigs!.innerPublicKey,
+                  );
+                }
+              });
+          });
+      });
   };
 
   const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
