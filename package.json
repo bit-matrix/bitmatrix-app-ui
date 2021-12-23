@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.4",
+    "@bitmatrix/lib": "^0.0.5",
     "@bitmatrix/models": "^0.0.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
