@@ -1,13 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Notification,
-  Button,
-  Content,
-  Panel,
-  PanelGroup,
-  Placeholder,
-} from 'rsuite';
+import { Notification, Button, Content } from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
