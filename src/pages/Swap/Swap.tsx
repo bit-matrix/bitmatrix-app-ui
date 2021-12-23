@@ -267,6 +267,7 @@ export const Swap = (): JSX.Element => {
                     Number(inputFromAmount),
                     txId,
                     publicKey,
+                    pool!.token.asset,
                     Number(inputToAmount),
                     poolConfigs!.defaultOrderingFee,
                     poolConfigs!.baseFee,
@@ -275,6 +276,8 @@ export const Swap = (): JSX.Element => {
                     poolConfigs!.innerPublicKey,
                   );
                 }
+
+                console.log(commitment);
 
                 axios
                   .post(
