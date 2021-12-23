@@ -214,17 +214,16 @@ export const Swap = (): JSX.Element => {
                 publicKey,
                 Number(inputToAmount),
                 poolConfigs!,
-                pool!.quote.asset,
+                pool!,
               );
             } else {
               commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
                 Number(inputFromAmount),
                 txId,
                 publicKey,
-                pool!.token.asset,
-                pool!.quote.asset,
                 Number(inputToAmount),
                 poolConfigs!,
+                pool!,
               );
             }
 
