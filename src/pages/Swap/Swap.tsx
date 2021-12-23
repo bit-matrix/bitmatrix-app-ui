@@ -168,42 +168,29 @@ export const Swap = (): JSX.Element => {
   };
 
   const swapClick = async () => {
-    let input;
+    const methodCall =
+      selectedAsset.from === SWAP_ASSET.LBTC
+        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
+        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      input = fundingTx.lbtcToToken(
-        Number(inputFromAmount),
-        poolConfigs!.fundingOutputAddress,
-        pool!.quote.asset,
-        1200,
-        650,
-        100,
-        1,
-      );
-    } else {
-      input = fundingTx.tokenToLBtc(
-        Number(inputFromAmount),
-        poolConfigs!.fundingOutputAddress,
-        pool!.quote.asset,
-        pool!.token.asset,
-        1200,
-        650,
-        100,
-        1,
-      );
-    }
+    const fundingTxInputs = fundingTx(
+      Number(inputFromAmount),
+      pool!,
+      poolConfigs!,
+      methodCall,
+    );
 
     wallet
       ?.sendTransaction([
         {
-          address: input.fundingOutput1Address,
-          value: input.fundingOutput1Value,
-          asset: input.fundingOutput1AssetId,
+          address: fundingTxInputs.fundingOutput1Address,
+          value: fundingTxInputs.fundingOutput1Value,
+          asset: fundingTxInputs.fundingOutput1AssetId,
         },
         {
-          address: input.fundingOutput2Address,
-          value: input.fundingOutput2Value,
-          asset: input.fundingOutput2AssetId,
+          address: fundingTxInputs.fundingOutput2Address,
+          value: fundingTxInputs.fundingOutput2Value,
+          asset: fundingTxInputs.fundingOutput2AssetId,
         },
       ])
       .then((rawTxHex) => {
