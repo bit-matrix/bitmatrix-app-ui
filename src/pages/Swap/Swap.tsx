@@ -245,6 +245,7 @@ export const Swap = (): JSX.Element => {
                     publicKey,
                     Number(inputToAmount),
                     poolConfigs!,
+                    pool!.quote.asset,
                   );
                 } else {
                   commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
@@ -252,6 +253,7 @@ export const Swap = (): JSX.Element => {
                     txId,
                     publicKey,
                     pool!.token.asset,
+                    pool!.quote.asset,
                     Number(inputToAmount),
                     poolConfigs!,
                   );
