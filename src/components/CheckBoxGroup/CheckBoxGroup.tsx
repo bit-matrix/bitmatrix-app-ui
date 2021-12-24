@@ -2,42 +2,33 @@ import React from 'react';
 import { CheckBox } from '../CheckBox/CheckBox';
 import './CheckBoxGroup.scss';
 
-type Props = {
-  options: Array<string>;
-  onChange: (checkedValues: Array<string>) => void;
-  checkedValues: Array<string>;
+type Props<T> = {
+  options: Array<T>;
+  onChange: (checkedValue: T | undefined) => void;
+  checkedValue: T | undefined;
   className?: string;
   style?: React.CSSProperties;
 };
 
-export const CheckBoxGroup: React.FC<Props> = ({
+export const CheckBoxGroup = <T extends unknown>({
   options,
   onChange,
-  checkedValues,
+  checkedValue,
   className,
   style,
-}) => {
-  const onChangeValue = (option: string, checked: boolean): void => {
-    const lastCheckedValues = [...checkedValues];
-    if (checked) {
-      const selectedValueIndex = lastCheckedValues.findIndex(
-        (checkedvalue) => checkedvalue === option,
-      );
-      lastCheckedValues.splice(selectedValueIndex, 1);
+}: Props<T>): JSX.Element => {
+  const onChangeValue = (option: T, checked: boolean): void => {
+    if (option === checkedValue && checked) {
+      onChange(undefined);
     } else {
-      lastCheckedValues.push(option);
-    }
-    if (lastCheckedValues != undefined) {
-      onChange(lastCheckedValues);
+      onChange(option);
     }
   };
 
   return (
     <div style={style} className={`checkbox-group-main ${className}`}>
-      {options.map((option: string, index: number) => {
-        const isSelected = checkedValues
-          ? checkedValues.includes(option)
-          : false;
+      {options.map((option: T, index: number) => {
+        const isSelected = checkedValue === option ? true : false;
 
         return (
           <CheckBox
