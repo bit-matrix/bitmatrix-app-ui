@@ -27,6 +27,11 @@
       border-radius: 1rem !important;
       margin-bottom: 1.5rem !important;
       background: #191919 !important;
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
 
       .liquidity-back-text {
         margin-left: 1rem;
