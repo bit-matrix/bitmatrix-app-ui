@@ -20,6 +20,7 @@ import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import './Swap.scss';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
+import { detectProvider } from 'marina-provider';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -61,12 +62,19 @@ export const Swap = (): JSX.Element => {
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    const marinaWallet = new Wallet(WALLET_NAME.MARINA);
-    setWallet(marinaWallet);
+    detectProvider('marina')
+      .then((marina) => {
+        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        setWallet(marinaWallet);
 
-    marinaWallet.isEnabled().then((enabled) => {
-      setWalletIsEnabled(enabled);
-    });
+        marina.isEnabled().then((enabled) => {
+          setWalletIsEnabled(enabled);
+        });
+      })
+      .catch(() => {
+        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        setWallet(marinaWallet);
+      });
   }, [walletIsEnabled]);
 
   useEffect(() => {

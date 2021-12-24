@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Icon } from 'rsuite';
 import AddLiquidity from './AddLiquidity/AddLiquidity';
-import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
+// import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
 import './Liquidity.scss';
 
 const Liquidity = (): JSX.Element => {

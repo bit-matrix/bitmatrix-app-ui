@@ -30,31 +30,32 @@ export default class Marina implements IWallet {
   };
 
   enable = (): Promise<void> => {
-    if (this.exist() && marina) return marina.enable();
+    if (this.exist() && this.marina) return this.marina.enable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
   disable = (): Promise<void> => {
-    if (this.exist() && marina) return marina.disable();
+    if (this.exist() && this.marina) return this.marina.disable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
   getNextAddress(): Promise<MarinaAddressInterface> {
-    if (this.exist() && marina) return marina.getNextAddress();
+    if (this.exist() && this.marina) return this.marina.getNextAddress();
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
   }
 
   getAddresses(): Promise<MarinaAddressInterface[]> {
-    if (this.exist() && marina) return marina.getAddresses();
+    if (this.exist() && this.marina) return this.marina.getAddresses();
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
   }
 
   sendTransaction(receipent: Recipient[]): Promise<MarinaTransactionHex> {
-    if (this.exist() && marina) return marina.sendTransaction(receipent);
+    if (this.exist() && this.marina)
+      return this.marina.sendTransaction(receipent);
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
   }
