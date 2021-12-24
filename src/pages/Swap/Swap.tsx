@@ -20,7 +20,6 @@ import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import './Swap.scss';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
-import { poolId } from '../../data/env';
 
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
@@ -71,14 +70,15 @@ export const Swap = (): JSX.Element => {
   }, [walletIsEnabled]);
 
   useEffect(() => {
-    api.getBmConfigs(poolId).then((response: BmConfig) => {
-      setPoolConfigs(response);
-    });
+    api.getPools().then((pools: Pool[]) => {
+      const tempPool = pools[0];
+      setPool(tempPool);
 
-    api.getPools(poolId).then((response: Pool) => {
-      setPool(response);
+      api.getBmConfigs(tempPool.id).then((response: BmConfig) => {
+        setPoolConfigs(response);
+      });
     });
-  }, [poolId]);
+  }, []);
 
   const assetAmountToFromAmount = useCallback(
     (
