@@ -1,0 +1,221 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.liquidity-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: $swapBackgroundColor;
+  text-align: center;
+}
+
+.liquidity-page-content {
+  position: relative;
+  margin: 0 auto;
+  border: 2px solid #adfbc4;
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  min-height: 20.8125rem;
+  z-index: 6;
+  width: 48rem;
+  margin-top: 3rem;
+}
+
+.liquidity-page-first-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.liquidity-page-second-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+}
+
+.liquidity-back-text {
+  margin-left: 1rem;
+  color: $liquidNeonColor;
+}
+
+.liquidity-back-icon {
+  height: 3rem !important;
+  font-size: 3rem !important;
+  color: $liquidNeonColor !important;
+  cursor: pointer;
+}
+
+.liquidity-page-back-button {
+  width: 18rem;
+  height: 3rem;
+  display: flex !important;
+  align-items: center;
+  border-radius: 1rem !important;
+  margin-bottom: 1.5rem !important;
+  background: #191919 !important;
+}
+
+.swap-page-icons {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.liquidity-page-second-line-item-first,
+.liquidity-page-second-line-item-third {
+  width: 32%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.liquidity-page-second-line-item-second {
+  width: 36%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-left: 2px solid;
+  border-right: 2px solid;
+}
+
+.liquidity-page-second-line-item-texts {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.liquidity-page-second-line-item-values {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #9a9a9a;
+}
+
+.liquidity-input-text {
+  display: flex;
+  align-items: center;
+}
+
+.liquidity-first-line-item {
+  display: flex;
+  border: 1px solid #666;
+  border-radius: 1rem;
+  width: 100%;
+  justify-content: space-between;
+  position: relative;
+}
+
+.liquidity-input {
+  width: 9.25rem;
+  background: #00000000;
+  border-width: 0px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  outline: none;
+  color: $swapGrayColor;
+  &::placeholder {
+    color: $swapGrayColor !important;
+    line-height: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.liquidity-input-content {
+  padding: 0.5rem 1rem;
+}
+
+.liquidity-text {
+  text-align: left;
+  font-size: 1rem;
+}
+
+.liquidity-page-icons {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.liquidity-icon {
+  margin-left: 0.5rem;
+  width: 1.5rem;
+}
+
+.liquidity-btc-icon {
+  margin-left: 0.5rem;
+  width: 1.25rem;
+  height: 1.5rem;
+}
+
+.liquidity-plus-icon {
+  margin: 0 1rem;
+}
+
+.liquidity-button {
+  width: 25rem;
+  height: 2.75rem;
+  border-radius: 1rem !important;
+  font-weight: 600 !important;
+  color: $swapBackgroundColor !important;
+  background: $liquidNeonColor !important;
+  border-width: 0 !important;
+  margin-top: 1rem;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.remove-liquidity-text {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.remove-liquidity-text-header {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #999999;
+}
+
+.remove-liquidity-text-body {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #999999;
+}
+
+.remove-liquidity-slider {
+  margin-bottom: 2rem;
+
+  .rs-slider-handle {
+    top: -0.5rem !important;
+
+    &::before {
+      border: 6px solid #adfbc4 !important;
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+    }
+  }
+}
+
+.remove-liquidity-button-toolbar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.remove-liquidity-buttons {
+  width: 5rem !important;
+  color: #adfbc4 !important;
+  border-color: #adfbc4 !important;
+  border-radius: 0.875rem !important;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .liquidity-page-main {
+    justify-content: unset;
+    // margin-top: 0;
+    // margin-bottom: 2.5rem;
+  }
+}
