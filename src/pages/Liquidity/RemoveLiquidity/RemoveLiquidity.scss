@@ -44,6 +44,12 @@
       color: #adfbc4 !important;
       border-color: #adfbc4 !important;
       border-radius: 0.875rem !important;
+      font-weight: 600;
+
+      &:hover {
+        color: #000 !important;
+        background-color: #adfbc4 !important;
+      }
     }
   }
 }

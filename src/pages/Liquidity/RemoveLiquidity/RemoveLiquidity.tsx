@@ -16,19 +16,19 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-toolbar">
           <Button className="remove-liquidity-buttons" appearance="ghost">
-            %10
+            % 10
           </Button>
           <Button className="remove-liquidity-buttons" appearance="ghost">
-            %25
+            % 25
           </Button>
           <Button className="remove-liquidity-buttons" appearance="ghost">
-            %50
+            % 50
           </Button>
           <Button className="remove-liquidity-buttons" appearance="ghost">
-            %75
+            % 75
           </Button>
           <Button className="remove-liquidity-buttons" appearance="ghost">
-            %100
+            % 100
           </Button>
         </div>
       </div>
