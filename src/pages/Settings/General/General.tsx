@@ -5,64 +5,51 @@ import { StripedRadioButton } from '../../../components/StripedRadioButton/Strip
 import { ToggleSwitch } from '../../../components/ToggleSwitch/ToggleSwitch';
 import SettingsContext from '../../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
+import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
+import { SLIPPAGE_FEE } from '../../../enum/SLIPPAGE_FEE';
 import info from '../../../images/info2.png';
 import './General.scss';
 
-enum PreferredUnit {
-  LBTC = 'L-BTC',
-  mBTC = 'mBTC',
-  uBTC = 'µBTC',
-  SAT = 'SAT',
-}
-
 const preferredUnitOptions = [
-  PreferredUnit.LBTC,
-  PreferredUnit.mBTC,
-  PreferredUnit.uBTC,
-  PreferredUnit.SAT,
+  PREFERRED_UNIT.LBTC,
+  PREFERRED_UNIT.mBTC,
+  PREFERRED_UNIT.uBTC,
+  PREFERRED_UNIT.SAT,
 ];
 
-enum SlippageFee {
-  ZEROPOINTFIVE = '%0.5',
-  ZEROPOINTSEVENTYFIVE = '%0.75',
-  ONEPOINT = '%1',
-  ONEPOINTTWENTYFIVE = '%1.25',
-  ONEPOINTFIVE = '%1.5',
-}
+const slippageFeeOptions = [
+  SLIPPAGE_FEE.ZEROPOINTFIVE,
+  SLIPPAGE_FEE.ZEROPOINTSEVENTYFIVE,
+  SLIPPAGE_FEE.ONEPOINT,
+  SLIPPAGE_FEE.ONEPOINTTWENTYFIVE,
+  SLIPPAGE_FEE.ONEPOINTFIVE,
+];
 
 const SlippageFeeList = [
   {
-    text: SlippageFee.ZEROPOINTFIVE,
+    text: SLIPPAGE_FEE.ZEROPOINTFIVE,
     value: 200,
   },
   {
-    text: SlippageFee.ZEROPOINTSEVENTYFIVE,
+    text: SLIPPAGE_FEE.ZEROPOINTSEVENTYFIVE,
     value: 133,
   },
   {
-    text: SlippageFee.ONEPOINT,
+    text: SLIPPAGE_FEE.ONEPOINT,
     value: 100,
   },
   {
-    text: SlippageFee.ONEPOINTTWENTYFIVE,
+    text: SLIPPAGE_FEE.ONEPOINTTWENTYFIVE,
     value: 80,
   },
   {
-    text: SlippageFee.ONEPOINTFIVE,
+    text: SLIPPAGE_FEE.ONEPOINTFIVE,
     value: 66,
   },
 ];
 
-const slippageFeeOptions = [
-  SlippageFee.ZEROPOINTFIVE,
-  SlippageFee.ZEROPOINTSEVENTYFIVE,
-  SlippageFee.ONEPOINT,
-  SlippageFee.ONEPOINTTWENTYFIVE,
-  SlippageFee.ONEPOINTFIVE,
-];
-
 export const General = (): JSX.Element => {
-  const [checkedValues, setCheckedValues] = useState<Array<string>>([]);
+  const [checkedValue, setCheckedValue] = useState<PREFERRED_UNIT>();
   const [pushNotificationsSwitch, setPushNotificationsSwitch] =
     useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
@@ -102,10 +89,10 @@ export const General = (): JSX.Element => {
         <CheckBoxGroup
           className="prefferred-unit"
           options={preferredUnitOptions}
-          onChange={(checkedValues: Array<string>) => {
-            setCheckedValues(checkedValues);
+          onChange={(checkedValue: PREFERRED_UNIT | undefined) => {
+            setCheckedValue(checkedValue);
           }}
-          checkedValues={checkedValues}
+          checkedValue={checkedValue}
         />
       </div>
       <div className="general-item">
