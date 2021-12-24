@@ -1,12 +1,12 @@
 import React from 'react';
-import { Button, ButtonToolbar, Slider } from 'rsuite';
+import { Button, Slider } from 'rsuite';
 import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
 import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
   return (
     <>
-      <div>
+      <div className="remove-liquidity-main">
         <div className="remove-liquidity-text">
           <div className="remove-liquidity-text-header">Removal Percentage</div>
           <div className="remove-liquidity-text-body">% 95.45</div>

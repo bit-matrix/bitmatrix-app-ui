@@ -16,22 +16,22 @@ const AddLiquidity = (): JSX.Element => {
 
   return (
     <>
-      <div className="liquidity-page-first-line">
-        <div className="liquidity-first-line-item pt8">
+      <div className="add-liquidity-main">
+        <div className="add-liquidity-item pt8">
           <SwapFromTab
             selectedFromAmountPercent={lbctPercent}
             setselectedFromAmountPercent={setLbtcPercent}
           />
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div className="liquidity-input-content">
-              <div className="liquidity-input-text">
-                <div className="liquidity-text">
+          <div className="add-liquidity-item-content">
+            <div className="add-liquidity-input-div">
+              <div className="add-liquidity-input-content">
+                <div className="add-liquidity-text">
                   {SWAP_ASSET.LBTC} Liquidity
                 </div>
                 <img className="liquidity-btc-icon" src={btc} alt="" />
               </div>
               <input
-                className="liquidity-input"
+                className="add-liquidity-input"
                 inputMode="decimal"
                 autoComplete="off"
                 autoCorrect="off"
@@ -46,32 +46,36 @@ const AddLiquidity = (): JSX.Element => {
             </div>
           </div>
         </div>
-        <div className="liquidity-plus-icon">
-          <img className="liquidity-page-icons" src={plus} alt="" />
+        <div className="add-liquidity-plus-icon">
+          <img className="add-liquidity-page-icons" src={plus} alt="" />
         </div>
-        <div className="liquidity-first-line-item pt8">
+        <div className="add-liquidity-item pt8">
           <SwapFromTab
             selectedFromAmountPercent={usdtPercent}
             setselectedFromAmountPercent={setUsdtPercent}
           />
-          <div className="liquidity-input-content">
-            <div className="liquidity-input-text">
-              <div className="liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
-              <img className="liquidity-icon" src={usdt} alt="" />
+          <div className="add-liquidity-item-content">
+            <div className="add-liquidity-input-div">
+              <div className="add-liquidity-input-content">
+                <div className="add-liquidity-text">
+                  {SWAP_ASSET.USDT} Liquidity
+                </div>
+                <img className="liquidity-usdt-icon" src={usdt} alt="" />
+              </div>
+              <input
+                className="add-liquidity-input"
+                inputMode="decimal"
+                autoComplete="off"
+                autoCorrect="off"
+                type="text"
+                pattern="^[0-9]*[.,]?[0-9]*$"
+                spellCheck="false"
+                value={inputToAmount}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setInputToAmount(event.target.value)
+                }
+              />
             </div>
-            <input
-              className="liquidity-input"
-              inputMode="decimal"
-              autoComplete="off"
-              autoCorrect="off"
-              type="text"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              spellCheck="false"
-              value={inputToAmount}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setInputToAmount(event.target.value)
-              }
-            />
           </div>
         </div>
       </div>
