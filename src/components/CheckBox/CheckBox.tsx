@@ -1,13 +1,17 @@
 import React from 'react';
 import './CheckBox.scss';
 
-type Props = {
-  onChange: (option: string, checked: boolean) => void;
+type Props<T> = {
+  onChange: (option: T, checked: boolean) => void;
   checked: boolean;
-  option: string;
+  option: T;
 };
 
-export const CheckBox: React.FC<Props> = ({ onChange, checked, option }) => {
+export const CheckBox = <T extends unknown>({
+  onChange,
+  checked,
+  option,
+}: Props<T>): JSX.Element => {
   return (
     <label className="custom-checkbox-container">
       <span
@@ -15,14 +19,14 @@ export const CheckBox: React.FC<Props> = ({ onChange, checked, option }) => {
           checked ? 'custom-checkbox-checked' : 'custom-checkbox-unchecked'
         }`}
       >
-        {option}
+        {option as string}
       </span>
       <input
         onChange={(event) => onChange(option, !event.target.checked)}
         checked={checked}
         type="checkbox"
-        id={option}
-        name={option}
+        id={option as string}
+        name={option as string}
       />
       <span className="checkmark"></span>
     </label>
