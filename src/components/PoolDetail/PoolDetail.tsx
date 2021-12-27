@@ -124,7 +124,11 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 <div>Fees 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">$0</div>
+                <div className="pool-detail-table-text left-side">
+                  {Numeral((Number(pool.token.value) * 2) / 100000000).format(
+                    '(0.00a)',
+                  )}
+                </div>
                 <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">

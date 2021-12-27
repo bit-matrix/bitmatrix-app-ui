@@ -33,7 +33,12 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick }) => {
           <th>Fees 24h</th>
         </tr>
         <tr>
-          <td>${Numeral(0).format('(0.00a)')}</td>
+          <td>
+            $
+            {Numeral((Number(pool.token.value) * 2) / 100000000).format(
+              '(0.00a)',
+            )}
+          </td>
           <td>${Numeral(0).format('(0.00a)')}</td>
           <td>${Numeral(0).format('(0.00a)')}</td>
         </tr>
