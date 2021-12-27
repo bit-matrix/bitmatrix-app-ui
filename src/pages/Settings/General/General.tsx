@@ -18,6 +18,7 @@ const preferredUnitOptions = [
 ];
 
 const slippageFeeOptions = [
+  SLIPPAGE_FEE.ZEROPOINTTHREE,
   SLIPPAGE_FEE.ZEROPOINTFIVE,
   SLIPPAGE_FEE.ZEROPOINTSEVENTYFIVE,
   SLIPPAGE_FEE.ONEPOINT,
@@ -26,6 +27,10 @@ const slippageFeeOptions = [
 ];
 
 const SlippageFeeList = [
+  {
+    text: SLIPPAGE_FEE.ZEROPOINTFIVE,
+    value: 333,
+  },
   {
     text: SLIPPAGE_FEE.ZEROPOINTFIVE,
     value: 200,

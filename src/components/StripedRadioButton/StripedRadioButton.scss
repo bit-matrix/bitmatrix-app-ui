@@ -16,12 +16,12 @@
     width: 100%;
     background: $liquidNeonColor;
     top: 14px;
-    left: -20%;
+    left: -15%;
     right: 0;
   }
 }
 .slider-option-label {
-  width: 60px;
+  width: 50px;
   display: block;
 }
 [type='radio'] {
@@ -131,7 +131,7 @@
 }
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .slider-option-main {
-    margin-left: 40px;
+    margin-left: 30px;
   }
   .slider-option-item {
     &:before {
@@ -146,7 +146,7 @@
     }
   }
   .slider-option-label {
-    width: 100px;
+    width: 90px;
   }
   [type='radio'] {
     &:checked {
