@@ -22,9 +22,9 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
     POOL_DETAIL_TABS.PRICE,
   );
 
-  const price = (Number(pool.token.value) / Number(pool.quote.value)).toFixed(
-    2,
-  );
+  const price = (
+    Number(pool.token.value) / Number(pool.quote.value)
+  ).toLocaleString();
 
   const history = useHistory();
 
@@ -91,13 +91,11 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
 
             <div className="pool-detail-volume-fee">
               <div className="pool-detail-item">
-                <div className="left-side">
-                  Price (Per 1 {pool.quote.ticker})
-                </div>
+                <div className="left-side">{pool.quote.ticker} Price</div>
                 <div>Volume 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">{price}</div>
+                <div className="pool-detail-table-text left-side">${price}</div>
                 <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
@@ -125,6 +123,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
               </div>
               <div className="pool-detail-item">
                 <div className="pool-detail-table-text left-side">
+                  $
                   {Numeral((Number(pool.token.value) * 2) / 100000000).format(
                     '(0.00a)',
                   )}
