@@ -46,10 +46,10 @@ export const Pool = (): JSX.Element => {
               selectedPool !== undefined && 'pool-detail-transition'
             }`}
           >
-            {/* <PoolDetail
+            <PoolDetail
               back={() => setSelectedPool(undefined)}
-              poolData={selectedPool}
-            /> */}
+              pool={selectedPool}
+            />
           </div>
         );
       }

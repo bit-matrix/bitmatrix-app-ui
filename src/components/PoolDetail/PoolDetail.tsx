@@ -2,24 +2,27 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Button, Icon } from 'rsuite';
-import { PoolData } from '../../model/PoolData';
 import { ParentSize } from '@visx/responsive';
 import AreaChart from '../AreaChart/AreaChart';
 import { TabMenu } from '../TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
+import { Pool } from '@bitmatrix/models';
 import './PoolDetail.scss';
+import Numeral from 'numeral';
 
 type Props = {
+  pool: Pool;
   back: () => void;
-  poolData: PoolData;
 };
 
-export const PoolDetail: React.FC<Props> = ({ back }) => {
+export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(
     POOL_DETAIL_TABS.PRICE,
   );
+
+  const price = Number(pool.quote.value) / Number(pool.token.value);
 
   const history = useHistory();
 
@@ -34,7 +37,9 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 icon="angle-left"
                 size="4x"
               />
-              <div className="pool-detail-page-text">L-BTC/USDT</div>
+              <div className="pool-detail-page-text uppercase">
+                {pool.quote.ticker} / {pool.token.ticker}
+              </div>
             </Button>
           </div>
           <div className="pool-detail-header-right">
@@ -64,17 +69,17 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
               <div className="pool-detail-item">
                 <div className="pool-detail-img-content left-side">
                   <img className="pool-detail-img" src={lbtcImage} alt="" />
-                  <span>L-BTC</span>
+                  <span className="uppercase">{pool.quote.ticker}</span>
                 </div>
-                82.54m
+                {Numeral(Number(pool.quote.value)).format('(0.00a)')}
               </div>
 
               <div className="pool-detail-item">
                 <div className="pool-detail-img-content left-side">
                   <img className="pool-detail-img" src={usdtImage} alt="" />
-                  <span>USDT</span>
+                  <span>{pool.token.ticker}</span>
                 </div>
-                123.41k
+                {Numeral(pool.token.value).format('(0.00a)')}
               </div>
             </div>
 
@@ -84,8 +89,10 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <div>Volume 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">%12</div>
-                <div className="pool-detail-table-text">%219.20m</div>
+                <div className="pool-detail-table-text left-side">
+                  {price.toFixed(8)}
+                </div>
+                <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
@@ -93,18 +100,14 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                     className="pool-detail-arrow-down-icon"
                     icon="arrow-down2"
                   />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
+                  <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
                   <Icon
                     className="pool-detail-arrow-up-icon"
                     icon="arrow-up2"
                   />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
+                  <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
             </div>
@@ -115,8 +118,8 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <div>Fees 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">$357.77m</div>
-                <div className="pool-detail-table-text">%657.61k</div>
+                <div className="pool-detail-table-text left-side">$0</div>
+                <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
@@ -124,18 +127,14 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                     className="pool-detail-arrow-down-icon"
                     icon="arrow-down2"
                   />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
+                  <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
                   <Icon
                     className="pool-detail-arrow-up-icon"
                     icon="arrow-up2"
                   />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
+                  <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
             </div>
