@@ -115,7 +115,6 @@ export const Swap = (): JSX.Element => {
             newFromAmount = 0;
           }
         }
-        // else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) newFromAmount *= 1;
       }
       if (newFromAmount === 0) {
         setInputFromAmount('0.0');
@@ -395,23 +394,11 @@ export const Swap = (): JSX.Element => {
               }}
             >
               {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
-              {/* Coming soon */}
             </Button>
           </div>
         </div>
         <Info content=" Network fee 0.1sat/byte $0.12" />
       </Content>
-
-      {/* <div>
-        {assetAmounts.map((assetAmount) => (
-          <>
-            <span>
-              {assetAmount.assetName}: {assetAmount.amount}
-            </span>
-            <br />
-          </>
-        ))}
-      </div> */}
     </div>
   );
 };
