@@ -22,7 +22,9 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
     POOL_DETAIL_TABS.PRICE,
   );
 
-  const price = Number(pool.quote.value) / Number(pool.token.value);
+  const price = (Number(pool.token.value) / Number(pool.quote.value)).toFixed(
+    2,
+  );
 
   const history = useHistory();
 
@@ -37,7 +39,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 icon="angle-left"
                 size="4x"
               />
-              <div className="pool-detail-page-text uppercase">
+              <div className="pool-detail-page-text">
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
             </Button>
@@ -69,9 +71,11 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
               <div className="pool-detail-item">
                 <div className="pool-detail-img-content left-side">
                   <img className="pool-detail-img" src={lbtcImage} alt="" />
-                  <span className="uppercase">{pool.quote.ticker}</span>
+                  <span>{pool.quote.ticker}</span>
                 </div>
-                {Numeral(Number(pool.quote.value)).format('(0.00a)')}
+                {Numeral(Number(pool.quote.value) / 100000000).format(
+                  '(0.00a)',
+                )}
               </div>
 
               <div className="pool-detail-item">
@@ -79,19 +83,21 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                   <img className="pool-detail-img" src={usdtImage} alt="" />
                   <span>{pool.token.ticker}</span>
                 </div>
-                {Numeral(pool.token.value).format('(0.00a)')}
+                {Numeral(Number(pool.token.value) / 100000000).format(
+                  '(0.00a)',
+                )}
               </div>
             </div>
 
             <div className="pool-detail-volume-fee">
               <div className="pool-detail-item">
-                <div className="left-side">Price</div>
+                <div className="left-side">
+                  Price (Per 1 {pool.quote.ticker})
+                </div>
                 <div>Volume 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">
-                  {price.toFixed(8)}
-                </div>
+                <div className="pool-detail-table-text left-side">{price}</div>
                 <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">

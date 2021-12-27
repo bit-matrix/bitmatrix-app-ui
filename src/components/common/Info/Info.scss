@@ -63,3 +63,9 @@
 .info-close-icon {
   margin-right: 0.5rem;
 }
+
+@media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
+  .swap-footer-tab {
+    bottom: 4.5rem;
+  }
+}

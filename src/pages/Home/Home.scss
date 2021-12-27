@@ -92,3 +92,9 @@
     transform: unset;
   }
 }
+
+@media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
+  .home-page-container {
+    margin-bottom: 0;
+  }
+}
