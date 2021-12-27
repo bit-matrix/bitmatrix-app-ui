@@ -33,11 +33,12 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
     } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
       return (
         <div key={1} className="pool-page-card card-2">
-          <PoolCard
+          <div className="no-pool-text">No pool found.</div>
+          {/* <PoolCard
             pool={pools[0]}
             rank={1}
             onClick={() => onClick(pools[0])}
-          />
+          /> */}
         </div>
       );
     }

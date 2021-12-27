@@ -20,7 +20,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick }) => {
           <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
           <AssetIcon symbol={pool.token.ticker as SWAP_ASSET} />
         </div>
-        <div className="column-1-item token-item uppercase">
+        <div className="column-1-item token-item">
           {pool.quote.ticker} / {pool.token.ticker}
         </div>
         <div className="column-1-item percent">0.2%</div>

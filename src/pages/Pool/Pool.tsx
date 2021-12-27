@@ -63,6 +63,6 @@ export const Pool = (): JSX.Element => {
       );
     }
 
-    return <div>There are no pools</div>;
+    return <div className="no-pool-text">There are no pools</div>;
   }
 };
