@@ -2,13 +2,12 @@ import React, { useContext, useState } from 'react';
 import { PoolDetail } from '../../components/PoolDetail/PoolDetail';
 import { PoolManagement } from '../../components/PoolManagement/PoolManagement';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import * as models from '@bitmatrix/models';
 import { Loader } from 'rsuite';
 import SettingsContext from '../../context/SettingsContext';
 import './Pool.scss';
 
 export const Pool = (): JSX.Element => {
-  const [selectedPool, setSelectedPool] = useState<models.Pool>();
+  const [selectedPoolIndex, setSelectedPoolIndex] = useState<number>();
   const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.POOL;
@@ -21,18 +20,19 @@ export const Pool = (): JSX.Element => {
     );
   } else {
     if (payloadData.pools && payloadData.pools.length > 0) {
-      if (selectedPool !== undefined) {
+      if (selectedPoolIndex !== undefined) {
         return (
-          <div className={`pool-main-div ${selectedPool !== undefined && 'pool-detail-transition'}`}>
-            <PoolDetail back={() => setSelectedPool(undefined)} pool={selectedPool} />
+          <div className={`pool-main-div ${selectedPoolIndex !== undefined && 'pool-detail-transition'}`}>
+            <PoolDetail back={() => setSelectedPoolIndex(undefined)} pool={payloadData.pools[selectedPoolIndex]} />
+          </div>
+        );
+      } else {
+        return (
+          <div className="pool-main-div">
+            <PoolManagement pools={payloadData.pools} onClick={(index) => setSelectedPoolIndex(index)} />
           </div>
         );
       }
-      return (
-        <div className="pool-main-div">
-          <PoolManagement pools={payloadData.pools} onClick={(data) => setSelectedPool(data)} />
-        </div>
-      );
     }
 
     return <div className="no-pool-text">There are no pools</div>;
