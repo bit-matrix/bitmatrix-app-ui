@@ -1,0 +1,44 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.liquidity-page-footer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 2rem 0;
+
+  .liquidity-page-footer-line-item-first,
+  .liquidity-page-footer-line-item-third {
+    width: 32%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .liquidity-page-footer-line-item-second {
+    width: 36%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px solid;
+    border-right: 2px solid;
+  }
+
+  .liquidity-page-footer-line-item-texts {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+  }
+
+  .liquidity-page-icons {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .liquidity-page-footer-line-item-values {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #9a9a9a;
+  }
+}

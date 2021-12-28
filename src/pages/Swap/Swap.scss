@@ -7,7 +7,6 @@
   flex-direction: column;
   background: $swapBackgroundColor;
   text-align: center;
-  margin-top: 2rem;
 }
 
 .swap-page-main-content {
@@ -58,6 +57,10 @@
 
   .rs-dropdown-toggle-caret {
     top: 0.75rem !important;
+  }
+
+  .rs-dropdown-menu-active {
+    min-width: 7.25rem !important;
   }
 }
 
@@ -239,6 +242,10 @@
   }
 }
 
+.notificationTx {
+  overflow-wrap: break-word;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .bitmatrix-icon {
     margin-bottom: 3rem;
@@ -246,5 +253,6 @@
   .swap-page-main {
     justify-content: unset;
     margin-top: 0;
+    margin-bottom: 2.5rem;
   }
 }

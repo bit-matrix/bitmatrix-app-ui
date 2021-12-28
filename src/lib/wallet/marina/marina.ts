@@ -1,5 +1,10 @@
-import { IWallet } from "../IWallet";
-import { MarinaAddressInterface, MarinaProvider } from "./IMarina";
+import { IWallet } from '../IWallet';
+import {
+  MarinaAddressInterface,
+  MarinaProvider,
+  MarinaTransactionHex,
+  Recipient,
+} from './IMarina';
 
 declare global {
   interface Window {
@@ -16,7 +21,7 @@ export default class Marina implements IWallet {
     this.marina = window.marina;
   }
 
-  exist = (): boolean => typeof window.marina !== "undefined";
+  exist = (): boolean => typeof window.marina !== 'undefined';
 
   isEnabled = (): Promise<boolean> => {
     if (this.exist() && marina) return marina.isEnabled();
@@ -25,26 +30,33 @@ export default class Marina implements IWallet {
   };
 
   enable = (): Promise<void> => {
-    if (this.exist() && marina) return marina.enable();
+    if (this.exist() && this.marina) return this.marina.enable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
   disable = (): Promise<void> => {
-    if (this.exist() && marina) return marina.disable();
+    if (this.exist() && this.marina) return this.marina.disable();
     // else throw "Install Marina first";
     return Promise.resolve();
   };
 
   getNextAddress(): Promise<MarinaAddressInterface> {
-    if (this.exist() && marina) return marina.getNextAddress();
+    if (this.exist() && this.marina) return this.marina.getNextAddress();
     // else throw "Install Marina first";
-    throw new Error("Marina wallet disabled.");
+    throw new Error('Marina wallet disabled.');
   }
 
   getAddresses(): Promise<MarinaAddressInterface[]> {
-    if (this.exist() && marina) return marina.getAddresses();
+    if (this.exist() && this.marina) return this.marina.getAddresses();
     // else throw "Install Marina first";
-    throw new Error("Marina wallet disabled.");
+    throw new Error('Marina wallet disabled.');
+  }
+
+  sendTransaction(receipent: Recipient[]): Promise<MarinaTransactionHex> {
+    if (this.exist() && this.marina)
+      return this.marina.sendTransaction(receipent);
+    // else throw "Install Marina first";
+    throw new Error('Marina wallet disabled.');
   }
 }

@@ -12,13 +12,13 @@
 
 @media only screen and (max-width: $mobile-view-breakpoint) {
   .mobile-hidden {
-    display: none;
+    display: none !important;
   }
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .desktop-hidden {
-    display: none;
+    display: none !important;
   }
 }
 

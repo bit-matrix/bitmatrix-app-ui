@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
-import { Button, Divider, Icon, Nav } from 'rsuite';
-import { PoolData } from '../../model/PoolData';
-import lbtcImage from '../../images/liquid_btc.png';
-import usdtImage from '../../images/usdt.png';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
+import { Button, Icon } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart from '../AreaChart/AreaChart';
-import './PoolDetail.scss';
 import { TabMenu } from '../TabMenu/TabMenu';
-
-enum PoolDetailTabs {
-  PRICE = 'Price',
-  VOLUME = 'Volume',
-  LIQUIDITY = 'Liquidity',
-  FEES = 'Fees',
-}
+import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
+import lbtcImage from '../../images/liquid_btc.png';
+import usdtImage from '../../images/usdt.png';
+import { Pool } from '@bitmatrix/models';
+import './PoolDetail.scss';
+import Numeral from 'numeral';
 
 type Props = {
+  pool: Pool;
   back: () => void;
-  poolData: PoolData;
 };
 
-export const PoolDetail: React.FC<Props> = ({ back }) => {
-  const [selectedTab, setSelectedTab] = useState<PoolDetailTabs>(
-    PoolDetailTabs.PRICE,
-  );
+export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
+  const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
+
+  const price = (Number(pool.token.value) / Number(pool.quote.value)).toLocaleString();
+
+  const history = useHistory();
 
   return (
     <div className="pool-detail-container">
@@ -31,21 +30,19 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
         <div className="pool-detail-header">
           <div className="pool-detail-header-left">
             <Button className="pool-detail-button" onClick={back}>
-              <Icon
-                className="pool-detail-back-icon"
-                icon="angle-left"
-                size="4x"
-              />
-              <div className="pool-detail-page-text">L-BTC/USDT</div>
+              <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
+              <div className="pool-detail-page-text">
+                {pool.quote.ticker} / {pool.token.ticker}
+              </div>
             </Button>
           </div>
           <div className="pool-detail-header-right">
             <TabMenu
               menuItems={[
-                PoolDetailTabs.PRICE,
-                PoolDetailTabs.VOLUME,
-                PoolDetailTabs.LIQUIDITY,
-                PoolDetailTabs.FEES,
+                POOL_DETAIL_TABS.PRICE,
+                POOL_DETAIL_TABS.VOLUME,
+                POOL_DETAIL_TABS.LIQUIDITY,
+                POOL_DETAIL_TABS.FEES,
               ]}
               selectedItem={selectedTab}
               onClick={(eventKey: any) => setSelectedTab(eventKey)}
@@ -54,11 +51,7 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
         </div>
         <div className="pool-detail-content">
           <div className="pool-detail-content-right desktop-hidden">
-            <ParentSize>
-              {({ width, height }) => (
-                <AreaChart width={width} height={height} />
-              )}
-            </ParentSize>
+            <ParentSize>{({ width, height }) => <AreaChart width={width} height={height} />}</ParentSize>
           </div>
           <div className="pool-detail-content-left">
             <div className="pool-detail-content-left-header">Pool Pairs</div>
@@ -66,47 +59,37 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
               <div className="pool-detail-item">
                 <div className="pool-detail-img-content left-side">
                   <img className="pool-detail-img" src={lbtcImage} alt="" />
-                  <span>L-BTC</span>
+                  <span>{pool.quote.ticker}</span>
                 </div>
-                82.54m
+                {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
               </div>
 
               <div className="pool-detail-item">
                 <div className="pool-detail-img-content left-side">
                   <img className="pool-detail-img" src={usdtImage} alt="" />
-                  <span>USDT</span>
+                  <span>{pool.token.ticker}</span>
                 </div>
-                123.41k
+                {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
               </div>
             </div>
 
             <div className="pool-detail-volume-fee">
               <div className="pool-detail-item">
-                <div className="left-side">Price</div>
+                <div className="left-side">{pool.quote.ticker} Price</div>
                 <div>Volume 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">%12</div>
-                <div className="pool-detail-table-text">%219.20m</div>
+                <div className="pool-detail-table-text left-side">${price}</div>
+                <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
+                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
+                  <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
+                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
+                  <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
             </div>
@@ -117,47 +100,35 @@ export const PoolDetail: React.FC<Props> = ({ back }) => {
                 <div>Fees 24h</div>
               </div>
               <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">$357.77m</div>
-                <div className="pool-detail-table-text">%657.61k</div>
+                <div className="pool-detail-table-text left-side">
+                  ${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}
+                </div>
+                <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
-                  <span className="pool-detail-table-arrow-down-text">
-                    1.35%
-                  </span>
+                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
+                  <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
-                  <span className="pool-detail-table-arrow-up-text">
-                    74.54%
-                  </span>
+                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
+                  <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
             </div>
 
             <Button
               appearance="default"
-              className="primary-button"
+              className="primary-button pool-detail-add-button"
               onClick={() => {
-                console.log('add liquidity');
+                history.push(ROUTE_PATH.LIQUIDITY);
               }}
             >
               Add Liquidity
             </Button>
           </div>
           <div className="pool-detail-content-right mobile-hidden">
-            <ParentSize>
-              {({ width, height }) => (
-                <AreaChart width={width} height={height} />
-              )}
-            </ParentSize>
+            <ParentSize>{({ width, height }) => <AreaChart width={width} height={height} />}</ParentSize>
           </div>
         </div>
       </div>

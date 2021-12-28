@@ -1,16 +1,19 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  margin-top: 7rem;
+  height: 33rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 95%;
 }
 
 .pool-detail-main {
   border: 2px solid #adfbc4;
   position: relative;
   border-radius: 1.5rem;
-  margin-top: 1rem;
-  width: 20rem;
-  height: 60rem;
+  margin-top: 2rem;
+  height: 55rem;
+  width: 100%;
 }
 
 .pool-detail-header-left {
@@ -49,7 +52,7 @@
 .pool-detail-item {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 0.5rem;
 
   .left-side {
@@ -119,8 +122,9 @@ th {
 .pool-detail-item-detail {
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: flex-start;
   margin: 0.25rem 0.5rem;
+  margin-bottom: 1rem;
 
   .left-side {
     width: 65%;
@@ -169,7 +173,7 @@ th {
 .pool-detail-button {
   display: flex !important;
   align-items: center;
-  width: 17rem;
+  width: 100%;
   height: 2.75rem;
   border-radius: 1rem !important;
   background: #171718 !important;
@@ -179,10 +183,18 @@ th {
   }
 }
 
+.pool-detail-add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 0.5rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
-    margin-top: 5rem;
+    margin-top: 3rem;
     height: unset;
+    width: unset;
   }
 
   .pool-detail-main {
@@ -232,5 +244,9 @@ th {
     margin-left: 0.5rem;
     height: 100%;
     margin-bottom: unset;
+  }
+
+  .pool-detail-button {
+    width: 17rem;
   }
 }

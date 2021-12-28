@@ -1,41 +1,38 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Icon, IconButton } from 'rsuite';
-import { PoolCard } from '../../components/PoolCard/PoolCard';
-import { PoolMockData } from '../../data/PoolMockData';
-import { PoolData } from '../../model/PoolData';
 import { TabMenu } from '../TabMenu/TabMenu';
+import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
+import { Pool } from '@bitmatrix/models';
+import { PoolCard } from '../PoolCard/PoolCard';
 import './PoolManagement.scss';
 
 type Props = {
-  onClick: (data: PoolData) => void;
+  pools: Pool[];
+  onClick: (data: Pool) => void;
 };
 
-enum PoolManagementTabs {
-  TOP_POOLS = 'Top Pools',
-  MY_POOLS = 'My Pools',
-}
-
-export const PoolManagement: React.FC<Props> = ({ onClick }) => {
-  const [selectedTab, setSelectedTab] = useState<PoolManagementTabs>(
-    PoolManagementTabs.TOP_POOLS,
-  );
+export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
+  const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
 
   const getPoolData = () => {
-    if (selectedTab == PoolManagementTabs.TOP_POOLS) {
-      return PoolMockData.map((poolData) => {
+    if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
+      return pools.map((pool, index) => {
         return (
-          <div key={poolData.rank} className="pool-page-card card-1">
-            <PoolCard data={poolData} onClick={() => onClick(poolData)} />
+          <div key={pool.id} className="pool-page-card card-1">
+            <PoolCard pool={pool} rank={index + 1} onClick={() => onClick(pool)} />
           </div>
         );
       });
-    } else if (selectedTab == PoolManagementTabs.MY_POOLS) {
+    } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
       return (
-        <div key={PoolMockData[0].rank} className="pool-page-card card-2">
-          <PoolCard
-            data={PoolMockData[0]}
-            onClick={() => onClick(PoolMockData[0])}
-          />
+        <div key={1} className="pool-page-card card-2">
+          <div className="no-pool-text">No pool found.</div>
+          {/* <PoolCard
+            pool={pools[0]}
+            rank={1}
+            onClick={() => onClick(pools[0])}
+          /> */}
         </div>
       );
     }
@@ -44,36 +41,17 @@ export const PoolManagement: React.FC<Props> = ({ onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <IconButton
-          className="pool-page-button"
-          icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />}
-        />
+        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />} />
         <TabMenu
-          menuItems={[
-            PoolManagementTabs.TOP_POOLS,
-            PoolManagementTabs.MY_POOLS,
-          ]}
+          menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <IconButton
-          className="pool-page-button"
-          icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
-        />
+        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="plus" size="4x" />} />
       </div>
-      {/* <div className="pool-page-content">
-        <div
-          className={`${
-            selectedTab == PoolManagementTabs.TOP_POOLS ? 'tab-1' : 'tab-2'
-          }`}
-        >
-          {getPoolData()}
-        </div>{' '}
-      </div> */}
       <div className="pool-page-content">
-        <div className="no-pool-text">No pool live yet.</div>
+        <div className={`${selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
       </div>
-      {/* <div className="pool-page-shadow" /> */}
     </div>
   );
 };

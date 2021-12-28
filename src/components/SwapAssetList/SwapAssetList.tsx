@@ -9,10 +9,7 @@ type Props = {
   setSelectedAsset: (asset: SWAP_ASSET) => void;
 };
 
-export const SwapAssetList: React.FC<Props> = ({
-  selectedAsset,
-  setSelectedAsset,
-}) => {
+export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset }) => {
   const onSelectAsset = (eventKey: any) => {
     setSelectedAsset(eventKey as SWAP_ASSET);
   };
@@ -37,9 +34,7 @@ export const SwapAssetList: React.FC<Props> = ({
           <div className="swap-dropdown-item">
             <img
               className={`${
-                selectedAsset === SWAP_ASSET.LBTC
-                  ? 'swap-dropdown-item-img-lbtc'
-                  : 'swap-dropdown-item-img'
+                selectedAsset === SWAP_ASSET.LBTC ? 'swap-dropdown-item-img-lbtc' : 'swap-dropdown-item-img'
               }`}
               src={getActiveIcon()}
               alt={selectedAsset}

@@ -14,6 +14,12 @@ export interface MarinaSignedMessage {
   address: MarinaNativeSegwitAddress;
 }
 
+export interface Recipient {
+  address: MarinaNativeSegwitAddress;
+  asset: string;
+  value: number;
+}
+
 export interface MarinaProvider {
   enable(): Promise<void>;
 
@@ -23,7 +29,7 @@ export interface MarinaProvider {
 
   setAccount(account: number): Promise<void>;
 
-  getNetwork(): Promise<"liquid" | "regtest">;
+  getNetwork(): Promise<'liquid' | 'regtest'>;
 
   getAddresses(): Promise<MarinaAddressInterface[]>;
 
@@ -31,7 +37,10 @@ export interface MarinaProvider {
 
   getNextChangeAddress(): Promise<MarinaAddressInterface>;
 
-  sendTransaction(recipientAddress: string, amountInSatoshis: number, assetHash: string): Promise<MarinaTransactionHex>;
+  sendTransaction(
+    recipients: Recipient[],
+    feeAssetHash?: string,
+  ): Promise<MarinaTransactionHex>;
 
   blindTransaction(pset: MarinaPsetBase64): Promise<MarinaPsetBase64>;
 

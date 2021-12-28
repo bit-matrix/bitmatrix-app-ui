@@ -1,0 +1,65 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.liquidity-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: $swapBackgroundColor;
+  text-align: center;
+
+  .liquidity-page-content {
+    position: relative;
+    margin: 0 auto;
+    border: 2px solid #adfbc4;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    min-height: 20.8125rem;
+    z-index: 6;
+    width: 48rem;
+    margin-top: 3rem;
+
+    .liquidity-page-back-button {
+      width: 18rem;
+      height: 3rem;
+      display: flex !important;
+      align-items: center;
+      border-radius: 1rem !important;
+      margin-bottom: 1.5rem !important;
+      background: #191919 !important;
+      opacity: 0.8;
+
+      &:hover {
+        opacity: 1;
+      }
+
+      .liquidity-back-text {
+        margin-left: 1rem;
+        color: $liquidNeonColor;
+      }
+
+      .liquidity-back-icon {
+        height: 3rem !important;
+        font-size: 3rem !important;
+        color: $liquidNeonColor !important;
+        cursor: pointer;
+      }
+    }
+
+    .liquidity-button {
+      width: 25rem;
+      height: 2.75rem;
+      border-radius: 1rem !important;
+      font-weight: 600 !important;
+      color: $swapBackgroundColor !important;
+      background: $liquidNeonColor !important;
+      border-width: 0 !important;
+      margin-top: 1rem;
+      opacity: 0.9;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 enum SWAP_ASSET {
-  LBTC = "L-BTC",
-  USDT = "USDT",
+  LBTC = 'tL-BTC',
+  USDT = 'tL-USDt',
 }
 
 export default SWAP_ASSET;
