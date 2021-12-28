@@ -137,11 +137,7 @@ export const Navbar = (): JSX.Element => {
             <Whisper
               placement="bottom"
               trigger="click"
-              speaker={
-                <Popover className="navbar-popover">
-                  <InfoCard />
-                </Popover>
-              }
+              speaker={<Popover className="navbar-popover">{/* <InfoCard /> */}</Popover>}
               enterable
             >
               {/* <Button className="navbar-hover-button">
