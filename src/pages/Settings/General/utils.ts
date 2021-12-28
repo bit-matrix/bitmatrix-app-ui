@@ -1,12 +1,7 @@
 import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
 import { SLIPPAGE_FEE } from '../../../enum/SLIPPAGE_FEE';
 
-export const preferredUnitOptions = [
-  PREFERRED_UNIT.LBTC,
-  PREFERRED_UNIT.mBTC,
-  PREFERRED_UNIT.uBTC,
-  PREFERRED_UNIT.SAT,
-];
+export const preferredUnitOptions = [PREFERRED_UNIT.LBTC, PREFERRED_UNIT.mBTC, PREFERRED_UNIT.uBTC, PREFERRED_UNIT.SAT];
 
 export const slippageFeeOptions = [
   SLIPPAGE_FEE.ZEROPOINTTHREE,

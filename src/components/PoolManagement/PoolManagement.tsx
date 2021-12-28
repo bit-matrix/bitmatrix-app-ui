@@ -13,20 +13,14 @@ type Props = {
 };
 
 export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
-  const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(
-    POOL_MANAGEMENT_TABS.TOP_POOLS,
-  );
+  const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
 
   const getPoolData = () => {
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
       return pools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
-            <PoolCard
-              pool={pool}
-              rank={index + 1}
-              onClick={() => onClick(pool)}
-            />
+            <PoolCard pool={pool} rank={index + 1} onClick={() => onClick(pool)} />
           </div>
         );
       });
@@ -47,31 +41,16 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <IconButton
-          className="pool-page-button"
-          icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />}
-        />
+        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />} />
         <TabMenu
-          menuItems={[
-            POOL_MANAGEMENT_TABS.TOP_POOLS,
-            POOL_MANAGEMENT_TABS.MY_POOLS,
-          ]}
+          menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <IconButton
-          className="pool-page-button"
-          icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
-        />
+        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="plus" size="4x" />} />
       </div>
       <div className="pool-page-content">
-        <div
-          className={`${
-            selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'
-          }`}
-        >
-          {getPoolData()}
-        </div>
+        <div className={`${selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
       </div>
     </div>
   );

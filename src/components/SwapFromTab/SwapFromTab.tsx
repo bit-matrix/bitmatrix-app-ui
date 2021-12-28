@@ -5,15 +5,10 @@ import './SwapFromTab.scss';
 
 type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT | undefined;
-  setselectedFromAmountPercent: (
-    newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined,
-  ) => void;
+  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => void;
 };
 
-export const SwapFromTab: React.FC<Props> = ({
-  selectedFromAmountPercent,
-  setselectedFromAmountPercent,
-}) => {
+export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
   const onChangeSelectedFromTab = (value: any) => {
     if (value === selectedFromAmountPercent) {
       setselectedFromAmountPercent(undefined);

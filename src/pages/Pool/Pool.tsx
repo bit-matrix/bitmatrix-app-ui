@@ -28,37 +28,21 @@ export const Pool = (): JSX.Element => {
   if (loading) {
     return (
       <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader
-          size="md"
-          inverse
-          center
-          content={<span>Loading...</span>}
-          vertical
-        />
+        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
       </div>
     );
   } else {
     if (pools && pools.length > 0) {
       if (selectedPool !== undefined) {
         return (
-          <div
-            className={`pool-main-div ${
-              selectedPool !== undefined && 'pool-detail-transition'
-            }`}
-          >
-            <PoolDetail
-              back={() => setSelectedPool(undefined)}
-              pool={selectedPool}
-            />
+          <div className={`pool-main-div ${selectedPool !== undefined && 'pool-detail-transition'}`}>
+            <PoolDetail back={() => setSelectedPool(undefined)} pool={selectedPool} />
           </div>
         );
       }
       return (
         <div className="pool-main-div">
-          <PoolManagement
-            pools={pools}
-            onClick={(data) => setSelectedPool(data)}
-          />
+          <PoolManagement pools={pools} onClick={(data) => setSelectedPool(data)} />
         </div>
       );
     }

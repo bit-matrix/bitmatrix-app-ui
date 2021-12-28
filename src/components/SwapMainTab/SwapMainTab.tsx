@@ -6,19 +6,14 @@ type Props = {
   setSelectedMainTab: (swapMainTab: SWAP_MAIN_TAB) => void;
 };
 
-export const SwapMainTab: React.FC<Props> = ({
-  selectedMainTab,
-  setSelectedMainTab,
-}) => {
+export const SwapMainTab: React.FC<Props> = ({ selectedMainTab, setSelectedMainTab }) => {
   return (
     <div className="swap-page-tabs">
       <div
         onClick={() => {
           setSelectedMainTab(SWAP_MAIN_TAB.SWAP);
         }}
-        className={`swap-page-tab-left ${
-          selectedMainTab === SWAP_MAIN_TAB.SWAP ? 'selected' : ''
-        }`}
+        className={`swap-page-tab-left ${selectedMainTab === SWAP_MAIN_TAB.SWAP ? 'selected' : ''}`}
       >
         <span>Swap</span>
       </div>
@@ -27,9 +22,7 @@ export const SwapMainTab: React.FC<Props> = ({
         onClick={() => {
           setSelectedMainTab(SWAP_MAIN_TAB.POOL);
         }}
-        className={`swap-page-tab-right ${
-          selectedMainTab === SWAP_MAIN_TAB.POOL ? 'selected' : ''
-        }`}
+        className={`swap-page-tab-right ${selectedMainTab === SWAP_MAIN_TAB.POOL ? 'selected' : ''}`}
       >
         <span>Pool</span>
       </div>

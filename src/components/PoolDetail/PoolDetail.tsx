@@ -18,13 +18,9 @@ type Props = {
 };
 
 export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
-  const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(
-    POOL_DETAIL_TABS.PRICE,
-  );
+  const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
 
-  const price = (
-    Number(pool.token.value) / Number(pool.quote.value)
-  ).toLocaleString();
+  const price = (Number(pool.token.value) / Number(pool.quote.value)).toLocaleString();
 
   const history = useHistory();
 
@@ -34,11 +30,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
         <div className="pool-detail-header">
           <div className="pool-detail-header-left">
             <Button className="pool-detail-button" onClick={back}>
-              <Icon
-                className="pool-detail-back-icon"
-                icon="angle-left"
-                size="4x"
-              />
+              <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
               <div className="pool-detail-page-text">
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
@@ -59,11 +51,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
         </div>
         <div className="pool-detail-content">
           <div className="pool-detail-content-right desktop-hidden">
-            <ParentSize>
-              {({ width, height }) => (
-                <AreaChart width={width} height={height} />
-              )}
-            </ParentSize>
+            <ParentSize>{({ width, height }) => <AreaChart width={width} height={height} />}</ParentSize>
           </div>
           <div className="pool-detail-content-left">
             <div className="pool-detail-content-left-header">Pool Pairs</div>
@@ -73,9 +61,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                   <img className="pool-detail-img" src={lbtcImage} alt="" />
                   <span>{pool.quote.ticker}</span>
                 </div>
-                {Numeral(Number(pool.quote.value) / 100000000).format(
-                  '(0.00a)',
-                )}
+                {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
               </div>
 
               <div className="pool-detail-item">
@@ -83,9 +69,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                   <img className="pool-detail-img" src={usdtImage} alt="" />
                   <span>{pool.token.ticker}</span>
                 </div>
-                {Numeral(Number(pool.token.value) / 100000000).format(
-                  '(0.00a)',
-                )}
+                {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
               </div>
             </div>
 
@@ -100,17 +84,11 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
+                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
                   <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
+                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
                   <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
@@ -123,26 +101,17 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
               </div>
               <div className="pool-detail-item">
                 <div className="pool-detail-table-text left-side">
-                  $
-                  {Numeral((Number(pool.token.value) * 2) / 100000000).format(
-                    '(0.00a)',
-                  )}
+                  ${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}
                 </div>
                 <div className="pool-detail-table-text">%0</div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
-                  <Icon
-                    className="pool-detail-arrow-down-icon"
-                    icon="arrow-down2"
-                  />
+                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
                   <span className="pool-detail-table-arrow-down-text">0%</span>
                 </div>
                 <div>
-                  <Icon
-                    className="pool-detail-arrow-up-icon"
-                    icon="arrow-up2"
-                  />
+                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
                   <span className="pool-detail-table-arrow-up-text">0%</span>
                 </div>
               </div>
@@ -159,11 +128,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
             </Button>
           </div>
           <div className="pool-detail-content-right mobile-hidden">
-            <ParentSize>
-              {({ width, height }) => (
-                <AreaChart width={width} height={height} />
-              )}
-            </ParentSize>
+            <ParentSize>{({ width, height }) => <AreaChart width={width} height={height} />}</ParentSize>
           </div>
         </div>
       </div>

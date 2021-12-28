@@ -13,25 +13,19 @@ export const Home = (): JSX.Element => {
     <div className="home-page-container">
       <div className="home-page-main">
         <div className="home-page-desc">
-          <h3 className="home-page-desc-header">
-            Anonymous liquidity provision here!
-          </h3>
+          <h3 className="home-page-desc-header">Anonymous liquidity provision here!</h3>
           <div className="home-page-img-content desktop-hidden">
             <img className="home-page-img" src={HomeIcon} alt="Home" />
           </div>
           <div className="home-page-desc-content">
+            <p>Bitmatrix is a constant product market maker built on Liquid Network.</p>
             <p>
-              Bitmatrix is a constant product market maker built on Liquid
-              Network.
+              Bitmatrix utilizes the power of bitcoin opcodes to enable automated liquidity provision across L-BTC and
+              other Liquid-based assets.
             </p>
             <p>
-              Bitmatrix utilizes the power of bitcoin opcodes to enable
-              automated liquidity provision across L-BTC and other Liquid-based
-              assets.
-            </p>
-            <p>
-              Bitmatrix comes with maximally Uniswap-like UX and is effectively
-              powered by Liquid's powerfull scripting capatilies.
+              Bitmatrix comes with maximally Uniswap-like UX and is effectively powered by Liquid's powerfull scripting
+              capatilies.
             </p>
           </div>
           <Button

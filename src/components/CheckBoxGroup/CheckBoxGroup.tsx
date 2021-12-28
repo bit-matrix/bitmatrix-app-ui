@@ -30,14 +30,7 @@ export const CheckBoxGroup = <T extends unknown>({
       {options.map((option: T, index: number) => {
         const isSelected = checkedValue === option ? true : false;
 
-        return (
-          <CheckBox
-            key={index}
-            option={option}
-            checked={isSelected}
-            onChange={onChangeValue}
-          />
-        );
+        return <CheckBox key={index} option={option} checked={isSelected} onChange={onChangeValue} />;
       })}
     </div>
   );

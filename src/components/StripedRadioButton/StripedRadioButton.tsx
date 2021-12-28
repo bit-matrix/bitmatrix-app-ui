@@ -8,12 +8,7 @@ type Props = {
   name?: string;
 };
 
-export const StripedRadioButton: React.FC<Props> = ({
-  options,
-  selectedOption,
-  onChange,
-  name = 'stripedRadio',
-}) => {
+export const StripedRadioButton: React.FC<Props> = ({ options, selectedOption, onChange, name = 'stripedRadio' }) => {
   const defineOptionTitleClassName = (option: string): string => {
     if (option.length <= 2) {
       return 'short-title';
@@ -33,23 +28,11 @@ export const StripedRadioButton: React.FC<Props> = ({
       {options.map((option, index) => {
         return (
           <li key={`${index}-${option}`} className="slider-option-item">
-            <input
-              type="radio"
-              defaultChecked={selectedOption === option}
-              value={option}
-              id={option}
-              name={name}
-            />
-            <label
-              onClick={() => onChange(option)}
-              className="slider-option-label"
-              htmlFor={option}
-            />
+            <input type="radio" defaultChecked={selectedOption === option} value={option} id={option} name={name} />
+            <label onClick={() => onChange(option)} className="slider-option-label" htmlFor={option} />
             <span
               className={`slider-option-title ${
-                selectedOption === option
-                  ? 'selected-title'
-                  : 'unselected-title'
+                selectedOption === option ? 'selected-title' : 'unselected-title'
               } ${defineOptionTitleClassName(option)}`}
             >
               {option}

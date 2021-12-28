@@ -25,8 +25,7 @@ import { detectProvider } from 'marina-provider';
 export const Swap = (): JSX.Element => {
   // <SwapMainTab />
   // <SwapFromTab />
-  const [selectedFromAmountPercent, setSelectedFromAmountPercent] =
-    useState<FROM_AMOUNT_PERCENT>();
+  const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
   // <SwapAssetList />
   const [selectedAsset, setSelectedAsset] = useState<{
     from: SWAP_ASSET;
@@ -89,25 +88,15 @@ export const Swap = (): JSX.Element => {
   }, []);
 
   const assetAmountToFromAmount = useCallback(
-    (
-      newAssetAmountList: AssetAmount[],
-      newFromAmountPercent?: FROM_AMOUNT_PERCENT,
-    ) => {
+    (newAssetAmountList: AssetAmount[], newFromAmountPercent?: FROM_AMOUNT_PERCENT) => {
       let newFromAmount = 0;
       if (selectedAsset.from === SWAP_ASSET.LBTC)
-        newFromAmount =
-          newAssetAmountList.find(
-            (assetAmount) => assetAmount.assetId === ASSET_ID.LBTC,
-          )?.amount || 0;
+        newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.LBTC)?.amount || 0;
       else if (selectedAsset.from === SWAP_ASSET.USDT)
-        newFromAmount =
-          newAssetAmountList.find(
-            (assetAmount) => assetAmount.assetId === ASSET_ID.USDT,
-          )?.amount || 0;
+        newFromAmount = newAssetAmountList.find((assetAmount) => assetAmount.assetId === ASSET_ID.USDT)?.amount || 0;
 
       if (newFromAmount >= 2500) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN)
-          newFromAmount = 2500;
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) newFromAmount = 2500;
         else if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
           if (newFromAmount >= 5000) {
             newFromAmount *= 0.5;
@@ -129,45 +118,25 @@ export const Swap = (): JSX.Element => {
     assetAmountToFromAmount(assetAmounts, selectedFromAmountPercent);
   }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
 
-  const onChangeFromInput = (
-    inputElement: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
     const methodCall =
-      selectedAsset.from === SWAP_ASSET.LBTC
-        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
-        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    const output = convertion.convertForCtx(
-      inputNum,
-      payloadData.slippage,
-      pool!,
-      poolConfigs!,
-      methodCall,
-    );
+    const output = convertion.convertForCtx(inputNum, payloadData.slippage, pool!, poolConfigs!, methodCall);
 
     setInputFromAmount(inputElement.target.value);
     setInputToAmount(output.toString());
   };
 
-  const onChangeToInput = (
-    inputElement: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
     const methodCall =
-      selectedAsset.to === SWAP_ASSET.LBTC
-        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
-        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    const output = convertion.convertForCtx(
-      inputNum,
-      payloadData.slippage,
-      pool!,
-      poolConfigs!,
-      methodCall,
-    );
+    const output = convertion.convertForCtx(inputNum, payloadData.slippage, pool!, poolConfigs!, methodCall);
 
     setInputFromAmount(output.toString());
     setInputToAmount(inputElement.target.value);
@@ -175,16 +144,9 @@ export const Swap = (): JSX.Element => {
 
   const swapClick = async () => {
     const methodCall =
-      selectedAsset.from === SWAP_ASSET.LBTC
-        ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN
-        : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    const fundingTxInputs = fundingTx(
-      Number(inputFromAmount),
-      pool!,
-      poolConfigs!,
-      methodCall,
-    );
+    const fundingTxInputs = fundingTx(Number(inputFromAmount), pool!, poolConfigs!, methodCall);
 
     wallet
       ?.sendTransaction([
@@ -256,9 +218,7 @@ export const Swap = (): JSX.Element => {
       assetId: ASSET_ID.LBTC,
       assetName: SWAP_ASSET.LBTC,
       amount: newUtxos
-        .filter(
-          (ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.LBTC, 'hex'),
-        )
+        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.LBTC, 'hex'))
         .reduce((p, u) => {
           return p + Number(u.unblindData.value);
         }, 0),
@@ -267,9 +227,7 @@ export const Swap = (): JSX.Element => {
       assetId: ASSET_ID.USDT,
       assetName: SWAP_ASSET.USDT,
       amount: newUtxos
-        .filter(
-          (ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.USDT, 'hex'),
-        )
+        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.USDT, 'hex'))
         .reduce((p, u) => {
           return p + Number(u.unblindData.value);
         }, 0),
@@ -285,9 +243,7 @@ export const Swap = (): JSX.Element => {
       <WalletListModal
         show={showWalletList}
         wallet={wallet}
-        walletOnClick={(walletName: WALLET_NAME) =>
-          setWallet(new Wallet(walletName))
-        }
+        walletOnClick={(walletName: WALLET_NAME) => setWallet(new Wallet(walletName))}
         close={() => setShowWalletList(false)}
         setNewAddress={setNewAddress}
         setUtxos={setUtxosAll}

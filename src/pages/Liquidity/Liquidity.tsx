@@ -12,27 +12,18 @@ enum LIQUIDITY {
 }
 
 const Liquidity = (): JSX.Element => {
-  const [liquidity, setLiquidity] = useState<LIQUIDITY>(
-    LIQUIDITY.ADD_LIQUIDITY,
-  );
+  const [liquidity, setLiquidity] = useState<LIQUIDITY>(LIQUIDITY.ADD_LIQUIDITY);
 
   const history = useHistory();
 
   return (
     <div className="liquidity-page-main">
       <Content className="liquidity-page-content">
-        <Button
-          className="liquidity-page-back-button"
-          onClick={() => history.goBack()}
-        >
+        <Button className="liquidity-page-back-button" onClick={() => history.goBack()}>
           <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
           <div className="liquidity-back-text">L-BTC/USDT</div>
         </Button>
-        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? (
-          <AddLiquidity />
-        ) : (
-          <RemoveLiquidity />
-        )}
+        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? <AddLiquidity /> : <RemoveLiquidity />}
         <Button
           appearance="default"
           className="liquidity-button"
@@ -42,9 +33,7 @@ const Liquidity = (): JSX.Element => {
               : setLiquidity(LIQUIDITY.ADD_LIQUIDITY);
           }}
         >
-          {liquidity === LIQUIDITY.ADD_LIQUIDITY
-            ? 'Add Liquidity'
-            : 'Remove Liquidity'}
+          {liquidity === LIQUIDITY.ADD_LIQUIDITY ? 'Add Liquidity' : 'Remove Liquidity'}
         </Button>
       </Content>
     </div>

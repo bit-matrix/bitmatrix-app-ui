@@ -6,18 +6,12 @@ import { CheckBoxGroup } from '../../../components/CheckBoxGroup/CheckBoxGroup';
 import { StripedRadioButton } from '../../../components/StripedRadioButton/StripedRadioButton';
 import { ToggleSwitch } from '../../../components/ToggleSwitch/ToggleSwitch';
 import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
-import {
-  preferredUnitList,
-  preferredUnitOptions,
-  SlippageFeeList,
-  slippageFeeOptions,
-} from './utils';
+import { preferredUnitList, preferredUnitOptions, SlippageFeeList, slippageFeeOptions } from './utils';
 import info from '../../../images/info2.png';
 import './General.scss';
 
 export const General = (): JSX.Element => {
-  const [pushNotificationsSwitch, setPushNotificationsSwitch] =
-    useState<boolean>(false);
+  const [pushNotificationsSwitch, setPushNotificationsSwitch] = useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
   const { dispatch, payloadData } = useContext(SettingsContext);
 
@@ -30,14 +24,9 @@ export const General = (): JSX.Element => {
         </div>
         <StripedRadioButton
           options={slippageFeeOptions}
-          selectedOption={
-            SlippageFeeList.find((sf) => sf.value === payloadData.slippage)
-              ?.text || ''
-          }
+          selectedOption={SlippageFeeList.find((sf) => sf.value === payloadData.slippage)?.text || ''}
           onChange={(option) => {
-            const selectedoOption = SlippageFeeList.find(
-              (sf) => sf.text === option,
-            )?.value;
+            const selectedoOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
             dispatch({
               type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
@@ -59,9 +48,7 @@ export const General = (): JSX.Element => {
           className="prefferred-unit"
           options={preferredUnitOptions}
           onChange={(checkedValue: PREFERRED_UNIT | undefined) => {
-            const preferredUnit = preferredUnitList.find(
-              (unit) => unit.text === checkedValue,
-            );
+            const preferredUnit = preferredUnitList.find((unit) => unit.text === checkedValue);
             if (preferredUnit) {
               dispatch({
                 type: SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT,
@@ -79,20 +66,14 @@ export const General = (): JSX.Element => {
         <div className="general-item-head">
           <span className="general-title">Push Notifications</span>
           <img className="general-icon" src={info} alt="info" />
-          <ToggleSwitch
-            onChange={(checked) => setPushNotificationsSwitch(checked)}
-            checked={pushNotificationsSwitch}
-          />
+          <ToggleSwitch onChange={(checked) => setPushNotificationsSwitch(checked)} checked={pushNotificationsSwitch} />
         </div>
       </div>
       <div className="general-item">
         <div className="general-item-head">
           <span className="general-title">Liquid Taxi</span>
           <img className="general-icon" src={info} alt="info" />
-          <ToggleSwitch
-            onChange={(checked) => setLiquidTaxiSwitch(checked)}
-            checked={liquidTaxiSwitch}
-          />
+          <ToggleSwitch onChange={(checked) => setLiquidTaxiSwitch(checked)} checked={liquidTaxiSwitch} />
         </div>
       </div>
     </div>

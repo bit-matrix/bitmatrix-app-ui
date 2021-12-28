@@ -18,16 +18,11 @@ const AddLiquidity = (): JSX.Element => {
     <>
       <div className="add-liquidity-main">
         <div className="add-liquidity-item pt8">
-          <SwapFromTab
-            selectedFromAmountPercent={lbctPercent}
-            setselectedFromAmountPercent={setLbtcPercent}
-          />
+          <SwapFromTab selectedFromAmountPercent={lbctPercent} setselectedFromAmountPercent={setLbtcPercent} />
           <div className="add-liquidity-item-content">
             <div className="add-liquidity-input-div">
               <div className="add-liquidity-input-content">
-                <div className="add-liquidity-text">
-                  {SWAP_ASSET.LBTC} Liquidity
-                </div>
+                <div className="add-liquidity-text">{SWAP_ASSET.LBTC} Liquidity</div>
                 <img className="liquidity-btc-icon" src={btc} alt="" />
               </div>
               <input
@@ -39,9 +34,7 @@ const AddLiquidity = (): JSX.Element => {
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 spellCheck="false"
                 value={inputFromAmount}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setInputFromAmount(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputFromAmount(event.target.value)}
               />
             </div>
           </div>
@@ -50,16 +43,11 @@ const AddLiquidity = (): JSX.Element => {
           <img className="add-liquidity-page-icons" src={plus} alt="" />
         </div>
         <div className="add-liquidity-item pt8">
-          <SwapFromTab
-            selectedFromAmountPercent={usdtPercent}
-            setselectedFromAmountPercent={setUsdtPercent}
-          />
+          <SwapFromTab selectedFromAmountPercent={usdtPercent} setselectedFromAmountPercent={setUsdtPercent} />
           <div className="add-liquidity-item-content">
             <div className="add-liquidity-input-div">
               <div className="add-liquidity-input-content">
-                <div className="add-liquidity-text">
-                  {SWAP_ASSET.USDT} Liquidity
-                </div>
+                <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
                 <img className="liquidity-usdt-icon" src={usdt} alt="" />
               </div>
               <input
@@ -71,9 +59,7 @@ const AddLiquidity = (): JSX.Element => {
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 spellCheck="false"
                 value={inputToAmount}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setInputToAmount(event.target.value)
-                }
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputToAmount(event.target.value)}
               />
             </div>
           </div>

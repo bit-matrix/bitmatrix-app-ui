@@ -7,20 +7,10 @@ type Props<T> = {
   option: T;
 };
 
-export const CheckBox = <T extends unknown>({
-  onChange,
-  checked,
-  option,
-}: Props<T>): JSX.Element => {
+export const CheckBox = <T extends unknown>({ onChange, checked, option }: Props<T>): JSX.Element => {
   return (
     <label className="custom-checkbox-container">
-      <span
-        className={`${
-          checked ? 'custom-checkbox-checked' : 'custom-checkbox-unchecked'
-        }`}
-      >
-        {option as string}
-      </span>
+      <span className={`${checked ? 'custom-checkbox-checked' : 'custom-checkbox-unchecked'}`}>{option as string}</span>
       <input
         onChange={(event) => onChange(option, !event.target.checked)}
         checked={checked}

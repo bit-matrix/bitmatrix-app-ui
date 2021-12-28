@@ -7,19 +7,14 @@ type Props = {
   onClick: (selectedItem: string) => void;
 };
 
-export const TabMenu: React.FC<Props> = ({
-  menuItems,
-  selectedItem,
-  onClick,
-}) => {
+export const TabMenu: React.FC<Props> = ({ menuItems, selectedItem, onClick }) => {
   return (
     <>
       <div className="tab-menu">
         {menuItems.map((menuItem, index) => {
           const menuItemTextClasses = ['tab-menu-item-text'];
 
-          if (menuItem === selectedItem)
-            menuItemTextClasses.push('tab-menu-item-selected');
+          if (menuItem === selectedItem) menuItemTextClasses.push('tab-menu-item-selected');
           return (
             <div
               key={`tab_menu_item_${index}`}

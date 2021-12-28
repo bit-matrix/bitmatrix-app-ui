@@ -4,12 +4,7 @@ import { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
 import { curveMonotoneX } from '@visx/curve';
 import { GridRows, GridColumns } from '@visx/grid';
 import { scaleTime, scaleLinear } from '@visx/scale';
-import {
-  withTooltip,
-  Tooltip,
-  TooltipWithBounds,
-  defaultStyles,
-} from '@visx/tooltip';
+import { withTooltip, Tooltip, TooltipWithBounds, defaultStyles } from '@visx/tooltip';
 import { WithTooltipProvidedProps } from '@visx/tooltip/lib/enhancers/withTooltip';
 import { localPoint } from '@visx/event';
 import { LinearGradient } from '@visx/gradient';
@@ -83,11 +78,7 @@ export default withTooltip<AreaProps, TooltipData>(
 
     // tooltip handler
     const handleTooltip = useCallback(
-      (
-        event:
-          | React.TouchEvent<SVGRectElement>
-          | React.MouseEvent<SVGRectElement>,
-      ) => {
+      (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
         const { x } = localPoint(event) || { x: 0 };
         const x0 = dateScale.invert(x);
         const index = bisectDate(stock, x0, 1);
@@ -95,11 +86,7 @@ export default withTooltip<AreaProps, TooltipData>(
         const d1 = stock[index];
         let d = d0;
         if (d1 && getDate(d1)) {
-          d =
-            x0.valueOf() - getDate(d0).valueOf() >
-            getDate(d1).valueOf() - x0.valueOf()
-              ? d1
-              : d0;
+          d = x0.valueOf() - getDate(d0).valueOf() > getDate(d1).valueOf() - x0.valueOf() ? d1 : d0;
         }
         showTooltip({
           tooltipData: d,
@@ -113,25 +100,9 @@ export default withTooltip<AreaProps, TooltipData>(
     return (
       <div>
         <svg width={width} height={height}>
-          <rect
-            x={0}
-            y={0}
-            width={width}
-            height={height}
-            fill="url(#area-background-gradient)"
-            rx={14}
-          />
-          <LinearGradient
-            id="area-background-gradient"
-            from={background}
-            to={background2}
-          />
-          <LinearGradient
-            id="area-gradient"
-            from={accentColor}
-            to={accentColor}
-            toOpacity={0.1}
-          />
+          <rect x={0} y={0} width={width} height={height} fill="url(#area-background-gradient)" rx={14} />
+          <LinearGradient id="area-background-gradient" from={background} to={background2} />
+          <LinearGradient id="area-gradient" from={accentColor} to={accentColor} toOpacity={0.1} />
           <GridRows
             left={margin.left}
             scale={stockValueScale}
@@ -207,12 +178,7 @@ export default withTooltip<AreaProps, TooltipData>(
         </svg>
         {tooltipData && (
           <div>
-            <TooltipWithBounds
-              key={Math.random()}
-              top={tooltipTop - 12}
-              left={tooltipLeft + 12}
-              style={tooltipStyles}
-            >
+            <TooltipWithBounds key={Math.random()} top={tooltipTop - 12} left={tooltipLeft + 12} style={tooltipStyles}>
               {`$${getStockValue(tooltipData)}`}
             </TooltipWithBounds>
             <Tooltip

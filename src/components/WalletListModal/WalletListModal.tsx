@@ -20,12 +20,7 @@ type Props = {
   setUtxos: (utxos: UnblindedOutput[]) => void;
 };
 
-export const WalletListModal: React.FC<Props> = ({
-  show,
-  wallet,
-  close,
-  setUtxos,
-}) => {
+export const WalletListModal: React.FC<Props> = ({ show, wallet, close, setUtxos }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const connectWalletOnClick = (): void => {
@@ -52,26 +47,14 @@ export const WalletListModal: React.FC<Props> = ({
             wallet.disable();
             setLoading(false);
           })
-      : window.open(
-          'https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related',
-        );
+      : window.open('https://chrome.google.com/webstore/detail/marina/nhanebedohgejbllffboeipobccgedhl/related');
   };
 
   return (
-    <Modal
-      className="wallet-list-modal"
-      size="xs"
-      backdrop={true}
-      show={show}
-      onHide={close}
-    >
-      {loading ? (
-        <Loader className="wallet-list-loading" inverse center />
-      ) : null}
+    <Modal className="wallet-list-modal" size="xs" backdrop={true} show={show} onHide={close}>
+      {loading ? <Loader className="wallet-list-loading" inverse center /> : null}
       <Modal.Header className="connect-wallet-header">
-        <Modal.Title className="connect-wallet-title">
-          Connect Wallet
-        </Modal.Title>
+        <Modal.Title className="connect-wallet-title">Connect Wallet</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ marginTop: '1rem' }}>
         <div
@@ -81,29 +64,18 @@ export const WalletListModal: React.FC<Props> = ({
             connectWalletOnClick();
           }}
         >
-          <img
-            className="wallet-list-item-icon"
-            src={marinaWallet}
-            alt="Generate Seed"
-          />
+          <img className="wallet-list-item-icon" src={marinaWallet} alt="Generate Seed" />
           <div>
-            <div className="wallet-text-header">
-              {wallet?.exist() ? 'Marina Wallet' : 'Install Marina Wallet'}{' '}
-            </div>
+            <div className="wallet-text-header">{wallet?.exist() ? 'Marina Wallet' : 'Install Marina Wallet'} </div>
             <div className="wallet-list-item-description">
               {' '}
-              Connect to Marina wallet to access Bitmatrix directly from your
-              browser.
+              Connect to Marina wallet to access Bitmatrix directly from your browser.
             </div>
           </div>
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img
-            className="wallet-list-item-icon"
-            src={ledgerNano}
-            alt="Import Seed"
-          />
+          <img className="wallet-list-item-icon" src={ledgerNano} alt="Import Seed" />
           <div>
             <div className="wallet-text-header">Ledger Nano</div>
             <div className="wallet-list-item-description">
@@ -113,31 +85,21 @@ export const WalletListModal: React.FC<Props> = ({
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img
-            className="wallet-list-item-icon"
-            src={importSeed}
-            alt="Import Seed"
-          />
+          <img className="wallet-list-item-icon" src={importSeed} alt="Import Seed" />
           <div>
             <div className="wallet-text-header">Import Seed</div>
             <div className="wallet-list-item-description">
-              Import your 12-word mnemonic phrases to unlock your coins and
-              start swapping.
+              Import your 12-word mnemonic phrases to unlock your coins and start swapping.
             </div>
           </div>
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img
-            className="wallet-list-item-icon"
-            src={generateSeed}
-            alt="Generate Seed"
-          />
+          <img className="wallet-list-item-icon" src={generateSeed} alt="Generate Seed" />
           <div>
             <div className="wallet-text-header">Generate Seed</div>
             <div className="wallet-list-item-description">
-              Generate new 12-word mnemonic phrases and get strated with
-              Bitmatrix
+              Generate new 12-word mnemonic phrases and get strated with Bitmatrix
             </div>
           </div>
         </div>
