@@ -1,38 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { PoolDetail } from '../../components/PoolDetail/PoolDetail';
 import { PoolManagement } from '../../components/PoolManagement/PoolManagement';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import * as models from '@bitmatrix/models';
-import { api } from '@bitmatrix/lib';
 import { Loader } from 'rsuite';
+import SettingsContext from '../../context/SettingsContext';
 import './Pool.scss';
 
 export const Pool = (): JSX.Element => {
   const [selectedPool, setSelectedPool] = useState<models.Pool>();
-  const [pools, setPools] = useState<models.Pool[]>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.POOL;
 
-  useEffect(() => {
-    api
-      .getPools()
-      .then((poolResponse) => {
-        setPools(poolResponse);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
+  if (payloadData.pools === undefined) {
     return (
       <div id="loaderInverseWrapper" style={{ height: 200 }}>
         <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
       </div>
     );
   } else {
-    if (pools && pools.length > 0) {
+    if (payloadData.pools && payloadData.pools.length > 0) {
       if (selectedPool !== undefined) {
         return (
           <div className={`pool-main-div ${selectedPool !== undefined && 'pool-detail-transition'}`}>
@@ -42,7 +30,7 @@ export const Pool = (): JSX.Element => {
       }
       return (
         <div className="pool-main-div">
-          <PoolManagement pools={pools} onClick={(data) => setSelectedPool(data)} />
+          <PoolManagement pools={payloadData.pools} onClick={(data) => setSelectedPool(data)} />
         </div>
       );
     }
