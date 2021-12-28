@@ -23,7 +23,7 @@ const reducer = (
     case SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT:
       return {
         ...state,
-        unit: action.payload.preferred_unit,
+        preferred_unit: action.payload.preferred_unit,
       };
 
     default:

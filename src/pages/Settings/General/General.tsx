@@ -26,12 +26,12 @@ export const General = (): JSX.Element => {
           options={slippageFeeOptions}
           selectedOption={SlippageFeeList.find((sf) => sf.value === payloadData.slippage)?.text || ''}
           onChange={(option) => {
-            const selectedoOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
+            const selectedOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
             dispatch({
               type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
               payload: {
-                slippage: selectedoOption || 200,
+                slippage: selectedOption || 200,
                 preferred_unit: payloadData.preferred_unit,
               },
             });
@@ -49,6 +49,7 @@ export const General = (): JSX.Element => {
           options={preferredUnitOptions}
           onChange={(checkedValue: PREFERRED_UNIT | undefined) => {
             const preferredUnit = preferredUnitList.find((unit) => unit.text === checkedValue);
+
             if (preferredUnit) {
               dispatch({
                 type: SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT,
