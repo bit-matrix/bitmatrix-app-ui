@@ -22,6 +22,8 @@ import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
 import './Swap.scss';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { CommitmentStore } from '../../model/CommitmentStore';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -44,6 +46,8 @@ export const Swap = (): JSX.Element => {
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [pool, setPool] = useState<Pool>();
+
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -188,6 +192,22 @@ export const Swap = (): JSX.Element => {
         }
 
         const commitmentTxId = await api.sendRawTransaction(commitment);
+
+        const tempTxData: CommitmentStore = {
+          txId: commitmentTxId,
+          fromAmount: Number(inputFromAmount),
+          toAmount: Number(inputToAmount),
+          fromAsset: selectedAsset.from,
+          toAsset: selectedAsset.to,
+          timestamp: new Date().valueOf(),
+          status: false,
+        };
+
+        const storeOldData = getTxLocalData() || [];
+
+        const newStoreData = [...storeOldData, tempTxData];
+
+        setTxLocalData(newStoreData);
 
         notify('Commitment Tx Id : ', commitmentTxId);
       } else {
