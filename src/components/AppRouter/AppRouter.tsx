@@ -24,7 +24,7 @@ export const AppRouter = (): JSX.Element => {
 
     setInterval(() => {
       fetchPools();
-    }, 10000);
+    }, 15000);
   }, []);
 
   const fetchPools = () => {
