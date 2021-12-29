@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
@@ -18,6 +18,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 
 export const AppRouter = (): JSX.Element => {
+  const [lastTxLoading, setLastTxLoading] = useState<boolean>(false);
   const { dispatch, payloadData } = useContext(SettingsContext);
   const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
 
@@ -27,7 +28,7 @@ export const AppRouter = (): JSX.Element => {
 
     setInterval(() => {
       fetchPools();
-    }, 15000);
+    }, 10000);
   }, []);
 
   const fetchPools = () => {
@@ -50,6 +51,8 @@ export const AppRouter = (): JSX.Element => {
       const lastCommitment = txHistory[txHistory.length - 1];
 
       if (!lastCommitment.completed) {
+        setLastTxLoading(true);
+
         api.getCtxMempool(lastCommitment.txId, poolId).then((ctxResponse) => {
           if (!ctxResponse) {
             api.getPtx(lastCommitment.txId, poolId).then((ptxResponse) => {
@@ -57,7 +60,9 @@ export const AppRouter = (): JSX.Element => {
                 const newTxHistory = [...txHistory];
                 newTxHistory[txHistory.length - 1].completed = true;
                 newTxHistory[txHistory.length - 1].status = true;
+
                 setTxLocalData(newTxHistory);
+                setLastTxLoading(false);
               }
             });
           }
@@ -70,7 +75,7 @@ export const AppRouter = (): JSX.Element => {
     <Router>
       <Content className="app-router-main">
         <div className="secret-top-div" />
-        <Navbar />
+        <Navbar loading={lastTxLoading} />
         <div className="app-container">
           <Switch>
             <Route exact path={ROUTE_PATH.HOME} component={Home} />
