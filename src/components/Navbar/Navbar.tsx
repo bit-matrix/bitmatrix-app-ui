@@ -15,7 +15,7 @@ export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
 
-  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
+  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV1');
   const txHistory = getTxLocalData();
   const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
@@ -35,7 +35,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = () => {
+  const txInfo = (): JSX.Element | undefined => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       return (
         <div>
@@ -43,10 +43,47 @@ export const Navbar: React.FC = (): JSX.Element => {
         </div>
       );
     } else {
-      if (txHistory && txHistory.length > 0 && txHistory[txHistory.length - 1].success) {
-        return <img className="navbar-item-icon" src={success} alt="" />;
-      } else {
-        <img className="navbar-item-icon" src={failed} alt="" />;
+      if (txHistory && txHistory.length > 0) {
+        if (txHistory[txHistory.length - 1].success) {
+          return <img className="navbar-item-icon" src={success} alt="" />;
+        } else {
+          <img className="navbar-item-icon" src={failed} alt="" />;
+        }
+      }
+    }
+  };
+
+  const infoTab = (): JSX.Element | undefined => {
+    if (txHistory && txHistory.length > 0) {
+      if (txHistory[txHistory.length - 1].seen === false) {
+        return (
+          <li className="navbar-item mobile-hidden">
+            <div
+              tabIndex={0}
+              className="navbar-item-circle-div"
+              onBlur={() => {
+                if (txHistory && txHistory.length > 0) {
+                  if (txHistory[txHistory.length - 1].completed) {
+                    const newTxHistory = [...txHistory];
+                    newTxHistory[newTxHistory.length - 1].seen = true;
+                    setTxLocalData(newTxHistory);
+                  }
+                }
+              }}
+            >
+              <ButtonToolbar>
+                <Whisper
+                  placement="bottom"
+                  trigger="click"
+                  speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
+                  enterable
+                >
+                  {txInfo()}
+                </Whisper>
+              </ButtonToolbar>
+            </div>
+          </li>
+        );
       }
     }
   };
@@ -111,32 +148,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         </Button>
       </li>
 
-      {txHistory && txHistory[txHistory.length - 1].seen ? null : (
-        <li className="navbar-item mobile-hidden">
-          <div
-            tabIndex={0}
-            className="navbar-item-circle-div"
-            onBlur={() => {
-              if (txHistory && txHistory.length > 0 && txHistory[txHistory.length - 1].completed) {
-                const newTxHistory = [...txHistory];
-                newTxHistory[newTxHistory.length - 1].seen = true;
-                setTxLocalData(newTxHistory);
-              }
-            }}
-          >
-            <ButtonToolbar>
-              <Whisper
-                placement="bottom"
-                trigger="click"
-                speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
-                enterable
-              >
-                {txInfo()}
-              </Whisper>
-            </ButtonToolbar>
-          </div>
-        </li>
-      )}
+      {infoTab()}
     </ul>
   );
 };
