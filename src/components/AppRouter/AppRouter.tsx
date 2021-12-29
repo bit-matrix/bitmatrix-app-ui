@@ -9,13 +9,13 @@ import { Pool } from '../../pages/Pool/Pool';
 import { Content } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
 import Liquidity from '../../pages/Liquidity/Liquidity';
-import './AppRouter.scss';
 import { api } from '@bitmatrix/lib';
 import { Pool as ModelPool } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
+import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
@@ -46,22 +46,28 @@ export const AppRouter = (): JSX.Element => {
   const checkLastTxStatus = (poolId: string) => {
     const txHistory = getTxLocalData();
 
-    if (txHistory) {
-      const lastCommitment = txHistory[txHistory.length - 1];
+    if (txHistory && txHistory.length > 0) {
+      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
 
-      if (!lastCommitment.completed) {
-        api.getCtxMempool(lastCommitment.txId, poolId).then((ctxResponse) => {
-          if (!ctxResponse) {
-            api.getPtx(lastCommitment.txId, poolId).then((ptxResponse) => {
-              if (ptxResponse) {
-                const newTxHistory = [...txHistory];
-                newTxHistory[txHistory.length - 1].completed = true;
-                newTxHistory[txHistory.length - 1].status = true;
+      if (unconfirmedTxs.length > 0) {
+        unconfirmedTxs.forEach((transaction) => {
+          api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
+            if (!ctxResponse) {
+              api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
+                if (ptxResponse) {
+                  const newTxHistory = [...txHistory];
+                  const willChangedTx = newTxHistory.findIndex((ntx) => {
+                    return ntx.txId === transaction.txId;
+                  });
 
-                setTxLocalData(newTxHistory);
-              }
-            });
-          }
+                  newTxHistory[willChangedTx].completed = true;
+                  newTxHistory[willChangedTx].status = true;
+
+                  setTxLocalData(newTxHistory);
+                }
+              });
+            }
+          });
         });
       }
     }

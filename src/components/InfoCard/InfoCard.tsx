@@ -17,7 +17,7 @@ export const InfoCard: React.FC = () => {
         <div className="info-card-content">
           {data.map((dt) => {
             return (
-              <div className="info-card-item">
+              <div key={dt.txId} className="info-card-item">
                 <Icon className="info-card-item-icon" icon="exchange" />
                 <div>
                   Swap {dt.fromAmount / 100000000} {dt.fromAsset} for {dt.toAmount / 100000000} {dt.toAsset}
