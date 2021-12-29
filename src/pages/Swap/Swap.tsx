@@ -46,7 +46,7 @@ export const Swap = (): JSX.Element => {
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV1');
 
   const { payloadData } = useContext(SettingsContext);
 
