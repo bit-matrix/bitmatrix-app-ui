@@ -21,9 +21,9 @@ import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
-import './Swap.scss';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -116,15 +116,14 @@ export const Swap = (): JSX.Element => {
       selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     if (payloadData.pools && poolConfigs) {
       const output = convertion.convertForCtx(
-        inputNum,
+        inputNum * payloadData.preferred_unit.value,
         payloadData.slippage,
         payloadData.pools[0],
         poolConfigs,
         methodCall,
       );
-
       setInputFromAmount(inputElement.target.value);
-      setInputToAmount(output.toString());
+      setInputToAmount((output / payloadData.preferred_unit.value).toString());
     }
   };
 
@@ -136,14 +135,14 @@ export const Swap = (): JSX.Element => {
 
     if (payloadData.pools && poolConfigs) {
       const output = convertion.convertForCtx(
-        inputNum,
+        inputNum * payloadData.preferred_unit.value,
         payloadData.slippage,
         payloadData.pools[0],
         poolConfigs,
         methodCall,
       );
 
-      setInputFromAmount(output.toString());
+      setInputFromAmount((output / payloadData.preferred_unit.value).toString());
       setInputToAmount(inputElement.target.value);
     }
   };
