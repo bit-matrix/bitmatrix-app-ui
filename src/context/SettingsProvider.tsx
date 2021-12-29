@@ -6,14 +6,10 @@ import SettingsContext from './SettingsContext';
 const SettingsProvider: React.FC = ({ children }) => {
   const [payloadData, dispatch] = useReducer(reducer, {
     slippage: 200,
-    preferred_unit: { text: PREFERRED_UNIT.SAT, value: 1 },
+    preferred_unit: { text: PREFERRED_UNIT.LBTC, value: 100000000 },
   });
 
-  return (
-    <SettingsContext.Provider value={{ payloadData, dispatch }}>
-      {children}
-    </SettingsContext.Provider>
-  );
+  return <SettingsContext.Provider value={{ payloadData, dispatch }}>{children}</SettingsContext.Provider>;
 };
 
 export default SettingsProvider;

@@ -14,7 +14,7 @@ export const slippageFeeOptions = [
 
 export const SlippageFeeList = [
   {
-    text: SLIPPAGE_FEE.ZEROPOINTFIVE,
+    text: SLIPPAGE_FEE.ZEROPOINTTHREE,
     value: 333,
   },
   {

@@ -12,7 +12,7 @@ const SettingsContext = createContext<{
 }>({
   payloadData: {
     slippage: 200,
-    preferred_unit: { text: PREFERRED_UNIT.SAT, value: 1 },
+    preferred_unit: { text: PREFERRED_UNIT.LBTC, value: 100000000 },
   },
   dispatch: () => null,
 });
