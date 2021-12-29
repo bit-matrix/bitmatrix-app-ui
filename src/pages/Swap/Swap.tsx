@@ -213,8 +213,9 @@ export const Swap = (): JSX.Element => {
           fromAsset: selectedAsset.from,
           toAsset: selectedAsset.to,
           timestamp: new Date().valueOf(),
-          status: false,
+          success: false,
           completed: false,
+          seen: false,
         };
 
         const storeOldData = getTxLocalData() || [];
