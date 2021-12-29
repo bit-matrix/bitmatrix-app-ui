@@ -22,8 +22,11 @@ export const InfoCard: React.FC = () => {
                 <div>
                   Swap {dt.fromAmount / 100000000} {dt.fromAsset} for {dt.toAmount / 100000000} {dt.toAsset}
                 </div>
-                {dt.completed === false ? <Loading width="1.5rem" height="1.5rem" /> : null}
-                <div>{timeDifference(dt.timestamp)}</div>
+                {dt.completed === false ? (
+                  <Loading width="1.5rem" height="1.5rem" />
+                ) : (
+                  <div>{timeDifference(dt.timestamp)}</div>
+                )}
               </div>
             );
           })}
