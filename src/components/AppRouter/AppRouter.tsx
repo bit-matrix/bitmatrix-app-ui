@@ -61,7 +61,7 @@ export const AppRouter = (): JSX.Element => {
                   });
 
                   newTxHistory[willChangedTx].completed = true;
-                  newTxHistory[willChangedTx].status = true;
+                  newTxHistory[willChangedTx].success = true;
 
                   setTxLocalData(newTxHistory);
                 }
