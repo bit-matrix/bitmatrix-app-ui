@@ -7,15 +7,9 @@ import more from '../../images/more.png';
 import Svg from '../base/Svg/Svg';
 import './Navbar.scss';
 
-type Props = {
-  loading: boolean;
-};
-
-export const Navbar: React.FC<Props> = ({ loading }): JSX.Element => {
+export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
-
-  console.log('2', loading);
 
   useEffect(() => {
     let unmounted = false;
