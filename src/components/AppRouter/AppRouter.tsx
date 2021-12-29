@@ -14,9 +14,12 @@ import { api } from '@bitmatrix/lib';
 import { Pool as ModelPool } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { CommitmentStore } from '../../model/CommitmentStore';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
+  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
 
   // fetch pools with timer
   useEffect(() => {
@@ -29,6 +32,7 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchPools = () => {
     api.getPools().then((pools: ModelPool[]) => {
+      checkLastTxStatus(pools[0].id);
       dispatch({
         type: SETTINGS_ACTION_TYPES.SET_POOLS,
         payload: {
@@ -37,6 +41,29 @@ export const AppRouter = (): JSX.Element => {
         },
       });
     });
+  };
+
+  const checkLastTxStatus = (poolId: string) => {
+    const txHistory = getTxLocalData();
+
+    if (txHistory) {
+      const lastCommitment = txHistory[txHistory.length - 1];
+
+      if (!lastCommitment.completed) {
+        api.getCtxMempool(lastCommitment.txId, poolId).then((ctxResponse) => {
+          if (!ctxResponse) {
+            api.getPtx(lastCommitment.txId, poolId).then((ptxResponse) => {
+              if (ptxResponse) {
+                const newTxHistory = [...txHistory];
+                newTxHistory[txHistory.length - 1].completed = true;
+                newTxHistory[txHistory.length - 1].status = true;
+                setTxLocalData(newTxHistory);
+              }
+            });
+          }
+        });
+      }
+    }
   };
 
   return (

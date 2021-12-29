@@ -211,6 +211,7 @@ export const Swap = (): JSX.Element => {
           toAsset: selectedAsset.to,
           timestamp: new Date().valueOf(),
           status: false,
+          completed: false,
         };
 
         const storeOldData = getTxLocalData() || [];

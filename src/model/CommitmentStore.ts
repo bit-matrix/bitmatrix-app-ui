@@ -6,4 +6,5 @@ export type CommitmentStore = {
   fromAsset: string;
   timestamp: number;
   status: boolean;
+  completed: boolean;
 };
