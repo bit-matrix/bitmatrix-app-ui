@@ -21,9 +21,9 @@ import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
-import './Swap.scss';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -45,7 +45,6 @@ export const Swap = (): JSX.Element => {
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
-  const [pool, setPool] = useState<Pool>();
 
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
 
@@ -70,17 +69,14 @@ export const Swap = (): JSX.Element => {
       });
   }, [walletIsEnabled]);
 
-  // fetch pool
+  // fetch pool config
   useEffect(() => {
-    api.getPools().then((pools: Pool[]) => {
-      const tempPool = pools[0];
-      setPool(tempPool);
-
-      api.getBmConfigs(tempPool.id).then((response: BmConfig) => {
+    if (payloadData.pools) {
+      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
         setPoolConfigs(response);
       });
-    });
-  }, []);
+    }
+  }, [payloadData.pools]);
 
   const assetAmountToFromAmount = useCallback(
     (newAssetAmountList: AssetAmount[], newFromAmountPercent?: FROM_AMOUNT_PERCENT) => {
@@ -118,11 +114,16 @@ export const Swap = (): JSX.Element => {
 
     const methodCall =
       selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-    if (pool && poolConfigs) {
-      const output = convertion.convertForCtx(inputNum, payloadData.slippage, pool, poolConfigs, methodCall);
-
+    if (payloadData.pools && poolConfigs) {
+      const output = convertion.convertForCtx(
+        inputNum * payloadData.preferred_unit.value,
+        payloadData.slippage,
+        payloadData.pools[0],
+        poolConfigs,
+        methodCall,
+      );
       setInputFromAmount(inputElement.target.value);
-      setInputToAmount(output.toString());
+      setInputToAmount((output / payloadData.preferred_unit.value).toString());
     }
   };
 
@@ -132,10 +133,16 @@ export const Swap = (): JSX.Element => {
     const methodCall =
       selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    if (pool && poolConfigs) {
-      const output = convertion.convertForCtx(inputNum, payloadData.slippage, pool, poolConfigs, methodCall);
+    if (payloadData.pools && poolConfigs) {
+      const output = convertion.convertForCtx(
+        inputNum * payloadData.preferred_unit.value,
+        payloadData.slippage,
+        payloadData.pools[0],
+        poolConfigs,
+        methodCall,
+      );
 
-      setInputFromAmount(output.toString());
+      setInputFromAmount((output / payloadData.preferred_unit.value).toString());
       setInputToAmount(inputElement.target.value);
     }
   };
@@ -145,8 +152,11 @@ export const Swap = (): JSX.Element => {
       const methodCall =
         selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-      if (pool && poolConfigs) {
-        const fundingTxInputs = fundingTx(Number(inputFromAmount), pool, poolConfigs, methodCall);
+      const numberFromAmount = Number(inputFromAmount) * payloadData.preferred_unit.value;
+      const numberToAmount = Number(inputToAmount) * payloadData.preferred_unit.value;
+
+      if (payloadData.pools && poolConfigs) {
+        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -165,6 +175,9 @@ export const Swap = (): JSX.Element => {
 
         notify('Funding Tx Id : ', fundingTxId);
 
+        setInputFromAmount('0.0');
+        setInputToAmount('0');
+
         const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
         const publicKey = fundingTxDecode.vin[0].txinwitness[1];
@@ -173,21 +186,21 @@ export const Swap = (): JSX.Element => {
 
         if (selectedAsset.from === SWAP_ASSET.LBTC) {
           commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
-            Number(inputFromAmount),
+            numberFromAmount,
             fundingTxId,
             publicKey,
-            Number(inputToAmount),
+            numberToAmount,
             poolConfigs,
-            pool,
+            payloadData.pools[0],
           );
         } else {
           commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-            Number(inputFromAmount),
+            numberFromAmount,
             fundingTxId,
             publicKey,
-            Number(inputToAmount),
+            numberToAmount,
             poolConfigs,
-            pool,
+            payloadData.pools[0],
           );
         }
 
@@ -195,12 +208,13 @@ export const Swap = (): JSX.Element => {
 
         const tempTxData: CommitmentStore = {
           txId: commitmentTxId,
-          fromAmount: Number(inputFromAmount),
-          toAmount: Number(inputToAmount),
+          fromAmount: numberFromAmount,
+          toAmount: numberToAmount,
           fromAsset: selectedAsset.from,
           toAsset: selectedAsset.to,
           timestamp: new Date().valueOf(),
           status: false,
+          completed: false,
         };
 
         const storeOldData = getTxLocalData() || [];

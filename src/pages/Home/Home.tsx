@@ -18,14 +18,17 @@ export const Home = (): JSX.Element => {
             <img className="home-page-img" src={HomeIcon} alt="Home" />
           </div>
           <div className="home-page-desc-content">
-            <p>Bitmatrix is a constant product market maker built on Liquid Network.</p>
             <p>
-              Bitmatrix utilizes the power of bitcoin opcodes to enable automated liquidity provision across L-BTC and
-              other Liquid-based assets.
+              Bitmatrix is a covenant-based AMM protocol where you can create your own pool, add liquidity to an
+              existing pool, or swap two assets.
             </p>
             <p>
-              Bitmatrix comes with maximally Uniswap-like UX and is effectively powered by Liquid's powerfull scripting
-              capatilies.
+              The AMM pools are made of covenants that interoperate and enforce constraints, resulting in a
+              fully-functional AMM based on the UTXO model.
+            </p>
+            <p>
+              Whether swapping two assets or adding or removing liquidity, you can asynchronously transact regardless of
+              the type of interaction.
             </p>
           </div>
           <Button

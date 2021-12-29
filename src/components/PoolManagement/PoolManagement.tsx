@@ -9,7 +9,7 @@ import './PoolManagement.scss';
 
 type Props = {
   pools: Pool[];
-  onClick: (data: Pool) => void;
+  onClick: (index: number) => void;
 };
 
 export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
@@ -20,7 +20,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
       return pools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
-            <PoolCard pool={pool} rank={index + 1} onClick={() => onClick(pool)} />
+            <PoolCard pool={pool} rank={index + 1} onClick={() => onClick(index)} />
           </div>
         );
       });

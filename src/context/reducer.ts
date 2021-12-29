@@ -26,6 +26,12 @@ const reducer = (
         preferred_unit: action.payload.preferred_unit,
       };
 
+    case SETTINGS_ACTION_TYPES.SET_POOLS:
+      return {
+        ...state,
+        pools: action.payload.pools,
+      };
+
     default:
       return state;
   }

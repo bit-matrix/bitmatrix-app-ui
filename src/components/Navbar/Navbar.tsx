@@ -7,7 +7,7 @@ import more from '../../images/more.png';
 import Svg from '../base/Svg/Svg';
 import './Navbar.scss';
 
-export const Navbar = (): JSX.Element => {
+export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
 
@@ -137,11 +137,7 @@ export const Navbar = (): JSX.Element => {
             <Whisper
               placement="bottom"
               trigger="click"
-              speaker={
-                <Popover className="navbar-popover">
-                  <InfoCard />
-                </Popover>
-              }
+              speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
               enterable
             >
               {/* <Button className="navbar-hover-button">
