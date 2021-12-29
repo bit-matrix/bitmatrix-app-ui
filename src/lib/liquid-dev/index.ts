@@ -1,10 +1,7 @@
-import { init } from '@bitmatrix/esplora-api-client';
 import { fetchAndUnblindUtxos, UnblindedOutput } from 'ldk';
 import { MarinaAddressInterface } from '../wallet/marina/IMarina';
 
 export const ESPLORA_API_URL = 'https://electrs.bitmatrix-aggregate.com';
-
-init(ESPLORA_API_URL);
 
 //...
 
