@@ -175,6 +175,9 @@ export const Swap = (): JSX.Element => {
 
         notify('Funding Tx Id : ', fundingTxId);
 
+        setInputFromAmount('0.0');
+        setInputToAmount('0');
+
         const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
         const publicKey = fundingTxDecode.vin[0].txinwitness[1];
