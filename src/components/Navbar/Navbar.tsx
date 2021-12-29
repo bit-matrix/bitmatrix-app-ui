@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
+import { CommitmentStore } from '../../model/CommitmentStore';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
-import more from '../../images/more.png';
+import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
+import success from '../../images/tick.png';
+import failed from '../../images/txrevert.png';
 import './Navbar.scss';
 
 export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
+
+  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTx');
+  const txHistory = getTxLocalData();
+  const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
   useEffect(() => {
     let unmounted = false;
@@ -26,6 +34,22 @@ export const Navbar: React.FC = (): JSX.Element => {
       if (unregisterCallback) unregisterCallback();
     };
   }, [history]);
+
+  const txInfo = () => {
+    if (unconfirmedTxs && unconfirmedTxs.length > 0) {
+      return (
+        <div>
+          <Loading width="1.5rem" height="1.5rem" />
+        </div>
+      );
+    } else {
+      if (txHistory && txHistory.length > 0 && txHistory[txHistory.length - 1].success) {
+        return <img className="navbar-item-icon" src={success} alt="" />;
+      } else {
+        <img className="navbar-item-icon" src={failed} alt="" />;
+      }
+    }
+  };
 
   return (
     <ul className="navbar-main">
@@ -53,18 +77,7 @@ export const Navbar: React.FC = (): JSX.Element => {
           Swap
         </Button>
       </li>
-      {/* <li className="navbar-item desktop-hidden">
-        <Button
-          className={`navbar-item-button ${
-            selectedTab === ROUTE_PATH.SWAP && 'active'
-          }`}
-          onClick={() => {
-            history.push(ROUTE_PATH.SWAP);
-          }}
-        >
-          <img className="navbar-mobile-icon" src={swap} alt="" />
-        </Button>
-      </li> */}
+
       <li className="navbar-item ">
         <Button
           className={`navbar-item-button ${selectedTab === ROUTE_PATH.POOL && 'active'}`}
@@ -75,18 +88,7 @@ export const Navbar: React.FC = (): JSX.Element => {
           Pool
         </Button>
       </li>
-      {/* <li className="navbar-item desktop-hidden">
-        <Button
-          className={`navbar-item-button ${
-            selectedTab === ROUTE_PATH.POOL && 'active'
-          }`}
-          onClick={() => {
-            history.push(ROUTE_PATH.POOL);
-          }}
-        >
-          <img className="navbar-mobile-icon" src={info} alt="" />
-        </Button>
-      </li> */}
+
       <li className="navbar-item mobile-hidden ">
         <Button
           className={`navbar-item-button ${selectedTab === ROUTE_PATH.STATS && 'active'}`}
@@ -97,18 +99,7 @@ export const Navbar: React.FC = (): JSX.Element => {
           Stats
         </Button>
       </li>
-      {/*  <li className="navbar-item desktop-hidden">
-        <Button
-          className={`navbar-item-button ${
-            selectedTab === ROUTE_PATH.STATS && 'active'
-          }`}
-          // onClick={() => {
-          //   history.push(ROUTE_PATH.STATS);
-          // }}
-        >
-          <img className="navbar-mobile-icon" src={stats} alt="" />
-        </Button>
-        </li> */}
+
       <li className="navbar-item ">
         <Button
           className={`navbar-item-button mr-5 ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
@@ -119,36 +110,33 @@ export const Navbar: React.FC = (): JSX.Element => {
           Settings
         </Button>
       </li>
-      {/*   <li className="navbar-item desktop-hidden">
-        <Button
-          className={`navbar-item-button ${
-            selectedTab === ROUTE_PATH.SETTINGS && 'active'
-          }`}
-          // onClick={() => {
-          //   history.push(ROUTE_PATH.SETTINGS);
-          // }}
-        >
-          <img className="navbar-mobile-icon" src={settings} alt="" />
-        </Button>
-      </li> */}
-      <li className="navbar-item mobile-hidden">
-        <div className="navbar-item-circle-div">
-          <ButtonToolbar>
-            <Whisper
-              placement="bottom"
-              trigger="click"
-              speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
-              enterable
-            >
-              {/* <Button className="navbar-hover-button">
-                <Loading width="2rem" height="2rem" />
-                <span className="navbar-item-info">1</span>
-              </Button> */}
-              <img className="navbar-item-icon mr-75 ml-5" src={more} alt="" />
-            </Whisper>
-          </ButtonToolbar>
-        </div>
-      </li>
+
+      {txHistory && txHistory[txHistory.length - 1].seen ? null : (
+        <li className="navbar-item mobile-hidden">
+          <div
+            tabIndex={0}
+            className="navbar-item-circle-div"
+            onBlur={() => {
+              if (txHistory && txHistory.length > 0 && txHistory[txHistory.length - 1].completed) {
+                const newTxHistory = [...txHistory];
+                newTxHistory[newTxHistory.length - 1].seen = true;
+                setTxLocalData(newTxHistory);
+              }
+            }}
+          >
+            <ButtonToolbar>
+              <Whisper
+                placement="bottom"
+                trigger="click"
+                speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
+                enterable
+              >
+                {txInfo()}
+              </Whisper>
+            </ButtonToolbar>
+          </div>
+        </li>
+      )}
     </ul>
   );
 };

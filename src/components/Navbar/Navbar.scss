@@ -76,12 +76,15 @@
 
 .navbar-item-circle-div {
   position: relative;
-  // margin-right: 1rem;
-  padding-left: 0.25rem;
   cursor: pointer;
   height: 3rem;
   display: flex;
   align-items: center;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  text-align: -webkit-center;
+  outline: 0;
 
   &:before {
     content: '';
