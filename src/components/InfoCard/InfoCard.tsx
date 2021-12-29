@@ -22,7 +22,7 @@ export const InfoCard: React.FC = () => {
                 <div key={dt.txId} className="info-card-item">
                   <Icon className="info-card-item-icon" icon="exchange" />
                   <div>
-                    Swap {dt.fromAmount / 100000000} {dt.fromAsset} for {dt.toAmount / 100000000} {dt.toAsset}
+                    Swap {dt.fromAmount / 100000000} {dt.fromAsset} for {dt.toAsset} (min {dt.toAmount / 100000000})
                   </div>
                   {dt.completed === false ? (
                     <Loading width="1.5rem" height="1.5rem" />
