@@ -23,6 +23,7 @@
     "@visx/tooltip": "^1.7.2",
     "ldk": "0.4.0",
     "marina-provider": "^1.4.4",
+    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "numeral": "^2.0.6",
     "react": "^17.0.2",
