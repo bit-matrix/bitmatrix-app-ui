@@ -152,8 +152,11 @@ export const Swap = (): JSX.Element => {
       const methodCall =
         selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
+      const numberFromAmount = Number(inputFromAmount) * payloadData.preferred_unit.value;
+      const numberToAmount = Number(inputToAmount) * payloadData.preferred_unit.value;
+
       if (payloadData.pools && poolConfigs) {
-        const fundingTxInputs = fundingTx(Number(inputFromAmount), payloadData.pools[0], poolConfigs, methodCall);
+        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -180,19 +183,19 @@ export const Swap = (): JSX.Element => {
 
         if (selectedAsset.from === SWAP_ASSET.LBTC) {
           commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
-            Number(inputFromAmount),
+            numberFromAmount,
             fundingTxId,
             publicKey,
-            Number(inputToAmount),
+            numberToAmount,
             poolConfigs,
             payloadData.pools[0],
           );
         } else {
           commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-            Number(inputFromAmount),
+            numberFromAmount,
             fundingTxId,
             publicKey,
-            Number(inputToAmount),
+            numberToAmount,
             poolConfigs,
             payloadData.pools[0],
           );
@@ -202,8 +205,8 @@ export const Swap = (): JSX.Element => {
 
         const tempTxData: CommitmentStore = {
           txId: commitmentTxId,
-          fromAmount: Number(inputFromAmount),
-          toAmount: Number(inputToAmount),
+          fromAmount: numberFromAmount,
+          toAmount: numberToAmount,
           fromAsset: selectedAsset.from,
           toAsset: selectedAsset.to,
           timestamp: new Date().valueOf(),
