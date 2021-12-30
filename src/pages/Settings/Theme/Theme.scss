@@ -85,6 +85,11 @@
   background: $liquidNeonColor;
 }
 
+.exclusive-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .theme-item {
     margin-left: 1rem;

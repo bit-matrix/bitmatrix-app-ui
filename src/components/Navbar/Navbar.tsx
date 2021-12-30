@@ -92,7 +92,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     <ul className="navbar-main">
       <li className="navbar-item">
         <Button
-          className={`navbar-home-button  ${selectedTab === ROUTE_PATH.HOME && 'active'}`}
+          className={`navbar-home-button ml-25  ${selectedTab === ROUTE_PATH.HOME && 'active'}`}
           onClick={() => {
             history.push(ROUTE_PATH.HOME);
           }}
@@ -139,7 +139,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
       <li className="navbar-item ">
         <Button
-          className={`navbar-item-button ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
+          className={`navbar-item-button mr-25 ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
           onClick={() => {
             history.push(ROUTE_PATH.SETTINGS);
           }}
