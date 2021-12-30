@@ -139,7 +139,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
       <li className="navbar-item ">
         <Button
-          className={`navbar-item-button mr-5 ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
+          className={`navbar-item-button ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
           onClick={() => {
             history.push(ROUTE_PATH.SETTINGS);
           }}
