@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
-import { fetchUTXOS } from '../../lib/liquid-dev';
 import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
@@ -16,11 +15,11 @@ type Props = {
   wallet?: IWallet;
   walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
-  setNewAddress: (newAddress: MarinaAddressInterface) => void;
-  setUtxos: (utxos: UnblindedOutput[]) => void;
+  setNewAddress?: (newAddress: MarinaAddressInterface) => void;
+  setUtxos?: (utxos: UnblindedOutput[]) => void;
 };
 
-export const WalletListModal: React.FC<Props> = ({ show, wallet, close, setUtxos }) => {
+export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const connectWalletOnClick = (): void => {
@@ -31,16 +30,19 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close, setUtxos
             // wallet.getNextAddress().then((newAddress: MarinaAddressInterface) => {
             // setNewAddress(newAddress);
 
-            wallet.getAddresses().then((addresses) => {
-              //   console.log("addresses", addresses);
+            setLoading(false);
+            close();
 
-              fetchUTXOS(addresses).then((utxos) => {
-                //   console.log("UTXOS", utxos);
-                setUtxos(utxos);
-                setLoading(false);
-                close();
-              });
-            });
+            // wallet.getAddresses().then((addresses) => {
+            //   //   console.log("addresses", addresses);
+
+            //   fetchUTXOS(addresses).then((utxos) => {
+            //     //   console.log("UTXOS", utxos);
+            //     setUtxos(utxos);
+            //     setLoading(false);
+            //     close();
+            //   });
+            // });
             //});
           })
           .catch(() => {
