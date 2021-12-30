@@ -56,10 +56,8 @@ export const Swap = (): JSX.Element => {
 
   // connect marina
   useEffect(() => {
-    console.log(selectedWalletName);
     detectProvider('marina')
       .then((marina) => {
-        console.log('then');
         const marinaWallet = new Wallet(selectedWalletName);
         setWallet(marinaWallet);
 
