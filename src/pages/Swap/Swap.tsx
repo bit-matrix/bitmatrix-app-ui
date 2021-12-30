@@ -5,7 +5,6 @@ import { Notification, Button, Content } from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
-import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -19,7 +18,7 @@ import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { BmConfig, Pool, CALL_METHOD } from '@bitmatrix/models';
+import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -209,23 +208,25 @@ export const Swap = (): JSX.Element => {
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
-          const tempTxData: CommitmentStore = {
-            txId: commitmentTxId,
-            fromAmount: numberFromAmount,
-            toAmount: numberToAmount,
-            fromAsset: selectedAsset.from,
-            toAsset: selectedAsset.to,
-            timestamp: new Date().valueOf(),
-            success: false,
-            completed: false,
-            seen: false,
-          };
+          if (commitmentTxId) {
+            const tempTxData: CommitmentStore = {
+              txId: commitmentTxId,
+              fromAmount: numberFromAmount,
+              toAmount: numberToAmount,
+              fromAsset: selectedAsset.from,
+              toAsset: selectedAsset.to,
+              timestamp: new Date().valueOf(),
+              success: false,
+              completed: false,
+              seen: false,
+            };
 
-          const storeOldData = getTxLocalData() || [];
+            const storeOldData = getTxLocalData() || [];
 
-          const newStoreData = [...storeOldData, tempTxData];
+            const newStoreData = [...storeOldData, tempTxData];
 
-          setTxLocalData(newStoreData);
+            setTxLocalData(newStoreData);
+          }
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
