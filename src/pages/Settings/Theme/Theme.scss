@@ -34,6 +34,57 @@
   width: 70%;
 }
 
+.theme-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 25rem;
+}
+
+.theme-tag {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 4px solid $swapBackgroundColor;
+  outline: 4px solid $navbarBackground;
+}
+
+.theme-selected {
+  outline: 4px solid $liquidNeonColor !important;
+}
+
+.gray-theme {
+  background: $navbarBackground;
+}
+
+.white-theme {
+  background: $bmWhite;
+}
+
+.yellow-theme {
+  background: $bmYellow;
+}
+
+.red-theme {
+  background: $bmRed;
+}
+
+.blue-theme {
+  background: $bmBlue;
+}
+
+.pink-theme {
+  background: $bmPink;
+}
+
+.turquoise-theme {
+  background: $bmTurquoise;
+}
+
+.neon-theme {
+  background: $liquidNeonColor;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .theme-item {
     margin-left: 1rem;
