@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Info } from '../../components/common/Info/Info';
 import HomeIcon from '../../images/homeweb.png';
+import mobileHomeIcon from '../../images/mobilehome.png';
 import './Home.scss';
 
 export const Home = (): JSX.Element => {
@@ -15,7 +16,7 @@ export const Home = (): JSX.Element => {
         <div className="home-page-desc">
           <h3 className="home-page-desc-header">Automoated Liquidity Provision on Liquid is Here!</h3>
           <div className="home-page-img-content desktop-hidden">
-            <img className="home-page-img" src={HomeIcon} alt="Home" />
+            <img className="home-page-img" src={mobileHomeIcon} alt="Home" />
           </div>
           <div className="home-page-desc-content">
             <p>
