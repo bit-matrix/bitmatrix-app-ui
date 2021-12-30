@@ -384,7 +384,7 @@ export const Swap = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        <Info content=" Network fee 0.1sat/byte $0.12" />
+        <Info content="Network fee 1951 sats ($0.91)" />
       </Content>
     </div>
   );
