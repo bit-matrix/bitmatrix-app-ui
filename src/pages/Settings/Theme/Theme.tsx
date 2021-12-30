@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import info from '../../../images/info2.png';
-import exclusiveIcon from '../../../images/mtx.png';
+// import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 enum SELECTED_THEME {
