@@ -14,7 +14,7 @@ export const Home = (): JSX.Element => {
     <div className="home-page-container">
       <div className="home-page-main">
         <div className="home-page-desc">
-          <h3 className="home-page-desc-header">Automoated Liquidity Provision on Liquid is Here!</h3>
+          <h3 className="home-page-desc-header">Automated Liquidity Provision on Liquid is Here!</h3>
           <div className="home-page-img-content desktop-hidden">
             <img className="home-page-img" src={mobileHomeIcon} alt="Home" />
           </div>

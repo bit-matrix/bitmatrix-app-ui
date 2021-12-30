@@ -30,12 +30,13 @@
 
 .app-container {
   width: 95%;
-  min-height: 26rem;
+  min-height: 27.5rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .app-container {
     width: 100%;
+    min-height: 26rem;
   }
 
   .secret-top-div {

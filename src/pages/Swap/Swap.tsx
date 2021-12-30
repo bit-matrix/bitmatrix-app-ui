@@ -176,7 +176,7 @@ export const Swap = (): JSX.Element => {
 
         // notify('Funding Tx Id : ', fundingTxId);
 
-        if (fundingTxId) {
+        if (fundingTxId && fundingTxId !== '') {
           setInputFromAmount('0.0');
           setInputToAmount('0');
 
@@ -208,7 +208,7 @@ export const Swap = (): JSX.Element => {
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
-          if (commitmentTxId) {
+          if (commitmentTxId && commitmentTxId !== '') {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               fromAmount: numberFromAmount,
@@ -386,6 +386,7 @@ export const Swap = (): JSX.Element => {
                   setShowWalletList(true);
                 }
               }}
+              disabled={walletIsEnabled ? Number(inputToAmount) <= 0 : false}
             >
               {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
             </Button>

@@ -70,20 +70,11 @@
 
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content,
-.pool-page-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:hover,
+.pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:hover,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:hover,
-.pool-page-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:focus,
+.pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:focus,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
-.pool-page-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:active,
+.pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:active {
   color: $liquidNeonColor !important;
 }
@@ -114,7 +105,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
 
 .tab-2 {
@@ -125,7 +116,7 @@
   top: 0;
   right: 100%;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
@@ -136,5 +127,13 @@
 
   .pool-page-content {
     height: 52vh;
+  }
+
+  .tab-1 {
+    padding: 0 1rem;
+  }
+
+  .tab-2 {
+    padding: 0 1rem;
   }
 }
