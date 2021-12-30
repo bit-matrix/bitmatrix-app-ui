@@ -386,6 +386,7 @@ export const Swap = (): JSX.Element => {
                   setShowWalletList(true);
                 }
               }}
+              disabled={walletIsEnabled ? Number(inputToAmount) <= 0 : false}
             >
               {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
             </Button>
