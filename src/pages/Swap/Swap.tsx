@@ -37,7 +37,7 @@ export const Swap = (): JSX.Element => {
   const [inputFromAmount, setInputFromAmount] = useState<string>('0');
   const [inputToAmount, setInputToAmount] = useState<string>('0');
 
-  const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
+  // const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
   const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
 
   const [wallet, setWallet] = useState<IWallet>();
@@ -276,7 +276,7 @@ export const Swap = (): JSX.Element => {
         wallet={wallet}
         walletOnClick={(walletName: WALLET_NAME) => setWallet(new Wallet(walletName))}
         close={() => setShowWalletList(false)}
-        setNewAddress={setNewAddress}
+        // setNewAddress={setNewAddress}
         setUtxos={setUtxosAll}
       />
 
