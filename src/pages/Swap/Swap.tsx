@@ -42,6 +42,8 @@ export const Swap = (): JSX.Element => {
 
   const [wallet, setWallet] = useState<IWallet>();
 
+  const [selectedWalletName, setSelectedWalletName] = useState<WALLET_NAME>();
+
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
@@ -56,7 +58,7 @@ export const Swap = (): JSX.Element => {
   useEffect(() => {
     detectProvider('marina')
       .then((marina) => {
-        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        const marinaWallet = new Wallet(selectedWalletName);
         setWallet(marinaWallet);
 
         marina.isEnabled().then((enabled) => {
@@ -64,10 +66,10 @@ export const Swap = (): JSX.Element => {
         });
       })
       .catch(() => {
-        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        const marinaWallet = new Wallet(selectedWalletName);
         setWallet(marinaWallet);
       });
-  }, [walletIsEnabled]);
+  }, [walletIsEnabled, selectedWalletName]);
 
   // fetch pool config
   useEffect(() => {
@@ -173,58 +175,62 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        notify('Funding Tx Id : ', fundingTxId);
+        // notify('Funding Tx Id : ', fundingTxId);
 
-        setInputFromAmount('0.0');
-        setInputToAmount('0');
+        if (fundingTxId) {
+          setInputFromAmount('0.0');
+          setInputToAmount('0');
 
-        const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
+          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
-        const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
 
-        let commitment;
+          let commitment;
 
-        if (selectedAsset.from === SWAP_ASSET.LBTC) {
-          commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
-            numberFromAmount,
-            fundingTxId,
-            publicKey,
-            numberToAmount,
-            poolConfigs,
-            payloadData.pools[0],
-          );
+          if (selectedAsset.from === SWAP_ASSET.LBTC) {
+            commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
+              numberFromAmount,
+              fundingTxId,
+              publicKey,
+              numberToAmount,
+              poolConfigs,
+              payloadData.pools[0],
+            );
+          } else {
+            commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
+              numberFromAmount,
+              fundingTxId,
+              publicKey,
+              numberToAmount,
+              poolConfigs,
+              payloadData.pools[0],
+            );
+          }
+
+          const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          const tempTxData: CommitmentStore = {
+            txId: commitmentTxId,
+            fromAmount: numberFromAmount,
+            toAmount: numberToAmount,
+            fromAsset: selectedAsset.from,
+            toAsset: selectedAsset.to,
+            timestamp: new Date().valueOf(),
+            success: false,
+            completed: false,
+            seen: false,
+          };
+
+          const storeOldData = getTxLocalData() || [];
+
+          const newStoreData = [...storeOldData, tempTxData];
+
+          setTxLocalData(newStoreData);
+
+          // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-            numberFromAmount,
-            fundingTxId,
-            publicKey,
-            numberToAmount,
-            poolConfigs,
-            payloadData.pools[0],
-          );
+          notify('Error : ', 'Transaction failed.');
         }
-
-        const commitmentTxId = await api.sendRawTransaction(commitment);
-
-        const tempTxData: CommitmentStore = {
-          txId: commitmentTxId,
-          fromAmount: numberFromAmount,
-          toAmount: numberToAmount,
-          fromAsset: selectedAsset.from,
-          toAsset: selectedAsset.to,
-          timestamp: new Date().valueOf(),
-          success: false,
-          completed: false,
-          seen: false,
-        };
-
-        const storeOldData = getTxLocalData() || [];
-
-        const newStoreData = [...storeOldData, tempTxData];
-
-        setTxLocalData(newStoreData);
-
-        notify('Commitment Tx Id : ', commitmentTxId);
       } else {
         notify('Error : ', 'Pool Error');
       }
@@ -274,7 +280,7 @@ export const Swap = (): JSX.Element => {
       <WalletListModal
         show={showWalletList}
         wallet={wallet}
-        walletOnClick={(walletName: WALLET_NAME) => setWallet(new Wallet(walletName))}
+        walletOnClick={(walletName: WALLET_NAME) => setSelectedWalletName(walletName)}
         close={() => setShowWalletList(false)}
         // setNewAddress={setNewAddress}
         setUtxos={setUtxosAll}
@@ -384,7 +390,7 @@ export const Swap = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        <Info content=" Network fee 0.1sat/byte $0.12" />
+        <Info content="Network fee 1951 sats ($0.91)" />
       </Content>
     </div>
   );

@@ -20,11 +20,8 @@ export const Home = (): JSX.Element => {
           <div className="home-page-desc-content">
             <p>
               Bitmatrix is a covenant-based AMM protocol where you can create your own pool, add liquidity to an
-              existing pool, or swap two assets.
-            </p>
-            <p>
-              The AMM pools are made of covenants that interoperate and enforce constraints, resulting in a
-              fully-functional AMM based on the UTXO model.
+              existing pool, or swap two assets. The AMM pools are made of covenants that interoperate and enforce
+              constraints, resulting in a fully-functional AMM based on the UTXO model.
             </p>
             <p>
               Whether swapping two assets or adding or removing liquidity, you can asynchronously transact regardless of
