@@ -133,20 +133,11 @@ th {
 
 .pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content,
-.pool-detail-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:hover,
+.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:hover,
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:hover,
-.pool-detail-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:focus,
+.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:focus,
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
-.pool-detail-tabs
-  .rs-dropdown
-  .rs-dropdown-menu-active
-  ~ .rs-dropdown-toggle:active,
+.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:active {
   color: $liquidNeonColor !important;
 }
@@ -193,13 +184,12 @@ th {
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
     margin-top: 3rem;
-    height: unset;
     width: unset;
   }
 
   .pool-detail-main {
     width: 60rem;
-    height: 29rem;
+    height: 30rem;
   }
   .pool-detail-header {
     display: flex;
