@@ -23,6 +23,7 @@ import { detectProvider } from 'marina-provider';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import './Swap.scss';
+import Decimal from 'decimal.js';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -47,7 +48,7 @@ export const Swap = (): JSX.Element => {
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV1');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -153,8 +154,8 @@ export const Swap = (): JSX.Element => {
       const methodCall =
         selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-      const numberFromAmount = Number(inputFromAmount) * payloadData.preferred_unit.value;
-      const numberToAmount = Number(inputToAmount) * payloadData.preferred_unit.value;
+      const numberFromAmount = new Decimal(Number(inputFromAmount)).mul(payloadData.preferred_unit.value).toNumber();
+      const numberToAmount = new Decimal(Number(inputToAmount)).mul(payloadData.preferred_unit.value).toNumber();
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
