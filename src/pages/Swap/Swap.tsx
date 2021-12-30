@@ -173,6 +173,8 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
+        // notify('Funding Tx Id : ', fundingTxId);
+
         if (!fundingTxId) notify('Error : ', 'Transaction failed.');
 
         setInputFromAmount('0.0');
