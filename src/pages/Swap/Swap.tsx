@@ -175,58 +175,60 @@ export const Swap = (): JSX.Element => {
 
         // notify('Funding Tx Id : ', fundingTxId);
 
-        if (!fundingTxId) notify('Error : ', 'Transaction failed.');
+        if (fundingTxId) {
+          setInputFromAmount('0.0');
+          setInputToAmount('0');
 
-        setInputFromAmount('0.0');
-        setInputToAmount('0');
+          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
-        const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
+          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
 
-        const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+          let commitment;
 
-        let commitment;
+          if (selectedAsset.from === SWAP_ASSET.LBTC) {
+            commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
+              numberFromAmount,
+              fundingTxId,
+              publicKey,
+              numberToAmount,
+              poolConfigs,
+              payloadData.pools[0],
+            );
+          } else {
+            commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
+              numberFromAmount,
+              fundingTxId,
+              publicKey,
+              numberToAmount,
+              poolConfigs,
+              payloadData.pools[0],
+            );
+          }
 
-        if (selectedAsset.from === SWAP_ASSET.LBTC) {
-          commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
-            numberFromAmount,
-            fundingTxId,
-            publicKey,
-            numberToAmount,
-            poolConfigs,
-            payloadData.pools[0],
-          );
+          const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          const tempTxData: CommitmentStore = {
+            txId: commitmentTxId,
+            fromAmount: numberFromAmount,
+            toAmount: numberToAmount,
+            fromAsset: selectedAsset.from,
+            toAsset: selectedAsset.to,
+            timestamp: new Date().valueOf(),
+            success: false,
+            completed: false,
+            seen: false,
+          };
+
+          const storeOldData = getTxLocalData() || [];
+
+          const newStoreData = [...storeOldData, tempTxData];
+
+          setTxLocalData(newStoreData);
+
+          // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-            numberFromAmount,
-            fundingTxId,
-            publicKey,
-            numberToAmount,
-            poolConfigs,
-            payloadData.pools[0],
-          );
+          notify('Error : ', 'Transaction failed.');
         }
-
-        const commitmentTxId = await api.sendRawTransaction(commitment);
-
-        const tempTxData: CommitmentStore = {
-          txId: commitmentTxId,
-          fromAmount: numberFromAmount,
-          toAmount: numberToAmount,
-          fromAsset: selectedAsset.from,
-          toAsset: selectedAsset.to,
-          timestamp: new Date().valueOf(),
-          success: false,
-          completed: false,
-          seen: false,
-        };
-
-        const storeOldData = getTxLocalData() || [];
-
-        const newStoreData = [...storeOldData, tempTxData];
-
-        setTxLocalData(newStoreData);
-
-        // notify('Commitment Tx Id : ', commitmentTxId);
       } else {
         notify('Error : ', 'Pool Error');
       }
