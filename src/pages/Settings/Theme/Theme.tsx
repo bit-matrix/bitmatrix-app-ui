@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import info from '../../../images/info2.png';
+// import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 enum SELECTED_THEME {
@@ -61,9 +62,11 @@ export const Theme = (): JSX.Element => {
         </div>
         <div className="theme-item-content">
           {/* <div
-            className={`theme-tag neon-theme ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
+            className={`theme-tag ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
             onClick={() => setSelected(SELECTED_THEME.NEON)}
-          /> */}
+          >
+            <img className="exclusive-icon" src={exclusiveIcon} alt="" />
+          </div> */}
           No exclusive theme found.
         </div>
       </div>

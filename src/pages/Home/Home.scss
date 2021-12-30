@@ -18,15 +18,15 @@
 }
 
 .home-page-img {
-  transform: rotate(-95deg);
-  width: 13rem;
+  width: 18rem;
 }
 
 .home-page-img-content {
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-bottom: 0.5rem;
+  padding-bottom: 2rem;
+  padding-top: 1.5rem;
 }
 
 .home-page-desc-header {
@@ -85,11 +85,7 @@
     align-items: center;
     width: 40%;
     padding-bottom: 0;
-  }
-
-  .home-page-img {
-    width: 18rem;
-    transform: unset;
+    padding-top: 0;
   }
 }
 
