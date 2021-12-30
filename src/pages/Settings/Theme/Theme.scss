@@ -1,0 +1,41 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.theme-item-head {
+  display: flex;
+  align-items: center;
+  margin-top: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.theme-item-first-head {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.theme-title {
+  color: #ccc;
+}
+
+.theme-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.theme-item {
+  margin-left: 0.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.prefferred-unit {
+  width: 70%;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .theme-item {
+    margin-left: 1rem;
+  }
+}
