@@ -1,3 +1,5 @@
+import { EventListenerID, MarinaEventType } from 'marina-provider';
+
 export type MarinaTransactionHex = string;
 export type MarinaPsetBase64 = string;
 export type MarinaSignatureBase64 = string;
@@ -21,6 +23,8 @@ export interface Recipient {
 }
 
 export interface MarinaProvider {
+  on(type: MarinaEventType, callback: (payload: any) => void): EventListenerID;
+
   enable(): Promise<void>;
 
   disable(): Promise<void>;
@@ -37,10 +41,7 @@ export interface MarinaProvider {
 
   getNextChangeAddress(): Promise<MarinaAddressInterface>;
 
-  sendTransaction(
-    recipients: Recipient[],
-    feeAssetHash?: string,
-  ): Promise<MarinaTransactionHex>;
+  sendTransaction(recipients: Recipient[], feeAssetHash?: string): Promise<MarinaTransactionHex>;
 
   blindTransaction(pset: MarinaPsetBase64): Promise<MarinaPsetBase64>;
 

@@ -19,7 +19,7 @@ type Props = {
   setUtxos?: (utxos: UnblindedOutput[]) => void;
 };
 
-export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
+export const WalletListModal: React.FC<Props> = ({ show, wallet, close, walletOnClick }) => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const connectWalletOnClick = (): void => {
@@ -32,7 +32,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
 
             setLoading(false);
             close();
-
+            walletOnClick(WALLET_NAME.MARINA);
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);
 

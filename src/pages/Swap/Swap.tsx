@@ -42,6 +42,8 @@ export const Swap = (): JSX.Element => {
 
   const [wallet, setWallet] = useState<IWallet>();
 
+  const [selectedWalletName, setSelectedWalletName] = useState<WALLET_NAME>();
+
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
@@ -56,7 +58,7 @@ export const Swap = (): JSX.Element => {
   useEffect(() => {
     detectProvider('marina')
       .then((marina) => {
-        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        const marinaWallet = new Wallet(selectedWalletName);
         setWallet(marinaWallet);
 
         marina.isEnabled().then((enabled) => {
@@ -64,10 +66,10 @@ export const Swap = (): JSX.Element => {
         });
       })
       .catch(() => {
-        const marinaWallet = new Wallet(WALLET_NAME.MARINA);
+        const marinaWallet = new Wallet(selectedWalletName);
         setWallet(marinaWallet);
       });
-  }, [walletIsEnabled]);
+  }, [walletIsEnabled, selectedWalletName]);
 
   // fetch pool config
   useEffect(() => {
@@ -278,7 +280,7 @@ export const Swap = (): JSX.Element => {
       <WalletListModal
         show={showWalletList}
         wallet={wallet}
-        walletOnClick={(walletName: WALLET_NAME) => setWallet(new Wallet(walletName))}
+        walletOnClick={(walletName: WALLET_NAME) => setSelectedWalletName(walletName)}
         close={() => setShowWalletList(false)}
         // setNewAddress={setNewAddress}
         setUtxos={setUtxosAll}
