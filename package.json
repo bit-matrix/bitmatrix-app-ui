@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.8",
+    "@bitmatrix/lib": "^0.0.9",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -23,7 +23,6 @@
     "@visx/tooltip": "^1.7.2",
     "ldk": "0.4.0",
     "marina-provider": "^1.4.4",
-    "moment": "^2.29.1",
     "node-sass": "^5.0.0",
     "numeral": "^2.0.6",
     "react": "^17.0.2",

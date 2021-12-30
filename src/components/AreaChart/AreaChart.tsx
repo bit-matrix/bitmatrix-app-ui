@@ -10,11 +10,13 @@ import { localPoint } from '@visx/event';
 import { LinearGradient } from '@visx/gradient';
 import { max, extent, bisector } from 'd3-array';
 import { timeFormat } from 'd3-time-format';
-import { data } from './Data';
 
 type TooltipData = AppleStock;
+export type ChartData = {
+  date: string;
+  close: number;
+};
 
-const stock = data;
 export const background = '#000';
 export const background2 = '#455747';
 export const accentColor = '#adfbc4';
@@ -29,14 +31,10 @@ const tooltipStyles = {
 // util
 const formatDate = timeFormat("%b %d, '%y");
 
-// accessors
-const getDate = (d: AppleStock) => new Date(d.date);
-const getStockValue = (d: AppleStock) => d.close;
-const bisectDate = bisector<AppleStock, Date>((d) => new Date(d.date)).left;
-
 export type AreaProps = {
   width: number;
   height: number;
+  data: ChartData[];
   margin?: { top: number; right: number; bottom: number; left: number };
 };
 
@@ -50,7 +48,15 @@ export default withTooltip<AreaProps, TooltipData>(
     tooltipData,
     tooltipTop = 0,
     tooltipLeft = 0,
+    data,
   }: AreaProps & WithTooltipProvidedProps<TooltipData>) => {
+    const stock = data;
+
+    // accessors
+    const getDate = (d: AppleStock) => new Date(d.date);
+    const getStockValue = (d: AppleStock) => d.close;
+    const bisectDate = bisector<AppleStock, Date>((d) => new Date(d.date)).left;
+
     if (width < 10) return null;
 
     // bounds
