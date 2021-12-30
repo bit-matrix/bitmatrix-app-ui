@@ -173,7 +173,9 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        notify('Funding Tx Id : ', fundingTxId);
+        // notify('Funding Tx Id : ', fundingTxId);
+
+        if (!fundingTxId) notify('Error : ', 'Transaction failed.');
 
         setInputFromAmount('0.0');
         setInputToAmount('0');
@@ -224,7 +226,7 @@ export const Swap = (): JSX.Element => {
 
         setTxLocalData(newStoreData);
 
-        notify('Commitment Tx Id : ', commitmentTxId);
+        // notify('Commitment Tx Id : ', commitmentTxId);
       } else {
         notify('Error : ', 'Pool Error');
       }
@@ -384,7 +386,7 @@ export const Swap = (): JSX.Element => {
             </Button>
           </div>
         </div>
-        <Info content=" Network fee 0.1sat/byte $0.12" />
+        <Info content="Network fee 1951 sats ($0.91)" />
       </Content>
     </div>
   );
