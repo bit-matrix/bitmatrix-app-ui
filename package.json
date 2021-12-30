@@ -21,6 +21,7 @@
     "@visx/scale": "^1.14.0",
     "@visx/shape": "^1.14.0",
     "@visx/tooltip": "^1.7.2",
+    "decimal.js": "^10.3.1",
     "ldk": "0.4.0",
     "marina-provider": "^1.4.4",
     "node-sass": "^5.0.0",
