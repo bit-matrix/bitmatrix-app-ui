@@ -51,23 +51,25 @@ export const AppRouter = (): JSX.Element => {
 
       if (unconfirmedTxs.length > 0) {
         unconfirmedTxs.forEach((transaction) => {
-          api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
-            if (!ctxResponse) {
-              api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
-                if (ptxResponse) {
-                  const newTxHistory = [...txHistory];
-                  const willChangedTx = newTxHistory.findIndex((ntx) => {
-                    return ntx.txId === transaction.txId;
-                  });
+          if (transaction.txId) {
+            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
+              if (!ctxResponse) {
+                api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
+                  if (ptxResponse) {
+                    const newTxHistory = [...txHistory];
+                    const willChangedTx = newTxHistory.findIndex((ntx) => {
+                      return ntx.txId === transaction.txId;
+                    });
 
-                  newTxHistory[willChangedTx].completed = true;
-                  newTxHistory[willChangedTx].success = true;
+                    newTxHistory[willChangedTx].completed = true;
+                    newTxHistory[willChangedTx].success = true;
 
-                  setTxLocalData(newTxHistory);
-                }
-              });
-            }
-          });
+                    setTxLocalData(newTxHistory);
+                  }
+                });
+              }
+            });
+          }
         });
       }
     }
