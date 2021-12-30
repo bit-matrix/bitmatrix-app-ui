@@ -149,8 +149,6 @@ export const Swap = (): JSX.Element => {
     }
   };
 
-  console.log();
-
   const swapClick = async () => {
     if (wallet) {
       const methodCall =
