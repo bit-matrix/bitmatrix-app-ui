@@ -227,9 +227,9 @@ export const Swap = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setTxLocalData(newStoreData);
-          } else {
+          } /* else {
             notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
-          }
+          } */
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
