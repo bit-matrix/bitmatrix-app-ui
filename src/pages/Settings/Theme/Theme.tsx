@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import info from '../../../images/info2.png';
 // import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
@@ -22,7 +23,13 @@ export const Theme = (): JSX.Element => {
       <div className="theme-item">
         <div className="theme-item-head">
           <span className="theme-title">Standard Themes</span>
-          <img className="theme-icon" src={info} alt="info" />
+          <CustomPopover
+            placement="autoHorizontal"
+            title="Standard Themes"
+            content="Choose one of the default themes to change your interface appearance."
+          >
+            <img className="general-icon" src={info} alt="info" />
+          </CustomPopover>
         </div>
         <div className="theme-item-content">
           <div
@@ -58,7 +65,13 @@ export const Theme = (): JSX.Element => {
       <div className="theme-item">
         <div className="theme-item-head">
           <span className="theme-title">Exclusive Themes</span>
-          <img className="theme-icon" src={info} alt="info" />
+          <CustomPopover
+            placement="autoHorizontal"
+            title="Exclusive Themes"
+            content="Your exclusive themes will appear here if you happen to own theme NFTs in your wallet."
+          >
+            <img className="general-icon" src={info} alt="info" />
+          </CustomPopover>
         </div>
         <div className="theme-item-content">
           {/* <div
