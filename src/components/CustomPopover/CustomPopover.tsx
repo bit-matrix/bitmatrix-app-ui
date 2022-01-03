@@ -1,5 +1,6 @@
 import React from 'react';
 import { Popover, Whisper } from 'rsuite';
+import './CustomPopover.scss';
 
 type Placement4 = 'top' | 'bottom' | 'right' | 'left';
 
@@ -35,7 +36,7 @@ type Props = {
 
 export const CustomPopover: React.FC<Props> = ({ trigger = 'hover', placement, title, content, children }) => {
   const speaker = (
-    <Popover title={title}>
+    <Popover className="custom-popover" title={title}>
       <p>{content}</p>
     </Popover>
   );
