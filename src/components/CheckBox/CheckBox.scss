@@ -24,12 +24,12 @@
 
   &:hover {
     input ~ .checkmark {
-      background-color: $swapBackgroundColor;
+      background-color: $bmBlack;
     }
   }
 
   input:checked ~ .checkmark {
-    background-color: $liquidNeonColor;
+    background-color: $bmPaleGreen;
     border: none;
   }
 
@@ -44,8 +44,8 @@
   left: 0;
   height: 23px;
   width: 23px;
-  background-color: $swapBackgroundColor;
-  border: 2px solid $bmWhite;
+  background-color: $bmBlack;
+  border: 2px solid $bmVeryLightGray;
 
   &:after {
     content: '';
@@ -55,7 +55,7 @@
     top: 3px;
     width: 8px;
     height: 14px;
-    border: solid $swapBackgroundColor;
+    border: solid $bmBlack;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -64,12 +64,12 @@
 }
 
 .custom-checkbox-unchecked {
-  color: $bmWhite;
+  color: $bmVeryLightGray;
   min-width: 3rem;
 }
 
 .custom-checkbox-checked {
-  color: $liquidNeonColor;
+  color: $bmPaleGreen;
   min-width: 3rem;
 }
 
@@ -85,7 +85,7 @@
     left: 0;
     height: 18px;
     width: 18px;
-    background-color: $swapBackgroundColor;
+    background-color: $bmBlack;
     border: 2px solid $bmWhite;
   }
 
@@ -94,7 +94,7 @@
     top: 3px;
     width: 5px;
     height: 11px;
-    border: solid $swapBackgroundColor;
+    border: solid $bmBlack;
     border-width: 0 3px 3px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
