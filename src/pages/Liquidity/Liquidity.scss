@@ -5,13 +5,13 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: $swapBackgroundColor;
+  background: $bmDeepFir;
   text-align: center;
 
   .liquidity-page-content {
     position: relative;
     margin: 0 auto;
-    border: 2px solid #adfbc4;
+    border: 2px solid $bmPaleGreen;
     border-radius: 1.5rem;
     padding: 1.5rem;
     min-height: 20.8125rem;
@@ -26,7 +26,7 @@
       align-items: center;
       border-radius: 1rem !important;
       margin-bottom: 1.5rem !important;
-      background: #191919 !important;
+      background: $bmNero !important;
       opacity: 0.8;
 
       &:hover {
@@ -35,13 +35,13 @@
 
       .liquidity-back-text {
         margin-left: 1rem;
-        color: $liquidNeonColor;
+        color: $bmPaleGreen;
       }
 
       .liquidity-back-icon {
         height: 3rem !important;
         font-size: 3rem !important;
-        color: $liquidNeonColor !important;
+        color: $bmPaleGreen !important;
         cursor: pointer;
       }
     }
@@ -51,8 +51,8 @@
       height: 2.75rem;
       border-radius: 1rem !important;
       font-weight: 600 !important;
-      color: $swapBackgroundColor !important;
-      background: $liquidNeonColor !important;
+      color: $bmDeepFir !important;
+      background: $bmPaleGreen !important;
       border-width: 0 !important;
       margin-top: 1rem;
       opacity: 0.9;

@@ -14,7 +14,7 @@
     position: absolute;
     height: 2px;
     width: 100%;
-    background: $liquidNeonColor;
+    background: $bmPaleGreen;
     top: 14px;
     left: -15%;
     right: 0;
@@ -34,7 +34,7 @@
         padding-top: 30px;
         cursor: pointer;
         display: inline-block;
-        color: $liquidNeonColor;
+        color: $bmPaleGreen;
         left: 3px;
         &:before {
           content: '';
@@ -43,15 +43,15 @@
           top: 0;
           width: 30px;
           height: 30px;
-          border: 3px solid $liquidNeonColor;
+          border: 3px solid $bmPaleGreen;
           border-radius: 100%;
-          background: #000;
+          background: $bmBlack;
         }
         &:after {
           content: '';
           width: 18px;
           height: 18px;
-          background: $liquidNeonColor;
+          background: $bmPaleGreen;
           position: absolute;
           top: 6px;
           left: 6px;
@@ -73,7 +73,7 @@
         padding-top: 30px;
         cursor: pointer;
         display: inline-block;
-        color: $liquidNeonColor;
+        color: $bmPaleGreen;
         left: 3px;
         &:before {
           content: '';
@@ -82,15 +82,15 @@
           top: 0;
           width: 30px;
           height: 30px;
-          border: 3px solid $liquidNeonColor;
+          border: 3px solid $bmPaleGreen;
           border-radius: 100%;
-          background: #000;
+          background: $bmBlack;
         }
         &:after {
           content: '';
           width: 18px;
           height: 18px;
-          background: $liquidNeonColor;
+          background: $bmPaleGreen;
           position: absolute;
           top: 6px;
           left: 6px;
@@ -105,10 +105,10 @@
   }
 }
 .selected-title {
-  color: $liquidNeonColor;
+  color: $bmPaleGreen;
 }
 .unselected-title {
-  color: #ccc;
+  color: $bmVeryLightGray;
 }
 .slider-option-title {
   position: absolute;
@@ -139,7 +139,7 @@
       position: absolute;
       height: 2px;
       width: 100%;
-      background: $liquidNeonColor;
+      background: $bmPaleGreen;
       top: 8px;
       left: -34%;
       right: 0;
@@ -160,15 +160,15 @@
             top: 0;
             width: 20px;
             height: 20px;
-            border: 3px solid $liquidNeonColor;
+            border: 3px solid $bmPaleGreen;
             border-radius: 100%;
-            background: #000;
+            background: $bmBlack;
           }
           &:after {
             content: '';
             width: 10px;
             height: 10px;
-            background: $liquidNeonColor;
+            background: $bmPaleGreen;
             position: absolute;
             top: 5px;
             left: 5px;
@@ -189,15 +189,15 @@
             top: 0;
             width: 20px;
             height: 20px;
-            border: 3px solid $liquidNeonColor;
+            border: 3px solid $bmPaleGreen;
             border-radius: 100%;
-            background: #000;
+            background: $bmBlack;
           }
           &:after {
             content: '';
             width: 10px;
             height: 10px;
-            background: $liquidNeonColor;
+            background: $bmPaleGreen;
             position: absolute;
             top: 5px;
             left: 5px;

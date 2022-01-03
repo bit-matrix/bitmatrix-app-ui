@@ -4,11 +4,11 @@
   // display: flex;
   // justify-content: center;
   width: 100%;
-  border: 2px solid #adfbc4;
+  border: 2px solid $bmPaleGreen;
   position: relative;
   border-radius: 1.5rem;
   height: 100%;
-  background-color: #010403;
+  background-color: $bmDeepFir;
   margin: 0 auto;
   transform: translateY(5%);
 }
