@@ -24,7 +24,7 @@
 
 .swap-footer-tab-one {
   padding: 0 1.5rem;
-  background: #333;
+  background: $swapBackgroundColor;
   width: 2.5rem;
   display: flex;
   flex-direction: column;
@@ -36,7 +36,7 @@
   &:after {
     content: '';
     border-top: 46px solid transparent;
-    border-left: 17px solid #333;
+    border-left: 17px solid $swapBackgroundColor;
     right: -17px;
     content: '';
     width: 0px;
@@ -49,7 +49,7 @@
 
 .swap-footer-tab-two {
   padding: 0 3rem;
-  background: #000;
+  background: $swapBackgroundColor;
   width: 100%;
   color: $swapGrayColor;
   display: flex;
