@@ -2,6 +2,7 @@ import React from 'react';
 import { Popover, Whisper } from 'rsuite';
 
 type Placement4 = 'top' | 'bottom' | 'right' | 'left';
+
 type Placement8 =
   | 'bottomStart'
   | 'bottomEnd'
@@ -11,6 +12,7 @@ type Placement8 =
   | 'rightStart'
   | 'leftEnd'
   | 'rightEnd';
+
 type PlacementAuto =
   | 'auto'
   | 'autoVertical'
@@ -22,13 +24,16 @@ type PlacementAuto =
 
 type Placement = Placement4 | Placement8 | PlacementAuto;
 
+type OverlayTrigger = 'click' | 'contextMenu' | 'hover' | 'focus' | 'active' | 'none';
+
 type Props = {
+  trigger?: OverlayTrigger;
   placement: Placement;
   title?: string;
   content: string;
 };
 
-export const CustomPopover: React.FC<Props> = ({ placement, title, content, children }) => {
+export const CustomPopover: React.FC<Props> = ({ trigger = 'hover', placement, title, content, children }) => {
   const speaker = (
     <Popover title={title}>
       <p>{content}</p>
@@ -36,7 +41,7 @@ export const CustomPopover: React.FC<Props> = ({ placement, title, content, chil
   );
 
   return (
-    <Whisper trigger="hover" placement={placement} controlId={`control-id-${placement}`} speaker={speaker}>
+    <Whisper trigger={trigger} placement={placement} controlId={`control-id-${title}-${content}`} speaker={speaker}>
       {children}
     </Whisper>
   );
