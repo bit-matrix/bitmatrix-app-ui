@@ -1,7 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .loading {
-  border: 0.25rem solid #818489;
+  border: 0.25rem solid $navbarTextColor;
   border-radius: 50%;
   border-top: 0.25rem solid $navbarBackground;
   // width: 2.25rem;
