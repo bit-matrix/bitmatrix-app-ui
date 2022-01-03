@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
+import { groupBydailyPrice, groupByDailyTvl, groupBydailyVolume } from './utils';
 import { Button, Icon, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../AreaChart/AreaChart';
@@ -38,127 +39,11 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
       });
   }, [pool.id]);
 
-  const groupBydailyPrice = useMemo(() => {
-    if (chartData.length === 0) return [];
-
-    const res = chartData.map((d) => {
-      const datetime = new Date(d.time * 1000);
-      const date =
-        datetime.getUTCFullYear() +
-        '-' +
-        (datetime.getUTCMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        datetime.getUTCDate().toString().padStart(2, '0');
-      return { price: d.price, date };
-    });
-
-    const result = [];
-
-    let currentDate = res[0].date;
-    let cumprice = res[0].price;
-    let j = 1;
-
-    for (let i = 1; i < res.length; i++) {
-      const r = res[i];
-
-      if (currentDate === r.date) {
-        cumprice += r.price;
-        j++;
-      } else {
-        result.push({ date: res[i - 1].date, close: Math.floor(cumprice / j) });
-
-        currentDate = r.date;
-        cumprice = r.price;
-        j = 1;
-      }
-    }
-
-    result.push({ date: res[res.length - 1].date, close: Math.floor(cumprice / j) });
-
-    return result;
-  }, [chartData]);
-
-  const groupBydailyVolume = useMemo(() => {
-    if (chartData.length === 0) return [];
-
-    const res = chartData.map((d) => {
-      const datetime = new Date(d.time * 1000);
-      const date =
-        datetime.getUTCFullYear() +
-        '-' +
-        (datetime.getUTCMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        datetime.getUTCDate().toString().padStart(2, '0');
-      return { volume: Math.floor(d.volume.token / 100000000), date };
-    });
-
-    const result = [];
-
-    let currentDate = res[0].date;
-    let totalVolume = res[0].volume;
-
-    for (let i = 1; i < res.length; i++) {
-      const r = res[i];
-
-      if (currentDate === r.date) {
-        totalVolume += r.volume;
-      } else {
-        result.push({ date: res[i - 1].date, close: totalVolume });
-
-        currentDate = r.date;
-        totalVolume = r.volume;
-      }
-    }
-
-    result.push({ date: res[res.length - 1].date, close: totalVolume });
-    return result;
-  }, [chartData]);
-
-  const groupByDailyTvl = useMemo(() => {
-    if (chartData.length === 0) return [];
-
-    const res = chartData.map((d) => {
-      const datetime = new Date(d.time * 1000);
-      const date =
-        datetime.getUTCFullYear() +
-        '-' +
-        (datetime.getUTCMonth() + 1).toString().padStart(2, '0') +
-        '-' +
-        datetime.getUTCDate().toString().padStart(2, '0');
-      return { close: Math.floor(d.value.token / 100000000), date };
-    });
-
-    const result = [];
-
-    let currentDate = res[0].date;
-    let cumclose = res[0].close;
-    let j = 1;
-
-    for (let i = 1; i < res.length; i++) {
-      const r = res[i];
-
-      if (currentDate === r.date) {
-        cumclose += r.close;
-        j++;
-      } else {
-        result.push({ date: res[i - 1].date, close: Math.floor(cumclose / j) * 2 });
-
-        currentDate = r.date;
-        cumclose = r.close;
-        j = 1;
-      }
-    }
-
-    result.push({ date: res[res.length - 1].date, close: Math.floor(cumclose / j) * 2 });
-
-    return result;
-  }, [chartData]);
-
   const renderChart = () => {
     let data: ChartData[] = [
       {
-        date: '2021-05-14',
-        close: 20,
+        date: '',
+        close: 0,
       },
     ];
 
@@ -166,16 +51,16 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
 
     if (selectedTab === POOL_DETAIL_TABS.PRICE) {
       key = 'price';
-      data = groupBydailyPrice;
+      data = groupBydailyPrice(chartData);
     } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
       key = 'volume';
-      data = groupBydailyVolume;
+      data = groupBydailyVolume(chartData);
     } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
       key = 'liquidity';
-      data = groupByDailyTvl;
+      data = groupByDailyTvl(chartData);
     } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
       key = 'fees';
-      data = groupBydailyVolume.map((d) => ({ ...d, close: d.close / 500 }));
+      data = groupBydailyVolume(chartData).map((d) => ({ ...d, close: d.close / 500 }));
     }
 
     return (
