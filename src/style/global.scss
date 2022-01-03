@@ -15,7 +15,7 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $defaultTextColor;
+  color: $bmMediumDarkGray;
 }
 
 html,
@@ -24,7 +24,7 @@ body,
   overflow: hidden;
   width: 100% !important;
   height: 100% !important;
-  background-color: #010403 !important;
+  background-color: $bmDeepFir !important;
 }
 
 .uppercase {
