@@ -1,7 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .app-router-main {
-  background: #010403;
+  background: $swapBackgroundColor;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -12,7 +12,7 @@
 
 .secret-top-div {
   height: 5rem;
-  background: black;
+  background: $swapBackgroundColor;
   z-index: 4;
   width: 100%;
   position: fixed;
@@ -21,7 +21,7 @@
 
 .secret-footer-div {
   height: 3rem;
-  background: black;
+  background: $swapBackgroundColor;
   z-index: 4;
   width: 100%;
   position: fixed;
@@ -41,7 +41,7 @@
 
   .secret-top-div {
     height: 9rem;
-    background: black;
+    background: $swapBackgroundColor;
     z-index: 4;
     width: 100%;
     position: fixed;
