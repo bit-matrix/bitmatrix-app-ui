@@ -115,12 +115,12 @@
 
 .navbar-item-info {
   position: absolute;
-  color: $navbarTextColor;
+  color: $bmAluminium;
   font-weight: 600;
 }
 
 .loader {
-  border: 0.25rem solid #f3f3f3;
+  border: 0.25rem solid $bmWhiteSmoke;
   border-radius: 50%;
   border-top: 0.25rem solid $bmAluminium;
   width: 2.25rem;
