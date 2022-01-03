@@ -1,9 +1,9 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .loading {
-  border: 0.25rem solid $navbarTextColor;
+  border: 0.25rem solid $bmAluminium;
   border-radius: 50%;
-  border-top: 0.25rem solid $navbarBackground;
+  border-top: 0.25rem solid $bmBastille;
   // width: 2.25rem;
   // height: 2.25rem;
   animation: spin 2s linear infinite;
