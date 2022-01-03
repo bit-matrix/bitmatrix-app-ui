@@ -53,9 +53,9 @@ export default class Marina implements IWallet {
     throw new Error('Marina wallet disabled.');
   }
 
-  sendTransaction(receipent: Recipient[]): Promise<MarinaTransactionHex> {
+  sendTransaction(recipients: Recipient[]): Promise<MarinaTransactionHex> {
     if (this.exist() && this.marina)
-      return this.marina.sendTransaction(receipent);
+      return this.marina.sendTransaction(recipients);
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
   }

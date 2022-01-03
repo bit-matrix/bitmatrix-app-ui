@@ -17,5 +17,5 @@ export interface IWallet {
 
   getAddresses(): Promise<MarinaAddressInterface[]>;
 
-  sendTransaction(receipent: Recipient[]): Promise<MarinaTransactionHex>;
+  sendTransaction(recipients: Recipient[]): Promise<MarinaTransactionHex>;
 }
