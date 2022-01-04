@@ -13,6 +13,7 @@
   border-radius: 1.5rem;
   height: 55rem;
   width: 100%;
+  margin-top: 3.5rem;
 }
 
 .pool-detail-header-left {
@@ -70,12 +71,12 @@
 }
 
 .pool-detail-amount {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .pool-detail-volume-fee {
   width: 100%;
-  margin: 1rem 0 0.5rem 0;
+  margin: 0.5rem 0;
 }
 
 .pool-detail-table {
@@ -122,8 +123,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.25rem 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0.5rem 0.25rem 0.5rem;
 
   .left-side {
     width: 65%;
@@ -177,19 +177,20 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
-    margin-top: 3rem;
     width: unset;
   }
 
   .pool-detail-main {
     width: 60rem;
-    height: 30rem;
+    height: 28rem;
+    margin-top: 2.5rem;
   }
+
   .pool-detail-header {
     display: flex;
     align-items: center;

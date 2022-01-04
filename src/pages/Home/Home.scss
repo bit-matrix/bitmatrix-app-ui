@@ -8,12 +8,11 @@
   background-color: $bmPaleGreen;
   margin-top: 6rem;
   margin: 0 auto;
-  transform: translateY(5%);
 }
 
 .home-page-desc {
   width: 100%;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .home-page-img {
@@ -24,8 +23,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-bottom: 2rem;
-  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .home-page-desc-header {
@@ -58,10 +56,9 @@
     display: flex;
     width: 47.5rem;
     border: 1px solid $bmBlack;
-    height: 25rem;
+    height: 24rem;
     border-radius: 1.5rem;
     background-color: $bmPaleGreen;
-    transform: translateY(0);
   }
 
   .home-page-desc {

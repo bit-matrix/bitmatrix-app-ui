@@ -9,11 +9,10 @@
   border-radius: 2rem;
   padding: 0 !important;
   background: $bmBastille;
-  margin-top: 1rem;
   position: fixed;
-  top: 1rem;
+  top: 2rem;
   z-index: 5;
-
+  margin: 0 !important;
   .active {
     background: $bmDeepFir !important;
     color: $bmPaleGreen !important;
@@ -195,7 +194,7 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .navbar-main {
-    margin-top: 2.5rem;
+    top: 3rem;
   }
 
   .navbar-item-button {
