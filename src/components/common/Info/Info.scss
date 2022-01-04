@@ -9,16 +9,11 @@
   display: flex;
   align-items: center;
   border-radius: 0.8125rem;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 7.5rem;
 
   div {
     position: relative;
     height: 100%;
     float: left;
-    // padding-left: 1rem;
   }
 }
 
@@ -62,10 +57,4 @@
 
 .info-close-icon {
   margin-right: 0.5rem;
-}
-
-@media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
-  .swap-footer-tab {
-    bottom: 4.5rem;
-  }
 }

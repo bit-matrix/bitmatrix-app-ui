@@ -30,7 +30,12 @@
 
 .app-container {
   width: 95%;
-  min-height: 27.5rem;
+  width: 100%;
+  height: calc(100% - 10.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.5rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {

@@ -23,15 +23,13 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 1.5rem;
-    margin-top: 3rem;
-    margin-bottom: 1.5rem;
+    bottom: 2rem;
     position: fixed;
   }
 }
 
 @media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: -0.5rem;
+    bottom: 2rem;
   }
 }

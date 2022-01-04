@@ -4,7 +4,6 @@
   display: block;
   width: 20rem;
   border: 1px solid $bmBlack;
-  // height: 49rem;
   border-radius: 1.5rem;
   background-color: $bmPaleGreen;
   margin-top: 6rem;
@@ -55,10 +54,6 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .home-page-container {
-    margin-bottom: 3rem;
-  }
-
   .home-page-main {
     display: flex;
     width: 47.5rem;
@@ -67,8 +62,6 @@
     border-radius: 1.5rem;
     background-color: $bmPaleGreen;
     transform: translateY(0);
-    // margin-bottom: 3rem;
-    // margin-top: 2rem;
   }
 
   .home-page-desc {
