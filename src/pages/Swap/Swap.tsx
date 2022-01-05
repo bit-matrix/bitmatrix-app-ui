@@ -48,6 +48,8 @@ export const Swap = (): JSX.Element => {
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
+  const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
+
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
 
   const { payloadData } = useContext(SettingsContext);
@@ -125,7 +127,8 @@ export const Swap = (): JSX.Element => {
         methodCall,
       );
       setInputFromAmount(inputElement.target.value);
-      setInputToAmount((output / payloadData.preferred_unit.value).toString());
+      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
     }
   };
 
@@ -155,7 +158,7 @@ export const Swap = (): JSX.Element => {
         selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
       const numberFromAmount = new Decimal(Number(inputFromAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const numberToAmount = new Decimal(Number(inputToAmount)).mul(payloadData.preferred_unit.value).toNumber();
+      const numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
