@@ -1,9 +1,10 @@
 @import '../../../style/themes/bitmatrix.scss';
 
 .remove-liquidity-main {
+  margin: 2rem 0 3rem 0;
   .remove-liquidity-text {
     text-align: left;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 
     .remove-liquidity-text-header {
       font-size: 1rem;
@@ -19,7 +20,7 @@
   }
 
   .remove-liquidity-slider {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
 
     .rs-slider-handle {
       top: -0.5rem !important;
@@ -40,7 +41,7 @@
     margin: 1rem 0;
 
     .remove-liquidity-buttons {
-      width: 5rem !important;
+      width: 4.5rem !important;
       color: $bmPaleGreen !important;
       border-color: $bmPaleGreen !important;
       border-radius: 0.875rem !important;
@@ -49,6 +50,24 @@
       &:hover {
         color: $bmBlack !important;
         background-color: $bmPaleGreen !important;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .remove-liquidity-main {
+    margin: 1.25rem 0;
+    .remove-liquidity-text {
+      margin-bottom: 1rem;
+    }
+
+    .remove-liquidity-slider {
+      margin-bottom: 2rem;
+    }
+    .remove-liquidity-button-toolbar {
+      .remove-liquidity-buttons {
+        width: 5rem !important;
       }
     }
   }

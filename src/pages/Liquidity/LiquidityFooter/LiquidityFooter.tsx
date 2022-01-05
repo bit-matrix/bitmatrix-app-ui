@@ -14,7 +14,7 @@ const LiquidityFooter = (): JSX.Element => {
         </div>
         <div className="liquidity-page-footer-line-item-values">250.00</div>
       </div>
-      <div className="liquidity-page-footer-line-item-second">
+      <div className="liquidity-page-footer-line-item-second mobile-hidden">
         <div>
           <span className="liquidity-page-footer-line-item-texts">LP rewards</span>
           <img className="liquidity-page-icons" src={rew} alt="" />

@@ -15,7 +15,7 @@ const RemoveLiquidity = (): JSX.Element => {
           <Slider />
         </div>
         <div className="remove-liquidity-button-toolbar">
-          <Button className="remove-liquidity-buttons" appearance="ghost">
+          <Button className="remove-liquidity-buttons mobile-hidden" appearance="ghost">
             % 10
           </Button>
           <Button className="remove-liquidity-buttons" appearance="ghost">

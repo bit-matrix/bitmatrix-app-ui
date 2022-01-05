@@ -32,6 +32,20 @@ export const Settings = (): JSX.Element => {
     }
   };
 
+  const settingsTabClasses = ['settings-page-content'];
+  if (selectedTab === SETTINGS_DETAIL_TABS.ADVANCED) {
+    settingsTabClasses.push('advanced');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.GENERAL) {
+    settingsTabClasses.push('general');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.PRIVACY) {
+    settingsTabClasses.push('privacy');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.THEME) {
+    settingsTabClasses.push('theme');
+  }
+
   return (
     <div className="settings-page-main">
       <div className="settings-page-header">
@@ -46,7 +60,7 @@ export const Settings = (): JSX.Element => {
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
       </div>
-      <div className="settings-page-content">{getSettingsData()}</div>
+      <div className={settingsTabClasses.join(' ')}>{getSettingsData()}</div>
     </div>
   );
 };
