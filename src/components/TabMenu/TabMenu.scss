@@ -35,8 +35,8 @@
 }
 
 .tab-menu-item-selected {
-  border-bottom: 2px solid $liquidNeonColor;
-  color: $liquidNeonColor;
+  border-bottom: 2px solid $bmPaleGreen;
+  color: $bmPaleGreen;
   height: 100%;
   width: 70%;
   margin: 0 auto;
@@ -52,7 +52,7 @@
 }
 
 .tab-menu-line {
-  border-top: 2px solid #3c3f43;
+  border-top: 2px solid $bmBalticSea;
   position: absolute;
   bottom: 0;
   width: 100%;

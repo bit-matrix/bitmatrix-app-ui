@@ -1,4 +1,4 @@
-@import '../../style/themes/bitmatrix.scss';
+@import '../../../style/themes/bitmatrix.scss';
 
 .switch {
   position: relative;
@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #525252;
+  background-color: $bmMortar;
   -webkit-transition: 0.4s;
   transition: 0.4s;
   &:before {
@@ -30,7 +30,7 @@
     width: 21px;
     left: 4px;
     bottom: 2px;
-    background-color: #000;
+    background-color: $bmBlack;
     transition: 0.4s;
   }
 }
@@ -38,7 +38,7 @@ input {
   &:checked {
     + {
       .slider {
-        background-color: #adfbc4;
+        background-color: $bmPaleGreen;
         &:before {
           -webkit-transform: translateX(15px);
           -ms-transform: translateX(15px);
@@ -50,7 +50,7 @@ input {
   &:focus {
     + {
       .slider {
-        box-shadow: 0 0 1px #adfbc4;
+        box-shadow: 0 0 1px $bmPaleGreen;
       }
     }
   }

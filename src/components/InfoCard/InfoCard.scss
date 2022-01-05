@@ -1,13 +1,13 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .info-card-main {
-  background: $navbarBackground;
+  background: $bmBastille;
   border-radius: 1rem;
   min-width: 25rem;
 }
 
 .info-card-item {
-  background: #000;
+  background: $bmDeepFir;
   padding: 1rem;
   margin: 0.25rem;
   display: flex;
@@ -27,7 +27,7 @@
   padding: 0.5rem 0;
   font-size: 0.9375rem;
   font-weight: 500;
-  color: $navbarTextColor;
+  color: $bmAluminium;
 }
 
 .info-card-item-icon {

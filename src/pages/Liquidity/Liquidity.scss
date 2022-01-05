@@ -5,28 +5,37 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  background: $swapBackgroundColor;
-  text-align: center;
+  background: $bmDeepFir;
+  width: 100%;
 
   .liquidity-page-content {
     position: relative;
     margin: 0 auto;
-    border: 2px solid #adfbc4;
+    border: 2px solid $bmPaleGreen;
     border-radius: 1.5rem;
-    padding: 1.5rem;
+    padding: 0.75rem;
     min-height: 20.8125rem;
     z-index: 6;
-    width: 48rem;
-    margin-top: 3rem;
+    width: 95%;
+
+    .liquidity-button-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-liquidity-button {
+      margin-top: 1.5rem;
+    }
 
     .liquidity-page-back-button {
-      width: 18rem;
+      width: 100%;
       height: 3rem;
       display: flex !important;
       align-items: center;
       border-radius: 1rem !important;
-      margin-bottom: 1.5rem !important;
-      background: #191919 !important;
+      background: $bmNero !important;
       opacity: 0.8;
 
       &:hover {
@@ -35,30 +44,51 @@
 
       .liquidity-back-text {
         margin-left: 1rem;
-        color: $liquidNeonColor;
+        color: $bmPaleGreen;
       }
 
       .liquidity-back-icon {
         height: 3rem !important;
         font-size: 3rem !important;
-        color: $liquidNeonColor !important;
+        color: $bmPaleGreen !important;
         cursor: pointer;
       }
     }
 
     .liquidity-button {
-      width: 25rem;
+      width: 100%;
       height: 2.75rem;
       border-radius: 1rem !important;
       font-weight: 600 !important;
-      color: $swapBackgroundColor !important;
-      background: $liquidNeonColor !important;
+      color: $bmDeepFir !important;
+      background: $bmPaleGreen !important;
       border-width: 0 !important;
-      margin-top: 1rem;
       opacity: 0.9;
 
       &:hover {
         opacity: 1;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .liquidity-page-main {
+    .liquidity-page-content {
+      width: 48rem;
+      padding: 1.5rem;
+
+      .liquidity-page-back-button {
+        width: 18rem;
+      }
+
+      .liquidity-button {
+        width: 25rem;
+        margin-top: 1rem;
+      }
+
+      .remove-liquidity-button {
+        margin-top: 0;
       }
     }
   }
