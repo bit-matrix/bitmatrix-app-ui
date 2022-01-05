@@ -1,0 +1,13 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.custom-popover {
+  background-color: $bmBlackRussian !important;
+  max-width: 20rem;
+  border-radius: 1rem !important;
+
+  .rs-popover-title,
+  .rs-popover-content p {
+    color: $bmVeryLightGray !important;
+    font-size: 0.875rem !important;
+  }
+}

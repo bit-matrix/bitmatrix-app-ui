@@ -31,6 +31,6 @@ export class Wallet implements IWallet {
     this.wallet.getAddresses();
 
   public sendTransaction = (
-    recipient: Recipient[],
-  ): Promise<MarinaTransactionHex> => this.wallet.sendTransaction(recipient);
+    recipients: Recipient[],
+  ): Promise<MarinaTransactionHex> => this.wallet.sendTransaction(recipients);
 }

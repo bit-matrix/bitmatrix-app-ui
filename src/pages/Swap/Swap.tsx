@@ -48,6 +48,8 @@ export const Swap = (): JSX.Element => {
 
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
+  const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
+
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
 
   const { payloadData } = useContext(SettingsContext);
@@ -123,31 +125,33 @@ export const Swap = (): JSX.Element => {
         payloadData.pools[0],
         poolConfigs,
         methodCall,
+        1000000,
       );
       setInputFromAmount(inputElement.target.value);
-      setInputToAmount((output / payloadData.preferred_unit.value).toString());
+      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
     }
   };
 
-  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(inputElement.target.value);
+  // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+  //   const inputNum = Number(inputElement.target.value);
 
-    const methodCall =
-      selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //   const methodCall =
+  //     selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    if (payloadData.pools && poolConfigs) {
-      const output = convertion.convertForCtx(
-        inputNum * payloadData.preferred_unit.value,
-        payloadData.slippage,
-        payloadData.pools[0],
-        poolConfigs,
-        methodCall,
-      );
+  //   if (payloadData.pools && poolConfigs) {
+  //     const output = convertion.convertForCtx(
+  //       inputNum * payloadData.preferred_unit.value,
+  //       payloadData.slippage,
+  //       payloadData.pools[0],
+  //       poolConfigs,
+  //       methodCall,
+  //     );
 
-      setInputFromAmount((output / payloadData.preferred_unit.value).toString());
-      setInputToAmount(inputElement.target.value);
-    }
-  };
+  //     setInputFromAmount((output / payloadData.preferred_unit.value).toString());
+  //     setInputToAmount(inputElement.target.value);
+  //   }
+  // };
 
   const swapClick = async () => {
     if (wallet) {
@@ -155,7 +159,7 @@ export const Swap = (): JSX.Element => {
         selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
       const numberFromAmount = new Decimal(Number(inputFromAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const numberToAmount = new Decimal(Number(inputToAmount)).mul(payloadData.preferred_unit.value).toNumber();
+      const numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
@@ -331,7 +335,22 @@ export const Swap = (): JSX.Element => {
                 />
               </div>
             </div>
-            <div className="swap-arrow-icon">
+            <div
+              className="swap-arrow-icon"
+              onClick={() => {
+                if (selectedAsset.from === SWAP_ASSET.LBTC) {
+                  setSelectedAsset({
+                    from: SWAP_ASSET.USDT,
+                    to: SWAP_ASSET.LBTC,
+                  });
+                } else {
+                  setSelectedAsset({
+                    from: SWAP_ASSET.LBTC,
+                    to: SWAP_ASSET.USDT,
+                  });
+                }
+              }}
+            >
               <svg
                 width="1.05rem"
                 aria-hidden="true"
@@ -359,7 +378,7 @@ export const Swap = (): JSX.Element => {
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
-                  onChange={onChangeToInput}
+                  disabled
                 />
               </div>
               <SwapAssetList

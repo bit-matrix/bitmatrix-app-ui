@@ -5,14 +5,14 @@
   align-items: center;
   padding: 0.5rem !important;
   margin-top: 1rem;
-  background-color: rgb(44, 47, 54);
+  background-color: $bmEbony;
   cursor: pointer;
   font-size: 1rem;
-  border: 2px solid $liquidNeonColor !important;
+  border: 2px solid $bmPaleGreen !important;
   border-radius: 1rem !important;
 
   .wallet-text-header {
-    color: $liquidNeonColor;
+    color: $bmPaleGreen;
     margin-bottom: 0.25rem;
   }
 }
@@ -22,8 +22,8 @@
   margin: 0 auto !important;
   width: 21rem !important;
   .rs-modal-content {
-    background-color: #191b1f !important;
-    border: 2px solid #232329;
+    background-color: $bmBlackRussian !important;
+    border: 2px solid $bmBlackRussian;
   }
   .rs-modal-dialog {
     transform: translateY(-50%);
@@ -36,7 +36,8 @@
 .wallet-list-loading {
   z-index: 999;
   position: fixed;
-  background: rgba(25, 27, 31, 0.5);
+  background: $bmBlackRussian;
+  opacity: 0.5;
 }
 
 .wallet-list-item-icon {
@@ -47,7 +48,7 @@
 .wallet-list-item-description {
   font-size: 0.75rem;
   font-weight: 500;
-  color: #cbc9cd;
+  color: $bmFrenchGray;
 }
 
 .connect-wallet-header {

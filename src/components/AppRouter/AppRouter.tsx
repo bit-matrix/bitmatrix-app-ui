@@ -32,12 +32,16 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchPools = () => {
     api.getPools().then((pools: ModelPool[]) => {
-      checkLastTxStatus(pools[0].id);
+      const filteredPool = pools.filter(
+        (p) => p.id === 'db7a0fa02b9649bb70d084f24412028a8b4157c91d07715a56870a161f041cb3',
+      );
+
+      checkLastTxStatus(filteredPool[0].id);
       dispatch({
         type: SETTINGS_ACTION_TYPES.SET_POOLS,
         payload: {
           ...payloadData,
-          pools,
+          pools: filteredPool,
         },
       });
     });

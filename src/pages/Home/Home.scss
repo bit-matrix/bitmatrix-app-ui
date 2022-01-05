@@ -3,18 +3,16 @@
 .home-page-main {
   display: block;
   width: 20rem;
-  border: 1px solid #000;
-  // height: 49rem;
+  border: 1px solid $bmBlack;
   border-radius: 1.5rem;
-  background-color: $liquidNeonColor;
+  background-color: $bmPaleGreen;
   margin-top: 6rem;
   margin: 0 auto;
-  transform: translateY(5%);
 }
 
 .home-page-desc {
   width: 100%;
-  padding: 1rem;
+  padding: 0.75rem;
 }
 
 .home-page-img {
@@ -25,12 +23,11 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-bottom: 2rem;
-  padding-top: 1.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .home-page-desc-header {
-  color: #000;
+  color: $bmBlack;
 }
 
 .home-page-desc-content {
@@ -40,11 +37,11 @@
 }
 
 .home-page-start-button {
-  background-color: #000 !important;
+  background-color: $bmBlack !important;
   width: 100%;
   height: 2.75rem;
   border-radius: 1rem !important;
-  color: $liquidNeonColor !important;
+  color: $bmPaleGreen !important;
   display: flex !important;
   justify-content: center;
   align-items: center;
@@ -55,20 +52,13 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .home-page-container {
-    margin-bottom: 3rem;
-  }
-
   .home-page-main {
     display: flex;
     width: 47.5rem;
-    border: 1px solid #000;
-    height: 25rem;
+    border: 1px solid $bmBlack;
+    height: 24rem;
     border-radius: 1.5rem;
-    background-color: $liquidNeonColor;
-    transform: translateY(0);
-    // margin-bottom: 3rem;
-    // margin-top: 2rem;
+    background-color: $bmPaleGreen;
   }
 
   .home-page-desc {

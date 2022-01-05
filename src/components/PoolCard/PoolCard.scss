@@ -3,9 +3,9 @@
 .pool-card-main {
   display: flex;
   align-items: center;
-  background-color: #333;
+  background-color: $bmBastille;
   border-radius: 1rem;
-  color: #fff;
+  color: $bmWhite;
   height: 5rem;
   cursor: pointer;
 }
@@ -17,14 +17,14 @@
 .order-item {
   display: flex;
   align-items: center;
-  border-top-color: #333;
-  border-left-color: #333;
-  border-bottom-color: #333;
+  border-top-color: $bmBastille;
+  border-left-color: $bmBastille;
+  border-bottom-color: $bmBastille;
   border-style: dashed;
-  border-right-width: 3;
-  border-right-color: #000;
+  border-right-width: 3px;
+  border-right-color: $bmBlack;
   padding: 1rem 1rem 1rem 0;
-  margin-right: 1rem;
+  // margin-right: 1rem;
   height: 5rem;
 }
 
@@ -36,7 +36,7 @@
 .pool-card-item .column-1-item {
   margin: 0 0.5rem;
   display: flex;
-  color: #fff;
+  color: $bmWhite;
 }
 
 .pool-card-img {
@@ -50,15 +50,15 @@
 
 .pool-card-main .column-2 th,
 td {
-  color: #fff;
+  color: $bmWhite;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-card-item .percent {
-    border: 1px solid gray;
+    border: 1px solid $bmGray;
     padding: 0.25rem;
     border-radius: 0.5rem;
-    background-color: gray;
+    background-color: $bmGray;
   }
 
   .pool-card-item {
