@@ -117,7 +117,7 @@ export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
   return result;
 };
 
-export const calculateChartData = (chartData: BmChart[], pool: Pool) => {
+export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   const allPriceData = groupBydailyPrice(chartData);
   const allVolumeData = groupBydailyVolume(chartData);
   const allTvlData = groupByDailyTvl(chartData);
