@@ -3,11 +3,10 @@
 .pool-main-div {
   display: flex;
   justify-content: center;
-  // width: 50rem;
   transition: all 0.3s ease-out;
   transition-timing-function: linear;
   margin: 0 auto;
-  transform: translateY(5%);
+  width: 100%;
 }
 
 .pool-detail-transition {

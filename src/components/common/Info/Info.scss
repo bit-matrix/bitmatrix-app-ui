@@ -5,26 +5,21 @@
   margin-top: 2.5rem;
   width: fit-content;
   border: 1px solid;
-  margin: 3rem auto 0;
+  margin: 2rem auto 0;
   display: flex;
   align-items: center;
   border-radius: 0.8125rem;
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 7.5rem;
 
   div {
     position: relative;
     height: 100%;
     float: left;
-    // padding-left: 1rem;
   }
 }
 
 .swap-footer-tab-one {
   padding: 0 1.5rem;
-  background: #333;
+  background: $bmBastille;
   width: 2.5rem;
   display: flex;
   flex-direction: column;
@@ -36,7 +31,7 @@
   &:after {
     content: '';
     border-top: 46px solid transparent;
-    border-left: 17px solid #333;
+    border-left: 17px solid $bmBastille;
     right: -17px;
     content: '';
     width: 0px;
@@ -49,9 +44,9 @@
 
 .swap-footer-tab-two {
   padding: 0 3rem;
-  background: #000;
+  background: $bmBlack;
   width: 100%;
-  color: $swapGrayColor;
+  color: $bmShadyLady;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -62,10 +57,4 @@
 
 .info-close-icon {
   margin-right: 0.5rem;
-}
-
-@media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
-  .swap-footer-tab {
-    bottom: 4.5rem;
-  }
 }

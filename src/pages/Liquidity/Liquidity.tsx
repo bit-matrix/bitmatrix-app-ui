@@ -24,17 +24,23 @@ const Liquidity = (): JSX.Element => {
           <div className="liquidity-back-text">L-BTC/USDT</div>
         </Button>
         {liquidity === LIQUIDITY.ADD_LIQUIDITY ? <AddLiquidity /> : <RemoveLiquidity />}
-        <Button
-          appearance="default"
-          className="liquidity-button"
-          onClick={() => {
-            liquidity === LIQUIDITY.ADD_LIQUIDITY
-              ? setLiquidity(LIQUIDITY.REMOVE_LIQUIDITY)
-              : setLiquidity(LIQUIDITY.ADD_LIQUIDITY);
-          }}
+        <div
+          className={`liquidity-button-content ${
+            liquidity === LIQUIDITY.REMOVE_LIQUIDITY && 'remove-liquidity-button'
+          }`}
         >
-          {liquidity === LIQUIDITY.ADD_LIQUIDITY ? 'Add Liquidity' : 'Remove Liquidity'}
-        </Button>
+          <Button
+            appearance="default"
+            className="liquidity-button"
+            onClick={() => {
+              liquidity === LIQUIDITY.ADD_LIQUIDITY
+                ? setLiquidity(LIQUIDITY.REMOVE_LIQUIDITY)
+                : setLiquidity(LIQUIDITY.ADD_LIQUIDITY);
+            }}
+          >
+            {liquidity === LIQUIDITY.ADD_LIQUIDITY ? 'Add Liquidity' : 'Remove Liquidity'}
+          </Button>
+        </div>
       </Content>
     </div>
   );

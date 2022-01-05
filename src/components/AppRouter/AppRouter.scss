@@ -1,7 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .app-router-main {
-  background: #010403;
+  background: $bmDeepFir;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,8 +11,8 @@
 }
 
 .secret-top-div {
-  height: 5rem;
-  background: black;
+  height: 6rem;
+  background: $bmBlack;
   z-index: 4;
   width: 100%;
   position: fixed;
@@ -20,8 +20,8 @@
 }
 
 .secret-footer-div {
-  height: 3rem;
-  background: black;
+  height: 2.5rem;
+  background: $bmBlack;
   z-index: 4;
   width: 100%;
   position: fixed;
@@ -29,22 +29,34 @@
 }
 
 .app-container {
-  width: 95%;
-  min-height: 27.5rem;
+  width: 100%;
+  height: calc(100% - 8.5rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3.5rem;
 }
 
-@media only screen and (min-width: $mobile-view-breakpoint) {
+@media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
   .app-container {
     width: 100%;
-    min-height: 26rem;
+    height: calc(100% - 10rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
   }
 
   .secret-top-div {
-    height: 9rem;
-    background: black;
+    height: 7rem;
+    background: $bmBlack;
     z-index: 4;
     width: 100%;
     position: fixed;
     top: 0rem;
+  }
+
+  .secret-footer-div {
+    height: 4rem;
   }
 }

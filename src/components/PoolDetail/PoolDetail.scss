@@ -8,12 +8,12 @@
 }
 
 .pool-detail-main {
-  border: 2px solid #adfbc4;
+  border: 2px solid $bmPaleGreen;
   position: relative;
   border-radius: 1.5rem;
-  margin-top: 2rem;
   height: 55rem;
   width: 100%;
+  margin-top: 3.5rem;
 }
 
 .pool-detail-header-left {
@@ -27,13 +27,13 @@
 
 .pool-detail-page-text {
   margin-left: 1rem;
-  color: $liquidNeonColor;
+  color: $bmPaleGreen;
 }
 
 .pool-detail-back-icon {
   height: 3rem !important;
   font-size: 3rem !important;
-  color: $liquidNeonColor !important;
+  color: $bmPaleGreen !important;
   cursor: pointer;
 }
 
@@ -43,10 +43,10 @@
 }
 
 .pool-detail-content-left {
-  background: #171718;
+  background: $bmBlackRussian;
   border-radius: 1rem;
   padding: 1rem;
-  color: $navbarTextColor;
+  color: $bmAluminium;
 }
 
 .pool-detail-item {
@@ -71,12 +71,12 @@
 }
 
 .pool-detail-amount {
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .pool-detail-volume-fee {
   width: 100%;
-  margin: 1rem 0 0.5rem 0;
+  margin: 0.5rem 0;
 }
 
 .pool-detail-table {
@@ -92,29 +92,29 @@ th {
 }
 
 .pool-detail-arrow-down-icon {
-  color: red;
+  color: $bmRed;
   font-size: 0.8rem !important;
 }
 
 .pool-detail-table-arrow-down-text {
   margin-left: 0.25rem;
-  color: red;
+  color: $bmRed;
   font-size: 0.75rem;
 }
 
 .pool-detail-arrow-up-icon {
-  color: green;
+  color: $bmGreen;
   font-size: 0.8rem !important;
 }
 
 .pool-detail-table-arrow-up-text {
   margin-left: 0.25rem;
-  color: green;
+  color: $bmGreen;
   font-size: 0.75rem;
 }
 
 .pool-detail-table-text {
-  color: #d4d4d4;
+  color: $LightGray;
   font-size: 1rem;
   font-weight: 600;
 }
@@ -123,8 +123,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.25rem 0.5rem;
-  margin-bottom: 1rem;
+  margin: 0.5rem 0.5rem 0.25rem 0.5rem;
 
   .left-side {
     width: 65%;
@@ -139,11 +138,11 @@ th {
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
 .pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:active {
-  color: $liquidNeonColor !important;
+  color: $bmPaleGreen !important;
 }
 
 .pool-detail-tabs .rs-nav-item-content::before {
-  background-color: $liquidNeonColor !important;
+  background-color: $bmPaleGreen !important;
 }
 
 .pool-detail-content-right {
@@ -167,7 +166,7 @@ th {
   width: 100%;
   height: 2.75rem;
   border-radius: 1rem !important;
-  background: #171718 !important;
+  background: $bmBlackRussian !important;
   opacity: 0.8;
   &:hover {
     opacity: 1;
@@ -178,19 +177,20 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
-    margin-top: 3rem;
     width: unset;
   }
 
   .pool-detail-main {
     width: 60rem;
-    height: 30rem;
+    height: 28rem;
+    margin-top: 2.5rem;
   }
+
   .pool-detail-header {
     display: flex;
     align-items: center;
@@ -215,10 +215,10 @@ th {
     width: 17rem;
     height: 100%;
     margin-right: 0.5rem;
-    background: #171718;
+    background: $bmBlackRussian;
     border-radius: 1rem;
     padding: 1rem;
-    color: $navbarTextColor;
+    color: $bmAluminium;
   }
 
   .pool-detail-tabs {

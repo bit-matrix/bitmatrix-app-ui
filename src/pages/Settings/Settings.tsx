@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { SETTINGS_DETAIL_TABS } from '../../enum/SETTINGS_DETAIL_TABS';
+import { Advanced } from './Advanced/Advanced';
 import { General } from './General/General';
 import { Privacy } from './Privacy/Privacy';
-import './Settings.scss';
 import { Theme } from './Theme/Theme';
+import './Settings.scss';
 
 export const Settings = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<SETTINGS_DETAIL_TABS>(SETTINGS_DETAIL_TABS.GENERAL);
@@ -24,12 +25,26 @@ export const Settings = (): JSX.Element => {
         return <Theme />;
         break;
       case SETTINGS_DETAIL_TABS.ADVANCED:
-        return <div></div>;
+        return <Advanced />;
         break;
       default:
         return;
     }
   };
+
+  const settingsTabClasses = ['settings-page-content'];
+  if (selectedTab === SETTINGS_DETAIL_TABS.ADVANCED) {
+    settingsTabClasses.push('advanced');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.GENERAL) {
+    settingsTabClasses.push('general');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.PRIVACY) {
+    settingsTabClasses.push('privacy');
+  }
+  if (selectedTab === SETTINGS_DETAIL_TABS.THEME) {
+    settingsTabClasses.push('theme');
+  }
 
   return (
     <div className="settings-page-main">
@@ -45,7 +60,7 @@ export const Settings = (): JSX.Element => {
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
       </div>
-      <div className="settings-page-content">{getSettingsData()}</div>
+      <div className={settingsTabClasses.join(' ')}>{getSettingsData()}</div>
     </div>
   );
 };

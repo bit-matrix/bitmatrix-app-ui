@@ -2,11 +2,11 @@
 
 .pool-page-main {
   width: 100%;
-  border: 2px solid #adfbc4;
+  border: 2px solid $bmPaleGreen;
   position: relative;
   border-radius: 1.5rem;
   height: 100%;
-  background-color: #010403;
+  background-color: $bmDeepFir;
 }
 
 .pool-page-header {
@@ -47,11 +47,11 @@
 }
 
 .pool-page-content::-webkit-scrollbar-thumb {
-  background: $navbarBackground;
+  background: $bmBastille;
 }
 
 .pool-page-content::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background: $bmMortar;
 }
 
 .pool-page-card {
@@ -60,11 +60,11 @@
 
 .pool-page-button {
   background-color: transparent !important;
-  color: $liquidNeonColor;
+  color: $bmPaleGreen;
 }
 
 .pool-page-icon {
-  color: $liquidNeonColor;
+  color: $bmPaleGreen;
   font-size: 1.5rem !important;
 }
 
@@ -76,11 +76,11 @@
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:active {
-  color: $liquidNeonColor !important;
+  color: $bmPaleGreen !important;
 }
 
 .pool-page-tabs .rs-nav-item-content::before {
-  background-color: $liquidNeonColor !important;
+  background-color: $bmPaleGreen !important;
 }
 
 .pool-page-shadow {
@@ -90,11 +90,12 @@
   bottom: 0;
   margin: 0 auto;
   width: 90%;
-  background: #000;
+  background: $bmBlack;
   border-radius: 0 0 1rem 1rem;
-  -webkit-box-shadow: 0px -34px 25px 40px rgba(0, 0, 0, 0.87);
-  -moz-box-shadow: 0px -34px 25px 40px rgba(0, 0, 0, 0.87);
-  box-shadow: 0px -34px 25px 40px rgba(0, 0, 0, 0.87);
+  -webkit-box-shadow: 0px -34px 25px 40px $bmBlack;
+  -moz-box-shadow: 0px -34px 25px 40px $bmBlack;
+  box-shadow: 0px -34px 25px 40px $bmBlack;
+  opacity: 0.87;
 }
 
 .tab-1 {
@@ -122,7 +123,6 @@
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-page-main {
     width: 48rem;
-    margin-top: 3rem;
   }
 
   .pool-page-content {

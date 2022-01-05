@@ -24,15 +24,15 @@ bitcoin-button {
   max-width: 22rem;
   margin: 0 auto;
   padding: 1.5rem;
-  background: #fff;
+  background: $bmWhite;
   border-radius: 2.5rem;
   z-index: 1;
 }
 
 .btc-main-div {
-  background: #fff;
+  background: $bmWhite;
   height: 8rem;
-  border: 3px solid $btcColor;
+  border: 3px solid $bmCarrotOrange;
   border-radius: 13px;
 }
 
@@ -47,7 +47,7 @@ bitcoin-button {
   width: 12rem;
   display: flex;
   justify-content: space-between;
-  color: #fff;
+  color: $bmWhite;
 }
 
 .btc-context {
@@ -70,16 +70,16 @@ bitcoin-button {
 }
 
 .token-main-div {
-  background: #fff;
+  background: $bmWhite;
   height: 8rem;
   width: 19rem;
-  border: 3px solid gray;
+  border: 3px solid $bmGray;
   border-radius: 13px;
 }
 
 .divider {
   width: 100%;
-  border-bottom: 2px solid $btcColor;
+  border-bottom: 2px solid $bmCarrotOrange;
   border-radius: 4px;
   margin: 0.15rem 0;
 }
@@ -87,7 +87,7 @@ bitcoin-button {
 .input {
   width: 8rem;
   height: 2rem;
-  background: #fff;
+  background: $bmWhite;
   border-width: 0px;
   font-size: 1.5rem;
   font-weight: bold;
@@ -95,17 +95,17 @@ bitcoin-button {
 }
 
 .input-usd {
-  color: gray;
+  color: $bmGrayay;
   &::placeholder {
-    color: gray;
+    color: $bmGray;
     opacity: 0.5;
   }
 }
 
 .input-btc {
-  color: $btcColor;
+  color: $bmCarrotOrange;
   &::placeholder {
-    color: $btcColor;
+    color: $bmCarrotOrange;
     opacity: 0.5;
   }
 }
@@ -119,12 +119,12 @@ bitcoin-button {
   font-size: 1.4rem;
   align-self: flex-start;
   font-weight: bold;
-  color: gray;
+  color: $bmGray;
 }
 
 .you-are-exchanging {
   padding: 0.75rem 0 0 0.75rem;
-  color: gray;
+  color: $bmGray;
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -132,7 +132,7 @@ bitcoin-button {
 }
 
 .btc {
-  color: $btcColor;
+  color: $bmCarrotOrange;
   font-size: 1.4rem;
   align-self: flex-end;
   font-weight: bold;
@@ -160,7 +160,7 @@ bitcoin-button {
   width: 21rem;
   margin: 0 auto;
   padding-bottom: 1rem;
-  background: #fff;
+  background: $bmWhite;
   z-index: 0;
   margin-top: -1rem;
   text-align: center;
@@ -173,25 +173,25 @@ bitcoin-button {
   width: 19rem;
   height: 3rem;
   border-radius: 1rem !important;
-  color: #fff !important;
+  color: $bmWhite !important;
   font-size: 1.25rem !important;
-  background: gray !important;
+  background: $bmGray !important;
   border-width: 0 !important;
   margin-top: 16px;
 }
 
 .bottom-text {
-  color: grey;
+  color: $bmGray;
   padding-top: 2rem;
 }
 
 .spice {
-  color: #ef2a31;
+  color: $bmAlizarin;
 }
 
 .divider-spice {
   width: 100%;
-  border-bottom: 2px solid #ef2a31;
+  border-bottom: 2px solid $bmAlizarin;
   border-radius: 4px;
   margin: 0.5rem 0;
 }
@@ -199,15 +199,15 @@ bitcoin-button {
 .spice-input {
   width: 7rem;
   height: 2rem;
-  background: #23242a;
+  background: $bmVeryVeryDarkGray;
   border-width: 0px;
-  color: #ef2a31;
+  color: $bmAlizarin;
   font-size: 1.25rem;
   font-weight: bold;
 }
 
 .select-token {
-  border: 2px dashed gray;
+  border: 2px dashed $bmGray;
   border-radius: 1rem;
   cursor: pointer;
   height: 3rem;
@@ -215,7 +215,7 @@ bitcoin-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: gray;
+  color: $bmGray;
   font-size: 1rem;
   font-weight: 500;
   margin-top: 1.25rem;
@@ -240,8 +240,8 @@ bitcoin-button {
   height: 0.5rem;
   margin-right: 7px;
   border-radius: 50px;
-  border: 1px solid #48b645;
-  background-color: #48b645;
+  border: 1px solid $bmFruitSalad;
+  background-color: $bmFruitSalad;
 }
 
 .down-arrow-icon {
@@ -250,7 +250,7 @@ bitcoin-button {
 }
 
 .connection-text {
-  color: #48b645;
+  color: $bmFruitSalad;
 }
 
 .bottom-text-span {
@@ -266,7 +266,7 @@ bitcoin-button {
   padding: 0.75rem 0;
   bottom: 0;
   width: 100%;
-  box-shadow: 0px 0 1.5px black;
+  box-shadow: 0px 0 1.5px $bmBlack;
 }
 
 .mobile-footer {
@@ -315,15 +315,15 @@ bitcoin-button {
   .layout {
     max-width: 23rem;
     padding: 1.5rem;
-    background: #fff;
+    background: $bmWhite;
     border-radius: 2.5rem;
   }
 
   .btc-main-div {
-    background: #fff;
+    background: $bmWhite;
     height: 8rem;
     width: 20rem;
-    border: 3px solid $btcColor;
+    border: 3px solid $bmCarrotOrange;
     border-radius: 13px;
   }
 
@@ -336,10 +336,10 @@ bitcoin-button {
   }
 
   .token-main-div {
-    background: #fff;
+    background: $bmWhite;
     height: 8rem;
     width: 20rem;
-    border: 3px solid gray;
+    border: 3px solid $bmGray;
     border-radius: 13px;
   }
 
@@ -347,7 +347,7 @@ bitcoin-button {
     width: 22rem;
     margin: 0 auto;
     padding: 1rem;
-    background: #fff;
+    background: $bmWhite;
     position: absolute;
     z-index: 0;
     left: 0;
@@ -362,9 +362,9 @@ bitcoin-button {
     width: 20rem;
     height: 3rem;
     border-radius: 1rem !important;
-    color: #fff !important;
+    color: $bmWhite !important;
     font-size: 1.25rem !important;
-    background: gray !important;
+    background: $bmGray !important;
     border-width: 0 !important;
     margin-top: 16px;
 

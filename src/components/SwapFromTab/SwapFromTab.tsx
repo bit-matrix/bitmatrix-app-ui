@@ -24,9 +24,11 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
       inline
       name="checkboxList"
       value={[selectedFromAmountPercent]}
-      onChange={(value: Array<FROM_AMOUNT_PERCENT>) => {
-        console.log(value[1]);
-      }}
+      onChange={
+        (/*value: Array<FROM_AMOUNT_PERCENT>*/) => {
+          // console.log(value[1]);
+        }
+      }
     >
       <Checkbox
         className="left-radio-item tab-radio"

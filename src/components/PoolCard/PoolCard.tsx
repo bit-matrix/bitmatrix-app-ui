@@ -27,16 +27,20 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick }) => {
       </div>
 
       <div className="pool-card-item column-2 mobile-hidden">
-        <tr>
-          <th>TVL</th>
-          <th>Volume 24h</th>
-          <th>Fees 24h</th>
-        </tr>
-        <tr>
-          <td>${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}</td>
-          <td>${Numeral(0).format('(0.00a)')}</td>
-          <td>${Numeral(0).format('(0.00a)')}</td>
-        </tr>
+        <table>
+          <tbody>
+            <tr>
+              <th>TVL</th>
+              <th>Volume 24h</th>
+              <th>Fees 24h</th>
+            </tr>
+            <tr>
+              <td>${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}</td>
+              <td>${Numeral(0).format('(0.00a)')}</td>
+              <td>${Numeral(0).format('(0.00a)')}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );

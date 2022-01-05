@@ -129,25 +129,25 @@ export const Swap = (): JSX.Element => {
     }
   };
 
-  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(inputElement.target.value);
+  // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+  //   const inputNum = Number(inputElement.target.value);
 
-    const methodCall =
-      selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //   const methodCall =
+  //     selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
 
-    if (payloadData.pools && poolConfigs) {
-      const output = convertion.convertForCtx(
-        inputNum * payloadData.preferred_unit.value,
-        payloadData.slippage,
-        payloadData.pools[0],
-        poolConfigs,
-        methodCall,
-      );
+  //   if (payloadData.pools && poolConfigs) {
+  //     const output = convertion.convertForCtx(
+  //       inputNum * payloadData.preferred_unit.value,
+  //       payloadData.slippage,
+  //       payloadData.pools[0],
+  //       poolConfigs,
+  //       methodCall,
+  //     );
 
-      setInputFromAmount((output / payloadData.preferred_unit.value).toString());
-      setInputToAmount(inputElement.target.value);
-    }
-  };
+  //     setInputFromAmount((output / payloadData.preferred_unit.value).toString());
+  //     setInputToAmount(inputElement.target.value);
+  //   }
+  // };
 
   const swapClick = async () => {
     if (wallet) {
@@ -227,9 +227,9 @@ export const Swap = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setTxLocalData(newStoreData);
-          } else {
+          } /* else {
             notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
-          }
+          } */
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
@@ -331,7 +331,22 @@ export const Swap = (): JSX.Element => {
                 />
               </div>
             </div>
-            <div className="swap-arrow-icon">
+            <div
+              className="swap-arrow-icon"
+              onClick={() => {
+                if (selectedAsset.from === SWAP_ASSET.LBTC) {
+                  setSelectedAsset({
+                    from: SWAP_ASSET.USDT,
+                    to: SWAP_ASSET.LBTC,
+                  });
+                } else {
+                  setSelectedAsset({
+                    from: SWAP_ASSET.LBTC,
+                    to: SWAP_ASSET.USDT,
+                  });
+                }
+              }}
+            >
               <svg
                 width="1.05rem"
                 aria-hidden="true"
@@ -359,7 +374,7 @@ export const Swap = (): JSX.Element => {
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
-                  onChange={onChangeToInput}
+                  disabled
                 />
               </div>
               <SwapAssetList
