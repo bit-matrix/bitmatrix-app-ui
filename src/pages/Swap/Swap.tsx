@@ -125,7 +125,6 @@ export const Swap = (): JSX.Element => {
         payloadData.pools[0],
         poolConfigs,
         methodCall,
-        1000000,
       );
       setInputFromAmount(inputElement.target.value);
       setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
