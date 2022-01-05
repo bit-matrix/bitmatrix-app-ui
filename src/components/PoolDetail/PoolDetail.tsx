@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { groupBydailyPrice, groupByDailyTvl, groupBydailyVolume } from './utils';
+import { calculateChartData } from './utils';
 import { Button, Icon, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../AreaChart/AreaChart';
@@ -13,6 +13,7 @@ import { Pool, BmChart } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { api } from '@bitmatrix/lib';
 import './PoolDetail.scss';
+import { IconNames } from 'rsuite/lib/Icon';
 
 type Props = {
   pool: Pool;
@@ -23,8 +24,6 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [chartData, setChartData] = useState<BmChart[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const price = (Number(pool.token.value) / Number(pool.quote.value)).toLocaleString();
 
   const history = useHistory();
 
@@ -37,9 +36,9 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [pool.id]);
+  }, [pool]);
 
-  const renderChart = () => {
+  const renderChart = (allData: any) => {
     let data: ChartData[] = [
       {
         date: '',
@@ -51,16 +50,16 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
 
     if (selectedTab === POOL_DETAIL_TABS.PRICE) {
       key = 'price';
-      data = groupBydailyPrice(chartData);
+      data = allData.allPriceData;
     } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
       key = 'volume';
-      data = groupBydailyVolume(chartData);
+      data = allData.allVolumeData;
     } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
       key = 'liquidity';
-      data = groupByDailyTvl(chartData);
+      data = allData.allTvlData;
     } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
       key = 'fees';
-      data = groupBydailyVolume(chartData).map((d) => ({ ...d, close: d.close / 500 }));
+      data = allData.allFeeData;
     }
 
     return (
@@ -76,124 +75,134 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
         <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
       </div>
     );
-  }
+  } else {
+    const data = calculateChartData(chartData, pool);
 
-  return (
-    <div className="pool-detail-container">
-      <div className="pool-detail-main">
-        <div className="pool-detail-header">
-          <div className="pool-detail-header-left">
-            <Button className="pool-detail-button" onClick={back}>
-              <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
-              <div className="pool-detail-page-text">
-                {pool.quote.ticker} / {pool.token.ticker}
-              </div>
-            </Button>
-          </div>
-          <div className="pool-detail-header-right">
-            <TabMenu
-              menuItems={[
-                POOL_DETAIL_TABS.PRICE,
-                POOL_DETAIL_TABS.VOLUME,
-                POOL_DETAIL_TABS.LIQUIDITY,
-                POOL_DETAIL_TABS.FEES,
-              ]}
-              selectedItem={selectedTab}
-              onClick={(eventKey: any) => setSelectedTab(eventKey)}
-            />
-          </div>
-        </div>
-        <div className="pool-detail-content">
-          <div className="pool-detail-content-right desktop-hidden">{renderChart()}</div>
-          <div className="pool-detail-content-left">
-            <div className="pool-detail-content-left-header">Pool Pairs</div>
-            <div className="pool-detail-amount">
-              <div className="pool-detail-item">
-                <div className="pool-detail-img-content left-side">
-                  <img className="pool-detail-img" src={lbtcImage} alt="" />
-                  <span>{pool.quote.ticker}</span>
+    return (
+      <div className="pool-detail-container">
+        <div className="pool-detail-main">
+          <div className="pool-detail-header">
+            <div className="pool-detail-header-left">
+              <Button className="pool-detail-button" onClick={back}>
+                <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
+                <div className="pool-detail-page-text">
+                  {pool.quote.ticker} / {pool.token.ticker}
                 </div>
-                {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
-              </div>
-
-              <div className="pool-detail-item">
-                <div className="pool-detail-img-content left-side">
-                  <img className="pool-detail-img" src={usdtImage} alt="" />
-                  <span>{pool.token.ticker}</span>
-                </div>
-                {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
-              </div>
+              </Button>
             </div>
-
-            <div className="pool-detail-volume-fee">
-              <div className="pool-detail-item">
-                <div className="left-side">{pool.quote.ticker} Price</div>
-                <div>Volume 24h</div>
-              </div>
-              <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">${price}</div>
-                <div className="pool-detail-table-text">
-                  $
-                  {Numeral(groupBydailyVolume(chartData)[groupBydailyVolume(chartData).length - 1].close).format(
-                    '(0.00a)',
-                  )}
-                </div>
-              </div>
-              <div className="pool-detail-item-detail">
-                <div className="left-side">
-                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
-                  <span className="pool-detail-table-arrow-down-text">0%</span>
-                </div>
-                <div>
-                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
-                  <span className="pool-detail-table-arrow-up-text">0%</span>
-                </div>
-              </div>
+            <div className="pool-detail-header-right">
+              <TabMenu
+                menuItems={[
+                  POOL_DETAIL_TABS.PRICE,
+                  POOL_DETAIL_TABS.VOLUME,
+                  POOL_DETAIL_TABS.LIQUIDITY,
+                  POOL_DETAIL_TABS.FEES,
+                ]}
+                selectedItem={selectedTab}
+                onClick={(eventKey: any) => setSelectedTab(eventKey)}
+              />
             </div>
-
-            <div className="pool-detail-volume-fee">
-              <div className="pool-detail-item">
-                <div className="left-side">TVL</div>
-                <div>Fees 24h</div>
-              </div>
-              <div className="pool-detail-item">
-                <div className="pool-detail-table-text left-side">
-                  ${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}
-                </div>
-                <div className="pool-detail-table-text">
-                  $
-                  {Numeral(
-                    groupBydailyVolume(chartData).map((d) => ({ ...d, close: d.close / 500 }))[
-                      groupBydailyVolume(chartData).length - 1
-                    ].close,
-                  ).format('(0.00a)')}
-                </div>
-              </div>
-              <div className="pool-detail-item-detail">
-                <div className="left-side">
-                  <Icon className="pool-detail-arrow-down-icon" icon="arrow-down2" />
-                  <span className="pool-detail-table-arrow-down-text">0%</span>
-                </div>
-                <div>
-                  <Icon className="pool-detail-arrow-up-icon" icon="arrow-up2" />
-                  <span className="pool-detail-table-arrow-up-text">0%</span>
-                </div>
-              </div>
-            </div>
-
-            <Button
-              appearance="default"
-              className="primary-button pool-detail-add-button"
-              onClick={() => {
-                history.push(ROUTE_PATH.LIQUIDITY);
-              }}
-            >
-              Add Liquidity
-            </Button>
           </div>
-          <div className="pool-detail-content-right mobile-hidden">{renderChart()}</div>
+          <div className="pool-detail-content">
+            <div className="pool-detail-content-right desktop-hidden">{renderChart(data)}</div>
+            <div className="pool-detail-content-left">
+              <div className="pool-detail-content-left-header">Pool Pairs</div>
+              <div className="pool-detail-amount">
+                <div className="pool-detail-item">
+                  <div className="pool-detail-img-content left-side">
+                    <img className="pool-detail-img" src={lbtcImage} alt="" />
+                    <span>{pool.quote.ticker}</span>
+                  </div>
+                  {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
+                </div>
+
+                <div className="pool-detail-item">
+                  <div className="pool-detail-img-content left-side">
+                    <img className="pool-detail-img" src={usdtImage} alt="" />
+                    <span>{pool.token.ticker}</span>
+                  </div>
+                  {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
+                </div>
+              </div>
+
+              <div className="pool-detail-volume-fee">
+                <div className="pool-detail-item">
+                  <div className="left-side">{pool.quote.ticker} Price</div>
+                  <div>Volume 24h</div>
+                </div>
+                <div className="pool-detail-item">
+                  <div className="pool-detail-table-text left-side">${data.todayPrice.toLocaleString()}</div>
+                  <div className="pool-detail-table-text">${Numeral(data.todayVolumeData.close).format('(0.00a)')}</div>
+                </div>
+                <div className="pool-detail-item-detail">
+                  <div className="left-side">
+                    <Icon
+                      className={`pool-detail-arrow-${data.priceRate.direction}-icon`}
+                      icon={`arrow-${data.priceRate.direction}2` as IconNames}
+                    />
+                    <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
+                      {data.priceRate.value}%
+                    </span>
+                  </div>
+                  <div>
+                    <Icon
+                      className={`pool-detail-arrow-${data.volumeRate.direction}-icon`}
+                      icon={`arrow-${data.volumeRate.direction}2` as IconNames}
+                    />
+                    <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
+                      {data.volumeRate.value}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pool-detail-volume-fee">
+                <div className="pool-detail-item">
+                  <div className="left-side">TVL</div>
+                  <div>Fees 24h</div>
+                </div>
+                <div className="pool-detail-item">
+                  <div className="pool-detail-table-text left-side">
+                    ${Numeral(data.todayTvlData).format('(0.00a)')}
+                  </div>
+                  <div className="pool-detail-table-text">${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
+                </div>
+                <div className="pool-detail-item-detail">
+                  <div className="left-side">
+                    <Icon
+                      className={`pool-detail-arrow-${data.tvlRate.direction}-icon`}
+                      icon={`arrow-${data.tvlRate.direction}2` as IconNames}
+                    />
+                    <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
+                      {data.tvlRate.value}%
+                    </span>
+                  </div>
+                  <div>
+                    <Icon
+                      className={`pool-detail-arrow-${data.feeRate.direction}-icon`}
+                      icon={`arrow-${data.feeRate.direction}2` as IconNames}
+                    />
+                    <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
+                      {data.feeRate.value}%
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                appearance="default"
+                className="primary-button pool-detail-add-button"
+                onClick={() => {
+                  history.push(ROUTE_PATH.LIQUIDITY);
+                }}
+              >
+                Add Liquidity
+              </Button>
+            </div>
+            <div className="pool-detail-content-right mobile-hidden">{renderChart(data)}</div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 };

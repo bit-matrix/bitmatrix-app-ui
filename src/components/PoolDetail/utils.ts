@@ -1,4 +1,4 @@
-import { BmChart } from '@bitmatrix/models';
+import { BmChart, Pool } from '@bitmatrix/models';
 import { ChartData } from '../AreaChart/AreaChart';
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
@@ -115,4 +115,55 @@ export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
 
   result.push({ date: res[res.length - 1].date, close: totalVolume });
   return result;
+};
+
+export const calculateChartData = (chartData: BmChart[], pool: Pool) => {
+  const allPriceData = groupBydailyPrice(chartData);
+  const allVolumeData = groupBydailyVolume(chartData);
+  const allTvlData = groupByDailyTvl(chartData);
+  const allFeeData = groupBydailyVolume(chartData).map((d) => ({ ...d, close: d.close / 500 }));
+
+  // live current time data
+  const todayVolumeData = allVolumeData[allVolumeData.length - 1];
+  const todayFeeData = allFeeData[allFeeData.length - 1];
+  const todayTvlData = (Number(pool.token.value) * 2) / 100000000;
+  const todayPrice = Number(pool.token.value) / Number(pool.quote.value);
+
+  // previous data
+  const previousVolumeData = allVolumeData[allVolumeData.length - 2];
+  const previousFeeData = allFeeData[allFeeData.length - 2];
+  const previousTvlData = allTvlData[allTvlData.length - 2];
+  const previousPriceData = allPriceData[allPriceData.length - 2];
+
+  const volumeRate = {
+    value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
+    direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
+  };
+  const feeRate = {
+    value: (todayFeeData.close / previousFeeData.close).toFixed(2),
+    direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
+  };
+  const tvlRate = {
+    value: (todayTvlData / previousTvlData.close).toFixed(2),
+    direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
+  };
+  const priceRate = {
+    value: (todayPrice / previousPriceData.close).toFixed(2),
+    direction: todayPrice > previousPriceData.close ? 'up' : 'down',
+  };
+
+  return {
+    allPriceData,
+    allVolumeData,
+    allTvlData,
+    allFeeData,
+    todayVolumeData,
+    todayFeeData,
+    todayTvlData,
+    todayPrice,
+    volumeRate,
+    feeRate,
+    tvlRate,
+    priceRate,
+  };
 };
