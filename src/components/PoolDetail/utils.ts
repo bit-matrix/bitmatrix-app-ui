@@ -130,27 +130,61 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   const todayPrice = Number(pool.token.value) / Number(pool.quote.value);
 
   // previous data
-  const previousVolumeData = allVolumeData[allVolumeData.length - 2];
-  const previousFeeData = allFeeData[allFeeData.length - 2];
-  const previousTvlData = allTvlData[allTvlData.length - 2];
-  const previousPriceData = allPriceData[allPriceData.length - 2];
+  let previousVolumeData: ChartData = { date: '', close: 0 };
+  let previousFeeData: ChartData = { date: '', close: 0 };
+  let previousTvlData: ChartData = { date: '', close: 0 };
+  let previousPriceData: ChartData = { date: '', close: 0 };
 
-  const volumeRate = {
-    value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
-    direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
+  let volumeRate = {
+    value: '0',
+    direction: 'up',
   };
-  const feeRate = {
-    value: (todayFeeData.close / previousFeeData.close).toFixed(2),
-    direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
+  let feeRate = {
+    value: '0',
+    direction: 'up',
   };
-  const tvlRate = {
-    value: (todayTvlData / previousTvlData.close).toFixed(2),
-    direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
+  let tvlRate = {
+    value: '0',
+    direction: 'up',
   };
-  const priceRate = {
-    value: (todayPrice / previousPriceData.close).toFixed(2),
-    direction: todayPrice > previousPriceData.close ? 'up' : 'down',
+  let priceRate = {
+    value: '0',
+    direction: 'up',
   };
+
+  if (allPriceData.length > 2) {
+    previousPriceData = allPriceData[allPriceData.length - 2];
+    priceRate = {
+      value: (todayPrice / previousPriceData.close).toFixed(2),
+      direction: todayPrice > previousPriceData.close ? 'up' : 'down',
+    };
+  }
+
+  if (allVolumeData.length > 2) {
+    previousVolumeData = allVolumeData[allVolumeData.length - 2];
+
+    volumeRate = {
+      value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
+      direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
+    };
+  }
+
+  if (allFeeData.length > 2) {
+    previousFeeData = allFeeData[allFeeData.length - 2];
+
+    feeRate = {
+      value: (todayFeeData.close / previousFeeData.close).toFixed(2),
+      direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
+    };
+  }
+
+  if (allTvlData.length > 2) {
+    previousTvlData = allTvlData[allTvlData.length - 2];
+    tvlRate = {
+      value: (todayTvlData / previousTvlData.close).toFixed(2),
+      direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
+    };
+  }
 
   return {
     allPriceData,
