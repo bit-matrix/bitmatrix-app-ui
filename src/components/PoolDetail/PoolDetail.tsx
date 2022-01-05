@@ -132,7 +132,12 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
               </div>
               <div className="pool-detail-item">
                 <div className="pool-detail-table-text left-side">${price}</div>
-                <div className="pool-detail-table-text">%0</div>
+                <div className="pool-detail-table-text">
+                  $
+                  {Numeral(groupBydailyVolume(chartData)[groupBydailyVolume(chartData).length - 1].close).format(
+                    '(0.00a)',
+                  )}
+                </div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
@@ -155,7 +160,14 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 <div className="pool-detail-table-text left-side">
                   ${Numeral((Number(pool.token.value) * 2) / 100000000).format('(0.00a)')}
                 </div>
-                <div className="pool-detail-table-text">%0</div>
+                <div className="pool-detail-table-text">
+                  $
+                  {Numeral(
+                    groupBydailyVolume(chartData).map((d) => ({ ...d, close: d.close / 500 }))[
+                      groupBydailyVolume(chartData).length - 1
+                    ].close,
+                  ).format('(0.00a)')}
+                </div>
               </div>
               <div className="pool-detail-item-detail">
                 <div className="left-side">
