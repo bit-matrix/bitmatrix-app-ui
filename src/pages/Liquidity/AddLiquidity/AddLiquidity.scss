@@ -2,9 +2,10 @@
 
 .add-liquidity-main {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 1.125rem 0;
+  padding: 0.75rem 0;
 
   .add-liquidity-item {
     display: flex;
@@ -19,12 +20,12 @@
       align-items: center;
 
       .add-liquidity-input-div {
-        padding: 0.5rem 1rem;
+        padding: 0.25rem 1rem;
 
         .add-liquidity-input-content {
           display: flex;
           align-items: center;
-          margin-top: 0.5rem;
+          margin-top: 0.25rem;
 
           .add-liquidity-text {
             text-align: left;
@@ -52,7 +53,7 @@
           font-weight: bold;
           outline: none;
           color: $bmShadyLady;
-          margin: 0.5rem 0;
+          margin: 0.25rem 0;
           &::placeholder {
             color: $bmShadyLady !important;
             line-height: 2rem;
@@ -64,11 +65,44 @@
   }
 
   .add-liquidity-plus-icon {
-    margin: 0 1rem;
+    margin: 0.5rem 0;
 
     .add-liquidity-page-icons {
-      width: 1.5rem;
-      height: 1.5rem;
+      width: 1rem;
+      height: 1rem;
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .add-liquidity-main {
+    margin: 1.25rem 0;
+    padding: 1.125rem 0;
+    flex-direction: row;
+
+    .add-liquidity-item {
+      .add-liquidity-item-content {
+        .add-liquidity-input-div {
+          padding: 0.5rem 1rem;
+
+          .add-liquidity-input-content {
+            margin-top: 0.5rem;
+          }
+
+          .add-liquidity-input {
+            margin: 0.5rem 0;
+          }
+        }
+      }
+    }
+
+    .add-liquidity-plus-icon {
+      margin: 0 1rem;
+
+      .add-liquidity-page-icons {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
     }
   }
 }
