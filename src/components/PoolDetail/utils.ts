@@ -18,26 +18,20 @@ export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
   const result = [];
 
   let currentDate = res[0].date;
-  let cumprice = res[0].price;
-  let j = 1;
+  let lastPrice = res[0].price;
 
   for (let i = 1; i < res.length; i++) {
     const r = res[i];
 
     if (currentDate === r.date) {
-      cumprice += r.price;
-      j++;
+      lastPrice = r.price;
     } else {
-      result.push({ date: res[i - 1].date, close: Math.floor(cumprice / j) });
-
+      result.push({ date: res[i - 1].date, close: Math.floor(lastPrice) });
       currentDate = r.date;
-      cumprice = r.price;
-      j = 1;
     }
   }
 
-  result.push({ date: res[res.length - 1].date, close: Math.floor(cumprice / j) });
-
+  result.push({ date: res[res.length - 1].date, close: Math.floor(lastPrice) });
   return result;
 };
 
