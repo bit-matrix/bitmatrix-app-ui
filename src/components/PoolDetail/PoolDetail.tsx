@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from './utils';
 import { Button, Icon, Loader } from 'rsuite';
@@ -11,9 +12,8 @@ import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
 import { Pool, BmChart } from '@bitmatrix/models';
 import Numeral from 'numeral';
-import { api } from '@bitmatrix/lib';
-import './PoolDetail.scss';
 import { IconNames } from 'rsuite/lib/Icon';
+import './PoolDetail.scss';
 
 type Props = {
   pool: Pool;
@@ -191,7 +191,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
 
               <Button
                 appearance="default"
-                className="primary-button pool-detail-add-button"
+                className="primary-button pool-detail-add-button mobile-hidden"
                 onClick={() => {
                   history.push(ROUTE_PATH.LIQUIDITY);
                 }}
