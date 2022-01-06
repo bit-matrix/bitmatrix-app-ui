@@ -111,7 +111,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 <div className="pool-detail-item">
                   <div className="pool-detail-img-content left-side">
                     <img className="pool-detail-img" src={lbtcImage} alt="" />
-                    <span>{pool.quote.ticker}</span>
+                    <span className="mobile-hidden">{pool.quote.ticker}</span>
                   </div>
                   {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
                 </div>
@@ -119,7 +119,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 <div className="pool-detail-item">
                   <div className="pool-detail-img-content left-side">
                     <img className="pool-detail-img" src={usdtImage} alt="" />
-                    <span>{pool.token.ticker}</span>
+                    <span className="mobile-hidden">{pool.token.ticker}</span>
                   </div>
                   {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
                 </div>

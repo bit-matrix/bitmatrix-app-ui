@@ -9,7 +9,7 @@
   border: 2px solid $bmPaleGreen;
   position: relative;
   border-radius: 1.5rem;
-  height: 32rem;
+  height: 31rem;
   width: 100%;
   // margin-top: 3.5rem;
 }
@@ -65,11 +65,14 @@
 
 .pool-detail-img {
   width: 1.5rem;
-  margin-right: 1rem;
+  margin-right: 0.25rem;
 }
 
 .pool-detail-amount {
-  margin: 0.25rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
 }
 
 .pool-detail-volume-fee {
@@ -145,7 +148,7 @@ th {
 
 .pool-detail-content-right {
   margin-bottom: 0.5rem;
-  height: calc(100% - 22rem);
+  height: calc(100% - 21rem);
 }
 
 .pool-detail-content-right svg {
@@ -241,6 +244,8 @@ th {
 
   .pool-detail-amount {
     margin: 0.5rem 0;
+    display: block;
+    width: 100%;
   }
 
   .pool-detail-volume-fee {
@@ -253,5 +258,9 @@ th {
 
   .pool-detail-item-detail {
     margin: 0.5rem 0.5rem 0.25rem 0.5rem;
+  }
+
+  .pool-detail-img {
+    margin-right: 1rem;
   }
 }
