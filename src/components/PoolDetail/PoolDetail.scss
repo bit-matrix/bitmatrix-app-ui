@@ -121,7 +121,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.5rem 0.5rem 0.25rem 0.5rem;
+  margin: 0rem 0.125rem 0rem 0.125rem;
 
   .left-side {
     width: 65%;
@@ -145,7 +145,7 @@ th {
 
 .pool-detail-content-right {
   margin-bottom: 0.5rem;
-  height: calc(100% - 25rem);
+  height: calc(100% - 22rem);
 }
 
 .pool-detail-content-right svg {
@@ -162,7 +162,7 @@ th {
   display: flex !important;
   align-items: center;
   width: 100%;
-  height: 2.75rem;
+  height: 3rem;
   border-radius: 1rem !important;
   background: $bmBlackRussian !important;
   opacity: 0.8;
@@ -236,6 +236,7 @@ th {
 
   .pool-detail-button {
     width: 17rem;
+    height: 2.75rem;
   }
 
   .pool-detail-amount {
@@ -248,5 +249,9 @@ th {
 
   .pool-detail-item {
     margin: 0.5rem;
+  }
+
+  .pool-detail-item-detail {
+    margin: 0.5rem 0.5rem 0.25rem 0.5rem;
   }
 }
