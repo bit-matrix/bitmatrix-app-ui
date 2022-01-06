@@ -131,6 +131,16 @@
   background-color: $bmEbony;
   border-radius: 1.25rem;
   padding: 0.35rem;
+  animation: fadein 2s ease;
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 .pm-add-button {
