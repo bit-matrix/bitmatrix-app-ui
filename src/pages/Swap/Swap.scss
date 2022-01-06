@@ -70,7 +70,7 @@
 
 .swap-button {
   width: 100%;
-  height: 2.75rem;
+  height: 3rem;
   border-radius: 1rem !important;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
@@ -254,5 +254,9 @@
   .swap-page-main {
     justify-content: unset;
     margin-top: 0;
+  }
+
+  .swap-button {
+    height: 2.75rem;
   }
 }

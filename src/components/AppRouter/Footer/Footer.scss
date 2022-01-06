@@ -28,8 +28,8 @@
   }
 }
 
-@media (max-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
+@media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 0.5rem;
+    bottom: 3.5rem;
   }
 }

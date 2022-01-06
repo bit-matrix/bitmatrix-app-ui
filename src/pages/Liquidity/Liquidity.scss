@@ -7,6 +7,24 @@
   flex-direction: column;
   background: $bmDeepFir;
   width: 100%;
+  animation: fadeAndScale 1s linear;
+  animation-delay: -0.2s;
+  transform-origin: center bottom;
+
+  @keyframes fadeAndScale {
+    0% {
+      opacity: 0;
+      transform: scale3d(0.5, 0.5, 1);
+    }
+    50% {
+      opacity: 0;
+      transform: scale3d(0.75, 0.75, 1);
+    }
+    100% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+  }
 
   .liquidity-page-content {
     position: relative;

@@ -11,7 +11,7 @@
 }
 
 .secret-top-div {
-  height: 6rem;
+  height: 5.5rem;
   background: $bmBlack;
   z-index: 4;
   width: 100%;
@@ -30,11 +30,11 @@
 
 .app-container {
   width: 100%;
-  height: calc(100% - 8.5rem);
+  height: calc(100% - 7.5rem);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 3.5rem;
+  margin-top: 3rem;
 }
 
 @media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
