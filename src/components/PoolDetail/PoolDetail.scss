@@ -1,9 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  height: 33rem;
-  overflow-y: auto;
-  overflow-x: hidden;
+  // height: 33rem;
   width: 95%;
 }
 
@@ -11,9 +9,9 @@
   border: 2px solid $bmPaleGreen;
   position: relative;
   border-radius: 1.5rem;
-  height: 55rem;
+  height: 32rem;
   width: 100%;
-  margin-top: 3.5rem;
+  // margin-top: 3.5rem;
 }
 
 .pool-detail-header-left {
@@ -22,7 +20,7 @@
 }
 
 .pool-detail-header {
-  padding: 1rem 1rem 0 1rem;
+  padding: 0.75rem 0.75rem 0 0.75rem;
 }
 
 .pool-detail-page-text {
@@ -38,14 +36,14 @@
 }
 
 .pool-detail-content {
-  height: calc(100% - 3rem);
-  padding: 1rem;
+  height: calc(100% - 0.5rem);
+  padding: 0.75rem;
 }
 
 .pool-detail-content-left {
   background: $bmBlackRussian;
   border-radius: 1rem;
-  padding: 1rem;
+  padding: 0.5rem;
   color: $bmAluminium;
 }
 
@@ -53,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.5rem;
+  margin: 0.25rem;
 
   .left-side {
     width: 65%;
@@ -71,12 +69,12 @@
 }
 
 .pool-detail-amount {
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 .pool-detail-volume-fee {
   width: 100%;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
 }
 
 .pool-detail-table {
@@ -123,7 +121,7 @@ th {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin: 0.5rem 0.5rem 0.25rem 0.5rem;
+  margin: 0rem 0.125rem 0rem 0.125rem;
 
   .left-side {
     width: 65%;
@@ -146,8 +144,8 @@ th {
 }
 
 .pool-detail-content-right {
-  margin-bottom: 1rem;
-  height: calc(100% - 28rem);
+  margin-bottom: 0.5rem;
+  height: calc(100% - 22rem);
 }
 
 .pool-detail-content-right svg {
@@ -164,7 +162,7 @@ th {
   display: flex !important;
   align-items: center;
   width: 100%;
-  height: 2.75rem;
+  height: 3rem;
   border-radius: 1rem !important;
   background: $bmBlackRussian !important;
   opacity: 0.8;
@@ -188,7 +186,7 @@ th {
   .pool-detail-main {
     width: 60rem;
     height: 28rem;
-    margin-top: 2.5rem;
+    // margin-top: 2.5rem;
   }
 
   .pool-detail-header {
@@ -238,5 +236,22 @@ th {
 
   .pool-detail-button {
     width: 17rem;
+    height: 2.75rem;
+  }
+
+  .pool-detail-amount {
+    margin: 0.5rem 0;
+  }
+
+  .pool-detail-volume-fee {
+    margin: 0.5rem 0;
+  }
+
+  .pool-detail-item {
+    margin: 0.5rem;
+  }
+
+  .pool-detail-item-detail {
+    margin: 0.5rem 0.5rem 0.25rem 0.5rem;
   }
 }

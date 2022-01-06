@@ -1,0 +1,19 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.stats-content {
+  width: 38rem;
+  margin-top: 0;
+  min-height: 26rem;
+  display: flex;
+  border: 2px solid $bmPaleGreen;
+  position: relative;
+  border-radius: 1.5rem;
+  background-color: $bmDeepFir;
+  margin: 0 auto;
+
+  .no-stats-text {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+  }
+}

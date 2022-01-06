@@ -23,7 +23,7 @@
   width: 100%;
   display: flex;
   justify-content: center;
-  padding-bottom: 0.5rem;
+  padding: 1rem 0;
 }
 
 .home-page-desc-header {
@@ -39,7 +39,7 @@
 .home-page-start-button {
   background-color: $bmBlack !important;
   width: 100%;
-  height: 2.75rem;
+  height: 3rem;
   border-radius: 1rem !important;
   color: $bmPaleGreen !important;
   display: flex !important;
@@ -56,7 +56,6 @@
     display: flex;
     width: 47.5rem;
     border: 1px solid $bmBlack;
-    height: 24rem;
     border-radius: 1.5rem;
     background-color: $bmPaleGreen;
   }
@@ -76,6 +75,10 @@
     width: 40%;
     padding-bottom: 0;
     padding-top: 0;
+  }
+
+  .home-page-start-button {
+    height: 2.75rem;
   }
 }
 
