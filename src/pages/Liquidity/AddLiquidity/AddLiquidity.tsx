@@ -12,7 +12,7 @@ import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix
 import { IWallet } from '../../../lib/wallet/IWallet';
 import Decimal from 'decimal.js';
 import './AddLiquidity.scss';
-import { Button } from 'rsuite';
+import { Button, Notification } from 'rsuite';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../../lib/wallet';
 
@@ -52,43 +52,6 @@ const AddLiquidity = (): JSX.Element => {
     }
   }, [payloadData.pools]);
 
-  const calcRecipientValueB = () => {
-    const user_provided_remaining_lbtc_supply = Number(quoteAmount);
-    const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
-    if (payloadData.pools) {
-      const pool = payloadData.pools[0];
-      const pool_lp_supply = Number(pool.lp.value);
-      const pool_lp_circulation = 2000000000 - pool_lp_supply;
-      const mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
-      const pool_lbtc_supply = Number(pool.quote.value);
-      const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
-
-      const user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
-
-      const user_provided_token_supply = Number(tokenAmount);
-
-      const user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
-      const mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
-      const pool_token_supply = Number(pool.token.value);
-      const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
-
-      const user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
-
-      const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
-
-      return user_lp_received;
-    }
-    return 0;
-  };
-
-  const calcPoolshare = () => {
-    if (payloadData.pools) {
-      const pool_lp_supply = 2000000000 - Number(payloadData.pools[0].lp.value);
-      return pool_lp_supply;
-    }
-    return 0;
-  };
-
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
@@ -102,9 +65,18 @@ const AddLiquidity = (): JSX.Element => {
         poolConfigs,
         methodCall,
       );
+
       setQuoteAmount(inputElement.target.value);
       setTokenAmount((output.amount / payloadData.preferred_unit.value).toString());
     }
+  };
+
+  const notify = (title: string, description: string) => {
+    Notification.open({
+      title: title,
+      description: <div className="notificationTx">{description}</div>,
+      duration: 20000,
+    });
   };
 
   const addLiquidityClick = async () => {
@@ -157,12 +129,27 @@ const AddLiquidity = (): JSX.Element => {
             payloadData.pools[0],
           );
 
+          console.log('commitment raw hex :', commitment);
+
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
-          console.log('commitmentTxId', commitmentTxId);
+          notify('Commitment Tx Id : ', commitmentTxId);
+        } else {
+          notify('Wallet Error : ', 'Funding transaction could not be created.');
         }
       }
     }
+  };
+
+  const calcLpValues = () => {
+    const currentPool = payloadData.pools;
+    if (currentPool && currentPool.length > 0) {
+      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
+      const tokenAmountN = new Decimal(tokenAmount).mul(payloadData.preferred_unit.value).toNumber();
+      return convertion.calcRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+    }
+
+    return { lpReceived: '0', poolRate: '0' };
   };
 
   return (
@@ -216,7 +203,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <LiquidityFooter received={calcRecipientValueB()} rewards={0.2} pool_share={calcPoolshare()} />
+      <LiquidityFooter received={calcLpValues().lpReceived} rewards={'0.2'} pool_share={calcLpValues().poolRate} />
       <div className="liquidity-button-content">
         <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
           Add Liquidity

@@ -5,9 +5,9 @@ import rew from '../../../images/rew.png';
 import './LiquidityFooter.scss';
 
 type Props = {
-  received?: number;
-  rewards?: number;
-  pool_share?: number;
+  received?: string;
+  rewards?: string;
+  pool_share?: string;
 };
 
 const LiquidityFooter: React.FC<Props> = ({ received, rewards, pool_share }): JSX.Element => {
