@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Icon } from 'rsuite';
+import SettingsContext from '../../context/SettingsContext';
 import AddLiquidity from './AddLiquidity/AddLiquidity';
-// import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
-import './Liquidity.scss';
 import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
+import './Liquidity.scss';
 
 enum LIQUIDITY {
   ADD_LIQUIDITY = 'Add',
@@ -16,6 +16,8 @@ const Liquidity = (): JSX.Element => {
 
   const history = useHistory();
 
+  const { payloadData } = useContext(SettingsContext);
+
   return (
     <div className="liquidity-page-main">
       <Content className="liquidity-page-content">
@@ -23,7 +25,11 @@ const Liquidity = (): JSX.Element => {
           <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
           <div className="liquidity-back-text">L-BTC/USDT</div>
         </Button>
-        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? <AddLiquidity /> : <RemoveLiquidity />}
+        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? (
+          <AddLiquidity pool={payloadData.pools && payloadData.pools[0]} />
+        ) : (
+          <RemoveLiquidity />
+        )}
         <div
           className={`liquidity-button-content ${
             liquidity === LIQUIDITY.REMOVE_LIQUIDITY && 'remove-liquidity-button'
