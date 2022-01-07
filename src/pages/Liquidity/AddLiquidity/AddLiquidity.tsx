@@ -6,13 +6,45 @@ import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
 import btc from '../../../images/liquid_btc.png';
 import usdt from '../../../images/usdt.png';
+import { Pool } from '@bitmatrix/models';
 import './AddLiquidity.scss';
 
-const AddLiquidity = (): JSX.Element => {
+type Props = {
+  pool: Pool | undefined;
+};
+
+const AddLiquidity: React.FC<Props> = ({ pool }): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
-  const [inputFromAmount, setInputFromAmount] = useState<string>('0');
-  const [inputToAmount, setInputToAmount] = useState<string>('0');
+  const [tokenAmount, setTokenAmount] = useState<string>('0');
+  const [quoteAmount, setQuoteAmount] = useState<string>('0');
+
+  const calcRecipientValueB = () => {
+    const user_provided_remaining_lbtc_supply = Number(quoteAmount);
+    const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+    if (pool) {
+      const pool_lp_supply = Number(pool.lp.value);
+      const pool_lp_circulation = 2000000000 - pool_lp_supply;
+      const mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
+      const pool_lbtc_supply = Number(pool.quote.value);
+      const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+
+      const user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
+
+      const user_provided_token_supply = Number(tokenAmount);
+
+      const user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
+      const mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
+      const pool_token_supply = Number(pool.token.value);
+      const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+
+      const user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
+
+      const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
+
+      return user_lp_received;
+    }
+  };
 
   return (
     <>
@@ -33,8 +65,8 @@ const AddLiquidity = (): JSX.Element => {
                 type="text"
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 spellCheck="false"
-                value={inputFromAmount}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputFromAmount(event.target.value)}
+                value={tokenAmount}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTokenAmount(event.target.value)}
               />
             </div>
           </div>
@@ -58,14 +90,14 @@ const AddLiquidity = (): JSX.Element => {
                 type="text"
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 spellCheck="false"
-                value={inputToAmount}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputToAmount(event.target.value)}
+                value={quoteAmount}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => setQuoteAmount(event.target.value)}
               />
             </div>
           </div>
         </div>
       </div>
-      <LiquidityFooter />
+      <LiquidityFooter received={calcRecipientValueB()} rewards={0} pool_share={0} />
     </>
   );
 };
