@@ -176,6 +176,8 @@ export const Swap = (): JSX.Element => {
           },
         ]);
 
+        console.log('marina raw tx hex ', rawTxHex);
+
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
         // notify('Funding Tx Id : ', fundingTxId);
