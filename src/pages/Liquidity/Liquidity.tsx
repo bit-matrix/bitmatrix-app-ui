@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Icon } from 'rsuite';
 import AddLiquidity from './AddLiquidity/AddLiquidity';
-// import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
-import './Liquidity.scss';
 import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
+import './Liquidity.scss';
 
 enum LIQUIDITY {
   ADD_LIQUIDITY = 'Add',
@@ -29,7 +28,7 @@ const Liquidity = (): JSX.Element => {
             liquidity === LIQUIDITY.REMOVE_LIQUIDITY && 'remove-liquidity-button'
           }`}
         >
-          <Button
+          {/* <Button
             appearance="default"
             className="liquidity-button"
             onClick={() => {
@@ -39,7 +38,7 @@ const Liquidity = (): JSX.Element => {
             }}
           >
             {liquidity === LIQUIDITY.ADD_LIQUIDITY ? 'Add Liquidity' : 'Remove Liquidity'}
-          </Button>
+          </Button> */}
         </div>
       </Content>
     </div>
