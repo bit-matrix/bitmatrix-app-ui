@@ -1,8 +1,5 @@
-import {
-  MarinaAddressInterface,
-  MarinaTransactionHex,
-  Recipient,
-} from './marina/IMarina';
+import { Balance } from 'marina-provider';
+import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
 
 export interface IWallet {
   exist(): boolean;
@@ -18,4 +15,6 @@ export interface IWallet {
   getAddresses(): Promise<MarinaAddressInterface[]>;
 
   sendTransaction(recipients: Recipient[]): Promise<MarinaTransactionHex>;
+
+  getBalances(): Promise<Balance[]>;
 }

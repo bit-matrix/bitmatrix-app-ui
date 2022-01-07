@@ -32,7 +32,7 @@ const RemoveLiquidity = (): JSX.Element => {
           </Button>
         </div>
       </div>
-      <LiquidityFooter />
+      <LiquidityFooter received={'0'} rewards={'0'} pool_share={'0'} />
     </>
   );
 };
