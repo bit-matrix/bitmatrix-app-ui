@@ -8,7 +8,7 @@ import btc from '../../../images/liquid_btc.png';
 import usdt from '../../../images/usdt.png';
 import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import SettingsContext from '../../../context/SettingsContext';
-import { api, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import Decimal from 'decimal.js';
 import './AddLiquidity.scss';
@@ -52,32 +52,42 @@ const AddLiquidity = (): JSX.Element => {
     }
   }, [payloadData.pools]);
 
-  // const calcRecipientValueB = () => {
-  //   const user_provided_remaining_lbtc_supply = Number(quoteAmount);
-  //   const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
-  //   if (pool) {
-  //     const pool_lp_supply = Number(pool.lp.value);
-  //     const pool_lp_circulation = 2000000000 - pool_lp_supply;
-  //     const mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
-  //     const pool_lbtc_supply = Number(pool.quote.value);
-  //     const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
+  const calcRecipientValueB = () => {
+    const user_provided_remaining_lbtc_supply = Number(quoteAmount);
+    const user_provided_remaining_lbtc_supply_16 = Math.floor(user_provided_remaining_lbtc_supply / 16);
+    if (payloadData.pools) {
+      const pool = payloadData.pools[0];
+      const pool_lp_supply = Number(pool.lp.value);
+      const pool_lp_circulation = 2000000000 - pool_lp_supply;
+      const mul_circ = user_provided_remaining_lbtc_supply_16 * pool_lp_circulation;
+      const pool_lbtc_supply = Number(pool.quote.value);
+      const pool_lbtc_supply_down = Math.floor(pool_lbtc_supply / 16);
 
-  //     const user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
+      const user_lp_receiving_1 = Math.floor(mul_circ / pool_lbtc_supply_down);
 
-  //     const user_provided_token_supply = Number(tokenAmount);
+      const user_provided_token_supply = Number(tokenAmount);
 
-  //     const user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
-  //     const mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
-  //     const pool_token_supply = Number(pool.token.value);
-  //     const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
+      const user_provided_token_supply_down = Math.floor(user_provided_token_supply / 2000000);
+      const mul_circ2 = user_provided_token_supply_down * pool_lp_circulation;
+      const pool_token_supply = Number(pool.token.value);
+      const pool_token_supply_down = Math.floor(pool_token_supply / 2000000);
 
-  //     const user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
+      const user_lp_receiving_2 = Math.floor(mul_circ2 / pool_token_supply_down);
 
-  //     const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
+      const user_lp_received = Math.min(user_lp_receiving_1, user_lp_receiving_2);
 
-  //     return user_lp_received;
-  //   }
-  // };
+      return user_lp_received;
+    }
+    return 0;
+  };
+
+  const calcPoolshare = () => {
+    if (payloadData.pools) {
+      const pool_lp_supply = 2000000000 - Number(payloadData.pools[0].lp.value);
+      return pool_lp_supply;
+    }
+    return 0;
+  };
 
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
@@ -125,9 +135,32 @@ const AddLiquidity = (): JSX.Element => {
             asset: fundingTxInputs.fundingOutput2AssetId,
           },
         ]);
-        console.log('rawTxHex', rawTxHex);
 
-        await api.sendRawTransaction(rawTxHex || '');
+        const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
+
+        console.log('fundingTxId', fundingTxId);
+
+        if (fundingTxId && fundingTxId !== '') {
+          setQuoteAmount('0');
+          setTokenAmount('0');
+
+          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
+
+          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+
+          const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
+            numberFromAmount,
+            numberToAmount,
+            fundingTxId,
+            publicKey,
+            poolConfigs,
+            payloadData.pools[0],
+          );
+
+          const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          console.log('commitmentTxId', commitmentTxId);
+        }
       }
     }
   };
@@ -183,7 +216,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <LiquidityFooter received={0} rewards={0} pool_share={0} />
+      <LiquidityFooter received={calcRecipientValueB()} rewards={0.2} pool_share={calcPoolshare()} />
       <div className="liquidity-button-content">
         <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
           Add Liquidity
