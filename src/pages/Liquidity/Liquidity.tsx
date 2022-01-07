@@ -1,7 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Icon } from 'rsuite';
-import SettingsContext from '../../context/SettingsContext';
 import AddLiquidity from './AddLiquidity/AddLiquidity';
 import RemoveLiquidity from './RemoveLiquidity/RemoveLiquidity';
 import './Liquidity.scss';
@@ -16,8 +15,6 @@ const Liquidity = (): JSX.Element => {
 
   const history = useHistory();
 
-  const { payloadData } = useContext(SettingsContext);
-
   return (
     <div className="liquidity-page-main">
       <Content className="liquidity-page-content">
@@ -25,17 +22,13 @@ const Liquidity = (): JSX.Element => {
           <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
           <div className="liquidity-back-text">L-BTC/USDT</div>
         </Button>
-        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? (
-          <AddLiquidity pool={payloadData.pools && payloadData.pools[0]} />
-        ) : (
-          <RemoveLiquidity />
-        )}
+        {liquidity === LIQUIDITY.ADD_LIQUIDITY ? <AddLiquidity /> : <RemoveLiquidity />}
         <div
           className={`liquidity-button-content ${
             liquidity === LIQUIDITY.REMOVE_LIQUIDITY && 'remove-liquidity-button'
           }`}
         >
-          <Button
+          {/* <Button
             appearance="default"
             className="liquidity-button"
             onClick={() => {
@@ -45,7 +38,7 @@ const Liquidity = (): JSX.Element => {
             }}
           >
             {liquidity === LIQUIDITY.ADD_LIQUIDITY ? 'Add Liquidity' : 'Remove Liquidity'}
-          </Button>
+          </Button> */}
         </div>
       </Content>
     </div>
