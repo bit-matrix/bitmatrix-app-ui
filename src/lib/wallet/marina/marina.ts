@@ -1,10 +1,6 @@
+import { Balance } from 'marina-provider';
 import { IWallet } from '../IWallet';
-import {
-  MarinaAddressInterface,
-  MarinaProvider,
-  MarinaTransactionHex,
-  Recipient,
-} from './IMarina';
+import { MarinaAddressInterface, MarinaProvider, MarinaTransactionHex, Recipient } from './IMarina';
 
 declare global {
   interface Window {
@@ -54,8 +50,13 @@ export default class Marina implements IWallet {
   }
 
   sendTransaction(recipients: Recipient[]): Promise<MarinaTransactionHex> {
-    if (this.exist() && this.marina)
-      return this.marina.sendTransaction(recipients);
+    if (this.exist() && this.marina) return this.marina.sendTransaction(recipients);
+    // else throw "Install Marina first";
+    throw new Error('Marina wallet disabled.');
+  }
+
+  getBalances(): Promise<Balance[]> {
+    if (this.exist() && this.marina) return this.marina.getBalances();
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
   }

@@ -1,9 +1,6 @@
+import { Balance } from 'marina-provider';
 import { IWallet } from './IWallet';
-import {
-  MarinaAddressInterface,
-  MarinaTransactionHex,
-  Recipient,
-} from './marina/IMarina';
+import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
 import Marina from './marina/marina';
 import { WALLET_NAME } from './WALLET_NAME';
 
@@ -24,13 +21,12 @@ export class Wallet implements IWallet {
 
   public disable = (): Promise<void> => this.wallet.disable();
 
-  public getNextAddress = (): Promise<MarinaAddressInterface> =>
-    this.wallet.getNextAddress();
+  public getNextAddress = (): Promise<MarinaAddressInterface> => this.wallet.getNextAddress();
 
-  public getAddresses = (): Promise<MarinaAddressInterface[]> =>
-    this.wallet.getAddresses();
+  public getAddresses = (): Promise<MarinaAddressInterface[]> => this.wallet.getAddresses();
 
-  public sendTransaction = (
-    recipients: Recipient[],
-  ): Promise<MarinaTransactionHex> => this.wallet.sendTransaction(recipients);
+  public sendTransaction = (recipients: Recipient[]): Promise<MarinaTransactionHex> =>
+    this.wallet.sendTransaction(recipients);
+
+  public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 }

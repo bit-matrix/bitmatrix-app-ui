@@ -22,8 +22,8 @@ import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import './Swap.scss';
 import Decimal from 'decimal.js';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -81,6 +81,27 @@ export const Swap = (): JSX.Element => {
       });
     }
   }, [payloadData.pools]);
+
+  // const fetchBalances = () => {
+  //   console.log(wallet);
+  //   if (wallet) {
+  //     wallet.getBalances().then((balances) => {
+  //       console.log(balances);
+  //     });
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchBalances();
+
+  //   const timer = setInterval(() => {
+  //     fetchBalances();
+  //   }, 10000);
+
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  // }, [wallet]);
 
   const assetAmountToFromAmount = useCallback(
     (newAssetAmountList: AssetAmount[], newFromAmountPercent?: FROM_AMOUNT_PERCENT) => {

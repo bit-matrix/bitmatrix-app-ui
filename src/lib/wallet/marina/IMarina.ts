@@ -1,4 +1,4 @@
-import { EventListenerID, MarinaEventType } from 'marina-provider';
+import { Balance, EventListenerID, MarinaEventType } from 'marina-provider';
 
 export type MarinaTransactionHex = string;
 export type MarinaPsetBase64 = string;
@@ -48,4 +48,6 @@ export interface MarinaProvider {
   signTransaction(pset: MarinaPsetBase64): Promise<MarinaPsetBase64>;
 
   signMessage(message: string): Promise<MarinaSignedMessage>;
+
+  getBalances(): Promise<Balance[]>;
 }
