@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { detectProvider } from 'marina-provider';
+import Decimal from 'decimal.js';
+import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
+import { Button, Content, Icon, Notification } from 'rsuite';
+import SettingsContext from '../../../context/SettingsContext';
+import { Wallet } from '../../../lib/wallet';
+import { IWallet } from '../../../lib/wallet/IWallet';
+import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
+import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
-import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
 import btc from '../../../images/liquid_btc.png';
 import usdt from '../../../images/usdt.png';
-import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
-import SettingsContext from '../../../context/SettingsContext';
-import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { IWallet } from '../../../lib/wallet/IWallet';
-import Decimal from 'decimal.js';
-import { Button, Content, Icon, Notification } from 'rsuite';
-import { detectProvider } from 'marina-provider';
-import { Wallet } from '../../../lib/wallet';
-import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {

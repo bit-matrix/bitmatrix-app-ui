@@ -1,15 +1,15 @@
-import { detectProvider } from 'marina-provider';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { detectProvider } from 'marina-provider';
+import Decimal from 'decimal.js';
+import { api, commitmentTx, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import { Button, Content, Icon, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
-import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import './RemoveLiquidity.scss';
-import Decimal from 'decimal.js';
-import { api, commitmentTx, fundingTxForLiquidity } from '@bitmatrix/lib';
 
 const RemoveLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
