@@ -13,11 +13,11 @@ import { Pool } from '../../pages/Pool/Pool';
 import { Stats } from '../../pages/Stats/Stats';
 import { Content } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
-import Liquidity from '../../pages/Liquidity/Liquidity';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import './AppRouter.scss';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
+import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
@@ -93,7 +93,7 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.POOL} component={Pool} />
             <Route exact path={ROUTE_PATH.STATS} component={Stats} />
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-            <Route exact path={ROUTE_PATH.LIQUIDITY} component={Liquidity} />
+            <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
             <Route exact path={ROUTE_PATH.REMOVE_LIQUIDTY} component={RemoveLiquidity} />
           </Switch>
         </div>
