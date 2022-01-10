@@ -14,6 +14,7 @@ import { Pool, BmChart } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { IconNames } from 'rsuite/lib/Icon';
 import './PoolDetail.scss';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 type Props = {
   pool: Pool;
@@ -113,7 +114,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                     <img className="pool-detail-img" src={lbtcImage} alt="" />
                     <span className="mobile-hidden">{pool.quote.ticker}</span>
                   </div>
-                  {Numeral(Number(pool.quote.value) / 100000000).format('(0.00a)')}
+                  {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                 </div>
 
                 <div className="pool-detail-item">
@@ -121,7 +122,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                     <img className="pool-detail-img" src={usdtImage} alt="" />
                     <span className="mobile-hidden">{pool.token.ticker}</span>
                   </div>
-                  {Numeral(Number(pool.token.value) / 100000000).format('(0.00a)')}
+                  {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                 </div>
               </div>
 
