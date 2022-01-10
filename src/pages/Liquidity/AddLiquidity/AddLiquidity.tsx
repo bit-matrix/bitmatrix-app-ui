@@ -68,7 +68,7 @@ const AddLiquidity = (): JSX.Element => {
       );
 
       setQuoteAmount(inputElement.target.value);
-      setTokenAmount((output.amount / payloadData.preferred_unit.value).toString());
+      setTokenAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
     }
   };
 
@@ -85,7 +85,7 @@ const AddLiquidity = (): JSX.Element => {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
 
       const numberFromAmount = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const numberToAmount = new Decimal(tokenAmount).mul(payloadData.preferred_unit.value).toNumber();
+      const numberToAmount = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTxForLiquidity(
@@ -146,7 +146,7 @@ const AddLiquidity = (): JSX.Element => {
     const currentPool = payloadData.pools;
     if (currentPool && currentPool.length > 0) {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const tokenAmountN = new Decimal(tokenAmount).mul(payloadData.preferred_unit.value).toNumber();
+      const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
       const recipientValue = convertion.calcRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
       return {
         lpReceived: (Number(recipientValue.lpReceived) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
