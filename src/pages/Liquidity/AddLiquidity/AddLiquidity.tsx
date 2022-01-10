@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
@@ -11,7 +12,7 @@ import SettingsContext from '../../../context/SettingsContext';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import Decimal from 'decimal.js';
-import { Button, Notification } from 'rsuite';
+import { Button, Content, Icon, Notification } from 'rsuite';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../../lib/wallet';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
@@ -27,6 +28,8 @@ const AddLiquidity = (): JSX.Element => {
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const { payloadData } = useContext(SettingsContext);
+
+  const history = useHistory();
 
   useEffect(() => {
     detectProvider('marina')
@@ -157,67 +160,75 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   return (
-    <>
-      <div className="add-liquidity-main">
-        <div className="add-liquidity-item pt8">
-          <SwapFromTab selectedFromAmountPercent={lbctPercent} setselectedFromAmountPercent={setLbtcPercent} />
-          <div className="add-liquidity-item-content">
-            <div className="add-liquidity-input-div">
-              <div className="add-liquidity-input-content">
-                <div className="add-liquidity-text">{SWAP_ASSET.LBTC} Liquidity</div>
-                <img className="liquidity-btc-icon" src={btc} alt="" />
-              </div>
-              <input
-                className="add-liquidity-input"
-                inputMode="decimal"
-                autoComplete="off"
-                autoCorrect="off"
-                type="text"
-                pattern="^[0-9]*[.,]?[0-9]*$"
-                spellCheck="false"
-                value={quoteAmount}
-                onChange={onChangeQuoteAmount}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="add-liquidity-plus-icon">
-          <img className="add-liquidity-page-icons" src={plus} alt="" />
-        </div>
-        <div className="add-liquidity-item pt8">
-          <SwapFromTab selectedFromAmountPercent={usdtPercent} setselectedFromAmountPercent={setUsdtPercent} />
-          <div className="add-liquidity-item-content">
-            <div className="add-liquidity-input-div">
-              <div className="add-liquidity-input-content">
-                <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
-                <img className="liquidity-usdt-icon" src={usdt} alt="" />
-              </div>
-              <input
-                className="add-liquidity-input"
-                inputMode="decimal"
-                autoComplete="off"
-                autoCorrect="off"
-                type="text"
-                pattern="^[0-9]*[.,]?[0-9]*$"
-                spellCheck="false"
-                value={tokenAmount}
-                onChange={
-                  (/*event: React.ChangeEvent<HTMLInputElement>*/) => {
-                    // setTokenAmount(event.target.value);
-                  }
-                }
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <LiquidityFooter received={calcLpValues().lpReceived} rewards={'0.2'} pool_share={calcLpValues().poolRate} />
-      <div className="liquidity-button-content">
-        <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
-          Add Liquidity
+    <div className="liquidity-page-main">
+      <Content className="liquidity-page-content">
+        <Button className="liquidity-page-back-button" onClick={() => history.goBack()}>
+          <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
+          <div className="liquidity-back-text">L-BTC/USDT</div>
         </Button>
-      </div>
-    </>
+        <div>
+          <div className="add-liquidity-main">
+            <div className="add-liquidity-item pt8">
+              <SwapFromTab selectedFromAmountPercent={lbctPercent} setselectedFromAmountPercent={setLbtcPercent} />
+              <div className="add-liquidity-item-content">
+                <div className="add-liquidity-input-div">
+                  <div className="add-liquidity-input-content">
+                    <div className="add-liquidity-text">{SWAP_ASSET.LBTC} Liquidity</div>
+                    <img className="liquidity-btc-icon" src={btc} alt="" />
+                  </div>
+                  <input
+                    className="add-liquidity-input"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    type="text"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
+                    spellCheck="false"
+                    value={quoteAmount}
+                    onChange={onChangeQuoteAmount}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="add-liquidity-plus-icon">
+              <img className="add-liquidity-page-icons" src={plus} alt="" />
+            </div>
+            <div className="add-liquidity-item pt8">
+              <SwapFromTab selectedFromAmountPercent={usdtPercent} setselectedFromAmountPercent={setUsdtPercent} />
+              <div className="add-liquidity-item-content">
+                <div className="add-liquidity-input-div">
+                  <div className="add-liquidity-input-content">
+                    <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
+                    <img className="liquidity-usdt-icon" src={usdt} alt="" />
+                  </div>
+                  <input
+                    className="add-liquidity-input"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    type="text"
+                    pattern="^[0-9]*[.,]?[0-9]*$"
+                    spellCheck="false"
+                    value={tokenAmount}
+                    onChange={
+                      (/*event: React.ChangeEvent<HTMLInputElement>*/) => {
+                        // setTokenAmount(event.target.value);
+                      }
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <LiquidityFooter received={calcLpValues().lpReceived} rewards={'0.2'} pool_share={calcLpValues().poolRate} />
+          <div className="liquidity-button-content">
+            <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
+              Add Liquidity
+            </Button>
+          </div>
+        </div>
+      </Content>
+    </div>
   );
 };
 
