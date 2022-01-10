@@ -11,10 +11,11 @@ import SettingsContext from '../../../context/SettingsContext';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import Decimal from 'decimal.js';
-import './AddLiquidity.scss';
 import { Button, Notification } from 'rsuite';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../../lib/wallet';
+import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
+import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -146,9 +147,12 @@ const AddLiquidity = (): JSX.Element => {
     if (currentPool && currentPool.length > 0) {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(payloadData.preferred_unit.value).toNumber();
-      return convertion.calcRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+      const recipientValue = convertion.calcRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+      return {
+        lpReceived: (Number(recipientValue.lpReceived) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
+        poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
+      };
     }
-
     return { lpReceived: '0', poolRate: '0' };
   };
 
@@ -197,7 +201,11 @@ const AddLiquidity = (): JSX.Element => {
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 spellCheck="false"
                 value={tokenAmount}
-                // onChange={(event: React.ChangeEvent<HTMLInputElement>) => setTokenAmount(event.target.value)}
+                onChange={
+                  (/*event: React.ChangeEvent<HTMLInputElement>*/) => {
+                    // setTokenAmount(event.target.value);
+                  }
+                }
               />
             </div>
           </div>

@@ -48,6 +48,11 @@
     font-size: 2rem;
     font-weight: 600;
     color: $bmShadyLady;
+    max-width: 13.5rem;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 
