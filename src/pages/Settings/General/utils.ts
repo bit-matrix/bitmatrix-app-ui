@@ -1,4 +1,5 @@
 import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
+import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SLIPPAGE_FEE } from '../../../enum/SLIPPAGE_FEE';
 
 export const preferredUnitOptions = [PREFERRED_UNIT.LBTC, PREFERRED_UNIT.mBTC, PREFERRED_UNIT.uBTC, PREFERRED_UNIT.SAT];
@@ -40,8 +41,8 @@ export const SlippageFeeList = [
 ];
 
 export const preferredUnitList = [
-  { text: PREFERRED_UNIT.LBTC, value: 100000000 },
-  { text: PREFERRED_UNIT.SAT, value: 1 },
-  { text: PREFERRED_UNIT.mBTC, value: 100000 },
-  { text: PREFERRED_UNIT.uBTC, value: 100 },
+  { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
+  { text: PREFERRED_UNIT.SAT, value: PREFERRED_UNIT_VALUE.SAT },
+  { text: PREFERRED_UNIT.mBTC, value: PREFERRED_UNIT_VALUE.mBTC },
+  { text: PREFERRED_UNIT.uBTC, value: PREFERRED_UNIT_VALUE.uBTC },
 ];
