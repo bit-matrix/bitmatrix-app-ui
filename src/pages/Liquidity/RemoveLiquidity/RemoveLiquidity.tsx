@@ -44,10 +44,9 @@ const RemoveLiquidity = (): JSX.Element => {
         setLpTokenAmount(lpTokenInWallet?.amount || 0);
       });
     }
-  });
+  }, [payloadData.pools]);
 
   const fetchTokens = async () => {
-    console.log('here');
     if (wallet) {
       const balances = await wallet.getBalances();
 
