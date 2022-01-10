@@ -17,6 +17,7 @@ import Liquidity from '../../pages/Liquidity/Liquidity';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import './AppRouter.scss';
+import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
@@ -93,6 +94,7 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.STATS} component={Stats} />
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
             <Route exact path={ROUTE_PATH.LIQUIDITY} component={Liquidity} />
+            <Route exact path={ROUTE_PATH.REMOVE_LIQUIDTY} component={RemoveLiquidity} />
           </Switch>
         </div>
 

@@ -5,4 +5,5 @@ export enum ROUTE_PATH {
   STATS = '/stats',
   SETTINGS = '/settings',
   LIQUIDITY = '/pool/liquidity',
+  REMOVE_LIQUIDTY = '/pool/removeliquidty',
 }
