@@ -1,19 +1,22 @@
 import { detectProvider } from 'marina-provider';
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Content, Icon, Slider } from 'rsuite';
+import { Button, Content, Icon, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
-import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
+import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import './RemoveLiquidity.scss';
+import Decimal from 'decimal.js';
+import { api, commitmentTx, fundingTxForLiquidity } from '@bitmatrix/lib';
 
 const RemoveLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
   const [wallet, setWallet] = useState<IWallet>();
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
+  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
   const history = useHistory();
 
@@ -38,6 +41,10 @@ const RemoveLiquidity = (): JSX.Element => {
       const currentPool = payloadData.pools[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
+      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
+        setPoolConfigs(response);
+      });
+
       fetchTokens().then((balances) => {
         const lpTokenInWallet = balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
@@ -54,6 +61,71 @@ const RemoveLiquidity = (): JSX.Element => {
     }
 
     return [];
+  };
+
+  const notify = (title: string, description: string) => {
+    Notification.open({
+      title: title,
+      description: <div className="notificationTx">{description}</div>,
+      duration: 20000,
+    });
+  };
+
+  const removeLiquidityClick = async () => {
+    if (wallet) {
+      const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
+
+      const lpTokenAmountInput = new Decimal(lpTokenAmount).toNumber();
+
+      if (payloadData.pools && poolConfigs) {
+        const fundingTxInputs = fundingTxForLiquidity(
+          0,
+          lpTokenAmountInput,
+          payloadData.pools[0],
+          poolConfigs,
+          methodCall,
+        );
+
+        const rawTxHex = await wallet.sendTransaction([
+          {
+            address: fundingTxInputs.fundingOutput1Address,
+            value: fundingTxInputs.fundingOutput1Value,
+            asset: fundingTxInputs.fundingOutput1AssetId,
+          },
+          {
+            address: fundingTxInputs.fundingOutput2Address,
+            value: fundingTxInputs.fundingOutput2Value,
+            asset: fundingTxInputs.fundingOutput2AssetId,
+          },
+        ]);
+
+        const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
+
+        console.log('fundingTxId', fundingTxId);
+
+        if (fundingTxId && fundingTxId !== '') {
+          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
+
+          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+
+          const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
+            lpTokenAmountInput,
+            fundingTxId,
+            publicKey,
+            poolConfigs,
+            payloadData.pools[0],
+          );
+
+          console.log('commitment raw hex :', commitment);
+
+          const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          notify('Commitment Tx Id : ', commitmentTxId);
+        } else {
+          notify('Wallet Error : ', 'Funding transaction could not be created.');
+        }
+      }
+    }
   };
 
   return (
@@ -94,7 +166,7 @@ const RemoveLiquidity = (): JSX.Element => {
           <LiquidityFooter received={'0'} rewards={'0'} pool_share={'0'} />
         </div>
         <div className="liquidity-button-content remove-liquidity-button">
-          <Button appearance="default" className="liquidity-button">
+          <Button appearance="default" className="liquidity-button" onClick={() => removeLiquidityClick()}>
             Remove Liquidity
           </Button>
         </div>
