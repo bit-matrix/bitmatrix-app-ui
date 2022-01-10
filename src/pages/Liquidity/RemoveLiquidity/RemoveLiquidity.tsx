@@ -17,6 +17,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
+  const [removalPercentage, setRemovalPercentage] = useState<number>(0);
 
   const history = useHistory();
 
@@ -139,25 +140,35 @@ const RemoveLiquidity = (): JSX.Element => {
           <div className="remove-liquidity-main">
             <div className="remove-liquidity-text">
               <div className="remove-liquidity-text-header">Removal Percentage</div>
-              <div className="remove-liquidity-text-body">% 95.45</div>
+              <div className="remove-liquidity-text-body">% {removalPercentage}</div>
             </div>
             <div className="remove-liquidity-slider">
-              <Slider />
+              <Slider
+                min={0}
+                max={100}
+                step={0.1}
+                value={removalPercentage}
+                onChange={(value: number) => setRemovalPercentage(value)}
+              />
             </div>
             <div className="remove-liquidity-button-toolbar">
-              <Button className="remove-liquidity-buttons mobile-hidden" appearance="ghost">
+              <Button
+                className="remove-liquidity-buttons mobile-hidden"
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(10)}
+              >
                 % 10
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost">
+              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(25)}>
                 % 25
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost">
+              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(50)}>
                 % 50
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost">
+              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(75)}>
                 % 75
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost">
+              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(100)}>
                 % 100
               </Button>
             </div>
