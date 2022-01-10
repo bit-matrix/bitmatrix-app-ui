@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
-import { api, commitmentTx, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import { Button, Content, Icon, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
+import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import lp from '../../../images/lp.png';
@@ -20,6 +21,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [removalPercentage, setRemovalPercentage] = useState<number>(0);
+  const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
 
   const history = useHistory();
 
@@ -56,6 +58,11 @@ const RemoveLiquidity = (): JSX.Element => {
     }
   }, [payloadData.pools]);
 
+  useEffect(() => {
+    const lpTokenAmountInput = new Decimal(lpTokenAmount).mul(removalPercentage).div(100).toNumber();
+    setCalcLpTokenAmount(lpTokenAmountInput);
+  }, [removalPercentage, lpTokenAmount]);
+
   const fetchTokens = async () => {
     if (wallet) {
       const balances = await wallet.getBalances();
@@ -78,13 +85,10 @@ const RemoveLiquidity = (): JSX.Element => {
     if (wallet) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      const lpTokenAmountInput = new Decimal(lpTokenAmount).mul(removalPercentage).div(100).toNumber();
-      console.log('lpTokenAmountInput', lpTokenAmountInput);
-
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTxForLiquidity(
           0,
-          lpTokenAmountInput,
+          calcLpTokenAmount,
           payloadData.pools[0],
           poolConfigs,
           methodCall,
@@ -113,7 +117,7 @@ const RemoveLiquidity = (): JSX.Element => {
           const publicKey = fundingTxDecode.vin[0].txinwitness[1];
 
           const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
-            lpTokenAmountInput,
+            calcLpTokenAmount,
             fundingTxId,
             publicKey,
             poolConfigs,
@@ -130,6 +134,19 @@ const RemoveLiquidity = (): JSX.Element => {
         }
       }
     }
+  };
+
+  const calcLpValues = () => {
+    const currentPool = payloadData.pools;
+    if (currentPool && currentPool.length > 0) {
+      const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
+      const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
+      return {
+        lbtcReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toFixed(2),
+        tokenReceived: (Number(recipientValue.user_token_received) * PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
+      };
+    }
+    return { lbtcReceived: '0', tokenReceived: '0' };
   };
 
   return (
@@ -183,21 +200,21 @@ const RemoveLiquidity = (): JSX.Element => {
                 <span className="liquidity-page-footer-line-item-texts">L-BTC You Get</span>
                 <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">0</div>
+              <div className="liquidity-page-footer-line-item-values">{calcLpValues().lbtcReceived}</div>
             </div>
             <div className="liquidity-page-footer-line-item-second mobile-hidden">
               <div>
                 <span className="liquidity-page-footer-line-item-texts">USDT You Get</span>
                 <img className="remove-liquidity-page-icons" src={usdt} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">0</div>
+              <div className="liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
             </div>
             <div className="liquidity-page-footer-line-item-third">
               <div>
                 <span className="liquidity-page-footer-line-item-texts">LP You Redeem</span>
                 <img className="remove-liquidity-page-icons" src={lp} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">0</div>
+              <div className="liquidity-page-footer-line-item-values">{calcLpTokenAmount}</div>
             </div>
           </div>
         </div>
