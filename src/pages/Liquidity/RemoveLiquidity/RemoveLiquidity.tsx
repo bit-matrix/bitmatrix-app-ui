@@ -59,7 +59,12 @@ const RemoveLiquidity = (): JSX.Element => {
   }, [payloadData.pools]);
 
   useEffect(() => {
-    const lpTokenAmountInput = new Decimal(lpTokenAmount).mul(removalPercentage).div(100).toNumber();
+    const lpTokenAmountInput = new Decimal(lpTokenAmount)
+      .mul(new Decimal(removalPercentage))
+      .div(100)
+      .ceil()
+      .toNumber();
+
     setCalcLpTokenAmount(lpTokenAmountInput);
   }, [removalPercentage, lpTokenAmount]);
 
@@ -143,7 +148,7 @@ const RemoveLiquidity = (): JSX.Element => {
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
       return {
         lbtcReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toFixed(2),
-        tokenReceived: (Number(recipientValue.user_token_received) * PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
+        tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
     return { lbtcReceived: '0', tokenReceived: '0' };
@@ -214,7 +219,9 @@ const RemoveLiquidity = (): JSX.Element => {
                 <span className="liquidity-page-footer-line-item-texts">LP You Redeem</span>
                 <img className="remove-liquidity-page-icons" src={lp} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">{calcLpTokenAmount}</div>
+              <div className="liquidity-page-footer-line-item-values">
+                {(Number(calcLpTokenAmount) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8)}
+              </div>
             </div>
           </div>
         </div>
