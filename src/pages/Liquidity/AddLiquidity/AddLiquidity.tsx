@@ -152,7 +152,7 @@ const AddLiquidity = (): JSX.Element => {
     if (currentPool && currentPool.length > 0) {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-      const recipientValue = convertion.calcRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+      const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
       return {
         lpReceived: (Number(recipientValue.lpReceived) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
         poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
