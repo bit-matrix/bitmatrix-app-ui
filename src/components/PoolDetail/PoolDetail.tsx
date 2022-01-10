@@ -194,7 +194,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
                 appearance="default"
                 className="primary-button pool-detail-add-button mobile-hidden"
                 onClick={() => {
-                  history.push(ROUTE_PATH.LIQUIDITY);
+                  history.push(ROUTE_PATH.ADD_LIQUIDTY);
                 }}
               >
                 Add Liquidity
