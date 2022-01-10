@@ -8,7 +8,9 @@ import { Button, Content, Icon, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
-import LiquidityFooter from '../LiquidityFooter/LiquidityFooter';
+import lp from '../../../images/lp.png';
+import usdt from '../../../images/usdt.png';
+import lbtc from '../../../images/liquid_btc.png';
 import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
@@ -174,7 +176,29 @@ const RemoveLiquidity = (): JSX.Element => {
             </div>
           </div>
 
-          <LiquidityFooter received={'0'} rewards={'0'} pool_share={'0'} />
+          <div className="liquidity-page-footer">
+            <div className="liquidity-page-footer-line-item-first">
+              <div>
+                <span className="liquidity-page-footer-line-item-texts">L-BTC You Get</span>
+                <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
+              </div>
+              <div className="liquidity-page-footer-line-item-values">0</div>
+            </div>
+            <div className="liquidity-page-footer-line-item-second mobile-hidden">
+              <div>
+                <span className="liquidity-page-footer-line-item-texts">USDT You Get</span>
+                <img className="remove-liquidity-page-icons" src={usdt} alt="" />
+              </div>
+              <div className="liquidity-page-footer-line-item-values">0</div>
+            </div>
+            <div className="liquidity-page-footer-line-item-third">
+              <div>
+                <span className="liquidity-page-footer-line-item-texts">LP You Redeem</span>
+                <img className="remove-liquidity-page-icons" src={lp} alt="" />
+              </div>
+              <div className="liquidity-page-footer-line-item-values">0</div>
+            </div>
+          </div>
         </div>
         <div className="liquidity-button-content remove-liquidity-button">
           <Button appearance="default" className="liquidity-button" onClick={() => removeLiquidityClick()}>
