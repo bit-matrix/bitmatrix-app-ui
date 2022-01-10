@@ -114,8 +114,6 @@ const RemoveLiquidity = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        console.log('fundingTxId', fundingTxId);
-
         if (fundingTxId && fundingTxId !== '') {
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
