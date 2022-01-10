@@ -24,6 +24,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import './Swap.scss';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -124,7 +125,7 @@ export const Swap = (): JSX.Element => {
       if (newFromAmount === 0) {
         setInputFromAmount('0.0');
       } else {
-        setInputFromAmount((newFromAmount / 100000000).toFixed(8).toString());
+        setInputFromAmount((newFromAmount / PREFERRED_UNIT_VALUE.LBTC).toFixed(8).toString());
       }
     },
     [selectedAsset],
@@ -135,21 +136,36 @@ export const Swap = (): JSX.Element => {
   }, [assetAmountToFromAmount, assetAmounts, selectedFromAmountPercent]);
 
   const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(inputElement.target.value);
+    let inputNum = Number(inputElement.target.value);
 
-    const methodCall =
-      selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     if (payloadData.pools && poolConfigs) {
+      let methodCall;
+
+      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+        inputNum = inputNum * payloadData.preferred_unit.value;
+        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+      } else {
+        inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      }
+
       const output = convertion.convertForCtx(
-        inputNum * payloadData.preferred_unit.value,
+        inputNum,
         payloadData.slippage,
         payloadData.pools[0],
         poolConfigs,
         methodCall,
       );
+
+      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      } else {
+        setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      }
+
       setInputFromAmount(inputElement.target.value);
-      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
-      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
     }
   };
 
@@ -175,11 +191,19 @@ export const Swap = (): JSX.Element => {
 
   const swapClick = async () => {
     if (wallet) {
-      const methodCall =
-        selectedAsset.from === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      let methodCall;
+      let numberFromAmount = 0;
+      let numberToAmount = 0;
 
-      const numberFromAmount = new Decimal(Number(inputFromAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
+      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(payloadData.preferred_unit.value).toNumber();
+        numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      } else {
+        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+        numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
+      }
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);

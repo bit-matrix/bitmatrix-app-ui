@@ -1,4 +1,5 @@
 import { BmChart, Pool } from '@bitmatrix/models';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ChartData } from '../AreaChart/AreaChart';
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
@@ -46,7 +47,7 @@ export const groupByDailyTvl = (chartData: BmChart[]): ChartData[] => {
       (datetime.getUTCMonth() + 1).toString().padStart(2, '0') +
       '-' +
       datetime.getUTCDate().toString().padStart(2, '0');
-    return { close: Math.floor(d.value.token / 100000000), date };
+    return { close: Math.floor(d.value.token / PREFERRED_UNIT_VALUE.LBTC), date };
   });
 
   const result = [];
@@ -86,7 +87,7 @@ export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
       (datetime.getUTCMonth() + 1).toString().padStart(2, '0') +
       '-' +
       datetime.getUTCDate().toString().padStart(2, '0');
-    return { volume: Math.floor(d.volume.token / 100000000), date };
+    return { volume: Math.floor(d.volume.token / PREFERRED_UNIT_VALUE.LBTC), date };
   });
 
   const result = [];
@@ -120,7 +121,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   // live current time data
   const todayVolumeData = allVolumeData[allVolumeData.length - 1];
   const todayFeeData = allFeeData[allFeeData.length - 1];
-  const todayTvlData = (Number(pool.token.value) * 2) / 100000000;
+  const todayTvlData = (Number(pool.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC;
   const todayPrice = Number(pool.token.value) / Number(pool.quote.value);
 
   // previous data
