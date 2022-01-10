@@ -36,15 +36,85 @@
     z-index: 6;
     width: 95%;
 
+    .add-liquidity-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem 0;
+
+      .add-liquidity-item {
+        display: flex;
+        border: 1px solid $bmDimGray;
+        border-radius: 1rem;
+        width: 100%;
+        justify-content: space-between;
+        position: relative;
+
+        .add-liquidity-item-content {
+          display: flex;
+          align-items: center;
+
+          .add-liquidity-input-div {
+            padding: 0.25rem 1rem;
+
+            .add-liquidity-input-content {
+              display: flex;
+              align-items: center;
+              margin-top: 0.25rem;
+
+              .add-liquidity-text {
+                text-align: left;
+                font-size: 1.125rem;
+                font-weight: 500;
+              }
+
+              .liquidity-btc-icon {
+                margin-left: 0.5rem;
+                width: 1.25rem;
+                height: 1.5rem;
+              }
+
+              .liquidity-usdt-icon {
+                margin-left: 0.5rem;
+                width: 1.5rem;
+              }
+            }
+
+            .add-liquidity-input {
+              max-width: 17rem;
+              background: $bmBlack;
+              border-width: 0px;
+              font-size: 1.5rem;
+              font-weight: bold;
+              outline: none;
+              color: $bmShadyLady;
+              margin: 0.25rem 0;
+              &::placeholder {
+                color: $bmShadyLady !important;
+                line-height: 2rem;
+                margin-bottom: 2rem;
+              }
+            }
+          }
+        }
+      }
+
+      .add-liquidity-plus-icon {
+        margin: 0.5rem 0;
+
+        .add-liquidity-page-icons {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
     .liquidity-button-content {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .remove-liquidity-button {
-      margin-top: 1.5rem;
     }
 
     .liquidity-page-back-button {
@@ -96,6 +166,37 @@
       width: 48rem;
       padding: 1.5rem;
 
+      .add-liquidity-main {
+        margin: 1.25rem 0;
+        padding: 1.125rem 0;
+        flex-direction: row;
+
+        .add-liquidity-item {
+          .add-liquidity-item-content {
+            .add-liquidity-input-div {
+              padding: 0.5rem 1rem;
+
+              .add-liquidity-input-content {
+                margin-top: 0.5rem;
+              }
+
+              .add-liquidity-input {
+                margin: 0.5rem 0;
+              }
+            }
+          }
+        }
+
+        .add-liquidity-plus-icon {
+          margin: 0 1rem;
+
+          .add-liquidity-page-icons {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+        }
+      }
+
       .liquidity-page-back-button {
         width: 18rem;
       }
@@ -103,117 +204,6 @@
       .liquidity-button {
         width: 25rem;
         margin-top: 1rem;
-      }
-
-      .remove-liquidity-button {
-        margin-top: 0;
-      }
-    }
-  }
-}
-
-.add-liquidity-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.75rem 0;
-
-  .add-liquidity-item {
-    display: flex;
-    border: 1px solid $bmDimGray;
-    border-radius: 1rem;
-    width: 100%;
-    justify-content: space-between;
-    position: relative;
-
-    .add-liquidity-item-content {
-      display: flex;
-      align-items: center;
-
-      .add-liquidity-input-div {
-        padding: 0.25rem 1rem;
-
-        .add-liquidity-input-content {
-          display: flex;
-          align-items: center;
-          margin-top: 0.25rem;
-
-          .add-liquidity-text {
-            text-align: left;
-            font-size: 1.125rem;
-            font-weight: 500;
-          }
-
-          .liquidity-btc-icon {
-            margin-left: 0.5rem;
-            width: 1.25rem;
-            height: 1.5rem;
-          }
-
-          .liquidity-usdt-icon {
-            margin-left: 0.5rem;
-            width: 1.5rem;
-          }
-        }
-
-        .add-liquidity-input {
-          max-width: 17rem;
-          background: $bmBlack;
-          border-width: 0px;
-          font-size: 1.5rem;
-          font-weight: bold;
-          outline: none;
-          color: $bmShadyLady;
-          margin: 0.25rem 0;
-          &::placeholder {
-            color: $bmShadyLady !important;
-            line-height: 2rem;
-            margin-bottom: 2rem;
-          }
-        }
-      }
-    }
-  }
-
-  .add-liquidity-plus-icon {
-    margin: 0.5rem 0;
-
-    .add-liquidity-page-icons {
-      width: 1rem;
-      height: 1rem;
-    }
-  }
-}
-
-@media only screen and (min-width: $mobile-view-breakpoint) {
-  .add-liquidity-main {
-    margin: 1.25rem 0;
-    padding: 1.125rem 0;
-    flex-direction: row;
-
-    .add-liquidity-item {
-      .add-liquidity-item-content {
-        .add-liquidity-input-div {
-          padding: 0.5rem 1rem;
-
-          .add-liquidity-input-content {
-            margin-top: 0.5rem;
-          }
-
-          .add-liquidity-input {
-            margin: 0.5rem 0;
-          }
-        }
-      }
-    }
-
-    .add-liquidity-plus-icon {
-      margin: 0 1rem;
-
-      .add-liquidity-page-icons {
-        width: 1.5rem;
-        height: 1.5rem;
       }
     }
   }
