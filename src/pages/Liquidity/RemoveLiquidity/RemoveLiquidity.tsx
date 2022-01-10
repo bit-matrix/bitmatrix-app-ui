@@ -78,7 +78,8 @@ const RemoveLiquidity = (): JSX.Element => {
     if (wallet) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      const lpTokenAmountInput = new Decimal(lpTokenAmount).toNumber();
+      const lpTokenAmountInput = new Decimal(lpTokenAmount).mul(removalPercentage).div(100).toNumber();
+      console.log('lpTokenAmountInput', lpTokenAmountInput);
 
       if (payloadData.pools && poolConfigs) {
         const fundingTxInputs = fundingTxForLiquidity(
