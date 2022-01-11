@@ -4,7 +4,7 @@ import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
-import { Button, Content, Icon, Notification } from 'rsuite';
+import { Button, Content, Icon, Loader, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -30,6 +30,7 @@ const AddLiquidity = (): JSX.Element => {
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [wallet, setWallet] = useState<IWallet>();
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -56,12 +57,17 @@ const AddLiquidity = (): JSX.Element => {
   // fetch pool config
   useEffect(() => {
     if (payloadData.pools) {
-      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        const primaryPoolConfig = { ...response };
-        primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
+      api
+        .getBmConfigs(payloadData.pools[0].id)
+        .then((response: BmConfig) => {
+          const primaryPoolConfig = { ...response };
+          primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
 
-        setPoolConfigs(primaryPoolConfig);
-      });
+          setPoolConfigs(primaryPoolConfig);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [payloadData.pools]);
 
@@ -186,6 +192,14 @@ const AddLiquidity = (): JSX.Element => {
     }
     return { lpReceived: '0', poolRate: '0' };
   };
+
+  if (loading) {
+    return (
+      <div id="loaderInverseWrapper" style={{ height: 200 }}>
+        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
+      </div>
+    );
+  }
 
   return (
     <div className="add-liquidity-page-main">

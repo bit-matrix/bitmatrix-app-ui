@@ -9,12 +9,12 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 type Props = {
   rank: number;
   pool: Pool;
-  onClick: () => void;
+  onClick: (poolId: string) => void;
 };
 
 export const PoolCard: React.FC<Props> = ({ pool, rank, onClick }) => {
   return (
-    <div className="pool-card-main" onClick={onClick}>
+    <div className="pool-card-main" onClick={() => onClick(pool.id)}>
       <div className="pool-card-item column-1">
         <div className="column-1-item order-item">#{rank}</div>
         <div className="column-1-item ">
