@@ -45,7 +45,7 @@ export const AppRouter = (): JSX.Element => {
         type: SETTINGS_ACTION_TYPES.SET_POOLS,
         payload: {
           ...payloadData,
-          pools,
+          pools: filteredPool,
         },
       });
     });
