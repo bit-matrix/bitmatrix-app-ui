@@ -145,9 +145,9 @@ const AddLiquidity = (): JSX.Element => {
           if (commitmentTxId && commitmentTxId !== '') {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: quoteAmountN,
+              quoteAmount: quoteAmountN / payloadData.preferred_unit.value,
               quoteAsset: pool.quote.ticker,
-              tokenAmount: tokenAmountN,
+              tokenAmount: tokenAmountN / PREFERRED_UNIT_VALUE.LBTC,
               tokenAsset: pool.token.ticker,
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: pool.lp.ticker,
