@@ -57,7 +57,10 @@ const AddLiquidity = (): JSX.Element => {
   useEffect(() => {
     if (payloadData.pools) {
       api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        setPoolConfigs(response);
+        const primaryPoolConfig = { ...response };
+        primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '0300000000' };
+
+        setPoolConfigs(primaryPoolConfig);
       });
     }
   }, [payloadData.pools]);
