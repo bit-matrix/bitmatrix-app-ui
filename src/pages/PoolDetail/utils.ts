@@ -1,6 +1,6 @@
 import { BmChart, Pool } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import { ChartData } from '../AreaChart/AreaChart';
+import { ChartData } from '../../components/AreaChart/AreaChart';
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
   if (chartData.length === 0) return [];
