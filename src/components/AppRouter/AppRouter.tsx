@@ -94,10 +94,9 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.STATS} component={Stats} />
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
             <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-            <Route exact path={ROUTE_PATH.REMOVE_LIQUIDTY} component={RemoveLiquidity} />
+            <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
           </Switch>
         </div>
-
         <Footer />
         <div className="secret-footer-div" />
       </Content>
