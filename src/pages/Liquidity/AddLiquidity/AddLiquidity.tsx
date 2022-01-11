@@ -146,7 +146,7 @@ const AddLiquidity = (): JSX.Element => {
               quoteAsset: pool.quote.ticker,
               tokenAmount: tokenAmountN,
               tokenAsset: pool.token.ticker,
-              lpAmount: Number(calcLpValues().lpReceived),
+              lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: pool.lp.ticker,
               timestamp: new Date().valueOf(),
               success: false,

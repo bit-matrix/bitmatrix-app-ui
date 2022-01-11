@@ -136,9 +136,9 @@ const RemoveLiquidity = (): JSX.Element => {
 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: Number(calcLpAmounts.quoteReceived),
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber(),
               quoteAsset: pool.quote.ticker,
-              tokenAmount: Number(calcLpAmounts.tokenReceived),
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber(),
               tokenAsset: pool.token.ticker,
               lpAmount: calcLpTokenAmount,
               lpAsset: pool.lp.ticker,
