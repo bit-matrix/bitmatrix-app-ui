@@ -245,7 +245,6 @@ const AddLiquidity = (): JSX.Element => {
               <div className="liquidity-page-footer-line-item-values">% {calcLpValues().poolRate}</div>
             </div>
           </div>
-          {/* <LiquidityFooter received={calcLpValues().lpReceived} rewards={'0.2'} pool_share={calcLpValues().poolRate} /> */}
           <div className="liquidity-button-content">
             <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
               Add Liquidity
