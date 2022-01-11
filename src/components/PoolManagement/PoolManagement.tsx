@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
@@ -8,6 +8,9 @@ import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
+import { IWallet } from '../../lib/wallet/IWallet';
+import { detectProvider } from 'marina-provider';
+import { Wallet } from '../../lib/wallet';
 import './PoolManagement.scss';
 
 type Props = {
@@ -18,8 +21,41 @@ type Props = {
 export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  const [wallet, setWallet] = useState<IWallet>();
+  const [myPools, setMyPools] = useState<Pool[]>([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    detectProvider('marina')
+      .then((marina) => {
+        const marinaWallet = new Wallet();
+        setWallet(marinaWallet);
+      })
+      .catch(() => {
+        const marinaWallet = new Wallet();
+        setWallet(marinaWallet);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (pools && pools.length > 0 && wallet && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+      wallet.getBalances().then((balances) => {
+        const balanceAssets = balances.map((bl) => bl.asset.assetHash);
+        const myCurrentPools: Pool[] = [];
+
+        balanceAssets.forEach((ba) => {
+          const currentPool = pools.find((po) => po.lp.asset === ba);
+
+          if (currentPool) {
+            myCurrentPools.push(currentPool);
+          }
+        });
+
+        setMyPools(myCurrentPools);
+      });
+    }
+  }, [wallet, pools, selectedTab]);
 
   const getPoolData = () => {
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
@@ -31,16 +67,17 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
         );
       });
     } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
-      return (
-        <div key={1} className="pool-page-card card-2">
-          <div className="no-pool-text">No pool found.</div>
-          {/* <PoolCard
-            pool={pools[0]}
-            rank={1}
-            onClick={() => onClick(pools[0])}
-          /> */}
-        </div>
-      );
+      if (myPools.length === 0) {
+        return <div className="no-pool-text">No pool found.</div>;
+      }
+
+      return myPools.map((pool, index) => {
+        return (
+          <div key={pool.id} className="pool-page-card card-2">
+            <PoolCard pool={pool} rank={index + 1} onClick={() => console.log('here ')} />
+          </div>
+        );
+      });
     }
   };
 
