@@ -6,6 +6,8 @@ import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix
 import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import { Button, Content, Icon, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
+import { CommitmentStore } from '../../../model/CommitmentStore';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
@@ -30,6 +32,8 @@ const AddLiquidity = (): JSX.Element => {
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const { payloadData } = useContext(SettingsContext);
+
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
 
   const history = useHistory();
 
@@ -89,17 +93,13 @@ const AddLiquidity = (): JSX.Element => {
     if (wallet) {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
 
-      const numberFromAmount = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
-      const numberToAmount = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
+      const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
       if (payloadData.pools && poolConfigs) {
-        const fundingTxInputs = fundingTxForLiquidity(
-          numberFromAmount,
-          numberToAmount,
-          payloadData.pools[0],
-          poolConfigs,
-          methodCall,
-        );
+        const pool = payloadData.pools[0];
+
+        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, poolConfigs, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -127,17 +127,40 @@ const AddLiquidity = (): JSX.Element => {
           const publicKey = fundingTxDecode.vin[0].txinwitness[1];
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
-            numberFromAmount,
-            numberToAmount,
+            quoteAmountN,
+            tokenAmountN,
             fundingTxId,
             publicKey,
             poolConfigs,
-            payloadData.pools[0],
+            pool,
           );
 
           console.log('commitment raw hex :', commitment);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          if (commitmentTxId && commitmentTxId !== '') {
+            const tempTxData: CommitmentStore = {
+              txId: commitmentTxId,
+              quoteAmount: quoteAmountN,
+              quoteAsset: pool.quote.ticker,
+              tokenAmount: tokenAmountN,
+              tokenAsset: pool.token.ticker,
+              lpAmount: Number(calcLpValues().lpReceived),
+              lpAsset: pool.lp.ticker,
+              timestamp: new Date().valueOf(),
+              success: false,
+              completed: false,
+              seen: false,
+              method: CALL_METHOD.ADD_LIQUIDITY,
+            };
+
+            const storeOldData = getTxLocalData() || [];
+
+            const newStoreData = [...storeOldData, tempTxData];
+
+            setTxLocalData(newStoreData);
+          }
 
           notify('Commitment Tx Id : ', commitmentTxId);
         } else {
