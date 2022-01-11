@@ -74,7 +74,11 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
       return myPools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
-            <PoolCard pool={pool} rank={index + 1} onClick={() => console.log('here ')} />
+            <PoolCard
+              pool={pool}
+              rank={index + 1}
+              onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/my-pool/' + poolId)}
+            />
           </div>
         );
       });

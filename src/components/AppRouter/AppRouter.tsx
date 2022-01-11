@@ -18,6 +18,7 @@ import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
+import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
 import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
@@ -93,6 +94,7 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
             <Route exact path={ROUTE_PATH.POOL} component={Pool} />
             <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
+            <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
             <Route exact path={ROUTE_PATH.STATS} component={Stats} />
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
             <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />

@@ -13,11 +13,11 @@ import usdtImage from '../../images/usdt.png';
 import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { IconNames } from 'rsuite/lib/Icon';
-import './PoolDetail.scss';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
+import './PoolDetail.scss';
 
-export const PoolDetail: React.FC = () => {
+export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [chartData, setChartData] = useState<BmChart[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -204,10 +204,10 @@ export const PoolDetail: React.FC = () => {
                 appearance="default"
                 className="primary-button pool-detail-add-button mobile-hidden"
                 onClick={() => {
-                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity');
+                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity');
                 }}
               >
-                Add Liquidity
+                Remove Liquidity
               </Button>
             </div>
             <div className="pool-detail-content-right mobile-hidden">{renderChart(data)}</div>
