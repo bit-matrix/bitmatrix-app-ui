@@ -54,7 +54,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
               appearance="default"
               className="pm-add-button pm-add-liquidity"
               onClick={() => {
-                history.push(ROUTE_PATH.LIQUIDITY);
+                history.push(ROUTE_PATH.ADD_LIQUIDTY);
               }}
             >
               Add Liquidity
