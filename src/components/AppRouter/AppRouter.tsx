@@ -17,6 +17,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
+import { PoolDetail } from '../PoolDetail/PoolDetail';
 import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
@@ -43,7 +44,7 @@ export const AppRouter = (): JSX.Element => {
         type: SETTINGS_ACTION_TYPES.SET_POOLS,
         payload: {
           ...payloadData,
-          pools: filteredPool,
+          pools,
         },
       });
     });
@@ -91,6 +92,7 @@ export const AppRouter = (): JSX.Element => {
             <Route exact path={ROUTE_PATH.HOME} component={Home} />
             <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
             <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+            <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
             <Route exact path={ROUTE_PATH.STATS} component={Stats} />
             <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
             <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
