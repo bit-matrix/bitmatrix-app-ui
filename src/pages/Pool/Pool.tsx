@@ -5,6 +5,7 @@ import { Loader } from 'rsuite';
 import SettingsContext from '../../context/SettingsContext';
 import { useHistory } from 'react-router-dom';
 import './Pool.scss';
+import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 
 export const Pool = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
@@ -22,7 +23,10 @@ export const Pool = (): JSX.Element => {
     if (payloadData.pools && payloadData.pools.length > 0) {
       return (
         <div className="pool-main-div">
-          <PoolManagement pools={payloadData.pools} onClick={(poolId: string) => history.push('/pool/' + poolId)} />
+          <PoolManagement
+            pools={payloadData.pools}
+            onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/' + poolId)}
+          />
         </div>
       );
     }
