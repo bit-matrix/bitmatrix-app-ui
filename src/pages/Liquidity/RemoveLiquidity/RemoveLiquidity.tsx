@@ -51,7 +51,10 @@ const RemoveLiquidity = (): JSX.Element => {
       const lpTokenAssetId = currentPool.lp.asset;
 
       api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        setPoolConfigs(response);
+        const primaryPoolConfig = { ...response };
+        primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '0300000000' };
+
+        setPoolConfigs(primaryPoolConfig);
       });
 
       fetchTokens().then((balances) => {
