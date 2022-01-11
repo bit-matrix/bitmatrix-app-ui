@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from './utils';
@@ -10,34 +10,42 @@ import { TabMenu } from '../TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
-import { Pool, BmChart } from '@bitmatrix/models';
+import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { IconNames } from 'rsuite/lib/Icon';
 import './PoolDetail.scss';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import SettingsContext from '../../context/SettingsContext';
 
-type Props = {
-  pool: Pool;
-  back: () => void;
-};
-
-export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
+export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [chartData, setChartData] = useState<BmChart[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [pool, setPool] = useState<Pool>();
+
+  const { payloadData } = useContext(SettingsContext);
 
   const history = useHistory();
 
+  const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    if (payloadData.pools && payloadData.pools.length > 0) {
+      const currentPool = payloadData.pools.find((pl) => pl.id === id);
+      setPool(currentPool);
+    }
+  }, [payloadData.pools]);
+
   useEffect(() => {
     api
-      .getPoolChartData(pool.id)
+      .getPoolChartData(id)
       .then((poolChartData: BmChart[]) => {
         setChartData(poolChartData);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [pool]);
+  }, [id]);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -76,6 +84,8 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
         <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
       </div>
     );
+  } else if (pool === undefined) {
+    return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
     const data = calculateChartData(chartData, pool);
 
@@ -84,7 +94,7 @@ export const PoolDetail: React.FC<Props> = ({ pool, back }) => {
         <div className="pool-detail-main">
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">
-              <Button className="pool-detail-button" onClick={back}>
+              <Button className="pool-detail-button" onClick={() => history.goBack()}>
                 <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
                 <div className="pool-detail-page-text">
                   {pool.quote.ticker} / {pool.token.ticker}
