@@ -162,11 +162,11 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   return (
-    <div className="liquidity-page-main">
-      <Content className="liquidity-page-content">
-        <Button className="liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
-          <div className="liquidity-back-text">L-BTC/USDT</div>
+    <div className="add-liquidity-page-main">
+      <Content className="add-liquidity-page-content">
+        <Button className="add-liquidity-page-back-button" onClick={() => history.goBack()}>
+          <Icon className="add-liquidity-back-icon" icon="angle-left" size="4x" />
+          <div className="add-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>
           <div className="add-liquidity-main">
@@ -222,31 +222,31 @@ const AddLiquidity = (): JSX.Element => {
               </div>
             </div>
           </div>
-          <div className="liquidity-page-footer">
-            <div className="liquidity-page-footer-line-item-first">
+          <div className="add-liquidity-page-footer">
+            <div className="add-liquidity-page-footer-line-item-first">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">LP you will get</span>
-                <img className="liquidity-page-icons" src={lp} alt="" />
+                <span className="add-liquidity-page-footer-line-item-texts">LP you will get</span>
+                <img className="add-liquidity-page-icons" src={lp} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">{calcLpValues().lpReceived}</div>
+              <div className="add-liquidity-page-footer-line-item-values">{calcLpValues().lpReceived}</div>
             </div>
-            <div className="liquidity-page-footer-line-item-second mobile-hidden">
+            <div className="add-liquidity-page-footer-line-item-second mobile-hidden">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">LP rewards</span>
-                <img className="liquidity-page-icons" src={rew} alt="" />
+                <span className="add-liquidity-page-footer-line-item-texts">LP rewards</span>
+                <img className="add-liquidity-page-icons" src={rew} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">% 0.2</div>
+              <div className="add-liquidity-page-footer-line-item-values">% 0.2</div>
             </div>
-            <div className="liquidity-page-footer-line-item-third">
+            <div className="add-liquidity-page-footer-line-item-third">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">Pool Share</span>
-                <img className="liquidity-page-icons" src={pct} alt="" />
+                <span className="add-liquidity-page-footer-line-item-texts">Pool Share</span>
+                <img className="add-liquidity-page-icons" src={pct} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">% {calcLpValues().poolRate}</div>
+              <div className="add-liquidity-page-footer-line-item-values">% {calcLpValues().poolRate}</div>
             </div>
           </div>
-          <div className="liquidity-button-content">
-            <Button appearance="default" className="liquidity-button" onClick={() => addLiquidityClick()}>
+          <div className="add-liquidity-button-content">
+            <Button appearance="default" className="add-liquidity-button" onClick={() => addLiquidityClick()}>
               Add Liquidity
             </Button>
           </div>

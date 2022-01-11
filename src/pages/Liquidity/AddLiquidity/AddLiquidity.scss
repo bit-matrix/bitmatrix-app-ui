@@ -1,6 +1,6 @@
 @import '../../../style/themes/bitmatrix.scss';
 
-.liquidity-page-main {
+.add-liquidity-page-main {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,7 @@
     }
   }
 
-  .liquidity-page-content {
+  .add-liquidity-page-content {
     position: relative;
     margin: 0 auto;
     border: 2px solid $bmPaleGreen;
@@ -110,13 +110,13 @@
       }
     }
 
-    .liquidity-page-footer {
+    .add-liquidity-page-footer {
       display: flex;
       align-items: center;
       width: 100%;
       margin: 0.5rem 0;
 
-      .liquidity-page-footer-line-item-first {
+      .add-liquidity-page-footer-line-item-first {
         width: 50%;
         display: flex;
         flex-direction: column;
@@ -125,7 +125,7 @@
         border-right: 2px solid;
       }
 
-      .liquidity-page-footer-line-item-second {
+      .add-liquidity-page-footer-line-item-second {
         width: 36%;
         display: flex;
         flex-direction: column;
@@ -135,7 +135,7 @@
         border-right: 2px solid;
       }
 
-      .liquidity-page-footer-line-item-third {
+      .add-liquidity-page-footer-line-item-third {
         width: 50%;
         display: flex;
         flex-direction: column;
@@ -143,18 +143,18 @@
         align-items: center;
       }
 
-      .liquidity-page-footer-line-item-texts {
+      .add-liquidity-page-footer-line-item-texts {
         font-size: 1rem;
         font-weight: 600;
         margin-right: 0.5rem;
       }
 
-      .liquidity-page-icons {
+      .add-liquidity-page-icons {
         width: 1.5rem;
         height: 1.5rem;
       }
 
-      .liquidity-page-footer-line-item-values {
+      .add-liquidity-page-footer-line-item-values {
         font-size: 2rem;
         font-weight: 600;
         color: $bmShadyLady;
@@ -166,14 +166,14 @@
       }
     }
 
-    .liquidity-button-content {
+    .add-liquidity-button-content {
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .liquidity-page-back-button {
+    .add-liquidity-page-back-button {
       width: 100%;
       height: 3rem;
       display: flex !important;
@@ -186,12 +186,12 @@
         opacity: 1;
       }
 
-      .liquidity-back-text {
+      .add-liquidity-back-text {
         margin-left: 1rem;
         color: $bmPaleGreen;
       }
 
-      .liquidity-back-icon {
+      .add-liquidity-back-icon {
         height: 3rem !important;
         font-size: 3rem !important;
         color: $bmPaleGreen !important;
@@ -199,7 +199,7 @@
       }
     }
 
-    .liquidity-button {
+    .add-liquidity-button {
       width: 100%;
       height: 2.75rem;
       border-radius: 1rem !important;
@@ -217,8 +217,8 @@
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
-  .liquidity-page-main {
-    .liquidity-page-content {
+  .add-liquidity-page-main {
+    .add-liquidity-page-content {
       width: 48rem;
       padding: 1.5rem;
 
@@ -253,24 +253,24 @@
         }
       }
 
-      .liquidity-page-footer {
+      .add-liquidity-page-footer {
         margin: 2rem 0;
 
-        .liquidity-page-footer-line-item-first {
+        .add-liquidity-page-footer-line-item-first {
           width: 32%;
           border-right: unset;
         }
 
-        .liquidity-page-footer-line-item-third {
+        .add-liquidity-page-footer-line-item-third {
           width: 32%;
         }
       }
 
-      .liquidity-page-back-button {
+      .add-liquidity-page-back-button {
         width: 18rem;
       }
 
-      .liquidity-button {
+      .add-liquidity-button {
         width: 25rem;
         margin-top: 1rem;
       }
