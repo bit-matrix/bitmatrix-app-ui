@@ -9,7 +9,7 @@ import { Loading } from '../Loading/Loading';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
-  const { getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const data = getTxLocalData();
 

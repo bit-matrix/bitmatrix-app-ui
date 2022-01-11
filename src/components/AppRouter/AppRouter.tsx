@@ -21,7 +21,7 @@ import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
-  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {

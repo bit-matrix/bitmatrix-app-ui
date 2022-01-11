@@ -51,7 +51,7 @@ export const Swap = (): JSX.Element => {
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const { payloadData } = useContext(SettingsContext);
 

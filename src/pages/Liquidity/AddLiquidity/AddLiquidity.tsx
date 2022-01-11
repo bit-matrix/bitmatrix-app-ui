@@ -33,7 +33,7 @@ const AddLiquidity = (): JSX.Element => {
 
   const { payloadData } = useContext(SettingsContext);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
 
