@@ -17,7 +17,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
-import { PoolDetail } from '../PoolDetail/PoolDetail';
+import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
