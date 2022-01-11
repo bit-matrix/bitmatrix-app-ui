@@ -7,6 +7,7 @@ import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
@@ -24,7 +25,6 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import './Swap.scss';
-import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -51,7 +51,7 @@ export const Swap = (): JSX.Element => {
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -260,14 +260,15 @@ export const Swap = (): JSX.Element => {
           if (commitmentTxId && commitmentTxId !== '') {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              fromAmount: numberFromAmount,
-              toAmount: numberToAmount,
-              fromAsset: selectedAsset.from,
-              toAsset: selectedAsset.to,
+              quoteAmount: numberFromAmount,
+              quoteAsset: selectedAsset.from,
+              tokenAmount: numberToAmount,
+              tokenAsset: selectedAsset.to,
               timestamp: new Date().valueOf(),
               success: false,
               completed: false,
               seen: false,
+              method: methodCall,
             };
 
             const storeOldData = getTxLocalData() || [];

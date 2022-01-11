@@ -6,6 +6,8 @@ import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix
 import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
 import { Button, Content, Icon, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
+import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
@@ -22,6 +24,8 @@ const RemoveLiquidity = (): JSX.Element => {
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
+
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
 
   const history = useHistory();
 
@@ -47,7 +51,10 @@ const RemoveLiquidity = (): JSX.Element => {
       const lpTokenAssetId = currentPool.lp.asset;
 
       api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        setPoolConfigs(response);
+        const primaryPoolConfig = { ...response };
+        primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '0300000000' };
+
+        setPoolConfigs(primaryPoolConfig);
       });
 
       fetchTokens().then((balances) => {
@@ -91,13 +98,9 @@ const RemoveLiquidity = (): JSX.Element => {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
       if (payloadData.pools && poolConfigs) {
-        const fundingTxInputs = fundingTxForLiquidity(
-          0,
-          calcLpTokenAmount,
-          payloadData.pools[0],
-          poolConfigs,
-          methodCall,
-        );
+        const pool = payloadData.pools[0];
+
+        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, poolConfigs, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -124,12 +127,37 @@ const RemoveLiquidity = (): JSX.Element => {
             fundingTxId,
             publicKey,
             poolConfigs,
-            payloadData.pools[0],
+            pool,
           );
 
           console.log('commitment raw hex :', commitment);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
+
+          if (commitmentTxId && commitmentTxId !== '') {
+            const calcLpAmounts = calcLpValues();
+
+            const tempTxData: CommitmentStore = {
+              txId: commitmentTxId,
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber(),
+              quoteAsset: pool.quote.ticker,
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber(),
+              tokenAsset: pool.token.ticker,
+              lpAmount: calcLpTokenAmount,
+              lpAsset: pool.lp.ticker,
+              timestamp: new Date().valueOf(),
+              success: false,
+              completed: false,
+              seen: false,
+              method: CALL_METHOD.REMOVE_LIQUIDITY,
+            };
+
+            const storeOldData = getTxLocalData() || [];
+
+            const newStoreData = [...storeOldData, tempTxData];
+
+            setTxLocalData(newStoreData);
+          }
 
           notify('Commitment Tx Id : ', commitmentTxId);
         } else {
@@ -145,11 +173,11 @@ const RemoveLiquidity = (): JSX.Element => {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
       return {
-        lbtcReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toFixed(2),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toFixed(2),
         tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
-    return { lbtcReceived: '0', tokenReceived: '0' };
+    return { quoteReceived: '0', tokenReceived: '0' };
   };
 
   return (
@@ -203,7 +231,7 @@ const RemoveLiquidity = (): JSX.Element => {
                 <span className="remove-liquidity-page-footer-line-item-texts">L-BTC You Get</span>
                 <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
               </div>
-              <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().lbtcReceived}</div>
+              <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div>
