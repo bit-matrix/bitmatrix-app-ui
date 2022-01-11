@@ -153,11 +153,11 @@ const RemoveLiquidity = (): JSX.Element => {
   };
 
   return (
-    <div className="liquidity-page-main">
-      <Content className="liquidity-page-content">
-        <Button className="liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="liquidity-back-icon" icon="angle-left" size="4x" />
-          <div className="liquidity-back-text">L-BTC/USDT</div>
+    <div className="remove-liquidity-page-main">
+      <Content className="remove-liquidity-page-content">
+        <Button className="remove-liquidity-page-back-button" onClick={() => history.goBack()}>
+          <Icon className="remove-liquidity-back-icon" icon="angle-left" size="4x" />
+          <div className="remove-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>
           <div className="remove-liquidity-main">
@@ -197,34 +197,34 @@ const RemoveLiquidity = (): JSX.Element => {
             </div>
           </div>
 
-          <div className="liquidity-page-footer">
-            <div className="liquidity-page-footer-line-item-first">
+          <div className="remove-liquidity-page-footer">
+            <div className="remove-liquidity-page-footer-line-item-first">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">L-BTC You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">L-BTC You Get</span>
                 <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">{calcLpValues().lbtcReceived}</div>
+              <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().lbtcReceived}</div>
             </div>
-            <div className="liquidity-page-footer-line-item-second mobile-hidden">
+            <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">USDT You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">USDT You Get</span>
                 <img className="remove-liquidity-page-icons" src={usdt} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
+              <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
             </div>
-            <div className="liquidity-page-footer-line-item-third">
+            <div className="remove-liquidity-page-footer-line-item-third">
               <div>
-                <span className="liquidity-page-footer-line-item-texts">LP You Redeem</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
                 <img className="remove-liquidity-page-icons" src={lp} alt="" />
               </div>
-              <div className="liquidity-page-footer-line-item-values">
+              <div className="remove-liquidity-page-footer-line-item-values">
                 {(Number(calcLpTokenAmount) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8)}
               </div>
             </div>
           </div>
         </div>
-        <div className="liquidity-button-content remove-liquidity-button">
-          <Button appearance="default" className="liquidity-button" onClick={() => removeLiquidityClick()}>
+        <div className="remove-liquidity-button-content">
+          <Button appearance="default" className="remove-liquidity-button" onClick={() => removeLiquidityClick()}>
             Remove Liquidity
           </Button>
         </div>
