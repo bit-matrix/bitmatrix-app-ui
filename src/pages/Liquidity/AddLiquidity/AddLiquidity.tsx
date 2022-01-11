@@ -74,19 +74,31 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
-    const methodCall = CALL_METHOD.ADD_LIQUIDITY;
-
     if (payloadData.pools && poolConfigs) {
-      const output = convertion.convertForCtx(
+      const output = convertion.convertForLiquidityCtx(
         inputNum * payloadData.preferred_unit.value,
-        payloadData.slippage,
         payloadData.pools[0],
         poolConfigs,
-        methodCall,
       );
 
       setQuoteAmount(inputElement.target.value);
-      setTokenAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+      setTokenAmount((output / PREFERRED_UNIT_VALUE.LBTC).toString());
+    }
+  };
+
+  const onChangeTokenAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+    const inputNum = Number(inputElement.target.value);
+
+    if (payloadData.pools && poolConfigs) {
+      const output = convertion.convertForLiquidityCtx(
+        inputNum * PREFERRED_UNIT_VALUE.LBTC,
+        payloadData.pools[0],
+        poolConfigs,
+        true,
+      );
+
+      setQuoteAmount((output / payloadData.preferred_unit.value).toString());
+      setTokenAmount(inputElement.target.value);
     }
   };
 
@@ -181,7 +193,7 @@ const AddLiquidity = (): JSX.Element => {
 
   const calcLpValues = () => {
     const currentPool = payloadData.pools;
-    if (currentPool && currentPool.length > 0) {
+    if (currentPool && currentPool.length > 0 && quoteAmount !== '' && tokenAmount !== '') {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
       const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
@@ -252,11 +264,7 @@ const AddLiquidity = (): JSX.Element => {
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     value={tokenAmount}
-                    onChange={
-                      (/*event: React.ChangeEvent<HTMLInputElement>*/) => {
-                        // setTokenAmount(event.target.value);
-                      }
-                    }
+                    onChange={onChangeTokenAmount}
                   />
                 </div>
               </div>
