@@ -15,9 +15,9 @@ import { Content } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import './AppRouter.scss';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
+import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
