@@ -25,7 +25,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV2');
+  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
 
