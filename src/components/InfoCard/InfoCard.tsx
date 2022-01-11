@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from 'rsuite';
+import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -12,6 +13,39 @@ export const InfoCard: React.FC = () => {
 
   const data = getTxLocalData();
 
+  const message = (cs: CommitmentStore): JSX.Element | undefined => {
+    if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+      return (
+        <div>
+          <Icon className="info-card-item-icon" icon="exchange" />
+          <div>
+            Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
+            {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
+          </div>
+        </div>
+      );
+    }
+    if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
+      <div>
+        <Icon className="info-card-item-icon" icon="tint" />
+        <div>
+          Add {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} and
+          {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC}
+        </div>
+      </div>;
+    }
+    if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
+      <div>
+        <Icon className="info-card-item-icon" icon="tint" />
+        <div>
+          Remove {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} and
+          {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC}
+        </div>
+      </div>;
+    }
+    return;
+  };
+
   if (data) {
     return (
       <div className="info-card-main">
@@ -21,11 +55,7 @@ export const InfoCard: React.FC = () => {
             .map((dt) => {
               return (
                 <div key={dt.txId} className="info-card-item">
-                  <Icon className="info-card-item-icon" icon="exchange" />
-                  <div>
-                    Swap {dt.fromAmount / PREFERRED_UNIT_VALUE.LBTC} {dt.fromAsset} for {dt.toAsset} (min{' '}
-                    {dt.toAmount / PREFERRED_UNIT_VALUE.LBTC})
-                  </div>
+                  {message}
                   {dt.completed === false ? (
                     <Loading width="1.5rem" height="1.5rem" />
                   ) : (
@@ -39,6 +69,5 @@ export const InfoCard: React.FC = () => {
       </div>
     );
   }
-
   return <div>Coming soon</div>;
 };
