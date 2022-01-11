@@ -20,7 +20,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
-  const [removalPercentage, setRemovalPercentage] = useState<number>(0);
+  const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
 
   const history = useHistory();
