@@ -14,36 +14,51 @@ export const InfoCard: React.FC = () => {
   const data = getTxLocalData();
 
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
+    let messageBody: JSX.Element | undefined;
+
     if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-      return (
-        <div>
+      messageBody = (
+        <>
           <Icon className="info-card-item-icon" icon="exchange" />
           <div>
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
             {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
           </div>
-        </div>
+        </>
       );
     }
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
-      <div>
-        <Icon className="info-card-item-icon" icon="tint" />
-        <div>
-          Add {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} and
-          {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC}
-        </div>
-      </div>;
+      messageBody = (
+        <>
+          <Icon className="info-card-item-icon" icon="tint" />
+          <div>
+            Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            {cs.tokenAmount} {cs.tokenAsset}
+          </div>
+        </>
+      );
     }
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
-      <div>
-        <Icon className="info-card-item-icon" icon="tint" />
-        <div>
-          Remove {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} and
-          {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC}
-        </div>
-      </div>;
+      messageBody = (
+        <>
+          <Icon className="info-card-item-icon" icon="tint" />
+          <div>
+            Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            {cs.tokenAmount} {cs.tokenAsset}
+          </div>
+        </>
+      );
     }
-    return;
+    return (
+      <div key={cs.txId} className="info-card-item">
+        {messageBody}
+        {cs.completed === false ? (
+          <Loading width="1.5rem" height="1.5rem" />
+        ) : (
+          <div>{timeDifference(cs.timestamp)}</div>
+        )}
+      </div>
+    );
   };
 
   if (data) {
@@ -53,16 +68,7 @@ export const InfoCard: React.FC = () => {
           {data
             .sort((a, b) => b.timestamp - a.timestamp)
             .map((dt) => {
-              return (
-                <div key={dt.txId} className="info-card-item">
-                  {message}
-                  {dt.completed === false ? (
-                    <Loading width="1.5rem" height="1.5rem" />
-                  ) : (
-                    <div>{timeDifference(dt.timestamp)}</div>
-                  )}
-                </div>
-              );
+              return message(dt);
             })}
         </div>
         <div className="info-card-footer">No other record found.</div>
