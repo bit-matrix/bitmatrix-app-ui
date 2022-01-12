@@ -8,7 +8,6 @@ import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import { IWallet } from '../../../lib/wallet/IWallet';
 import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
@@ -18,7 +17,6 @@ const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -27,21 +25,15 @@ const RemoveLiquidity = (): JSX.Element => {
   const history = useHistory();
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet?.marina) {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
       const currentPool = payloadData.pools[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
-      fetchTokens(payloadData.wallet.marina)
-        .then((balances) => {
-          const lpTokenInWallet = balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
+      const lpTokenInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
-          setLpTokenAmount(lpTokenInWallet?.amount || 0);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      setLpTokenAmount(lpTokenInWallet?.amount || 0);
     }
-  }, [payloadData.pools, payloadData.wallet?.marina]);
+  }, [payloadData.pools, payloadData.wallet?.balances]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)
@@ -52,12 +44,6 @@ const RemoveLiquidity = (): JSX.Element => {
 
     setCalcLpTokenAmount(lpTokenAmountInput);
   }, [removalPercentage, lpTokenAmount]);
-
-  const fetchTokens = async (wall: IWallet) => {
-    const balances = await wall.getBalances();
-
-    return balances;
-  };
 
   const notify = (title: string, description: string) => {
     Notification.open({
@@ -153,14 +139,6 @@ const RemoveLiquidity = (): JSX.Element => {
     }
     return { quoteReceived: '0', tokenReceived: '0' };
   };
-
-  if (loading) {
-    return (
-      <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-      </div>
-    );
-  }
 
   return (
     <div className="remove-liquidity-page-main">

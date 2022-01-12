@@ -26,23 +26,21 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (pools && pools.length > 0 && payloadData.wallet?.marina && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
-      payloadData.wallet.marina.getBalances().then((balances) => {
-        const balanceAssets = balances.map((bl) => bl.asset.assetHash);
-        const myCurrentPools: Pool[] = [];
+    if (pools && pools.length > 0 && payloadData.wallet?.balances && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+      const balanceAssets = payloadData.wallet?.balances.map((bl) => bl.asset.assetHash);
+      const myCurrentPools: Pool[] = [];
 
-        balanceAssets.forEach((ba) => {
-          const currentPool = pools.find((po) => po.lp.asset === ba);
+      balanceAssets.forEach((ba) => {
+        const currentPool = pools.find((po) => po.lp.asset === ba);
 
-          if (currentPool) {
-            myCurrentPools.push(currentPool);
-          }
-        });
-
-        setMyPools(myCurrentPools);
+        if (currentPool) {
+          myCurrentPools.push(currentPool);
+        }
       });
+
+      setMyPools(myCurrentPools);
     }
-  }, [payloadData.wallet?.marina, pools, selectedTab]);
+  }, [payloadData.wallet?.balances, pools, selectedTab]);
 
   const getPoolData = () => {
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
