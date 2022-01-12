@@ -19,7 +19,7 @@ import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
+import { CALL_METHOD } from '@bitmatrix/models';
 import { detectProvider } from 'marina-provider';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -47,8 +47,6 @@ export const Swap = (): JSX.Element => {
 
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
-  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
-
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -73,15 +71,6 @@ export const Swap = (): JSX.Element => {
         setWallet(marinaWallet);
       });
   }, [walletIsEnabled, selectedWalletName]);
-
-  // fetch pool config
-  useEffect(() => {
-    if (payloadData.pools) {
-      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        setPoolConfigs(response);
-      });
-    }
-  }, [payloadData.pools]);
 
   // const fetchBalances = () => {
   //   console.log(wallet);
@@ -138,7 +127,7 @@ export const Swap = (): JSX.Element => {
   const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     let inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
       let methodCall;
 
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
@@ -153,7 +142,7 @@ export const Swap = (): JSX.Element => {
         inputNum,
         payloadData.slippage,
         payloadData.pools[0],
-        poolConfigs,
+        payloadData.pool_config,
         methodCall,
       );
 
@@ -205,8 +194,8 @@ export const Swap = (): JSX.Element => {
         numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
       }
 
-      if (payloadData.pools && poolConfigs) {
-        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
+      if (payloadData.pools && payloadData.pool_config) {
+        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -241,7 +230,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               publicKey,
               numberToAmount,
-              poolConfigs,
+              payloadData.pool_config,
               payloadData.pools[0],
             );
           } else {
@@ -250,7 +239,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               publicKey,
               numberToAmount,
-              poolConfigs,
+              payloadData.pool_config,
               payloadData.pools[0],
             );
           }

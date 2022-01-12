@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
+import { CALL_METHOD } from '@bitmatrix/models';
 import { Button, Content, Icon, Slider, Notification, Loader } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -21,7 +21,6 @@ const RemoveLiquidity = (): JSX.Element => {
   const [wallet, setWallet] = useState<IWallet>();
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
-  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,22 +50,15 @@ const RemoveLiquidity = (): JSX.Element => {
       const currentPool = payloadData.pools[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
-      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        const primaryPoolConfig = { ...response };
-        primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
+      fetchTokens(wallet)
+        .then((balances) => {
+          const lpTokenInWallet = balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
-        setPoolConfigs(primaryPoolConfig);
-
-        fetchTokens(wallet)
-          .then((balances) => {
-            const lpTokenInWallet = balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
-
-            setLpTokenAmount(lpTokenInWallet?.amount || 0);
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      });
+          setLpTokenAmount(lpTokenInWallet?.amount || 0);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   }, [payloadData.pools, wallet]);
 
@@ -98,10 +90,10 @@ const RemoveLiquidity = (): JSX.Element => {
     if (wallet) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      if (payloadData.pools && poolConfigs) {
+      if (payloadData.pools && payloadData.pool_config) {
         const pool = payloadData.pools[0];
 
-        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, poolConfigs, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, payloadData.pool_config, methodCall);
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -127,7 +119,7 @@ const RemoveLiquidity = (): JSX.Element => {
             calcLpTokenAmount,
             fundingTxId,
             publicKey,
-            poolConfigs,
+            payloadData.pool_config,
             pool,
           );
 

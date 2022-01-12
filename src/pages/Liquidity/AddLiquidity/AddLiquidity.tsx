@@ -3,8 +3,8 @@ import { useHistory } from 'react-router-dom';
 import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
-import { Button, Content, Icon, Loader, Notification } from 'rsuite';
+import { CALL_METHOD } from '@bitmatrix/models';
+import { Button, Content, Icon, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -27,10 +27,8 @@ const AddLiquidity = (): JSX.Element => {
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenAmount, setTokenAmount] = useState<string>('0');
   const [quoteAmount, setQuoteAmount] = useState<string>('0');
-  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
   const [wallet, setWallet] = useState<IWallet>();
   const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -54,31 +52,14 @@ const AddLiquidity = (): JSX.Element => {
       });
   }, [walletIsEnabled]);
 
-  // fetch pool config
-  useEffect(() => {
-    if (payloadData.pools) {
-      api
-        .getBmConfigs(payloadData.pools[0].id)
-        .then((response: BmConfig) => {
-          const primaryPoolConfig = { ...response };
-          primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
-
-          setPoolConfigs(primaryPoolConfig);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [payloadData.pools]);
-
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
       const output = convertion.convertForLiquidityCtx(
         inputNum * payloadData.preferred_unit.value,
         payloadData.pools[0],
-        poolConfigs,
+        payloadData.pool_config,
       );
 
       setQuoteAmount(inputElement.target.value);
@@ -89,11 +70,11 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeTokenAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
       const output = convertion.convertForLiquidityCtx(
         inputNum * PREFERRED_UNIT_VALUE.LBTC,
         payloadData.pools[0],
-        poolConfigs,
+        payloadData.pool_config,
         true,
       );
 
@@ -117,10 +98,16 @@ const AddLiquidity = (): JSX.Element => {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
-      if (payloadData.pools && poolConfigs) {
+      if (payloadData.pools && payloadData.pool_config) {
         const pool = payloadData.pools[0];
 
-        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, poolConfigs, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(
+          quoteAmountN,
+          tokenAmountN,
+          pool,
+          payloadData.pool_config,
+          methodCall,
+        );
 
         const rawTxHex = await wallet.sendTransaction([
           {
@@ -152,7 +139,7 @@ const AddLiquidity = (): JSX.Element => {
             tokenAmountN,
             fundingTxId,
             publicKey,
-            poolConfigs,
+            payloadData.pool_config,
             pool,
           );
 
@@ -204,14 +191,6 @@ const AddLiquidity = (): JSX.Element => {
     }
     return { lpReceived: '0', poolRate: '0' };
   };
-
-  if (loading) {
-    return (
-      <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-      </div>
-    );
-  }
 
   return (
     <div className="add-liquidity-page-main">
