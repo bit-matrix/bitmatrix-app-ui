@@ -1,19 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SettingsStore } from '../model/SettingsStore';
 import SETTINGS_ACTION_TYPES from './SETTINGS_ACTION_TYPES';
 import PayloadData from './PayloadData';
-import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
 
-const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
-const settings = getLocalData();
+const { setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
 
 const reducer = (
-  state: PayloadData = {
-    slippage: settings?.slippage || 200,
-    preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
-  },
+  state: PayloadData,
   action: {
     type: SETTINGS_ACTION_TYPES;
     payload: PayloadData;
@@ -23,7 +17,7 @@ const reducer = (
     case SETTINGS_ACTION_TYPES.SET_SLIPPAGE:
       setLocalData({
         slippage: action.payload.slippage,
-        preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
+        preferred_unit: state.preferred_unit,
       });
       return {
         ...state,
@@ -32,7 +26,7 @@ const reducer = (
 
     case SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT:
       setLocalData({
-        slippage: settings?.slippage || 200,
+        slippage: state.slippage,
         preferred_unit: action.payload.preferred_unit,
       });
       return {
