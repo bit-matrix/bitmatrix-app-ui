@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Notification, Button, Content } from 'rsuite';
 import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
-import { UnblindedOutput } from 'ldk';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
@@ -14,13 +13,10 @@ import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { AssetAmount } from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { IWallet } from '../../lib/wallet/IWallet';
-import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { detectProvider } from 'marina-provider';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
@@ -28,24 +24,19 @@ import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
+
   const [selectedAsset, setSelectedAsset] = useState<{
     from: SWAP_ASSET;
     to: SWAP_ASSET;
   }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
+
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
+
   const [assetAmounts, setAssetAmounts] = useState<AssetAmount[]>([]);
 
   const [inputFromAmount, setInputFromAmount] = useState<string>('0');
+
   const [inputToAmount, setInputToAmount] = useState<string>('0');
-
-  // const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
-  const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
-
-  const [wallet, setWallet] = useState<IWallet>();
-
-  const [selectedWalletName, setSelectedWalletName] = useState<WALLET_NAME>();
-
-  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
@@ -54,44 +45,6 @@ export const Swap = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
-
-  // connect marina
-  useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet(selectedWalletName);
-        setWallet(marinaWallet);
-
-        marina.isEnabled().then((enabled) => {
-          setWalletIsEnabled(enabled);
-        });
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet(selectedWalletName);
-        setWallet(marinaWallet);
-      });
-  }, [walletIsEnabled, selectedWalletName]);
-
-  // const fetchBalances = () => {
-  //   console.log(wallet);
-  //   if (wallet) {
-  //     wallet.getBalances().then((balances) => {
-  //       console.log(balances);
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchBalances();
-
-  //   const timer = setInterval(() => {
-  //     fetchBalances();
-  //   }, 10000);
-
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [wallet]);
 
   const assetAmountToFromAmount = useCallback(
     (newAssetAmountList: AssetAmount[], newFromAmountPercent?: FROM_AMOUNT_PERCENT) => {
@@ -179,7 +132,7 @@ export const Swap = (): JSX.Element => {
   // };
 
   const swapClick = async () => {
-    if (wallet) {
+    if (payloadData.wallet) {
       let methodCall;
       let numberFromAmount = 0;
       let numberToAmount = 0;
@@ -197,7 +150,7 @@ export const Swap = (): JSX.Element => {
       if (payloadData.pools && payloadData.pool_config) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
 
-        const rawTxHex = await wallet.sendTransaction([
+        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -289,43 +242,14 @@ export const Swap = (): JSX.Element => {
     });
   };
 
-  const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
-    setUtxos(newUtxos);
-
-    const newAssetAmountList: AssetAmount[] = [];
-    newAssetAmountList.push({
-      assetId: ASSET_ID.LBTC,
-      assetName: SWAP_ASSET.LBTC,
-      amount: newUtxos
-        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.LBTC, 'hex'))
-        .reduce((p, u) => {
-          return p + Number(u.unblindData.value);
-        }, 0),
-    });
-    newAssetAmountList.push({
-      assetId: ASSET_ID.USDT,
-      assetName: SWAP_ASSET.USDT,
-      amount: newUtxos
-        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.USDT, 'hex'))
-        .reduce((p, u) => {
-          return p + Number(u.unblindData.value);
-        }, 0),
-    });
-    setAssetAmounts(newAssetAmountList);
-
-    assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
-  };
-
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
       <WalletListModal
         show={showWalletList}
-        wallet={wallet}
-        walletOnClick={(walletName: WALLET_NAME) => setSelectedWalletName(walletName)}
+        wallet={payloadData.wallet?.marina}
+        walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
         close={() => setShowWalletList(false)}
-        // setNewAddress={setNewAddress}
-        setUtxos={setUtxosAll}
       />
 
       <Content className="swap-page-main-content">
@@ -436,15 +360,15 @@ export const Swap = (): JSX.Element => {
               appearance="default"
               className="swap-button"
               onClick={() => {
-                if (walletIsEnabled) {
+                if (payloadData.wallet?.isEnabled) {
                   swapClick();
                 } else {
                   setShowWalletList(true);
                 }
               }}
-              disabled={walletIsEnabled ? Number(inputToAmount) <= 0 : false}
+              disabled={payloadData.wallet?.isEnabled ? Number(inputToAmount) <= 0 : false}
             >
-              {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
+              {payloadData.wallet?.isEnabled ? 'Swap' : 'Connect Wallet'}
             </Button>
           </div>
         </div>
