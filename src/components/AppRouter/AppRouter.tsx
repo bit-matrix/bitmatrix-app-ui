@@ -20,6 +20,8 @@ import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
 import './AppRouter.scss';
+import { detectProvider } from 'marina-provider';
+import { Wallet } from '../../lib/wallet';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -33,6 +35,33 @@ export const AppRouter = (): JSX.Element => {
     setInterval(() => {
       fetchPools(false);
     }, 10000);
+  }, []);
+
+  useEffect(() => {
+    detectProvider('marina')
+      .then((marina) => {
+        const marinaWallet = new Wallet();
+
+        marina.isEnabled().then((enabled) => {
+          dispatch({
+            type: SETTINGS_ACTION_TYPES.SET_WALLET,
+            payload: {
+              ...payloadData,
+              wallet: { marina: marinaWallet, isEnabled: enabled },
+            },
+          });
+        });
+      })
+      .catch(() => {
+        const marinaWallet = new Wallet();
+        dispatch({
+          type: SETTINGS_ACTION_TYPES.SET_WALLET,
+          payload: {
+            ...payloadData,
+            wallet: { marina: marinaWallet, isEnabled: false },
+          },
+        });
+      });
   }, []);
 
   const fetchPools = (isInitialize: boolean) => {
