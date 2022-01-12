@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
@@ -8,8 +7,6 @@ import { Button, Content, Icon, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
-import { Wallet } from '../../../lib/wallet';
-import { IWallet } from '../../../lib/wallet/IWallet';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
@@ -27,30 +24,12 @@ const AddLiquidity = (): JSX.Element => {
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenAmount, setTokenAmount] = useState<string>('0');
   const [quoteAmount, setQuoteAmount] = useState<string>('0');
-  const [wallet, setWallet] = useState<IWallet>();
-  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
 
   const { payloadData } = useContext(SettingsContext);
 
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
-
-  useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-
-        marina.isEnabled().then((enabled) => {
-          setWalletIsEnabled(enabled);
-        });
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-      });
-  }, [walletIsEnabled]);
 
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
@@ -92,7 +71,7 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   const addLiquidityClick = async () => {
-    if (wallet) {
+    if (payloadData.wallet?.marina) {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
 
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
@@ -109,7 +88,7 @@ const AddLiquidity = (): JSX.Element => {
           methodCall,
         );
 
-        const rawTxHex = await wallet.sendTransaction([
+        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,

@@ -132,7 +132,7 @@ export const Swap = (): JSX.Element => {
   // };
 
   const swapClick = async () => {
-    if (payloadData.wallet) {
+    if (payloadData.wallet?.marina) {
       let methodCall;
       let numberFromAmount = 0;
       let numberToAmount = 0;

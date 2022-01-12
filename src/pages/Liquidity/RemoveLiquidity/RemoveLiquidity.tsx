@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
@@ -9,7 +8,6 @@ import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import { Wallet } from '../../../lib/wallet';
 import { IWallet } from '../../../lib/wallet/IWallet';
 import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
@@ -17,40 +15,23 @@ import lbtc from '../../../images/liquid_btc.png';
 import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
-  const { payloadData } = useContext(SettingsContext);
-  const [wallet, setWallet] = useState<IWallet>();
-  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const { payloadData } = useContext(SettingsContext);
 
   const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
 
   useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-
-        marina.isEnabled().then((enabled) => {
-          setWalletIsEnabled(enabled);
-        });
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-      });
-  }, [walletIsEnabled]);
-
-  useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && wallet) {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet?.marina) {
       const currentPool = payloadData.pools[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
-      fetchTokens(wallet)
+      fetchTokens(payloadData.wallet.marina)
         .then((balances) => {
           const lpTokenInWallet = balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
@@ -60,7 +41,7 @@ const RemoveLiquidity = (): JSX.Element => {
           setLoading(false);
         });
     }
-  }, [payloadData.pools, wallet]);
+  }, [payloadData.pools, payloadData.wallet?.marina]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)
@@ -87,7 +68,7 @@ const RemoveLiquidity = (): JSX.Element => {
   };
 
   const removeLiquidityClick = async () => {
-    if (wallet) {
+    if (payloadData.wallet?.marina) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
       if (payloadData.pools && payloadData.pool_config) {
@@ -95,7 +76,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
         const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, payloadData.pool_config, methodCall);
 
-        const rawTxHex = await wallet.sendTransaction([
+        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
