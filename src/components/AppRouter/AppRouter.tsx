@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
-import { Pool as ModelPool } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
@@ -28,20 +28,32 @@ export const AppRouter = (): JSX.Element => {
 
   // fetch pools with timer
   useEffect(() => {
-    fetchPools();
+    fetchPools(true);
 
     setInterval(() => {
-      fetchPools();
+      fetchPools(false);
     }, 10000);
   }, []);
 
-  const fetchPools = () => {
+  const fetchPools = (isInitialize: boolean) => {
     api
       .getPools()
       .then((pools: ModelPool[]) => {
         const filteredPool = pools.filter(
           (p) => p.id !== 'db7a0fa02b9649bb70d084f24412028a8b4157c91d07715a56870a161f041cb3',
         );
+
+        if (isInitialize) {
+          api.getBmConfigs(filteredPool[0].id).then((pool_config: BmConfig) => {
+            dispatch({
+              type: SETTINGS_ACTION_TYPES.SET_POOL_CONFIG,
+              payload: {
+                ...payloadData,
+                pool_config,
+              },
+            });
+          });
+        }
 
         checkLastTxStatus(filteredPool[0].id);
         dispatch({
