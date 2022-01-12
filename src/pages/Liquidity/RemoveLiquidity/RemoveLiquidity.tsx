@@ -136,7 +136,7 @@ const RemoveLiquidity = (): JSX.Element => {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
       return {
-        quoteReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toFixed(8),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toString(),
         tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
