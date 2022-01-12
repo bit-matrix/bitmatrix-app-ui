@@ -38,6 +38,12 @@ const reducer = (
         pool_config: action.payload.pool_config,
       };
 
+    case SETTINGS_ACTION_TYPES.SET_WALLET:
+      return {
+        ...state,
+        wallet: action.payload.wallet,
+      };
+
     default:
       return state;
   }
