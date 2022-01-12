@@ -18,6 +18,7 @@ import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import './AddLiquidity.scss';
+import { WalletButton } from '../../../components/WalletButton/WalletButton';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -252,9 +253,11 @@ const AddLiquidity = (): JSX.Element => {
             </div>
           </div>
           <div className="add-liquidity-button-content">
-            <Button appearance="default" className="add-liquidity-button" onClick={() => addLiquidityClick()}>
-              Add Liquidity
-            </Button>
+            <WalletButton
+              text="Add Liquidity"
+              onClick={() => addLiquidityClick()}
+              disabled={payloadData.wallet?.isEnabled ? Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0 : false}
+            ></WalletButton>
           </div>
         </div>
       </Content>
