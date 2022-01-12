@@ -96,6 +96,8 @@ export const Swap = (): JSX.Element => {
         methodCall,
       );
 
+      console.log('1', output);
+
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
         setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
@@ -109,21 +111,40 @@ export const Swap = (): JSX.Element => {
   };
 
   // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-  //   const inputNum = Number(inputElement.target.value);
+  //   let inputNum = Number(inputElement.target.value);
 
-  //   const methodCall =
-  //     selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //   if (payloadData.pools && payloadData.pool_config) {
+  //     let methodCall;
 
-  //   if (payloadData.pools && poolConfigs) {
+  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
+  //       console.log('lbtc');
+  //       inputNum = inputNum * payloadData.preferred_unit.value;
+  //       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+  //     } else {
+  //       console.log('usdt');
+  //       inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+  //       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //     }
+
+  //     console.log(inputNum);
   //     const output = convertion.convertForCtx(
-  //       inputNum * payloadData.preferred_unit.value,
+  //       inputNum,
   //       payloadData.slippage,
   //       payloadData.pools[0],
-  //       poolConfigs,
+  //       payloadData.pool_config,
   //       methodCall,
   //     );
 
-  //     setInputFromAmount((output / payloadData.preferred_unit.value).toString());
+  //     console.log('2', output);
+
+  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
+  //       setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+  //       setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+  //     } else {
+  //       setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
+  //       setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+  //     }
+
   //     setInputToAmount(inputElement.target.value);
   //   }
   // };
@@ -327,7 +348,7 @@ export const Swap = (): JSX.Element => {
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
-                  disabled
+                  // onChange={onChangeToInput}
                 />
               </div>
               <SwapAssetList
