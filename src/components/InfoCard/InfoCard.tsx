@@ -11,9 +11,9 @@ import liqremove from '../../images/liqremove.png';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
-  const { getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
-  const data = getTxLocalData();
+  const data = getLocalData();
 
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
     let messageBody: JSX.Element | undefined;

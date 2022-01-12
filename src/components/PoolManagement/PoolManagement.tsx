@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
@@ -8,9 +8,7 @@ import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
-import { IWallet } from '../../lib/wallet/IWallet';
-import { detectProvider } from 'marina-provider';
-import { Wallet } from '../../lib/wallet';
+import SettingsContext from '../../context/SettingsContext';
 import './PoolManagement.scss';
 
 type Props = {
@@ -22,41 +20,27 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
-  const [wallet, setWallet] = useState<IWallet>();
   const [myPools, setMyPools] = useState<Pool[]>([]);
+  const { payloadData } = useContext(SettingsContext);
 
   const history = useHistory();
 
   useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
+    if (pools && pools.length > 0 && payloadData.wallet && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+      const balanceAssets = payloadData.wallet?.balances.map((bl) => bl.asset.assetHash);
+      const myCurrentPools: Pool[] = [];
+
+      balanceAssets.forEach((ba) => {
+        const currentPool = pools.find((po) => po.lp.asset === ba);
+
+        if (currentPool) {
+          myCurrentPools.push(currentPool);
+        }
       });
-  }, []);
 
-  useEffect(() => {
-    if (pools && pools.length > 0 && wallet && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
-      wallet.getBalances().then((balances) => {
-        const balanceAssets = balances.map((bl) => bl.asset.assetHash);
-        const myCurrentPools: Pool[] = [];
-
-        balanceAssets.forEach((ba) => {
-          const currentPool = pools.find((po) => po.lp.asset === ba);
-
-          if (currentPool) {
-            myCurrentPools.push(currentPool);
-          }
-        });
-
-        setMyPools(myCurrentPools);
-      });
+      setMyPools(myCurrentPools);
     }
-  }, [wallet, pools, selectedTab]);
+  }, [payloadData.wallet?.balances, pools, selectedTab]);
 
   const getPoolData = () => {
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {

@@ -15,8 +15,8 @@ export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
 
-  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-  const txHistory = getTxLocalData();
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const txHistory = getLocalData();
   const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
   useEffect(() => {
@@ -66,7 +66,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                   if (txHistory[txHistory.length - 1].completed) {
                     const newTxHistory = [...txHistory];
                     newTxHistory[newTxHistory.length - 1].seen = true;
-                    setTxLocalData(newTxHistory);
+                    setLocalData(newTxHistory);
                   }
                 }
               }}

@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { detectProvider } from 'marina-provider';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { CALL_METHOD, BmConfig } from '@bitmatrix/models';
-import { Button, Content, Icon, Loader, Notification } from 'rsuite';
+import { CALL_METHOD } from '@bitmatrix/models';
+import { Button, Content, Icon, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
-import { Wallet } from '../../../lib/wallet';
-import { IWallet } from '../../../lib/wallet/IWallet';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
@@ -21,64 +18,31 @@ import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import './AddLiquidity.scss';
+import { WalletButton } from '../../../components/WalletButton/WalletButton';
+import { getPrimaryPoolConfig } from '../../../helper';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenAmount, setTokenAmount] = useState<string>('0');
   const [quoteAmount, setQuoteAmount] = useState<string>('0');
-  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
-  const [wallet, setWallet] = useState<IWallet>();
-  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { payloadData } = useContext(SettingsContext);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
-
-  useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-
-        marina.isEnabled().then((enabled) => {
-          setWalletIsEnabled(enabled);
-        });
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet();
-        setWallet(marinaWallet);
-      });
-  }, [walletIsEnabled]);
-
-  // fetch pool config
-  useEffect(() => {
-    if (payloadData.pools) {
-      api
-        .getBmConfigs(payloadData.pools[0].id)
-        .then((response: BmConfig) => {
-          const primaryPoolConfig = { ...response };
-          primaryPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
-
-          setPoolConfigs(primaryPoolConfig);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [payloadData.pools]);
 
   const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
       const output = convertion.convertForLiquidityCtx(
         inputNum * payloadData.preferred_unit.value,
         payloadData.pools[0],
-        poolConfigs,
+        primaryPoolConfig,
       );
 
       setQuoteAmount(inputElement.target.value);
@@ -89,11 +53,13 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeTokenAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
       const output = convertion.convertForLiquidityCtx(
         inputNum * PREFERRED_UNIT_VALUE.LBTC,
         payloadData.pools[0],
-        poolConfigs,
+        primaryPoolConfig,
         true,
       );
 
@@ -111,18 +77,19 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   const addLiquidityClick = async () => {
-    if (wallet) {
+    if (payloadData.wallet?.marina) {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
 
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
-      if (payloadData.pools && poolConfigs) {
+      if (payloadData.pools && payloadData.pool_config) {
         const pool = payloadData.pools[0];
+        const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
-        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, poolConfigs, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
 
-        const rawTxHex = await wallet.sendTransaction([
+        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -146,13 +113,14 @@ const AddLiquidity = (): JSX.Element => {
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
           const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+          const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
             quoteAmountN,
             tokenAmountN,
             fundingTxId,
             publicKey,
-            poolConfigs,
+            primaryPoolConfig,
             pool,
           );
 
@@ -176,11 +144,11 @@ const AddLiquidity = (): JSX.Element => {
               method: CALL_METHOD.ADD_LIQUIDITY,
             };
 
-            const storeOldData = getTxLocalData() || [];
+            const storeOldData = getLocalData() || [];
 
             const newStoreData = [...storeOldData, tempTxData];
 
-            setTxLocalData(newStoreData);
+            setLocalData(newStoreData);
           }
 
           notify('Commitment Tx Id : ', commitmentTxId);
@@ -204,14 +172,6 @@ const AddLiquidity = (): JSX.Element => {
     }
     return { lpReceived: '0', poolRate: '0' };
   };
-
-  if (loading) {
-    return (
-      <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-      </div>
-    );
-  }
 
   return (
     <div className="add-liquidity-page-main">
@@ -294,9 +254,12 @@ const AddLiquidity = (): JSX.Element => {
             </div>
           </div>
           <div className="add-liquidity-button-content">
-            <Button appearance="default" className="add-liquidity-button" onClick={() => addLiquidityClick()}>
-              Add Liquidity
-            </Button>
+            <WalletButton
+              text="Add Liquidity"
+              onClick={() => addLiquidityClick()}
+              disabled={Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0}
+              className="add-liquidity-button"
+            />
           </div>
         </div>
       </Content>
