@@ -2,8 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Notification, Button, Content } from 'rsuite';
-import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
-import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
@@ -20,6 +18,7 @@ import { CALL_METHOD } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
+import { WalletButton } from '../../components/WalletButton/WalletButton';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -29,8 +28,6 @@ export const Swap = (): JSX.Element => {
     from: SWAP_ASSET;
     to: SWAP_ASSET;
   }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
-
-  const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
   const [assetAmounts, setAssetAmounts] = useState<AssetAmount[]>([]);
 
@@ -245,12 +242,6 @@ export const Swap = (): JSX.Element => {
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
-      <WalletListModal
-        show={showWalletList}
-        wallet={payloadData.wallet?.marina}
-        walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
-        close={() => setShowWalletList(false)}
-      />
 
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
@@ -356,20 +347,11 @@ export const Swap = (): JSX.Element => {
                 }}
               />
             </div>
-            <Button
-              appearance="default"
-              className="swap-button"
-              onClick={() => {
-                if (payloadData.wallet?.isEnabled) {
-                  swapClick();
-                } else {
-                  setShowWalletList(true);
-                }
-              }}
+            <WalletButton
+              text="Swap"
+              onClick={() => swapClick()}
               disabled={payloadData.wallet?.isEnabled ? Number(inputToAmount) <= 0 : false}
-            >
-              {payloadData.wallet?.isEnabled ? 'Swap' : 'Connect Wallet'}
-            </Button>
+            ></WalletButton>
           </div>
         </div>
         <Info content="Network fee 1951 sats ($0.91)" />
