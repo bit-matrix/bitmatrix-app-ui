@@ -22,7 +22,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
   const { payloadData } = useContext(SettingsContext);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
 
@@ -115,11 +115,11 @@ const RemoveLiquidity = (): JSX.Element => {
               method: CALL_METHOD.REMOVE_LIQUIDITY,
             };
 
-            const storeOldData = getTxLocalData() || [];
+            const storeOldData = getLocalData() || [];
 
             const newStoreData = [...storeOldData, tempTxData];
 
-            setTxLocalData(newStoreData);
+            setLocalData(newStoreData);
           }
 
           notify('Commitment Tx Id : ', commitmentTxId);

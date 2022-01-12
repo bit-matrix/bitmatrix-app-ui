@@ -27,7 +27,7 @@ import './AppRouter.scss';
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { dispatch, payloadData } = useContext(SettingsContext);
-  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
@@ -132,7 +132,7 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const checkLastTxStatus = (poolId: string) => {
-    const txHistory = getTxLocalData();
+    const txHistory = getLocalData();
 
     if (txHistory && txHistory.length > 0) {
       const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
@@ -152,7 +152,7 @@ export const AppRouter = (): JSX.Element => {
                     newTxHistory[willChangedTx].completed = true;
                     newTxHistory[willChangedTx].success = true;
 
-                    setTxLocalData(newTxHistory);
+                    setLocalData(newTxHistory);
                   }
                 });
               }

@@ -37,7 +37,7 @@ export const Swap = (): JSX.Element => {
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -231,11 +231,11 @@ export const Swap = (): JSX.Element => {
               method: methodCall,
             };
 
-            const storeOldData = getTxLocalData() || [];
+            const storeOldData = getLocalData() || [];
 
             const newStoreData = [...storeOldData, tempTxData];
 
-            setTxLocalData(newStoreData);
+            setLocalData(newStoreData);
           } /* else {
             notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
           } */
