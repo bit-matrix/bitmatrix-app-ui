@@ -22,6 +22,7 @@ import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
 import './AppRouter.scss';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
+import { IWallet } from '../../lib/wallet/IWallet';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -43,26 +44,56 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet();
 
         marina.isEnabled().then((enabled) => {
+          fetchBalances(marinaWallet);
+
           dispatch({
             type: SETTINGS_ACTION_TYPES.SET_WALLET,
             payload: {
               ...payloadData,
-              wallet: { marina: marinaWallet, isEnabled: enabled },
+              wallet: { marina: marinaWallet, isEnabled: enabled, balances: [] },
             },
           });
         });
       })
       .catch(() => {
         const marinaWallet = new Wallet();
+
         dispatch({
           type: SETTINGS_ACTION_TYPES.SET_WALLET,
           payload: {
             ...payloadData,
-            wallet: { marina: marinaWallet, isEnabled: false },
+            wallet: { marina: marinaWallet, isEnabled: false, balances: [] },
           },
         });
       });
   }, []);
+
+  useEffect(() => {
+    setInterval(() => {
+      if (payloadData.wallet) {
+        fetchBalances(payloadData.wallet?.marina);
+      }
+    }, 60000);
+  }, [payloadData.wallet?.marina]);
+
+  const fetchBalances = async (wall: IWallet) => {
+    if (payloadData.wallet?.isEnabled) {
+      wall
+        .getBalances()
+        .then((balances) => {
+          dispatch({
+            type: SETTINGS_ACTION_TYPES.SET_WALLET,
+            payload: {
+              ...payloadData,
+              wallet: { marina: wall, isEnabled: true, balances },
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   const fetchPools = (isInitialize: boolean) => {
     api
