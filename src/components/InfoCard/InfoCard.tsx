@@ -32,7 +32,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="navbar-item-icon" src={liqadd} alt="" />
+          <img className="info-card-item-icon-2" src={liqadd} alt="" />
           <div>
             Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
             {cs.tokenAmount} {cs.tokenAsset}
@@ -43,7 +43,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="navbar-item-icon" src={liqremove} alt="" />
+          <img className="info-card-item-icon-2" src={liqremove} alt="" />
           <div>
             Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
             {cs.tokenAmount} {cs.tokenAsset}
