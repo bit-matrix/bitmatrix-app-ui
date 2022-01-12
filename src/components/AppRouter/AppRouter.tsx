@@ -19,10 +19,10 @@ import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidi
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
-import './AppRouter.scss';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
+import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);

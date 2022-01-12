@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Button } from 'rsuite';
 import SettingsContext from '../../context/SettingsContext';
-import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
 
@@ -20,7 +19,6 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false 
       <WalletListModal
         show={showWalletList}
         wallet={payloadData.wallet?.marina}
-        walletOnClick={(walletName: WALLET_NAME) => console.log(walletName)}
         close={() => setShowWalletList(false)}
       />
       <Button
@@ -33,7 +31,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false 
             setShowWalletList(true);
           }
         }}
-        disabled={disabled}
+        disabled={payloadData.wallet?.isEnabled && disabled}
       >
         {payloadData.wallet?.isEnabled ? text : 'Connect Wallet'}
       </Button>
