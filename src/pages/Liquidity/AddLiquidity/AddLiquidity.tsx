@@ -258,6 +258,7 @@ const AddLiquidity = (): JSX.Element => {
               text="Add Liquidity"
               onClick={() => addLiquidityClick()}
               disabled={Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0}
+              className="add-liquidity-button"
             />
           </div>
         </div>

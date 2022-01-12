@@ -219,6 +219,7 @@ const RemoveLiquidity = (): JSX.Element => {
             text="Remove Liquidity"
             onClick={() => removeLiquidityClick()}
             disabled={calcLpTokenAmount <= 0}
+            className="remove-liquidity-button"
           />
         </div>
       </Content>
