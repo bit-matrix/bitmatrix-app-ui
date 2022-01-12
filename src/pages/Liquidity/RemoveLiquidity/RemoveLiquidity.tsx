@@ -12,6 +12,7 @@ import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import './RemoveLiquidity.scss';
+import { WalletButton } from '../../../components/WalletButton/WalletButton';
 
 const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
@@ -212,9 +213,11 @@ const RemoveLiquidity = (): JSX.Element => {
           </div>
         </div>
         <div className="remove-liquidity-button-content">
-          <Button appearance="default" className="remove-liquidity-button" onClick={() => removeLiquidityClick()}>
-            Remove Liquidity
-          </Button>
+          <WalletButton
+            text="Remove Liquidity"
+            onClick={() => removeLiquidityClick()}
+            disabled={calcLpTokenAmount <= 0}
+          ></WalletButton>
         </div>
       </Content>
     </div>

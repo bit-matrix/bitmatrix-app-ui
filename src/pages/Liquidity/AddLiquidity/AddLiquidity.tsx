@@ -256,7 +256,7 @@ const AddLiquidity = (): JSX.Element => {
             <WalletButton
               text="Add Liquidity"
               onClick={() => addLiquidityClick()}
-              disabled={payloadData.wallet?.isEnabled ? Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0 : false}
+              disabled={Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0}
             ></WalletButton>
           </div>
         </div>
