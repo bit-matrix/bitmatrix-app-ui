@@ -11,9 +11,9 @@ import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
-import './RemoveLiquidity.scss';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig } from '../../../helper';
+import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
