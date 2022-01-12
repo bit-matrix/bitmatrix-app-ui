@@ -347,7 +347,7 @@ export const Swap = (): JSX.Element => {
                 }}
               />
             </div>
-            <WalletButton text="Swap" onClick={() => swapClick()} disabled={Number(inputToAmount) <= 0}></WalletButton>
+            <WalletButton text="Swap" onClick={() => swapClick()} disabled={Number(inputToAmount) <= 0} />
           </div>
         </div>
         <Info content="Network fee 1951 sats ($0.91)" />
