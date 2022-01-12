@@ -172,6 +172,23 @@
   border-bottom-right-radius: 1.25rem !important;
 }
 
+.pool-list-modal {
+  padding-top: 1rem !important;
+  margin: 0 auto !important;
+  width: 31rem !important;
+  border-radius: 1rem !important;
+  .rs-modal-content {
+    background-color: $bmBlackRussian !important;
+    border: 2px solid $bmBlackRussian;
+  }
+  .rs-modal-dialog {
+    transform: translateY(-70%);
+    top: 50vh;
+    margin: 0 auto;
+    position: relative;
+  }
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-page-main {
     width: 48rem;
