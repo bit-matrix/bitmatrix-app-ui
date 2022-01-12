@@ -26,7 +26,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const history = useHistory();
 
   useEffect(() => {
-    if (pools && pools.length > 0 && payloadData.wallet?.balances && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+    if (pools && pools.length > 0 && payloadData.wallet && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       const balanceAssets = payloadData.wallet?.balances.map((bl) => bl.asset.assetHash);
       const myCurrentPools: Pool[] = [];
 

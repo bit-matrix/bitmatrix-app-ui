@@ -44,8 +44,6 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet();
 
         marina.isEnabled().then((enabled) => {
-          fetchBalances(marinaWallet);
-
           dispatch({
             type: SETTINGS_ACTION_TYPES.SET_WALLET,
             payload: {
@@ -69,6 +67,10 @@ export const AppRouter = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
+    if (payloadData.wallet?.marina) {
+      fetchBalances(payloadData.wallet.marina);
+    }
+
     setInterval(() => {
       if (payloadData.wallet) {
         fetchBalances(payloadData.wallet?.marina);
