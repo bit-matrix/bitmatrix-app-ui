@@ -32,6 +32,12 @@ const reducer = (
         pools: action.payload.pools,
       };
 
+    case SETTINGS_ACTION_TYPES.SET_POOL_CONFIG:
+      return {
+        ...state,
+        pool_config: action.payload.pool_config,
+      };
+
     default:
       return state;
   }
