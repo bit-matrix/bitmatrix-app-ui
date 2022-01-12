@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
-import { Button, Icon, IconButton } from 'rsuite';
+import { Button, Icon, IconButton, Modal } from 'rsuite';
 import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
@@ -21,6 +21,7 @@ type Props = {
 export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [wallet, setWallet] = useState<IWallet>();
   const [myPools, setMyPools] = useState<Pool[]>([]);
 
@@ -95,7 +96,8 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
               appearance="default"
               className="pm-add-button pm-add-liquidity"
               onClick={() => {
-                history.push(ROUTE_PATH.ADD_LIQUIDTY);
+                setShowPoolListModal(!showPoolListModal);
+                setShowButtons(false);
               }}
             >
               Add Liquidity
@@ -110,6 +112,37 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
           </div>
         </div>
       </>
+    );
+  };
+
+  const poolListModal = (): JSX.Element => {
+    return (
+      <Modal
+        className="pool-list-modal"
+        backdrop={true}
+        show={showPoolListModal}
+        onHide={() => setShowPoolListModal(false)}
+      >
+        <Modal.Header>
+          <Modal.Title>Choose a pool</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <ul>
+            {pools.map((pool: Pool, index: number) => {
+              return (
+                <div key={pool.id} className="pool-page-card card-2">
+                  <PoolCard
+                    pool={pool}
+                    rank={index + 1}
+                    onClick={() => history.push('pool/' + pool.id + '/add-liquidity')}
+                    showDetail={false}
+                  />
+                </div>
+              );
+            })}
+          </ul>
+        </Modal.Body>
+      </Modal>
     );
   };
 
@@ -129,6 +162,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
           icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
         />
         {showButtons && addButtons()}
+        {showPoolListModal && poolListModal()}
       </div>
       <div className="pool-page-content">
         <div className={`${selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
