@@ -1,0 +1,23 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.wallet-button {
+  width: 100%;
+  height: 3rem;
+  border-radius: 1rem !important;
+  font-weight: 600 !important;
+  color: $bmDeepFir !important;
+  background: $bmPaleGreen !important;
+  border-width: 0 !important;
+  margin-top: 1rem;
+  opacity: 0.9;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .wallet-button {
+    height: 2.75rem;
+  }
+}
