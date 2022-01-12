@@ -13,6 +13,7 @@ import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import './RemoveLiquidity.scss';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
+import { getPrimaryPoolConfig } from '../../../helper';
 
 const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
@@ -60,8 +61,9 @@ const RemoveLiquidity = (): JSX.Element => {
 
       if (payloadData.pools && payloadData.pool_config) {
         const pool = payloadData.pools[0];
+        const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
-        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, payloadData.pool_config, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
 
         const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
@@ -80,14 +82,14 @@ const RemoveLiquidity = (): JSX.Element => {
 
         if (fundingTxId && fundingTxId !== '') {
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
-
           const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+          const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
           const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
             calcLpTokenAmount,
             fundingTxId,
             publicKey,
-            payloadData.pool_config,
+            primaryPoolConfig,
             pool,
           );
 

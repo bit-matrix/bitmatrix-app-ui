@@ -19,6 +19,7 @@ import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import './AddLiquidity.scss';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
+import { getPrimaryPoolConfig } from '../../../helper';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -36,10 +37,12 @@ const AddLiquidity = (): JSX.Element => {
     const inputNum = Number(inputElement.target.value);
 
     if (payloadData.pools && payloadData.pool_config) {
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
       const output = convertion.convertForLiquidityCtx(
         inputNum * payloadData.preferred_unit.value,
         payloadData.pools[0],
-        payloadData.pool_config,
+        primaryPoolConfig,
       );
 
       setQuoteAmount(inputElement.target.value);
@@ -51,10 +54,12 @@ const AddLiquidity = (): JSX.Element => {
     const inputNum = Number(inputElement.target.value);
 
     if (payloadData.pools && payloadData.pool_config) {
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
       const output = convertion.convertForLiquidityCtx(
         inputNum * PREFERRED_UNIT_VALUE.LBTC,
         payloadData.pools[0],
-        payloadData.pool_config,
+        primaryPoolConfig,
         true,
       );
 
@@ -80,14 +85,9 @@ const AddLiquidity = (): JSX.Element => {
 
       if (payloadData.pools && payloadData.pool_config) {
         const pool = payloadData.pools[0];
+        const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
-        const fundingTxInputs = fundingTxForLiquidity(
-          quoteAmountN,
-          tokenAmountN,
-          pool,
-          payloadData.pool_config,
-          methodCall,
-        );
+        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
 
         const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
@@ -113,13 +113,14 @@ const AddLiquidity = (): JSX.Element => {
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
           const publicKey = fundingTxDecode.vin[0].txinwitness[1];
+          const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
             quoteAmountN,
             tokenAmountN,
             fundingTxId,
             publicKey,
-            payloadData.pool_config,
+            primaryPoolConfig,
             pool,
           );
 
