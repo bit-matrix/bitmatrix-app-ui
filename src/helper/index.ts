@@ -1,3 +1,5 @@
+import { BmConfig } from '@bitmatrix/models';
+
 export const timeDifference = (time: number): string => {
   const now = new Date().valueOf();
 
@@ -25,4 +27,11 @@ export const timeDifference = (time: number): string => {
   }
 
   return '';
+};
+
+export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
+  const newPoolConfig = { ...poolConfig };
+
+  newPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
+  return newPoolConfig;
 };

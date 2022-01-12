@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
-import { Pool as ModelPool } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
@@ -19,29 +19,103 @@ import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidi
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
+import { detectProvider } from 'marina-provider';
+import { Wallet } from '../../lib/wallet';
+import { IWallet } from '../../lib/wallet/IWallet';
 import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { dispatch, payloadData } = useContext(SettingsContext);
-  const { getTxLocalData, setTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
-    fetchPools();
+    fetchPools(true);
 
     setInterval(() => {
-      fetchPools();
+      fetchPools(false);
     }, 10000);
   }, []);
 
-  const fetchPools = () => {
+  useEffect(() => {
+    detectProvider('marina')
+      .then((marina) => {
+        const marinaWallet = new Wallet();
+
+        marina.isEnabled().then((enabled) => {
+          dispatch({
+            type: SETTINGS_ACTION_TYPES.SET_WALLET,
+            payload: {
+              ...payloadData,
+              wallet: { marina: marinaWallet, isEnabled: enabled, balances: [] },
+            },
+          });
+        });
+      })
+      .catch(() => {
+        const marinaWallet = new Wallet();
+
+        dispatch({
+          type: SETTINGS_ACTION_TYPES.SET_WALLET,
+          payload: {
+            ...payloadData,
+            wallet: { marina: marinaWallet, isEnabled: false, balances: [] },
+          },
+        });
+      });
+  }, []);
+
+  useEffect(() => {
+    if (payloadData.wallet?.marina) {
+      fetchBalances(payloadData.wallet.marina);
+    }
+
+    setInterval(() => {
+      if (payloadData.wallet) {
+        fetchBalances(payloadData.wallet?.marina);
+      }
+    }, 60000);
+  }, [payloadData.wallet?.marina]);
+
+  const fetchBalances = async (wall: IWallet) => {
+    if (payloadData.wallet?.isEnabled) {
+      wall
+        .getBalances()
+        .then((balances) => {
+          dispatch({
+            type: SETTINGS_ACTION_TYPES.SET_WALLET,
+            payload: {
+              ...payloadData,
+              wallet: { marina: wall, isEnabled: true, balances },
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const fetchPools = (isInitialize: boolean) => {
     api
       .getPools()
       .then((pools: ModelPool[]) => {
         const filteredPool = pools.filter(
           (p) => p.id !== 'db7a0fa02b9649bb70d084f24412028a8b4157c91d07715a56870a161f041cb3',
         );
+
+        if (isInitialize) {
+          api.getBmConfigs(filteredPool[0].id).then((pool_config: BmConfig) => {
+            dispatch({
+              type: SETTINGS_ACTION_TYPES.SET_POOL_CONFIG,
+              payload: {
+                ...payloadData,
+                pool_config,
+              },
+            });
+          });
+        }
 
         checkLastTxStatus(filteredPool[0].id);
         dispatch({
@@ -58,7 +132,7 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const checkLastTxStatus = (poolId: string) => {
-    const txHistory = getTxLocalData();
+    const txHistory = getLocalData();
 
     if (txHistory && txHistory.length > 0) {
       const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
@@ -78,7 +152,7 @@ export const AppRouter = (): JSX.Element => {
                     newTxHistory[willChangedTx].completed = true;
                     newTxHistory[willChangedTx].success = true;
 
-                    setTxLocalData(newTxHistory);
+                    setLocalData(newTxHistory);
                   }
                 });
               }

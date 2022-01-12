@@ -68,22 +68,6 @@
   text-align: left;
 }
 
-.swap-button {
-  width: 100%;
-  height: 3rem;
-  border-radius: 1rem !important;
-  font-weight: 600 !important;
-  color: $bmDeepFir !important;
-  background: $bmPaleGreen !important;
-  border-width: 0 !important;
-  margin-top: 1rem;
-  opacity: 0.9;
-
-  &:hover {
-    opacity: 1;
-  }
-}
-
 .from-input {
   width: 9.25rem;
   // height: 2rem;

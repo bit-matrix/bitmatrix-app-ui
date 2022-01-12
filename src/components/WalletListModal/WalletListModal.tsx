@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Loader, Modal } from 'rsuite';
 import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
-import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
 import { UnblindedOutput } from 'ldk';
-import './WalletListModal.scss';
 import importSeed from '../../images/key_1.png';
 import marinaWallet from '../../images/marina.png';
 import ledgerNano from '../../images/ledger.png';
 import generateSeed from '../../images/key_2.png';
 import { IWallet } from '../../lib/wallet/IWallet';
+import SettingsContext from '../../context/SettingsContext';
+import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
+import { Wallet } from '../../lib/wallet';
+import './WalletListModal.scss';
 
 type Props = {
   show: boolean;
   wallet?: IWallet;
-  walletOnClick: (walletName: WALLET_NAME) => void;
+  // walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
   setNewAddress?: (newAddress: MarinaAddressInterface) => void;
   setUtxos?: (utxos: UnblindedOutput[]) => void;
 };
 
-export const WalletListModal: React.FC<Props> = ({ show, wallet, close, walletOnClick }) => {
+export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const { dispatch, payloadData } = useContext(SettingsContext);
 
   const connectWalletOnClick = (): void => {
     wallet?.exist()
@@ -29,10 +32,19 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close, walletOn
           .then(() => {
             // wallet.getNextAddress().then((newAddress: MarinaAddressInterface) => {
             // setNewAddress(newAddress);
+            const marinaWallet = new Wallet();
 
             setLoading(false);
             close();
-            walletOnClick(WALLET_NAME.MARINA);
+
+            dispatch({
+              type: SETTINGS_ACTION_TYPES.SET_WALLET,
+              payload: {
+                ...payloadData,
+                wallet: { marina: marinaWallet, isEnabled: true, balances: [] },
+              },
+            });
+
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);
 

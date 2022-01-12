@@ -2,9 +2,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Notification, Button, Content } from 'rsuite';
-import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
-import { WALLET_NAME } from '../../lib/wallet/WALLET_NAME';
-import { UnblindedOutput } from 'ldk';
 import { ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
@@ -14,95 +11,37 @@ import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { AssetAmount } from '../../model/AssetAmount';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { IWallet } from '../../lib/wallet/IWallet';
-import { Wallet } from '../../lib/wallet';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
-import { detectProvider } from 'marina-provider';
+import { CALL_METHOD } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
+import { WalletButton } from '../../components/WalletButton/WalletButton';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
+
   const [selectedAsset, setSelectedAsset] = useState<{
     from: SWAP_ASSET;
     to: SWAP_ASSET;
   }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
-  const [showWalletList, setShowWalletList] = useState<boolean>(false);
+
   const [assetAmounts, setAssetAmounts] = useState<AssetAmount[]>([]);
 
   const [inputFromAmount, setInputFromAmount] = useState<string>('0');
+
   const [inputToAmount, setInputToAmount] = useState<string>('0');
-
-  // const [newAddress, setNewAddress] = useState<MarinaAddressInterface>();
-  const [utxos, setUtxos] = useState<UnblindedOutput[]>([]);
-
-  const [wallet, setWallet] = useState<IWallet>();
-
-  const [selectedWalletName, setSelectedWalletName] = useState<WALLET_NAME>();
-
-  const [walletIsEnabled, setWalletIsEnabled] = useState<boolean>(false);
-
-  const [poolConfigs, setPoolConfigs] = useState<BmConfig>();
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
-  const { setTxLocalData, getTxLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const { payloadData } = useContext(SettingsContext);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
-
-  // connect marina
-  useEffect(() => {
-    detectProvider('marina')
-      .then((marina) => {
-        const marinaWallet = new Wallet(selectedWalletName);
-        setWallet(marinaWallet);
-
-        marina.isEnabled().then((enabled) => {
-          setWalletIsEnabled(enabled);
-        });
-      })
-      .catch(() => {
-        const marinaWallet = new Wallet(selectedWalletName);
-        setWallet(marinaWallet);
-      });
-  }, [walletIsEnabled, selectedWalletName]);
-
-  // fetch pool config
-  useEffect(() => {
-    if (payloadData.pools) {
-      api.getBmConfigs(payloadData.pools[0].id).then((response: BmConfig) => {
-        setPoolConfigs(response);
-      });
-    }
-  }, [payloadData.pools]);
-
-  // const fetchBalances = () => {
-  //   console.log(wallet);
-  //   if (wallet) {
-  //     wallet.getBalances().then((balances) => {
-  //       console.log(balances);
-  //     });
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchBalances();
-
-  //   const timer = setInterval(() => {
-  //     fetchBalances();
-  //   }, 10000);
-
-  //   return () => {
-  //     clearInterval(timer);
-  //   };
-  // }, [wallet]);
 
   const assetAmountToFromAmount = useCallback(
     (newAssetAmountList: AssetAmount[], newFromAmountPercent?: FROM_AMOUNT_PERCENT) => {
@@ -138,7 +77,7 @@ export const Swap = (): JSX.Element => {
   const onChangeFromInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
     let inputNum = Number(inputElement.target.value);
 
-    if (payloadData.pools && poolConfigs) {
+    if (payloadData.pools && payloadData.pool_config) {
       let methodCall;
 
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
@@ -153,9 +92,11 @@ export const Swap = (): JSX.Element => {
         inputNum,
         payloadData.slippage,
         payloadData.pools[0],
-        poolConfigs,
+        payloadData.pool_config,
         methodCall,
       );
+
+      console.log('1', output);
 
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
@@ -170,27 +111,46 @@ export const Swap = (): JSX.Element => {
   };
 
   // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-  //   const inputNum = Number(inputElement.target.value);
+  //   let inputNum = Number(inputElement.target.value);
 
-  //   const methodCall =
-  //     selectedAsset.to === SWAP_ASSET.LBTC ? CALL_METHOD.SWAP_QUOTE_FOR_TOKEN : CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //   if (payloadData.pools && payloadData.pool_config) {
+  //     let methodCall;
 
-  //   if (payloadData.pools && poolConfigs) {
+  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
+  //       console.log('lbtc');
+  //       inputNum = inputNum * payloadData.preferred_unit.value;
+  //       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+  //     } else {
+  //       console.log('usdt');
+  //       inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+  //       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+  //     }
+
+  //     console.log(inputNum);
   //     const output = convertion.convertForCtx(
-  //       inputNum * payloadData.preferred_unit.value,
+  //       inputNum,
   //       payloadData.slippage,
   //       payloadData.pools[0],
-  //       poolConfigs,
+  //       payloadData.pool_config,
   //       methodCall,
   //     );
 
-  //     setInputFromAmount((output / payloadData.preferred_unit.value).toString());
+  //     console.log('2', output);
+
+  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
+  //       setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+  //       setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+  //     } else {
+  //       setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
+  //       setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+  //     }
+
   //     setInputToAmount(inputElement.target.value);
   //   }
   // };
 
   const swapClick = async () => {
-    if (wallet) {
+    if (payloadData.wallet?.marina) {
       let methodCall;
       let numberFromAmount = 0;
       let numberToAmount = 0;
@@ -205,10 +165,10 @@ export const Swap = (): JSX.Element => {
         numberToAmount = new Decimal(amountWithSlippage).mul(payloadData.preferred_unit.value).toNumber();
       }
 
-      if (payloadData.pools && poolConfigs) {
-        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], poolConfigs, methodCall);
+      if (payloadData.pools && payloadData.pool_config) {
+        const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
 
-        const rawTxHex = await wallet.sendTransaction([
+        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -241,7 +201,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               publicKey,
               numberToAmount,
-              poolConfigs,
+              payloadData.pool_config,
               payloadData.pools[0],
             );
           } else {
@@ -250,7 +210,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               publicKey,
               numberToAmount,
-              poolConfigs,
+              payloadData.pool_config,
               payloadData.pools[0],
             );
           }
@@ -271,11 +231,11 @@ export const Swap = (): JSX.Element => {
               method: methodCall,
             };
 
-            const storeOldData = getTxLocalData() || [];
+            const storeOldData = getLocalData() || [];
 
             const newStoreData = [...storeOldData, tempTxData];
 
-            setTxLocalData(newStoreData);
+            setLocalData(newStoreData);
           } /* else {
             notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
           } */
@@ -300,44 +260,9 @@ export const Swap = (): JSX.Element => {
     });
   };
 
-  const setUtxosAll = (newUtxos: UnblindedOutput[]) => {
-    setUtxos(newUtxos);
-
-    const newAssetAmountList: AssetAmount[] = [];
-    newAssetAmountList.push({
-      assetId: ASSET_ID.LBTC,
-      assetName: SWAP_ASSET.LBTC,
-      amount: newUtxos
-        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.LBTC, 'hex'))
-        .reduce((p, u) => {
-          return p + Number(u.unblindData.value);
-        }, 0),
-    });
-    newAssetAmountList.push({
-      assetId: ASSET_ID.USDT,
-      assetName: SWAP_ASSET.USDT,
-      amount: newUtxos
-        .filter((ut) => ut.unblindData.asset === Buffer.from(ASSET_ID.USDT, 'hex'))
-        .reduce((p, u) => {
-          return p + Number(u.unblindData.value);
-        }, 0),
-    });
-    setAssetAmounts(newAssetAmountList);
-
-    assetAmountToFromAmount(newAssetAmountList, selectedFromAmountPercent);
-  };
-
   return (
     <div className="swap-page-main">
       {/* Wallet list modal */}
-      <WalletListModal
-        show={showWalletList}
-        wallet={wallet}
-        walletOnClick={(walletName: WALLET_NAME) => setSelectedWalletName(walletName)}
-        close={() => setShowWalletList(false)}
-        // setNewAddress={setNewAddress}
-        setUtxos={setUtxosAll}
-      />
 
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
@@ -423,7 +348,7 @@ export const Swap = (): JSX.Element => {
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
-                  disabled
+                  // onChange={onChangeToInput}
                 />
               </div>
               <SwapAssetList
@@ -443,20 +368,7 @@ export const Swap = (): JSX.Element => {
                 }}
               />
             </div>
-            <Button
-              appearance="default"
-              className="swap-button"
-              onClick={() => {
-                if (walletIsEnabled) {
-                  swapClick();
-                } else {
-                  setShowWalletList(true);
-                }
-              }}
-              disabled={walletIsEnabled ? Number(inputToAmount) <= 0 : false}
-            >
-              {walletIsEnabled ? 'Swap' : 'Connect Wallet'}
-            </Button>
+            <WalletButton text="Swap" onClick={() => swapClick()} disabled={Number(inputToAmount) <= 0} />
           </div>
         </div>
         <Info content="Network fee 1951 sats ($0.91)" />
