@@ -62,16 +62,17 @@ export const MyPoolDetail: React.FC = () => {
 
       const quoteAmountN = new Decimal(Number(quoteAmountInWallet)).toNumber();
       const tokenAmountN = new Decimal(tokenAmountInWallet || 0).toNumber();
-      const lpAmountN = (
-        Number(new Decimal(lpAmountInWallet || 0).ceil().toNumber()) / PREFERRED_UNIT_VALUE.LBTC
-      ).toFixed(8);
+      const lpAmountN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
       const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool, quoteAmountN, tokenAmountN);
+      const pooledRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
+      const quoteReceived = (pooledRecipients.user_lbtc_received / payloadData.preferred_unit.value).toString();
+      const tokenReceived = (pooledRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
       return {
-        quoteAmount: new Decimal(Number(quoteAmountInWallet)).div(payloadData.preferred_unit.value).toFixed(2),
-        tokenAmount: new Decimal(tokenAmountInWallet || 0).div(PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
-        lpAmount: lpAmountN,
+        quoteAmount: quoteReceived,
+        tokenAmount: tokenReceived,
+        lpAmount: (lpAmountN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
         poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
       };
     }
