@@ -149,6 +149,56 @@ export const Swap = (): JSX.Element => {
   //   }
   // };
 
+  const calcAmountPercent = useCallback(
+    (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
+      if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
+        const currentPool = payloadData.pools[0];
+
+        let inputAmount = '';
+        const quoteAssetId = currentPool.quote.asset;
+        const quoteAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === quoteAssetId,
+        )?.amount;
+
+        const tokenAssetId = currentPool.token.asset;
+        const tokenAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === tokenAssetId,
+        )?.amount;
+
+        if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (quoteAmountInWallet / payloadData.preferred_unit.value).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
+            inputAmount = (quoteAmountInWalletHalf / payloadData.preferred_unit.value).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            const quoteAmountInWalletMin = quoteAmountInWallet / 4;
+            inputAmount = (quoteAmountInWalletMin / payloadData.preferred_unit.value).toString();
+          }
+        } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const tokenAmountInWalletHalf = tokenAmountInWallet / 2;
+            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            const tokenAmountInWalletMin = tokenAmountInWallet / 4;
+            inputAmount = (tokenAmountInWalletMin / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+        }
+        console.log('inputAmount', inputAmount);
+
+        setInputFromAmount(inputAmount);
+      }
+      setSelectedFromAmountPercent(newFromAmountPercent);
+    },
+    [selectedFromAmountPercent, selectedAsset],
+  );
+
   const swapClick = async () => {
     if (payloadData.wallet?.marina) {
       let methodCall;
@@ -270,7 +320,7 @@ export const Swap = (): JSX.Element => {
             <div className="from-content pt8">
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
-                setselectedFromAmountPercent={setSelectedFromAmountPercent}
+                setselectedFromAmountPercent={calcAmountPercent}
               />
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="from-amount-div">
