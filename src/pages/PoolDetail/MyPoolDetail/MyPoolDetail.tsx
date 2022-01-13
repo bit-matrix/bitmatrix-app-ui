@@ -52,31 +52,31 @@ export const MyPoolDetail: React.FC = () => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
       const currentPool = payloadData.pools[0];
 
-      const quoteAssetId = currentPool.quote.asset;
-      const tokenAssetId = currentPool.token.asset;
-      const lpTokenAssetId = currentPool.lp.asset;
+      const lpAssetId = currentPool.lp.asset;
+      const lpAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
+      const lpAmountInWalletN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
-      const lpAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId)?.amount;
-      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
-      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountInWalletN);
 
-      const quoteAmountN = new Decimal(Number(quoteAmountInWallet)).toNumber();
-      const tokenAmountN = new Decimal(tokenAmountInWallet || 0).toNumber();
-      const lpAmountN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
+      const recipientValue = convertion.calcAddLiquidityRecipientValue(
+        currentPool,
+        quoteTokenRecipients.user_lbtc_received,
+        quoteTokenRecipients.user_token_received,
+      );
 
-      const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool, quoteAmountN, tokenAmountN);
-      const pooledRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
-      const quoteReceived = (pooledRecipients.user_lbtc_received / payloadData.preferred_unit.value).toString();
-      const tokenReceived = (pooledRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+      const pooledQuote = (quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value).toString();
+      const pooledToken = (quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+      const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
+      const poolRate = (Number(recipientValue.poolRate) * 100).toFixed(2);
 
       return {
-        quoteAmount: quoteReceived,
-        tokenAmount: tokenReceived,
-        lpAmount: (lpAmountN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
-        poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
+        pooledQuote,
+        pooledToken,
+        pooledLp,
+        poolRate,
       };
     }
-    return { quoteAmount: '0', tokenAmount: '0', lpAmount: '0', poolRate: '0' };
+    return { pooledQuote: '0', pooledToken: '0', pooledLp: '0', poolRate: '0' };
   };
 
   const renderChart = (allData: any) => {
@@ -120,9 +120,9 @@ export const MyPoolDetail: React.FC = () => {
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
-              <Button className="my-pool-detail-button" onClick={() => history.goBack()}>
+              <Button className="my-pool-detail-back-button" onClick={() => history.goBack()}>
                 <Icon className="my-pool-detail-back-icon" icon="angle-left" size="4x" />
-                <div className="my-pool-detail-page-text">
+                <div className="my-pool-detail-back-text">
                   {pool.quote.ticker} / {pool.token.ticker}
                 </div>
               </Button>
@@ -144,14 +144,14 @@ export const MyPoolDetail: React.FC = () => {
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
                       <img className="my-pool-detail-img" src={lbtcImage} alt="" />
-                      {calcPooledAssets().quoteAmount}
+                      {calcPooledAssets().pooledQuote}
                     </div>
                   </div>
 
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
                       <img className="my-pool-detail-img" src={usdtImage} alt="" />
-                      {calcPooledAssets().tokenAmount}
+                      {calcPooledAssets().pooledToken}
                     </div>
                   </div>
                 </div>
@@ -162,7 +162,7 @@ export const MyPoolDetail: React.FC = () => {
                 <div className="my-pool-detail-item">
                   <div className="my-pool-detail-img-content left-side">
                     <span className="portion-item">LP&nbsp;</span>
-                    {calcPooledAssets().lpAmount}
+                    {calcPooledAssets().pooledLp}
                   </div>
                   <CustomPopover
                     placement="autoHorizontal"
