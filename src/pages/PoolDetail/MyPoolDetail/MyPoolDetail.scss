@@ -1,0 +1,196 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.my-pool-detail-container {
+  // height: 33rem;
+  width: 95%;
+}
+
+.my-pool-detail-main {
+  border: 2px solid $bmPaleGreen;
+  position: relative;
+  border-radius: 1.5rem;
+  height: 31rem;
+  width: 100%;
+  // margin-top: 3.5rem;
+}
+
+.my-pool-detail-header {
+  padding: 0.75rem 0.75rem 0 0.75rem;
+}
+
+.my-pool-detail-header-left {
+  display: flex;
+  align-items: center;
+}
+
+.my-pool-detail-page-text {
+  margin-left: 1rem;
+  color: $bmPaleGreen;
+}
+
+.my-pool-detail-back-icon {
+  height: 3rem !important;
+  font-size: 3rem !important;
+  color: $bmPaleGreen !important;
+  cursor: pointer;
+}
+
+.my-pool-detail-content {
+  height: calc(100% - 0.5rem);
+  padding: 0.75rem;
+}
+
+.my-pool-detail-content-left {
+  background: $bmBlackRussian;
+  border-radius: 1rem;
+  padding: 0.5rem;
+  color: $bmAluminium;
+}
+
+.my-pool-detail-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+  width: 100%;
+  background: $bmBlack;
+  height: 3rem;
+  border-radius: 1rem;
+  padding: 0 0.5rem;
+}
+
+.my-pool-detail-img-content {
+  display: flex;
+  align-items: center;
+  color: $bmWhiteSmoke;
+}
+
+.my-pool-detail-img {
+  width: 1.5rem;
+  margin-right: 0.25rem;
+}
+
+.my-pool-detail-content-right {
+  margin-bottom: 0.5rem;
+  height: calc(100% - 21rem);
+}
+
+.my-pool-detail-content-right svg {
+  border-radius: 1rem;
+}
+
+.my-pool-detail-content-left-header {
+  padding-left: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: $bmDimGray;
+}
+
+.my-pool-detail-button {
+  display: flex !important;
+  align-items: center;
+  width: 100%;
+  height: 3rem;
+  border-radius: 1rem !important;
+  background: $bmBlackRussian !important;
+  justify-content: center;
+  opacity: 0.8;
+  margin-top: 0.5rem;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.my-pooled-assets-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5rem 0;
+  width: 100%;
+}
+
+.my-pooled-assets-item {
+  display: flex;
+  align-items: center;
+  background: $bmBlack;
+  border-radius: 1rem;
+  width: 48%;
+  height: 3rem;
+  padding-left: 0.5rem;
+}
+
+.portion-item {
+  color: $bmPaleGreen;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .my-pool-detail-container {
+    width: unset;
+  }
+
+  .my-pool-detail-main {
+    width: 60rem;
+    height: 28rem;
+    // margin-top: 2.5rem;
+  }
+
+  .my-pool-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem 0 1rem;
+  }
+
+  .my-pool-detail-header-right {
+    margin-right: 5rem;
+  }
+
+  .my-pool-detail-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: calc(100% - 4rem);
+    padding: 1rem;
+  }
+
+  .my-pool-detail-content-left {
+    // width: calc(30% - 0.5rem);
+    width: 17rem;
+    height: 100%;
+    margin-right: 0.5rem;
+    background: $bmBlackRussian;
+    border-radius: 1rem;
+    padding: 0.75rem;
+    color: $bmAluminium;
+  }
+
+  .my-pool-detail-navbar-item .rs-nav-item-content {
+    padding: 0.5rem 1.5rem !important;
+  }
+
+  .my-pool-detail-content-right {
+    width: calc(100% - 18rem);
+    margin-left: 0.5rem;
+    height: 100%;
+    margin-bottom: unset;
+  }
+
+  .my-pool-detail-button {
+    height: 2.75rem;
+  }
+
+  .my-pool-detail-item {
+    margin: 0.5rem 0;
+  }
+
+  .my-pool-detail-item-detail {
+    margin: 0.5rem 0.5rem 0.25rem 0.5rem;
+  }
+
+  .my-pool-detail-img {
+    margin-right: 0.5rem;
+  }
+}
