@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { api } from '@bitmatrix/lib';
+import { api, convertion } from '@bitmatrix/lib';
 import { BmChart, Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { calculateChartData } from '../utils';
@@ -9,13 +9,13 @@ import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../../components/TabMenu/TabMenu';
 import { MY_POOL_DETAIL_TABS } from '../../../enum/MY_POOL_DETAIL_TABS';
-import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../../context/SettingsContext';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import info from '../../../images/info2.png';
 import lbtcImage from '../../../images/liquid_btc.png';
 import usdtImage from '../../../images/usdt.png';
+import Decimal from 'decimal.js';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -47,6 +47,36 @@ export const MyPoolDetail: React.FC = () => {
         setLoading(false);
       });
   }, [id]);
+
+  const calcPooledAssets = () => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
+      const currentPool = payloadData.pools[0];
+
+      const quoteAssetId = currentPool.quote.asset;
+      const tokenAssetId = currentPool.token.asset;
+      const lpTokenAssetId = currentPool.lp.asset;
+
+      const lpAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId)?.amount;
+      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+
+      const quoteAmountN = new Decimal(Number(quoteAmountInWallet)).mul(payloadData.preferred_unit.value).toNumber();
+      const tokenAmountN = new Decimal(tokenAmountInWallet || 0).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const lpAmountN = (
+        Number(new Decimal(lpAmountInWallet || 0).ceil().toNumber()) / PREFERRED_UNIT_VALUE.LBTC
+      ).toFixed(8);
+
+      const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool, quoteAmountN, tokenAmountN);
+
+      return {
+        quoteAmount: new Decimal(Number(quoteAmountInWallet)).div(payloadData.preferred_unit.value).toFixed(2),
+        tokenAmount: new Decimal(tokenAmountInWallet || 0).div(PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
+        lpAmount: lpAmountN,
+        poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
+      };
+    }
+    return { quoteAmount: '0', tokenAmount: '0', lpAmount: '0', poolRate: '0' };
+  };
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -113,14 +143,14 @@ export const MyPoolDetail: React.FC = () => {
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
                       <img className="my-pool-detail-img" src={lbtcImage} alt="" />
-                      {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                      {calcPooledAssets().quoteAmount}
                     </div>
                   </div>
 
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
                       <img className="my-pool-detail-img" src={usdtImage} alt="" />
-                      {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                      {calcPooledAssets().tokenAmount}
                     </div>
                   </div>
                 </div>
@@ -131,7 +161,7 @@ export const MyPoolDetail: React.FC = () => {
                 <div className="my-pool-detail-item">
                   <div className="my-pool-detail-img-content left-side">
                     <span className="portion-item">LP&nbsp;</span>
-                    {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                    {calcPooledAssets().lpAmount}
                   </div>
                   <CustomPopover
                     placement="autoHorizontal"
@@ -144,7 +174,7 @@ export const MyPoolDetail: React.FC = () => {
                 <div className="my-pool-detail-item">
                   <div className="my-pool-detail-img-content left-side">
                     <span className="portion-item">%&nbsp;</span>
-                    {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                    {calcPooledAssets().poolRate}
                   </div>
 
                   <CustomPopover
