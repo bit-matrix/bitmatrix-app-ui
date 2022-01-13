@@ -159,7 +159,11 @@
   }
 
   .my-pool-detail-header-right {
-    margin-right: 5rem;
+    margin-left: 1rem;
+    width: calc(100% - 17rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .my-pool-detail-content {
