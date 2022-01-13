@@ -60,8 +60,8 @@ export const MyPoolDetail: React.FC = () => {
       const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      const quoteAmountN = new Decimal(Number(quoteAmountInWallet)).mul(payloadData.preferred_unit.value).toNumber();
-      const tokenAmountN = new Decimal(tokenAmountInWallet || 0).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const quoteAmountN = new Decimal(Number(quoteAmountInWallet)).toNumber();
+      const tokenAmountN = new Decimal(tokenAmountInWallet || 0).toNumber();
       const lpAmountN = (
         Number(new Decimal(lpAmountInWallet || 0).ceil().toNumber()) / PREFERRED_UNIT_VALUE.LBTC
       ).toFixed(8);
