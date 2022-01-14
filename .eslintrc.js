@@ -1,23 +1,61 @@
 module.exports = {
-  parser: '@typescript-eslint/parser',
+  globals: {
+    MyGlobal: true,
+  },
+  extends: [
+    'airbnb',
+    'airbnb-typescript',
+    'airbnb/hooks',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'prettier',
+    'prettier/react',
+  ],
+  plugins: ['prettier', 'jest'],
+  rules: {
+    'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', 'tsx'] }],
+    'prettier/prettier': [
+      'error',
+      {
+        printWidth: 250,
+        singleQuote: true,
+        arrowParens: 'always',
+        trailingComma: 'all',
+        endOfLine: 'auto',
+        overrides: [
+          {
+            files: 'package*.json',
+            options: {
+              printWidth: 1000,
+            },
+          },
+        ],
+      },
+    ],
+    semi: ['error', 'always'],
+    quotes: ['error', 'single'],
+    '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
+  },
+
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
+    ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [
-    'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:@typescript-eslint/recommended',
-    'prettier',
-  ],
-  root: true,
+
   env: {
-    node: true,
-    jest: true,
+    browser: true,
+    es6: true,
+    'jest/globals': true,
   },
-  rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-  },
+  overrides: [
+    {
+      files: ['**/*.tsx'],
+      rules: {
+        'react/prop-types': 'off',
+      },
+    },
+  ],
 };
