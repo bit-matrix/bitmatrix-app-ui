@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Notification, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
@@ -12,7 +12,7 @@ import { Info } from '../../components/common/Info/Info';
 import { useContext } from 'react';
 import SettingsContext from '../../context/SettingsContext';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { CALL_METHOD } from '@bitmatrix/models';
+import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
@@ -39,41 +39,37 @@ export const Swap = (): JSX.Element => {
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
-  const onChangeFromInput = (input: string) => {
+  const onChangeFromInput = (currentPool: Pool, pool_config: BmConfig, input: string) => {
     let inputNum = Number(input);
 
-    if (payloadData.pools && payloadData.pool_config) {
-      let methodCall;
+    let methodCall;
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC) {
-        inputNum = inputNum * payloadData.preferred_unit.value;
-        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-      } else {
-        inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-      }
+    if (selectedAsset.from === SWAP_ASSET.LBTC) {
+      inputNum = inputNum * payloadData.preferred_unit.value;
+      methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+    } else {
+      inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+      methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+    }
 
-      const output = convertion.convertForCtx(
-        inputNum,
-        payloadData.slippage,
-        payloadData.pools[0],
-        payloadData.pool_config,
-        methodCall,
-      );
+    const output = convertion.convertForCtx(inputNum, payloadData.slippage, currentPool, pool_config, methodCall);
 
-      console.log('1', output);
+    console.log('1', output);
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC) {
-        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-      } else {
-        setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
-      }
-
-      setInputFromAmount(input);
+    if (selectedAsset.from === SWAP_ASSET.LBTC) {
+      setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+      setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+    } else {
+      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
     }
   };
+
+  useEffect(() => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
+      onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
+    }
+  }, [inputFromAmount, payloadData]);
 
   // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
   //   let inputNum = Number(inputElement.target.value);
@@ -151,7 +147,8 @@ export const Swap = (): JSX.Element => {
         }
       }
 
-      onChangeFromInput(inputAmount);
+      // onChangeFromInput(inputAmount);
+      setInputFromAmount(inputAmount);
     }
     setSelectedFromAmountPercent(newFromAmountPercent);
   };
@@ -361,7 +358,7 @@ export const Swap = (): JSX.Element => {
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     value={inputFromAmount}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeFromInput(event.target.value)}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputFromAmount(event.target.value)}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
