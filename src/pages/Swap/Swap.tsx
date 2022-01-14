@@ -39,26 +39,6 @@ export const Swap = (): JSX.Element => {
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
-  const infoMessage = (): string => {
-    if (payloadData.pool_config && payloadData.pools && payloadData.pools.length > 0) {
-      const config = payloadData.pool_config;
-      const currentPool = payloadData.pools[0];
-      const totalFee =
-        config.baseFee.number +
-        config.commitmentTxFee.number +
-        config.defaultOrderingFee.number +
-        config.serviceFee.number;
-
-      const currentUsdtPrice = (
-        (Number(currentPool.token.value) / Number(currentPool.quote.value) / PREFERRED_UNIT_VALUE.LBTC) *
-        totalFee
-      ).toFixed(2);
-
-      return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
-    }
-    return '';
-  };
-
   const onChangeFromInput = (input: string) => {
     let inputNum = Number(input);
 
@@ -335,6 +315,26 @@ export const Swap = (): JSX.Element => {
       description: <div className="notificationTx">{description}</div>,
       duration: 20000,
     });
+  };
+
+  const infoMessage = (): string => {
+    if (payloadData.pool_config && payloadData.pools && payloadData.pools.length > 0) {
+      const config = payloadData.pool_config;
+      const currentPool = payloadData.pools[0];
+      const totalFee =
+        config.baseFee.number +
+        config.commitmentTxFee.number +
+        config.defaultOrderingFee.number +
+        config.serviceFee.number;
+
+      const currentUsdtPrice = (
+        (Number(currentPool.token.value) / Number(currentPool.quote.value) / PREFERRED_UNIT_VALUE.LBTC) *
+        totalFee
+      ).toFixed(2);
+
+      return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
+    }
+    return '';
   };
 
   return (
