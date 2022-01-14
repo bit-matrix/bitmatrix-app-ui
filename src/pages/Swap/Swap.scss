@@ -47,23 +47,6 @@
   padding: 0.5rem 1rem;
 }
 
-.from-selection {
-  align-self: center;
-  padding: 0.5rem;
-
-  .rs-btn-subtle:hover {
-    background-color: $bmBlack;
-  }
-
-  .rs-dropdown-toggle-caret {
-    top: 0.75rem !important;
-  }
-
-  .rs-dropdown-menu-active {
-    min-width: 7.25rem !important;
-  }
-}
-
 .from-text {
   text-align: left;
 }
