@@ -8,4 +8,5 @@ export enum ROUTE_PATH {
   SETTINGS = '/settings',
   ADD_LIQUIDTY = '/pool/:id/add-liquidity',
   REMOVE_LIQUIDITY = '/pool/:id/remove-liquidity',
+  NOT_FOUND = '*',
 }

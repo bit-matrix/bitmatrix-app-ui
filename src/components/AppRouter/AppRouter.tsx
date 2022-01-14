@@ -23,6 +23,7 @@ import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
 import './AppRouter.scss';
+import { NotFound } from '../../pages/NotFound/NotFound';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -184,6 +185,7 @@ export const AppRouter = (): JSX.Element => {
               <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
               <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
               <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+              <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
             </Switch>
           )}
         </div>
