@@ -136,7 +136,6 @@ export const Swap = (): JSX.Element => {
           inputAmount = (quoteAmountInWalletHalf / payloadData.preferred_unit.value).toString();
         }
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          const quoteAmountInWalletMin = quoteAmountInWallet / 4;
           inputAmount = (poolConfig.minRemainingSupply / payloadData.preferred_unit.value).toString();
         }
       } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
@@ -148,7 +147,6 @@ export const Swap = (): JSX.Element => {
           inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
         }
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          const tokenAmountInWalletMin = tokenAmountInWallet / 4;
           inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
         }
       }
