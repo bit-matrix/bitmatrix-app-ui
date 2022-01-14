@@ -7,7 +7,7 @@ export const NotFound = (): JSX.Element => {
 
   useEffect(() => {
     setTimeout(() => {
-      history.push('swap');
+      history.push('/');
     }, 5000);
   }, []);
 
