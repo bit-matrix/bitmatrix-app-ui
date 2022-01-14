@@ -1,15 +1,17 @@
 import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { Button, Content, Icon, Notification } from 'rsuite';
+import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
+import { WalletButton } from '../../../components/WalletButton/WalletButton';
+import { getPrimaryPoolConfig } from '../../../helper';
+import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
 import btc from '../../../images/liquid_btc.png';
@@ -18,8 +20,6 @@ import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import './AddLiquidity.scss';
-import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -33,8 +33,8 @@ const AddLiquidity = (): JSX.Element => {
 
   const history = useHistory();
 
-  const onChangeQuoteAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(inputElement.target.value);
+  const onChangeQuoteAmount = (input: string) => {
+    const inputNum = Number(input);
 
     if (payloadData.pools && payloadData.pool_config) {
       const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
@@ -45,13 +45,13 @@ const AddLiquidity = (): JSX.Element => {
         primaryPoolConfig,
       );
 
-      setQuoteAmount(inputElement.target.value);
+      setQuoteAmount(input);
       setTokenAmount((output / PREFERRED_UNIT_VALUE.LBTC).toString());
     }
   };
 
-  const onChangeTokenAmount = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(inputElement.target.value);
+  const onChangeTokenAmount = (input: string) => {
+    const inputNum = Number(input);
 
     if (payloadData.pools && payloadData.pool_config) {
       const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
@@ -64,7 +64,7 @@ const AddLiquidity = (): JSX.Element => {
       );
 
       setQuoteAmount((output / payloadData.preferred_unit.value).toString());
-      setTokenAmount(inputElement.target.value);
+      setTokenAmount(input);
     }
   };
 
@@ -74,6 +74,55 @@ const AddLiquidity = (): JSX.Element => {
       description: <div className="notificationTx">{description}</div>,
       duration: 20000,
     });
+  };
+
+  const calcAmountPercent = (
+    lbctPercent: FROM_AMOUNT_PERCENT | undefined,
+    usdtPercent: FROM_AMOUNT_PERCENT | undefined,
+  ) => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+      const currentPool = payloadData.pools[0];
+      const poolConfig = payloadData.pool_config;
+
+      let inputAmount = '';
+
+      const quoteAssetId = currentPool.quote.asset;
+      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+
+      const tokenAssetId = currentPool.token.asset;
+      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+
+      if (lbctPercent && quoteAmountInWallet) {
+        if (lbctPercent === FROM_AMOUNT_PERCENT.ALL) {
+          inputAmount = (quoteAmountInWallet / payloadData.preferred_unit.value).toString();
+        }
+        if (lbctPercent === FROM_AMOUNT_PERCENT.HALF) {
+          const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
+          inputAmount = (quoteAmountInWalletHalf / payloadData.preferred_unit.value).toString();
+        }
+        if (lbctPercent === FROM_AMOUNT_PERCENT.MIN) {
+          inputAmount = (poolConfig.minRemainingSupply / payloadData.preferred_unit.value).toString();
+        }
+        onChangeQuoteAmount(inputAmount);
+        setUsdtPercent(undefined);
+        setLbtcPercent(lbctPercent);
+      }
+      if (usdtPercent && tokenAmountInWallet) {
+        if (usdtPercent === FROM_AMOUNT_PERCENT.ALL) {
+          inputAmount = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
+        if (usdtPercent === FROM_AMOUNT_PERCENT.HALF) {
+          const tokenAmountInWalletHalf = tokenAmountInWallet / 2;
+          inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
+        if (usdtPercent === FROM_AMOUNT_PERCENT.MIN) {
+          inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
+        onChangeTokenAmount(inputAmount);
+        setLbtcPercent(undefined);
+        setUsdtPercent(usdtPercent);
+      }
+    }
   };
 
   const addLiquidityClick = async () => {
@@ -183,7 +232,12 @@ const AddLiquidity = (): JSX.Element => {
         <div>
           <div className="add-liquidity-main">
             <div className="add-liquidity-item pt8">
-              <SwapFromTab selectedFromAmountPercent={lbctPercent} setselectedFromAmountPercent={setLbtcPercent} />
+              <SwapFromTab
+                selectedFromAmountPercent={lbctPercent}
+                setselectedFromAmountPercent={(lbtcPercent: FROM_AMOUNT_PERCENT | undefined) =>
+                  calcAmountPercent(lbtcPercent, undefined)
+                }
+              />
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
@@ -199,7 +253,7 @@ const AddLiquidity = (): JSX.Element => {
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     value={quoteAmount}
-                    onChange={onChangeQuoteAmount}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeQuoteAmount(event.target.value)}
                   />
                 </div>
               </div>
@@ -208,7 +262,12 @@ const AddLiquidity = (): JSX.Element => {
               <img className="add-liquidity-page-icons" src={plus} alt="" />
             </div>
             <div className="add-liquidity-item pt8">
-              <SwapFromTab selectedFromAmountPercent={usdtPercent} setselectedFromAmountPercent={setUsdtPercent} />
+              <SwapFromTab
+                selectedFromAmountPercent={usdtPercent}
+                setselectedFromAmountPercent={(usdtPercent: FROM_AMOUNT_PERCENT | undefined) =>
+                  calcAmountPercent(undefined, usdtPercent)
+                }
+              />
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
@@ -224,7 +283,7 @@ const AddLiquidity = (): JSX.Element => {
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     value={tokenAmount}
-                    onChange={onChangeTokenAmount}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeTokenAmount(event.target.value)}
                   />
                 </div>
               </div>
