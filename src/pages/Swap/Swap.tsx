@@ -54,8 +54,6 @@ export const Swap = (): JSX.Element => {
 
     const output = convertion.convertForCtx(inputNum, payloadData.slippage, currentPool, pool_config, methodCall);
 
-    console.log('1', output);
-
     if (selectedAsset.from === SWAP_ASSET.LBTC) {
       setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
       setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
