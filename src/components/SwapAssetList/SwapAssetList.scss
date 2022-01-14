@@ -1,0 +1,39 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.from-selection {
+  align-self: center;
+  padding: 0.5rem;
+
+  .rs-btn {
+    width: 7.5rem !important;
+  }
+
+  .rs-btn-subtle {
+    background-color: $bmBlack !important;
+    &:hover {
+      background-color: $bmBlack;
+    }
+  }
+
+  .rs-dropdown-item-content {
+    border-bottom: 2px solid $bmDeepFir;
+  }
+
+  .rs-dropdown-toggle-caret {
+    top: 0.75rem !important;
+    right: 0.5rem !important;
+  }
+
+  .rs-dropdown-menu-active {
+    background-color: $bmBlackRussian !important ;
+    min-width: 7.5rem !important;
+  }
+
+  .rs-dropdown-menu > .rs-dropdown-item-active > .rs-dropdown-item-content {
+    background-color: $bmShadyLady !important;
+  }
+
+  .rs-dropdown-menu > .rs-dropdown-item > .rs-dropdown-item-content:hover {
+    background-color: $bmShadyLady !important;
+  }
+}
