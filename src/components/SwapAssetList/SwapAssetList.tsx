@@ -3,6 +3,7 @@ import { Dropdown } from 'rsuite';
 import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
+import './SwapAssetList.scss';
 
 type Props = {
   selectedAsset: SWAP_ASSET;
@@ -47,12 +48,7 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         <Dropdown.Item eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
           {
             <div className="swap-dropdown-item">
-              <img
-                className="swap-dropdown-item-img-lbtc"
-                src={lbtcImage}
-                style={{ height: '1.65rem' }}
-                alt={SWAP_ASSET.LBTC}
-              />
+              <img className="swap-dropdown-item-img-lbtc" src={lbtcImage} alt={SWAP_ASSET.LBTC} />
               <span>{SWAP_ASSET.LBTC}</span>
             </div>
           }
@@ -60,12 +56,7 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         <Dropdown.Item eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
           {
             <div className="swap-dropdown-item">
-              <img
-                className="swap-dropdown-item-img"
-                src={usdtImage}
-                style={{ height: '1.65rem' }}
-                alt={SWAP_ASSET.USDT}
-              />
+              <img className="swap-dropdown-item-img" src={usdtImage} alt={SWAP_ASSET.USDT} />
               <span>{SWAP_ASSET.USDT}</span>
             </div>
           }

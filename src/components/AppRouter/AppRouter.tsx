@@ -18,7 +18,7 @@ import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
-import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail';
+import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
