@@ -5,6 +5,7 @@ import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
 import { Navbar } from '../Navbar/Navbar';
@@ -23,7 +24,6 @@ import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
 import './AppRouter.scss';
-import { NotFound } from '../../pages/NotFound/NotFound';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -175,18 +175,31 @@ export const AppRouter = (): JSX.Element => {
               <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
             </div>
           ) : (
-            <Switch>
-              <Route exact path={ROUTE_PATH.HOME} component={Home} />
-              <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-              <Route exact path={ROUTE_PATH.POOL} component={Pool} />
-              <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
-              <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-              <Route exact path={ROUTE_PATH.STATS} component={Stats} />
-              <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-              <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-              <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
-              <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
-            </Switch>
+            <Route
+              render={({ location }) => (
+                <TransitionGroup>
+                  <CSSTransition
+                    mountOnEnter={false}
+                    unmountOnExit={true}
+                    timeout={300}
+                    classNames="slide-enter-active slide-exit-active"
+                    key={location.key}
+                  >
+                    <Switch>
+                      <Route exact path={ROUTE_PATH.HOME} component={Home} />
+                      <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+                      <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+                      <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
+                      <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
+                      <Route exact path={ROUTE_PATH.STATS} component={Stats} />
+                      <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
+                      <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
+                      <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+                    </Switch>
+                  </CSSTransition>
+                </TransitionGroup>
+              )}
+            />
           )}
         </div>
         <Footer />
