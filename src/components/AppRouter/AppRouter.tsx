@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
@@ -22,8 +22,10 @@ import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
-import './AppRouter.scss';
+import Switch from 'react-router-transition-switch';
+import Fader from 'react-fader';
 import { NotFound } from '../../pages/NotFound/NotFound';
+import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -175,7 +177,7 @@ export const AppRouter = (): JSX.Element => {
               <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
             </div>
           ) : (
-            <Switch>
+            <Switch component={Fader}>
               <Route exact path={ROUTE_PATH.HOME} component={Home} />
               <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
               <Route exact path={ROUTE_PATH.POOL} component={Pool} />
