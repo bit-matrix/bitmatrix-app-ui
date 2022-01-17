@@ -1,0 +1,18 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.wallet-confirm-modal {
+  padding-top: 1rem !important;
+  margin: 0 auto !important;
+  width: 31rem !important;
+  border-radius: 1rem !important;
+  .rs-modal-content {
+    background-color: $bmBlackRussian !important;
+    border: 2px solid $bmBlackRussian;
+  }
+  .rs-modal-dialog {
+    transform: translateY(-70%);
+    top: 50vh;
+    margin: 0 auto;
+    position: relative;
+  }
+}
