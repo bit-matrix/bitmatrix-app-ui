@@ -11,9 +11,7 @@ import { Navbar } from '../Navbar/Navbar';
 import { Home } from '../../pages/Home/Home';
 import { Pool } from '../../pages/Pool/Pool';
 import { Factory } from '../../pages/Factory/Factory';
-import { Issuance } from '../../pages/Factory/Issuance/Issuance';
-import { PegIn } from '../../pages/Factory/PegIn/PegIn';
-import { PegOut } from '../../pages/Factory/PegOut/PegOut';
+import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -190,9 +188,7 @@ export const AppRouter = (): JSX.Element => {
               <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
               <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
               <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
-              <Route exact path={ROUTE_PATH.ISSUANCE} component={Issuance} />
-              <Route exact path={ROUTE_PATH.PEG_IN} component={PegIn} />
-              <Route exact path={ROUTE_PATH.PEG_OUT} component={PegOut} />
+              <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} />
               <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
             </Switch>
           )}
