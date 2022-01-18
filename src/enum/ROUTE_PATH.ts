@@ -4,7 +4,7 @@ export enum ROUTE_PATH {
   POOL = '/pool',
   POOL_DETAIL = '/pool/:id',
   MY_POOL = '/pool/my-pool/:id',
-  STATS = '/stats',
+  FACTORY = '/factory',
   SETTINGS = '/settings',
   ADD_LIQUIDTY = '/pool/:id/add-liquidity',
   REMOVE_LIQUIDITY = '/pool/:id/remove-liquidity',
