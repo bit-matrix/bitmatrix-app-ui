@@ -4,9 +4,12 @@ export enum ROUTE_PATH {
   POOL = '/pool',
   POOL_DETAIL = '/pool/:id',
   MY_POOL = '/pool/my-pool/:id',
-  FACTORY = '/factory',
   SETTINGS = '/settings',
   ADD_LIQUIDTY = '/pool/:id/add-liquidity',
   REMOVE_LIQUIDITY = '/pool/:id/remove-liquidity',
+  FACTORY = '/factory',
+  ISSUANCE = '/factory/issuance',
+  PEG_IN = '/factory/peg-in',
+  PEG_OUT = '/factory/peg-out',
   NOT_FOUND = '*',
 }
