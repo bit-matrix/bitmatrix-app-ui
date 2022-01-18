@@ -128,12 +128,12 @@ export const Navbar: React.FC = (): JSX.Element => {
 
       <li className="navbar-item mobile-hidden ">
         <Button
-          className={`navbar-item-button ${selectedTab === ROUTE_PATH.STATS && 'active'}`}
+          className={`navbar-item-button ${selectedTab === ROUTE_PATH.FACTORY && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.STATS);
+            history.push(ROUTE_PATH.FACTORY);
           }}
         >
-          Stats
+          Factory
         </Button>
       </li>
 

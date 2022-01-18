@@ -10,7 +10,7 @@ import { Footer } from './Footer/Footer';
 import { Navbar } from '../Navbar/Navbar';
 import { Home } from '../../pages/Home/Home';
 import { Pool } from '../../pages/Pool/Pool';
-import { Stats } from '../../pages/Stats/Stats';
+import { Factory } from '../../pages/Factory/Factory';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -183,7 +183,7 @@ export const AppRouter = (): JSX.Element => {
               <Route exact path={ROUTE_PATH.POOL} component={Pool} />
               <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
               <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-              <Route exact path={ROUTE_PATH.STATS} component={Stats} />
+              <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
               <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
               <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
