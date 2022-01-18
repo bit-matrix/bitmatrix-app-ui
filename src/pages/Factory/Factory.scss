@@ -1,0 +1,35 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.factory-page-main {
+  width: 100%;
+  border: 2px solid $bmPaleGreen;
+  position: relative;
+  border-radius: 1.5rem;
+  background-color: $bmDeepFir;
+  margin: 0 auto;
+  min-height: 27rem;
+}
+
+.factory-page-header {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.25rem;
+}
+
+.factory-page-content {
+  padding: 1rem 1rem 0 1rem;
+  font-size: 1rem;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .factory-page-main {
+    width: 48rem;
+    margin-top: 0;
+    min-height: 26rem;
+  }
+
+  .factory-page-content {
+    padding: 1rem 1rem 0 1rem;
+    font-size: 0.875rem;
+  }
+}

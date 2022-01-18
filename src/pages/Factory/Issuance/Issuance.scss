@@ -1,0 +1,51 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.issuance-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .issuance-content-item {
+    background-color: $bmPaleGreen;
+    height: 20.5rem;
+    width: 14rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    position: relative;
+
+    .issuance-img-content {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 0.5rem;
+
+      .issuance-img {
+        width: 10rem;
+      }
+    }
+
+    .issuance-button-content {
+      position: absolute;
+      bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      left: 1rem;
+      right: 1rem;
+
+      .issuance-button {
+        width: 100%;
+        height: 2.5rem;
+        border-radius: 1rem !important;
+        background-color: $bmDeepFir !important;
+        opacity: 0.9;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

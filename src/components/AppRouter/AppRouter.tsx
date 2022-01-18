@@ -10,7 +10,8 @@ import { Footer } from './Footer/Footer';
 import { Navbar } from '../Navbar/Navbar';
 import { Home } from '../../pages/Home/Home';
 import { Pool } from '../../pages/Pool/Pool';
-import { Stats } from '../../pages/Stats/Stats';
+import { Factory } from '../../pages/Factory/Factory';
+import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -183,10 +184,11 @@ export const AppRouter = (): JSX.Element => {
               <Route exact path={ROUTE_PATH.POOL} component={Pool} />
               <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
               <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-              <Route exact path={ROUTE_PATH.STATS} component={Stats} />
               <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
               <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
               <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+              <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
+              <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} />
               <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
             </Switch>
           )}
