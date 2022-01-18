@@ -128,7 +128,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
       <li className="navbar-item mobile-hidden ">
         <Button
-          className={`navbar-item-button ${selectedTab === ROUTE_PATH.FACTORY && 'active'}`}
+          className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.FACTORY) && 'active'}`}
           onClick={() => {
             history.push(ROUTE_PATH.FACTORY);
           }}
