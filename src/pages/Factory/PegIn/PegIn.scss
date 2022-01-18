@@ -1,0 +1,16 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.peg-in-content {
+  margin-top: 0;
+  display: flex;
+  position: relative;
+  border-radius: 1.5rem;
+  background-color: $bmDeepFir;
+  margin: 0 auto;
+
+  .no-peg-in-text {
+    width: 100%;
+    margin-top: 1rem;
+    text-align: center;
+  }
+}
