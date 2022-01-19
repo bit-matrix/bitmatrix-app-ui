@@ -12,10 +12,11 @@ import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
 import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
-// import { IconNames } from 'rsuite/lib/Icon';
-import './PoolDetail.scss';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -95,8 +96,8 @@ export const PoolDetail: React.FC = () => {
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">
               <Button className="pool-detail-button" onClick={() => history.goBack()}>
-                <i className="pool-detail-back-icon fas fa-angle-left"></i>
-                {/* <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" /> */}
+                {/* TODO  style={{ color: '#adfbc4 !important' }} */}
+                <FontAwesomeIcon icon={faAngleLeft} size="3x" />
                 <div className="pool-detail-page-text">
                   {pool.quote.ticker} / {pool.token.ticker}
                 </div>
