@@ -29,7 +29,7 @@ export const Advanced = (): JSX.Element => {
   };
 
   return (
-    <>
+    <div className="advanced-main">
       <div className="modal-container">
         <Modal
           className="wallet-confirm-modal"
@@ -57,6 +57,6 @@ export const Advanced = (): JSX.Element => {
           }}
         />
       </div>
-    </>
+    </div>
   );
 };

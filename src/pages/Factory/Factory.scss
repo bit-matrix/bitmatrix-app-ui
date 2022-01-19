@@ -10,6 +10,36 @@
   min-height: 27rem;
 }
 
+.issuance {
+  transform: translateX(-50%);
+  transition: transform 300ms ease-in-out;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 50%;
+  width: 100%;
+}
+
+.peg-in {
+  transform: translate(50%);
+  transition: transform 300ms ease-in-out;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  right: 50%;
+  width: 100%;
+}
+
+.peg-out {
+  transform: translateX(-50%);
+  transition: transform 300ms ease-in-out;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 50%;
+  width: 100%;
+}
+
 .factory-page-header {
   display: flex;
   justify-content: center;
@@ -19,6 +49,10 @@
 .factory-page-content {
   padding: 1rem 1rem 0 1rem;
   font-size: 1rem;
+  position: relative;
+  height: 52vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
