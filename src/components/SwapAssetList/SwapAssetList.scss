@@ -8,7 +8,7 @@
     width: 7.5rem !important;
   }
 
-  .rs-btn-subtle {
+  .rs-btn-default {
     background-color: $bmBlack !important;
     &:hover {
       background-color: $bmBlack;
@@ -24,7 +24,7 @@
     right: 0.5rem !important;
   }
 
-  .rs-dropdown-menu-active {
+  .rs-dropdown-menu {
     background-color: $bmBlackRussian !important ;
     min-width: 7.5rem !important;
   }
