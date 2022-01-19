@@ -28,6 +28,17 @@ export const Factory = (): JSX.Element => {
     }
   };
 
+  const factoryTabClasses = [];
+  if (selectedTab === FACTORY_TABS.ISSUANCE) {
+    factoryTabClasses.push('issuance');
+  }
+  if (selectedTab === FACTORY_TABS.PEG_IN) {
+    factoryTabClasses.push('peg-in');
+  }
+  if (selectedTab === FACTORY_TABS.PEG_OUT) {
+    factoryTabClasses.push('peg-out');
+  }
+
   return (
     <div className="factory-page-main">
       <div className="factory-page-header">
@@ -37,7 +48,9 @@ export const Factory = (): JSX.Element => {
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
       </div>
-      <div className="factory-page-content">{getFactoryData()}</div>
+      <div className="factory-page-content">
+        <div className={factoryTabClasses.join(' ')}>{getFactoryData()}</div>
+      </div>
     </div>
   );
 };

@@ -32,7 +32,7 @@ export const Settings = (): JSX.Element => {
     }
   };
 
-  const settingsTabClasses = ['settings-page-content'];
+  const settingsTabClasses = [];
   if (selectedTab === SETTINGS_DETAIL_TABS.ADVANCED) {
     settingsTabClasses.push('advanced');
   }
@@ -60,7 +60,9 @@ export const Settings = (): JSX.Element => {
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
       </div>
-      <div className={settingsTabClasses.join(' ')}>{getSettingsData()}</div>
+      <div className="settings-page-content">
+        <div className={settingsTabClasses.join(' ')}>{getSettingsData()}</div>
+      </div>
     </div>
   );
 };

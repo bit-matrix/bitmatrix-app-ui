@@ -17,7 +17,7 @@ export const General = (): JSX.Element => {
   const { dispatch, payloadData } = useContext(SettingsContext);
 
   return (
-    <div>
+    <div className="general-main">
       <div className="general-item">
         <div className="general-item-first-head">
           <span className="general-title">Slippage Tolerance</span>
