@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'rsuite';
+// import { Icon } from 'rsuite';
 import './Footer.scss';
 
 export const Footer = (): JSX.Element => {
@@ -7,16 +7,20 @@ export const Footer = (): JSX.Element => {
     <div className="swap-page-footer">
       <div className="swap-page-footer-icons">
         <a href="https://medium.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
-          <Icon className="swap-page-footer-icon" icon="medium" />
+          <i className="fab fa-medium"></i>
+          {/* <Icon className="swap-page-footer-icon" icon="medium" /> */}
         </a>
         <a href="https://twitter.com/bitmatrix_" target="_blank" className="swap-page-footer-icon-item">
-          <Icon className="swap-page-footer-icon" icon="twitter" />
+          <i className="swap-page-footer-icon fab fa-twitter"></i>
+          {/* <Icon className="swap-page-footer-icon" icon="twitter" /> */}
         </a>
         <a href="https://t.me/bitmatrix_community" target="_blank" className="swap-page-footer-icon-item">
-          <Icon className="swap-page-footer-icon" icon="telegram" />
+          <i className="swap-page-footer-icon fab fa-telegram"></i>
+          {/* <Icon className="swap-page-footer-icon" icon="telegram" /> */}
         </a>
         <a href="https://github.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
-          <Icon className="swap-page-footer-icon" icon="github" />
+          <i className="swap-page-footer-icon fab fa-github"></i>
+          {/* <Icon className="swap-page-footer-icon" icon="github" /> */}
         </a>
       </div>
     </div>

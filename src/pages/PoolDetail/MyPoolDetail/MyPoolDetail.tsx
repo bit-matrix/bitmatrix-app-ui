@@ -4,7 +4,7 @@ import { api, convertion } from '@bitmatrix/lib';
 import { BmChart, Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { calculateChartData } from '../utils';
-import { Button, Icon, Loader } from 'rsuite';
+import { Button, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../../components/TabMenu/TabMenu';
@@ -121,7 +121,8 @@ export const MyPoolDetail: React.FC = () => {
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
               <Button className="my-pool-detail-back-button" onClick={() => history.goBack()}>
-                <Icon className="my-pool-detail-back-icon" icon="angle-left" size="4x" />
+                <i className="my-pool-detail-back-icon fas fa-angle-left"></i>
+                {/* <Icon className="my-pool-detail-back-icon" icon="angle-left" size="4x" /> */}
                 <div className="my-pool-detail-back-text">
                   {pool.quote.ticker} / {pool.token.ticker}
                 </div>

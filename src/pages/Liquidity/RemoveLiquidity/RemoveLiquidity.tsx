@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Icon, Slider, Notification } from 'rsuite';
+import { Button, Content, Slider, Notification } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -47,13 +47,13 @@ const RemoveLiquidity = (): JSX.Element => {
     setCalcLpTokenAmount(lpTokenAmountInput);
   }, [removalPercentage, lpTokenAmount]);
 
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
-  };
+  // const notify = (title: string, description: string) => {
+  //   Notification.open({
+  //     title: title,
+  //     description: <div className="notificationTx">{description}</div>,
+  //     duration: 20000,
+  //   });
+  // };
 
   const removeLiquidityClick = async () => {
     if (payloadData.wallet?.marina) {
@@ -122,9 +122,9 @@ const RemoveLiquidity = (): JSX.Element => {
             setLocalData(newStoreData);
           }
 
-          notify('Commitment Tx Id : ', commitmentTxId);
+          // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          // notify('Wallet Error : ', 'Funding transaction could not be created.');
         }
       }
     }
@@ -147,7 +147,8 @@ const RemoveLiquidity = (): JSX.Element => {
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
         <Button className="remove-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="remove-liquidity-back-icon" icon="angle-left" size="4x" />
+          {/* <Icon className="remove-liquidity-back-icon" icon="angle-left" size="4x" /> */}
+          <i className="remove-liquidity-back-icon fas fa-angle-left"></i>
           <div className="remove-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>

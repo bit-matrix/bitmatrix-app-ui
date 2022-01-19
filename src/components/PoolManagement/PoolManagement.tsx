@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
-import { Button, Icon, IconButton, Modal } from 'rsuite';
+import { Button, IconButton, Modal } from 'rsuite';
 import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
@@ -104,8 +104,8 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
       <Modal
         className="pool-list-modal"
         backdrop={true}
-        show={showPoolListModal}
-        onHide={() => setShowPoolListModal(false)}
+        open={showPoolListModal}
+        onClose={() => setShowPoolListModal(false)}
       >
         <Modal.Header>
           <Modal.Title>Choose a pool</Modal.Title>
@@ -133,7 +133,12 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />} />
+        <IconButton
+          className="pool-page-button"
+          icon={
+            <i className="pool-page-icon fas fa-sliders-h"></i> /*<Icon className="pool-page-icon" icon="sliders" size="4x" />*/
+          }
+        />
 
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
@@ -143,7 +148,9 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
         <IconButton
           className="pool-page-button"
           onClick={() => setShowButtons(!showButtons)}
-          icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
+          icon={
+            <i className="pool-page-icon fas fa-plus"></i> /*<Icon className="pool-page-icon" icon="plus" size="4x" />*/
+          }
         />
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}

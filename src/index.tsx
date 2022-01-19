@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './style/global.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'rsuite/dist/styles/rsuite-dark.css';
+// import 'rsuite/dist/styles/rsuite-dark.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 ReactDOM.render(

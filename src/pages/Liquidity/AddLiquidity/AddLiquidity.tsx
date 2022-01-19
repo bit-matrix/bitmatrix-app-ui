@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Icon, Notification } from 'rsuite';
+import { Button, Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -68,13 +68,13 @@ const AddLiquidity = (): JSX.Element => {
     }
   };
 
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
-  };
+  // const notify = (title: string, description: string) => {
+  //   Notification.open({
+  //     title: title,
+  //     description: <div className="notificationTx">{description}</div>,
+  //     duration: 20000,
+  //   });
+  // };
 
   const calcAmountPercent = (
     lbctPercent: FROM_AMOUNT_PERCENT | undefined,
@@ -200,9 +200,9 @@ const AddLiquidity = (): JSX.Element => {
             setLocalData(newStoreData);
           }
 
-          notify('Commitment Tx Id : ', commitmentTxId);
+          // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          // notify('Wallet Error : ', 'Funding transaction could not be created.');
         }
       }
     }
@@ -226,7 +226,8 @@ const AddLiquidity = (): JSX.Element => {
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
         <Button className="add-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="add-liquidity-back-icon" icon="angle-left" size="4x" />
+          <i className="add-liquidity-back-icon fas fa-angle-left"></i>
+          {/* <Icon className="add-liquidity-back-icon" icon="angle-left" size="4x" /> */}
           <div className="add-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>

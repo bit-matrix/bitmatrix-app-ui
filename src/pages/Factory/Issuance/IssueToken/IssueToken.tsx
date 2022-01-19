@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Content, Dropdown, Icon, Input, Uploader } from 'rsuite';
-import { FileType } from 'rsuite/lib/Uploader';
+import { Button, Content, Dropdown, Input, Uploader } from 'rsuite';
+import { FileType } from 'rsuite/esm/Uploader/Uploader';
 import './IssueToken.scss';
 
 export const IssueToken = (): JSX.Element => {
@@ -21,7 +21,8 @@ export const IssueToken = (): JSX.Element => {
     <div className="issue-token-page-main">
       <Content className="issue-token-page-content">
         <Button className="issue-token-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="issue-token-back-icon" icon="angle-left" size="4x" />
+          {/* <Icon className="issue-token-back-icon" icon="angle-left" size="4x" /> */}
+          <i className="issue-token-back-icon fas fa-angle-left"></i>
           <div className="issue-token-back-text">Token Issuance</div>
         </Button>
         <div>

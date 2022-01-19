@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'rsuite';
+// import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { timeDifference } from '../../helper';
@@ -21,7 +21,8 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
       messageBody = (
         <>
-          <Icon className="info-card-item-icon" icon="exchange" />
+          <i className="info-card-item-icon fas fa-exchange"></i>
+          {/* <Icon className="info-card-item-icon" icon="exchange" /> */}
           <div>
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
             {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})

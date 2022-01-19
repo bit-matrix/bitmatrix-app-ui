@@ -35,7 +35,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = (): JSX.Element | undefined => {
+  const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       return (
         <div>
@@ -51,6 +51,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         }
       }
     }
+    return <div></div>;
   };
 
   const infoTab = (): JSX.Element | undefined => {

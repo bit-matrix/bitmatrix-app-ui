@@ -65,7 +65,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
   };
 
   return (
-    <Modal className="wallet-list-modal" size="xs" backdrop={true} show={show} onHide={close}>
+    <Modal className="wallet-list-modal" size="xs" backdrop={true} open={show} onClose={close}>
       {loading ? <Loader className="wallet-list-loading" inverse center /> : null}
       <Modal.Header className="connect-wallet-header">
         <Modal.Title className="connect-wallet-title">Connect Wallet</Modal.Title>
