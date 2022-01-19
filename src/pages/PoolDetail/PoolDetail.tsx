@@ -15,8 +15,9 @@ import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft, faArrowDown, faArrowUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import './PoolDetail.scss';
+import { ArrowDown } from '@rsuite/icons';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -90,6 +91,20 @@ export const PoolDetail: React.FC = () => {
   } else {
     const data = calculateChartData(chartData, pool);
 
+    let iconVolumeRateDirection: IconDefinition;
+    if (data.priceRate.direction === 'down') {
+      iconVolumeRateDirection = faArrowDown;
+    } else {
+      iconVolumeRateDirection = faArrowUp;
+    }
+
+    let iconTvlRateDirection: IconDefinition;
+    if (data.tvlRate.direction === 'down') {
+      iconTvlRateDirection = faArrowDown;
+    } else {
+      iconTvlRateDirection = faArrowUp;
+    }
+
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -149,19 +164,24 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    <i
+                    {/* TODO icon color */}
+                    {/* <i
                       className={`pool-detail-arrow-${data.priceRate.direction}-icon`}
                       // icon={`arrow-${data.priceRate.direction}2` as IconNames}
-                    />
+                    /> */}
+                    {/* <ArrowDown style={{ fontSize: '1em' }} /> */}
+                    <FontAwesomeIcon icon={iconVolumeRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                       {data.priceRate.value}%
                     </span>
                   </div>
                   <div>
-                    <i
+                    {/* TODO icon color */}
+                    {/* <i
                       className={`pool-detail-arrow-${data.volumeRate.direction}-icon`}
                       // icon={`arrow-${data.volumeRate.direction}2` as IconNames}
-                    />
+                    /> */}
+                    <FontAwesomeIcon icon={iconVolumeRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                       {data.volumeRate.value}%
                     </span>
@@ -182,19 +202,23 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    <i
+                    {/* TODO icon color */}
+                    {/* <i
                       className={`pool-detail-arrow-${data.tvlRate.direction}-icon`}
                       // icon={`arrow-${data.tvlRate.direction}2` as IconNames}
-                    />
+                    /> */}
+                    <FontAwesomeIcon icon={iconTvlRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                       {data.tvlRate.value}%
                     </span>
                   </div>
                   <div>
-                    <i
+                    {/* TODO icon color */}
+                    {/* <i
                       className={`pool-detail-arrow-${data.feeRate.direction}-icon`}
                       // icon={`arrow-${data.feeRate.direction}2` as IconNames}
-                    />
+                    /> */}
+                    <FontAwesomeIcon icon={iconTvlRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                       {data.feeRate.value}%
                     </span>
