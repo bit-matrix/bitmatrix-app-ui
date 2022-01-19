@@ -69,44 +69,39 @@ export const Swap = (): JSX.Element => {
     }
   }, [inputFromAmount, payloadData]);
 
-  // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-  //   let inputNum = Number(inputElement.target.value);
+  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
+    let inputNum = Number(inputElement.target.value);
 
-  //   if (payloadData.pools && payloadData.pool_config) {
-  //     let methodCall;
+    if (payloadData.pools && payloadData.pool_config) {
+      let methodCall;
 
-  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
-  //       console.log('lbtc');
-  //       inputNum = inputNum * payloadData.preferred_unit.value;
-  //       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //     } else {
-  //       console.log('usdt');
-  //       inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-  //       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  //     }
+      if (selectedAsset.to === SWAP_ASSET.LBTC) {
+        inputNum = inputNum * payloadData.preferred_unit.value;
+        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      } else {
+        inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+      }
 
-  //     console.log(inputNum);
-  //     const output = convertion.convertForCtx(
-  //       inputNum,
-  //       payloadData.slippage,
-  //       payloadData.pools[0],
-  //       payloadData.pool_config,
-  //       methodCall,
-  //     );
+      const output = convertion.convertForCtx2(
+        inputNum,
+        payloadData.slippage,
+        payloadData.pools[0],
+        payloadData.pool_config,
+        methodCall,
+      );
 
-  //     console.log('2', output);
+      if (selectedAsset.to === SWAP_ASSET.LBTC) {
+        setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      } else {
+        setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      }
 
-  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
-  //       setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-  //       setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-  //     } else {
-  //       setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
-  //       setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
-  //     }
-
-  //     setInputToAmount(inputElement.target.value);
-  //   }
-  // };
+      setInputToAmount(inputElement.target.value);
+    }
+  };
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
@@ -390,7 +385,7 @@ export const Swap = (): JSX.Element => {
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
-                  // onChange={onChangeToInput}
+                  onChange={onChangeToInput}
                 />
               </div>
               <SwapAssetList
