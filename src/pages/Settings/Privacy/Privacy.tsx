@@ -50,7 +50,7 @@ export const Privacy = (): JSX.Element => {
   // const [torSwitch, setTorSwitch] = useState<boolean>(false);
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <div className="privacy-main" style={{ textAlign: 'center' }}>
       <span>No privacy settings yet.</span>
       {/* <div className="privacy-first-item">
         <div className="privacy-item-head">

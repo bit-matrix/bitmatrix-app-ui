@@ -19,7 +19,7 @@ export const Theme = (): JSX.Element => {
   const [selected, setSelected] = useState<SELECTED_THEME>(SELECTED_THEME.GRAY);
 
   return (
-    <div>
+    <div className="theme-main">
       <div className="theme-item">
         <div className="theme-item-head">
           <span className="theme-title">Standard Themes</span>
