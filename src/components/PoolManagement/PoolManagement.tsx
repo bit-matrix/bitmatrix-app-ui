@@ -9,6 +9,8 @@ import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
 import SettingsContext from '../../context/SettingsContext';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSlidersH, faPlus } from '@fortawesome/free-solid-svg-icons';
 import './PoolManagement.scss';
 
 type Props = {
@@ -133,25 +135,14 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <IconButton
-          className="pool-page-button"
-          icon={
-            <i className="pool-page-icon fas fa-sliders-h"></i> /*<Icon className="pool-page-icon" icon="sliders" size="4x" />*/
-          }
-        />
-
+        <FontAwesomeIcon icon={faSlidersH} size="3x" className="pool-page-icon" />
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <IconButton
-          className="pool-page-button"
-          onClick={() => setShowButtons(!showButtons)}
-          icon={
-            <i className="pool-page-icon fas fa-plus"></i> /*<Icon className="pool-page-icon" icon="plus" size="4x" />*/
-          }
-        />
+        <FontAwesomeIcon icon={faPlus} size="2x" className="pool-page-button" />
+
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}
       </div>

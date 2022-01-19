@@ -64,8 +64,11 @@
 }
 
 .pool-page-icon {
-  color: $bmPaleGreen;
   font-size: 1.5rem !important;
+}
+
+.pool-page-header svg path {
+  color: $bmPaleGreen !important;
 }
 
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
