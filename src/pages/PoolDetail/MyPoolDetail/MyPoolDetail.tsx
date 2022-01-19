@@ -16,6 +16,8 @@ import info from '../../../images/info2.png';
 import lbtcImage from '../../../images/liquid_btc.png';
 import usdtImage from '../../../images/usdt.png';
 import Decimal from 'decimal.js';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -121,8 +123,8 @@ export const MyPoolDetail: React.FC = () => {
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
               <Button className="my-pool-detail-back-button" onClick={() => history.goBack()}>
-                <i className="my-pool-detail-back-icon fas fa-angle-left"></i>
-                {/* <Icon className="my-pool-detail-back-icon" icon="angle-left" size="4x" /> */}
+                {/* TODO size */}
+                <FontAwesomeIcon icon={faAngleLeft} size="3x" />
                 <div className="my-pool-detail-back-text">
                   {pool.quote.ticker} / {pool.token.ticker}
                 </div>
