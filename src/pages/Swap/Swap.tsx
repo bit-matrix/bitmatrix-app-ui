@@ -294,23 +294,23 @@ export const Swap = (): JSX.Element => {
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          // notify('Wallet Error : ', 'Funding transaction could not be created.');
         }
       } else {
-        notify('Error : ', 'Pool Error');
+        // notify('Error : ', 'Pool Error');
       }
     } else {
-      notify('Error : ', 'Wallet Error');
+      // notify('Error : ', 'Wallet Error');
     }
   };
 
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
-  };
+  // const notify = (title: string, description: string) => {
+  //   Notification.open({
+  //     title: title,
+  //     description: <div className="notificationTx">{description}</div>,
+  //     duration: 20000,
+  //   });
+  // };
 
   const infoMessage = (): string => {
     if (payloadData.pool_config && payloadData.pools && payloadData.pools.length > 0) {
