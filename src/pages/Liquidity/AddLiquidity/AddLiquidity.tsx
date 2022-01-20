@@ -21,6 +21,7 @@ import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { notify } from '../../../components/utils/utils';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
@@ -201,10 +202,9 @@ const AddLiquidity = (): JSX.Element => {
 
             setLocalData(newStoreData);
           }
-
-          // notify('Commitment Tx Id : ', commitmentTxId);
+          notify(commitmentTxId, 'Commitment Tx Id : ', 'success');
         } else {
-          // notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       }
     }
