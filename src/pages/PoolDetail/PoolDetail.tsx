@@ -15,9 +15,8 @@ import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faArrowDown, faArrowUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import './PoolDetail.scss';
-import { ArrowDown } from '@rsuite/icons';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -91,36 +90,6 @@ export const PoolDetail: React.FC = () => {
   } else {
     const data = calculateChartData(chartData, pool);
 
-    console.log(data);
-
-    let iconPriceRateDirection!: IconDefinition;
-    if (data.priceRate.direction === 'down') {
-      iconPriceRateDirection = faArrowDown;
-    } else if (data.priceRate.direction === 'up') {
-      iconPriceRateDirection = faArrowUp;
-    }
-
-    let iconVolumeRateDirection!: IconDefinition;
-    if (data.volumeRate.direction === 'down') {
-      iconVolumeRateDirection = faArrowDown;
-    } else if (data.volumeRate.direction === 'up') {
-      iconVolumeRateDirection = faArrowUp;
-    }
-
-    let iconTvlRateDirection!: IconDefinition;
-    if (data.tvlRate.direction === 'down') {
-      iconTvlRateDirection = faArrowDown;
-    } else if (data.tvlRate.direction === 'up') {
-      iconTvlRateDirection = faArrowUp;
-    }
-
-    let iconFeeRateDirection!: IconDefinition;
-    if (data.feeRate.direction === 'down') {
-      iconFeeRateDirection = faArrowDown;
-    } else if (data.feeRate.direction === 'up') {
-      iconFeeRateDirection = faArrowUp;
-    }
-
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -180,23 +149,14 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
                     {/* TODO icon color */}
-                    {/* <i
-                      className={`pool-detail-arrow-${data.priceRate.direction}-icon`}
-                      // icon={`arrow-${data.priceRate.direction}2` as IconNames}
-                    /> */}
-                    {/* <ArrowDown style={{ fontSize: '1em' }} /> */}
-                    <FontAwesomeIcon icon={iconPriceRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={data.priceRate.icon} />
                     <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                       {data.priceRate.value}%
                     </span>
                   </div>
                   <div>
                     {/* TODO icon color */}
-                    {/* <i
-                      className={`pool-detail-arrow-${data.volumeRate.direction}-icon`}
-                      // icon={`arrow-${data.volumeRate.direction}2` as IconNames}
-                    /> */}
-                    <FontAwesomeIcon icon={iconVolumeRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={data.volumeRate.icon} />
                     <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                       {data.volumeRate.value}%
                     </span>
@@ -217,23 +177,13 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    {/* TODO icon color */}
-                    {/* <i
-                      className={`pool-detail-arrow-${data.tvlRate.direction}-icon`}
-                      // icon={`arrow-${data.tvlRate.direction}2` as IconNames}
-                    /> */}
-                    <FontAwesomeIcon icon={iconTvlRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={data.tvlRate.icon} />
                     <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                       {data.tvlRate.value}%
                     </span>
                   </div>
                   <div>
-                    {/* TODO icon color */}
-                    {/* <i
-                      className={`pool-detail-arrow-${data.feeRate.direction}-icon`}
-                      // icon={`arrow-${data.feeRate.direction}2` as IconNames}
-                    /> */}
-                    <FontAwesomeIcon icon={iconFeeRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={data.feeRate.icon} />
                     <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                       {data.feeRate.value}%
                     </span>

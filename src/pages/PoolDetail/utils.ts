@@ -1,6 +1,7 @@
 import { BmChart, Pool } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ChartData } from '../../components/AreaChart/AreaChart';
+import { faArrowDown, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
   if (chartData.length === 0) return [];
@@ -133,18 +134,22 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   let volumeRate = {
     value: '0',
     direction: 'up',
+    icon: faArrowUp,
   };
   let feeRate = {
     value: '0',
     direction: 'up',
+    icon: faArrowUp,
   };
   let tvlRate = {
     value: '0',
     direction: 'up',
+    icon: faArrowUp,
   };
   let priceRate = {
     value: '0',
     direction: 'up',
+    icon: faArrowUp,
   };
 
   if (allPriceData.length > 2) {
@@ -152,6 +157,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     priceRate = {
       value: (todayPrice / previousPriceData.close).toFixed(2),
       direction: todayPrice > previousPriceData.close ? 'up' : 'down',
+      icon: todayPrice > previousPriceData.close ? faArrowUp : faArrowDown,
     };
   }
 
@@ -161,6 +167,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     volumeRate = {
       value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
       direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
+      icon: todayVolumeData.close > previousVolumeData.close ? faArrowUp : faArrowDown,
     };
   }
 
@@ -170,6 +177,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     feeRate = {
       value: (todayFeeData.close / previousFeeData.close).toFixed(2),
       direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
+      icon: todayFeeData.close > previousFeeData.close ? faArrowUp : faArrowDown,
     };
   }
 
@@ -178,6 +186,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     tvlRate = {
       value: (todayTvlData / previousTvlData.close).toFixed(2),
       direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
+      icon: todayTvlData > previousTvlData.close ? faArrowUp : faArrowDown,
     };
   }
 
