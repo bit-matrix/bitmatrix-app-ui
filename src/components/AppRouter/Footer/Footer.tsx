@@ -1,26 +1,24 @@
 import React from 'react';
 // import { Icon } from 'rsuite';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './Footer.scss';
+import { faGithub, faMedium, faTelegram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 export const Footer = (): JSX.Element => {
   return (
     <div className="swap-page-footer">
       <div className="swap-page-footer-icons">
         <a href="https://medium.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
-          <i className="fab fa-medium"></i>
-          {/* <Icon className="swap-page-footer-icon" icon="medium" /> */}
+          <FontAwesomeIcon icon={faMedium} size="2x" />
         </a>
         <a href="https://twitter.com/bitmatrix_" target="_blank" className="swap-page-footer-icon-item">
-          <i className="swap-page-footer-icon fab fa-twitter"></i>
-          {/* <Icon className="swap-page-footer-icon" icon="twitter" /> */}
+          <FontAwesomeIcon icon={faTwitter} size="2x" />
         </a>
         <a href="https://t.me/bitmatrix_community" target="_blank" className="swap-page-footer-icon-item">
-          <i className="swap-page-footer-icon fab fa-telegram"></i>
-          {/* <Icon className="swap-page-footer-icon" icon="telegram" /> */}
+          <FontAwesomeIcon icon={faTelegram} size="2x" />
         </a>
         <a href="https://github.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
-          <i className="swap-page-footer-icon fab fa-github"></i>
-          {/* <Icon className="swap-page-footer-icon" icon="github" /> */}
+          <FontAwesomeIcon icon={faGithub} size="2x" />
         </a>
       </div>
     </div>
