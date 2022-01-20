@@ -127,7 +127,6 @@ export const PoolDetail: React.FC = () => {
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">
               <Button className="pool-detail-button" onClick={() => history.goBack()}>
-                {/* TODO  style={{ color: '#adfbc4 !important' }} */}
                 <FontAwesomeIcon icon={faAngleLeft} size="3x" />
                 <div className="pool-detail-page-text">
                   {pool.quote.ticker} / {pool.token.ticker}

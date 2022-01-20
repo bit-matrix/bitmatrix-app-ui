@@ -28,13 +28,6 @@
   color: $bmPaleGreen;
 }
 
-.pool-detail-back-icon {
-  height: 3rem !important;
-  font-size: 3rem !important;
-  color: $bmPaleGreen !important;
-  cursor: pointer;
-}
-
 .pool-detail-content {
   height: calc(100% - 0.5rem);
   padding: 0.75rem;
@@ -172,6 +165,13 @@ th {
   &:hover {
     opacity: 1;
   }
+}
+
+.pool-detail-button svg path {
+  height: 3rem !important;
+  font-size: 3rem !important;
+  color: $bmPaleGreen !important;
+  cursor: pointer;
 }
 
 .pool-detail-add-button {
