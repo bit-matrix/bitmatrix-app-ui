@@ -181,13 +181,14 @@
       border-radius: 1rem !important;
       background: $bmNero !important;
       opacity: 0.8;
+      padding: 8px 12px 8px 0;
 
       &:hover {
         opacity: 1;
       }
 
       .add-liquidity-back-text {
-        margin-left: 1rem;
+        margin-left: 0.5rem;
         color: $bmPaleGreen;
       }
     }
