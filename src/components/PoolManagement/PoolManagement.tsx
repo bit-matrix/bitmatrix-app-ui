@@ -3,17 +3,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
-import { Button, IconButton, Modal } from 'rsuite';
+import { Button, Modal } from 'rsuite';
 import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
 import SettingsContext from '../../context/SettingsContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSlidersH, faPlus } from '@fortawesome/free-solid-svg-icons';
-import PlusIcon from '@rsuite/icons/Plus';
 import './PoolManagement.scss';
-import Add from '../base/Svg/Icons/Add';
 import SliderIcon from '../base/Svg/Icons/Slider';
 import AddIcon from '../base/Svg/Icons/Add';
 
