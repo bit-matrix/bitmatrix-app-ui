@@ -141,7 +141,12 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <FontAwesomeIcon icon={faPlus} size="2x" className="pool-page-button" />
+        <FontAwesomeIcon
+          icon={faPlus}
+          size="2x"
+          className="pool-page-button"
+          onClick={() => setShowButtons(!showButtons)}
+        />
 
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}
