@@ -13,6 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSlidersH, faPlus } from '@fortawesome/free-solid-svg-icons';
 import PlusIcon from '@rsuite/icons/Plus';
 import './PoolManagement.scss';
+import Add from '../base/Svg/Icons/Add';
+import SliderIcon from '../base/Svg/Icons/Slider';
+import AddIcon from '../base/Svg/Icons/Add';
 
 type Props = {
   pools: Pool[];
@@ -136,13 +139,19 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <FontAwesomeIcon icon={faSlidersH} size="3x" className="pool-page-button pool-page-icon" />
+        <div className="pool-page-button pool-page-icon">
+          <SliderIcon size="1rem" />
+        </div>
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <PlusIcon className="pool-page-button" onClick={() => setShowButtons(!showButtons)} />
+        <div className="pool-page-button" onClick={() => setShowButtons(!showButtons)}>
+          <AddIcon size="1.5rem" />
+        </div>
+
+        {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
 
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}
