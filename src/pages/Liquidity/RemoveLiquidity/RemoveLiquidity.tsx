@@ -13,6 +13,7 @@ import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig } from '../../../helper';
+import BackIcon from '../../../components/base/Svg/Icons/Back';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
@@ -139,8 +140,7 @@ const RemoveLiquidity = (): JSX.Element => {
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
         <Button className="remove-liquidity-page-back-button" onClick={() => history.goBack()}>
-          {/* <Icon className="remove-liquidity-back-icon" icon="angle-left" size="4x" /> */}
-          <i className="remove-liquidity-back-icon fas fa-angle-left"></i>
+          <BackIcon />
           <div className="remove-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>
