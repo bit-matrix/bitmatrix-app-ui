@@ -11,6 +11,7 @@ import { PoolCard } from '../PoolCard/PoolCard';
 import SettingsContext from '../../context/SettingsContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSlidersH, faPlus } from '@fortawesome/free-solid-svg-icons';
+import PlusIcon from '@rsuite/icons/Plus';
 import './PoolManagement.scss';
 
 type Props = {
@@ -135,18 +136,13 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <FontAwesomeIcon icon={faSlidersH} size="3x" className="pool-page-icon" />
+        <FontAwesomeIcon icon={faSlidersH} size="3x" className="pool-page-button pool-page-icon" />
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <FontAwesomeIcon
-          icon={faPlus}
-          size="2x"
-          className="pool-page-button"
-          onClick={() => setShowButtons(!showButtons)}
-        />
+        <PlusIcon className="pool-page-button" onClick={() => setShowButtons(!showButtons)} />
 
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}
