@@ -19,6 +19,8 @@ import usdt from '../../../images/usdt.png';
 import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
@@ -226,8 +228,7 @@ const AddLiquidity = (): JSX.Element => {
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
         <Button className="add-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <i className="add-liquidity-back-icon fas fa-angle-left"></i>
-          {/* <Icon className="add-liquidity-back-icon" icon="angle-left" size="4x" /> */}
+          <FontAwesomeIcon icon={faAngleLeft} size="3x" />
           <div className="add-liquidity-back-text">L-BTC/USDT</div>
         </Button>
         <div>
