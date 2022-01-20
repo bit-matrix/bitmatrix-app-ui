@@ -49,7 +49,7 @@
         }
 
         .remove-liquidity-text-body {
-          font-size: 2.5rem;
+          font-size: 2.2rem;
           font-weight: 600;
           color: $bmShadyLady;
         }
@@ -125,17 +125,17 @@
       }
 
       .remove-liquidity-page-footer-line-item-texts {
-        font-size: 1rem;
+        font-size: 0.9rem;
         font-weight: 600;
         margin-right: 0.5rem;
       }
 
       .remove-liquidity-page-icons {
-        height: 1.5rem;
+        height: 1.2rem;
       }
 
       .remove-liquidity-page-footer-line-item-values {
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: 600;
         color: $bmShadyLady;
         max-width: 13.5rem;
@@ -200,7 +200,7 @@
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .remove-liquidity-page-main {
     .remove-liquidity-page-content {
-      width: 48rem;
+      width: 40rem;
       padding: 1.5rem;
 
       .remove-liquidity-main {
@@ -237,8 +237,8 @@
       }
 
       .remove-liquidity-button {
-        width: 25rem;
-        margin-top: 1rem;
+        width: 20rem;
+        padding: 0 !important;
       }
     }
   }
