@@ -82,7 +82,7 @@
             }
 
             .add-liquidity-input {
-              max-width: 17rem;
+              max-width: 15rem;
               background: $bmBlack;
               border-width: 0px;
               font-size: 1.5rem;
@@ -155,7 +155,7 @@
       }
 
       .add-liquidity-page-footer-line-item-values {
-        font-size: 2rem;
+        font-size: 1.6rem;
         font-weight: 600;
         color: $bmShadyLady;
         max-width: 13.5rem;
@@ -219,7 +219,7 @@
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .add-liquidity-page-main {
     .add-liquidity-page-content {
-      width: 48rem;
+      width: 40rem;
       padding: 1.5rem;
 
       .add-liquidity-main {
