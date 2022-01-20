@@ -10,11 +10,9 @@ type Props = {
 };
 
 export const CustomNotify: React.FC<Props> = ({ type = 'info', header = type, content }) => {
-  const message = (
-    <Notification type={type} header={header} closable>
-      <div>{content}</div>
+  return (
+    <Notification className="custom-notify" type={type} header={header} closable duration={2000}>
+      {content}
     </Notification>
   );
-
-  return <>{message}</>;
 };

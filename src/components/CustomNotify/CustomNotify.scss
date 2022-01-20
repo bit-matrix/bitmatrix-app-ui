@@ -1,1 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
+
+.custom-notify {
+  .rs-notification-description {
+    word-break: break-word;
+  }
+}

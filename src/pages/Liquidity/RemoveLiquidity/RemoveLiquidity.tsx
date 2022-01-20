@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Slider, Notification } from 'rsuite';
+import { Button, Content, Slider } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -14,6 +14,7 @@ import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig } from '../../../helper';
 import BackIcon from '../../../components/base/Svg/Icons/Back';
+import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
@@ -47,14 +48,6 @@ const RemoveLiquidity = (): JSX.Element => {
 
     setCalcLpTokenAmount(lpTokenAmountInput);
   }, [removalPercentage, lpTokenAmount]);
-
-  // const notify = (title: string, description: string) => {
-  //   Notification.open({
-  //     title: title,
-  //     description: <div className="notificationTx">{description}</div>,
-  //     duration: 20000,
-  //   });
-  // };
 
   const removeLiquidityClick = async () => {
     if (payloadData.wallet?.marina) {
@@ -122,10 +115,9 @@ const RemoveLiquidity = (): JSX.Element => {
 
             setLocalData(newStoreData);
           }
-
-          // notify('Commitment Tx Id : ', commitmentTxId);
+          notify(commitmentTxId, 'Commitment Tx Id : ', 'success');
         } else {
-          // notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       }
     }
