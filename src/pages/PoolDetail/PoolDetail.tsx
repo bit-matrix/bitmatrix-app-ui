@@ -91,18 +91,34 @@ export const PoolDetail: React.FC = () => {
   } else {
     const data = calculateChartData(chartData, pool);
 
-    let iconVolumeRateDirection: IconDefinition;
+    console.log(data);
+
+    let iconPriceRateDirection!: IconDefinition;
     if (data.priceRate.direction === 'down') {
+      iconPriceRateDirection = faArrowDown;
+    } else if (data.priceRate.direction === 'up') {
+      iconPriceRateDirection = faArrowUp;
+    }
+
+    let iconVolumeRateDirection!: IconDefinition;
+    if (data.volumeRate.direction === 'down') {
       iconVolumeRateDirection = faArrowDown;
-    } else {
+    } else if (data.volumeRate.direction === 'up') {
       iconVolumeRateDirection = faArrowUp;
     }
 
-    let iconTvlRateDirection: IconDefinition;
+    let iconTvlRateDirection!: IconDefinition;
     if (data.tvlRate.direction === 'down') {
       iconTvlRateDirection = faArrowDown;
-    } else {
+    } else if (data.tvlRate.direction === 'up') {
       iconTvlRateDirection = faArrowUp;
+    }
+
+    let iconFeeRateDirection!: IconDefinition;
+    if (data.feeRate.direction === 'down') {
+      iconFeeRateDirection = faArrowDown;
+    } else if (data.feeRate.direction === 'up') {
+      iconFeeRateDirection = faArrowUp;
     }
 
     return (
@@ -170,7 +186,7 @@ export const PoolDetail: React.FC = () => {
                       // icon={`arrow-${data.priceRate.direction}2` as IconNames}
                     /> */}
                     {/* <ArrowDown style={{ fontSize: '1em' }} /> */}
-                    <FontAwesomeIcon icon={iconVolumeRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={iconPriceRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                       {data.priceRate.value}%
                     </span>
@@ -218,7 +234,7 @@ export const PoolDetail: React.FC = () => {
                       className={`pool-detail-arrow-${data.feeRate.direction}-icon`}
                       // icon={`arrow-${data.feeRate.direction}2` as IconNames}
                     /> */}
-                    <FontAwesomeIcon icon={iconTvlRateDirection} size="1x" color="red" />
+                    <FontAwesomeIcon icon={iconFeeRateDirection} size="1x" color="red" />
                     <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                       {data.feeRate.value}%
                     </span>
