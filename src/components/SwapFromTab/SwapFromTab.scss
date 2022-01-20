@@ -38,7 +38,7 @@
   cursor: pointer;
 }
 
-.left-radio-item.radio-item-prefix-checked .rs-radio-item-prefix-checker {
+.left-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
   background-color: $bmPaleGreen;
   border-top-left-radius: 0;
@@ -47,7 +47,7 @@
   border-bottom-left-radius: 0.5rem;
 }
 
-.middle-radio-item.radio-item-prefix-checked .rs-radio-item-prefix-checker {
+.middle-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
   background-color: $bmPaleGreen;
   border-top-left-radius: 0;
@@ -56,7 +56,7 @@
   border-bottom-left-radius: 0;
 }
 
-.right-radio-item.radio-item-prefix-checked .rs-radio-item-prefix-checker {
+.right-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
   background-color: $bmPaleGreen;
   border-top-left-radius: 0;
