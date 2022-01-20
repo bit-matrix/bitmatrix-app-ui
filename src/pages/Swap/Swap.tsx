@@ -17,6 +17,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
+import { notify } from '../../components/utils/utils';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -235,7 +236,7 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        // notify('Funding Tx Id : ', fundingTxId);
+        notify(fundingTxId, 'Funding Tx Id : ', 'success');
 
         if (fundingTxId && fundingTxId !== '') {
           setInputFromAmount('0.0');
@@ -294,23 +295,15 @@ export const Swap = (): JSX.Element => {
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          // notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       } else {
-        // notify('Error : ', 'Pool Error');
+        notify('Pool Error', 'Error : ', 'error');
       }
     } else {
-      // notify('Error : ', 'Wallet Error');
+      notify('Wallet Error', 'Error : ', 'error');
     }
   };
-
-  // const notify = (title: string, description: string) => {
-  //   Notification.open({
-  //     title: title,
-  //     description: <div className="notificationTx">{description}</div>,
-  //     duration: 20000,
-  //   });
-  // };
 
   const infoMessage = (): string => {
     if (payloadData.pool_config && payloadData.pools && payloadData.pools.length > 0) {
