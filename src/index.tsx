@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
-import '@fortawesome/fontawesome-free/css/all.css';
 
 ReactDOM.render(
   <React.StrictMode>
