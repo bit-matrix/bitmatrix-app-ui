@@ -9,9 +9,9 @@ import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
 import SettingsContext from '../../context/SettingsContext';
-import './PoolManagement.scss';
 import SliderIcon from '../base/Svg/Icons/Slider';
 import AddIcon from '../base/Svg/Icons/Add';
+import './PoolManagement.scss';
 
 type Props = {
   pools: Pool[];
@@ -54,11 +54,11 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
         );
       });
     } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
-      // if (myPools.length === 0) {
-      //   return <div className="no-pool-text">No pool found.</div>;
-      // }
+      if (myPools.length === 0) {
+        return <div className="no-pool-text">No pool found.</div>;
+      }
 
-      return pools.map((pool, index) => {
+      return myPools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
