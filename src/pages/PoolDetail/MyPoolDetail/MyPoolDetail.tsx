@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { api, convertion } from '@bitmatrix/lib';
 import { BmChart, Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
-import { calculateChartData } from '../utils';
+import { calculateChartData } from '../../../components/utils/utils';
 import { Button, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
