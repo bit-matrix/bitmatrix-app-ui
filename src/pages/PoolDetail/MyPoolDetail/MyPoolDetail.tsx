@@ -16,7 +16,7 @@ import info from '../../../images/info2.png';
 import lbtcImage from '../../../images/liquid_btc.png';
 import usdtImage from '../../../images/usdt.png';
 import Decimal from 'decimal.js';
-import BackIcon from '../../../components/base/Svg/Icons/Back';
+import { BackButton } from '../../../components/base/BackButton/BackButton';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -121,12 +121,7 @@ export const MyPoolDetail: React.FC = () => {
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
-              <Button className="my-pool-detail-back-button" onClick={() => history.goBack()}>
-                <BackIcon />
-                <div className="my-pool-detail-back-text">
-                  {pool.quote.ticker} / {pool.token.ticker}
-                </div>
-              </Button>
+              <BackButton />
             </div>
             <div className="my-pool-detail-header-right">
               <TabMenu

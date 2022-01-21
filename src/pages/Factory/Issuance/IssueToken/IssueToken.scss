@@ -42,33 +42,6 @@
       justify-content: center;
     }
 
-    .issue-token-page-back-button {
-      width: 100%;
-      height: 3rem;
-      display: flex !important;
-      align-items: center;
-      border-radius: 1rem !important;
-      background: $bmNero !important;
-      opacity: 0.8;
-      padding: 8px 12px 8px 0;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      .issue-token-back-text {
-        margin-left: 0.5rem;
-        color: $bmPaleGreen;
-      }
-    }
-
-    .issue-token-page-back-button svg path {
-      height: 3rem !important;
-      font-size: 3rem !important;
-      color: $bmPaleGreen !important;
-      cursor: pointer;
-    }
-
     .issue-token-page-line-1 {
       display: flex;
       align-items: center;
@@ -120,10 +93,6 @@
     .issue-token-page-content {
       width: 48rem;
       padding: 1.5rem;
-
-      .issue-token-page-back-button {
-        width: 18rem;
-      }
 
       .issue-token-button {
         width: 25rem;
