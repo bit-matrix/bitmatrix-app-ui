@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
@@ -13,7 +12,7 @@ import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig } from '../../../helper';
-import BackIcon from '../../../components/base/Svg/Icons/Back';
+import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
@@ -25,8 +24,6 @@ const RemoveLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const history = useHistory();
 
   useEffect(() => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
@@ -139,10 +136,7 @@ const RemoveLiquidity = (): JSX.Element => {
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
-        <Button className="remove-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <BackIcon />
-          <div className="remove-liquidity-back-text">L-BTC/USDT</div>
-        </Button>
+        <BackButton />
         <div>
           <div className="remove-liquidity-main">
             <div className="remove-liquidity-text">
