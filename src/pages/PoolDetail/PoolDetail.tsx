@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { calculateChartData } from './utils';
+import { calculateChartData } from '../../components/utils/utils';
 import { Button, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
@@ -14,7 +14,6 @@ import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import BackIcon from '../../components/base/Svg/Icons/Back';
 import './PoolDetail.scss';
 
@@ -148,15 +147,13 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    {/* TODO icon color */}
-                    <FontAwesomeIcon icon={data.priceRate.icon} />
+                    {data.priceRate.icon}
                     <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                       {data.priceRate.value}%
                     </span>
                   </div>
                   <div>
-                    {/* TODO icon color */}
-                    <FontAwesomeIcon icon={data.volumeRate.icon} />
+                    {data.volumeRate.icon}
                     <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                       {data.volumeRate.value}%
                     </span>
@@ -177,13 +174,13 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    <FontAwesomeIcon icon={data.tvlRate.icon} />
+                    {data.tvlRate.icon}
                     <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                       {data.tvlRate.value}%
                     </span>
                   </div>
                   <div>
-                    <FontAwesomeIcon icon={data.feeRate.icon} />
+                    {data.feeRate.icon}
                     <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                       {data.feeRate.value}%
                     </span>
