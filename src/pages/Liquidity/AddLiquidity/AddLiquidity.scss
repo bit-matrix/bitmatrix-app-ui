@@ -224,21 +224,23 @@
       padding: 1.5rem;
 
       .add-liquidity-main {
-        margin: 1.25rem 0;
-        padding: 1.125rem 0;
+        margin-top: 2rem;
+        padding: 0;
         flex-direction: row;
 
         .add-liquidity-item {
           .add-liquidity-item-content {
             .add-liquidity-input-div {
-              padding: 0.25rem 1rem;
+              padding: 0.25rem 0.5rem;
 
               .add-liquidity-input-content {
                 margin-top: 0.5rem;
+                padding-left: 0.5rem;
               }
 
               .add-liquidity-input {
                 margin: 0.5rem 0;
+                padding-left: 0.5rem;
               }
             }
           }
