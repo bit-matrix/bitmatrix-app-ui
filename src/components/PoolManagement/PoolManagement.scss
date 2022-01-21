@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
 }
 
 .pool-page-content {
@@ -62,13 +62,8 @@
   background-color: transparent !important;
   color: $bmPaleGreen;
   cursor: pointer;
-  height: 1.75rem;
-  width: 1.75rem;
   margin-top: 1rem;
-}
-
-.pool-page-icon {
-  font-size: 1.5rem !important;
+  line-height: 0;
 }
 
 .pool-page-header svg path {

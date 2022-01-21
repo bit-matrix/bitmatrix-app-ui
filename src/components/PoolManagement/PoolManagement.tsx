@@ -136,7 +136,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
     <div className="pool-page-main">
       <div className="pool-page-header">
         <div className="pool-page-button pool-page-icon">
-          <SliderIcon size="1rem" />
+          <SliderIcon width="1.25rem" height="1.5rem" />
         </div>
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
@@ -144,7 +144,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
         <div className="pool-page-button" onClick={() => setShowButtons(!showButtons)}>
-          <AddIcon size="1.5rem" />
+          <AddIcon width="1.5rem" height="1.5rem" />
         </div>
 
         {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
