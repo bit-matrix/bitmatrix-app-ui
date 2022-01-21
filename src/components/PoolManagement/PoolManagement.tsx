@@ -54,11 +54,11 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
         );
       });
     } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
-      if (myPools.length === 0) {
-        return <div className="no-pool-text">No pool found.</div>;
-      }
+      // if (myPools.length === 0) {
+      //   return <div className="no-pool-text">No pool found.</div>;
+      // }
 
-      return myPools.map((pool, index) => {
+      return pools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard

@@ -15,10 +15,7 @@
 
 .swap-page-footer-icon-item {
   color: unset !important;
-}
-
-.swap-page-footer-icon {
-  font-size: 2rem !important;
+  line-height: 0 !important;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
@@ -30,22 +27,6 @@
 
 @media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
   .swap-page-footer {
-    bottom: 2.5rem;
+    bottom: 2rem;
   }
-}
-
-.medium-icon-item {
-  font-size: 1.2rem !important;
-}
-
-.twitter-icon-item {
-  font-size: 1.5rem !important;
-}
-
-.telegram-icon-item {
-  font-size: 1.4rem !important;
-}
-
-.github-icon-item {
-  font-size: 1.4rem !important;
 }
