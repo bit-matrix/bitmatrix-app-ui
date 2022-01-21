@@ -9,24 +9,16 @@ export const Footer = (): JSX.Element => {
   return (
     <div className="swap-page-footer">
       <div className="swap-page-footer-icons">
-        <a href="https://medium.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item medium-icon-item">
+        <a href="https://medium.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
           <MediumIcon width="2rem" height="2rem" />
         </a>
-        <a
-          href="https://twitter.com/bitmatrix_"
-          target="_blank"
-          className="swap-page-footer-icon-item twitter-icon-item"
-        >
+        <a href="https://twitter.com/bitmatrix_" target="_blank" className="swap-page-footer-icon-item">
           <TwitterIcon width="2rem" height="2rem" />
         </a>
-        <a
-          href="https://t.me/bitmatrix_community"
-          target="_blank"
-          className="swap-page-footer-icon-item telegram-icon-item"
-        >
+        <a href="https://t.me/bitmatrix_community" target="_blank" className="swap-page-footer-icon-item">
           <TelegramIcon width="2rem" height="2rem" />
         </a>
-        <a href="https://github.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item github-icon-item">
+        <a href="https://github.com/bit-matrix" target="_blank" className="swap-page-footer-icon-item">
           <GithubIcon width="2rem" height="2rem" />
         </a>
       </div>
