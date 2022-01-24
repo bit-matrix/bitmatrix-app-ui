@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { calculateChartData } from './utils';
-import { Button, Icon, Loader } from 'rsuite';
+import { calculateChartData } from '../../components/utils/utils';
+import { Button, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
@@ -12,10 +12,10 @@ import lbtcImage from '../../images/liquid_btc.png';
 import usdtImage from '../../images/usdt.png';
 import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
-import { IconNames } from 'rsuite/lib/Icon';
-import './PoolDetail.scss';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
+import BackIcon from '../../components/base/Svg/Icons/Back';
+import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -95,7 +95,7 @@ export const PoolDetail: React.FC = () => {
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">
               <Button className="pool-detail-button" onClick={() => history.goBack()}>
-                <Icon className="pool-detail-back-icon" icon="angle-left" size="4x" />
+                <BackIcon />
                 <div className="pool-detail-page-text">
                   {pool.quote.ticker} / {pool.token.ticker}
                 </div>
@@ -147,19 +147,13 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    <Icon
-                      className={`pool-detail-arrow-${data.priceRate.direction}-icon`}
-                      icon={`arrow-${data.priceRate.direction}2` as IconNames}
-                    />
+                    {data.priceRate.icon}
                     <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                       {data.priceRate.value}%
                     </span>
                   </div>
                   <div>
-                    <Icon
-                      className={`pool-detail-arrow-${data.volumeRate.direction}-icon`}
-                      icon={`arrow-${data.volumeRate.direction}2` as IconNames}
-                    />
+                    {data.volumeRate.icon}
                     <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                       {data.volumeRate.value}%
                     </span>
@@ -180,19 +174,13 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-detail-item-detail">
                   <div className="left-side">
-                    <Icon
-                      className={`pool-detail-arrow-${data.tvlRate.direction}-icon`}
-                      icon={`arrow-${data.tvlRate.direction}2` as IconNames}
-                    />
+                    {data.tvlRate.icon}
                     <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                       {data.tvlRate.value}%
                     </span>
                   </div>
                   <div>
-                    <Icon
-                      className={`pool-detail-arrow-${data.feeRate.direction}-icon`}
-                      icon={`arrow-${data.feeRate.direction}2` as IconNames}
-                    />
+                    {data.feeRate.icon}
                     <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                       {data.feeRate.value}%
                     </span>

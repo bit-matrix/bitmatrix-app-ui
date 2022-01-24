@@ -1,5 +1,6 @@
 import React from 'react';
 import { Checkbox, CheckboxGroup } from 'rsuite';
+import { ValueType } from 'rsuite/esm/Checkbox';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import './SwapFromTab.scss';
 
@@ -23,7 +24,7 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
       className="swap-amount-rate"
       inline
       name="checkboxList"
-      value={[selectedFromAmountPercent]}
+      value={[selectedFromAmountPercent] as ValueType[]}
       onChange={
         (/*value: Array<FROM_AMOUNT_PERCENT>*/) => {
           // console.log(value[1]);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'rsuite';
+// import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { timeDifference } from '../../helper';
@@ -8,6 +8,7 @@ import { CommitmentStore } from '../../model/CommitmentStore';
 import { Loading } from '../Loading/Loading';
 import liqadd from '../../images/liqadd.png';
 import liqremove from '../../images/liqremove.png';
+import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -21,7 +22,9 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
       messageBody = (
         <>
-          <Icon className="info-card-item-icon" icon="exchange" />
+          <div className="info-card-item-icon ">
+            <ExchangeIcon width="1rem" height="1rem" />
+          </div>
           <div>
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
             {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})

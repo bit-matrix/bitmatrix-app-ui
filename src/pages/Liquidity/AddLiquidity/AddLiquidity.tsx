@@ -1,8 +1,7 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Icon, Notification } from 'rsuite';
+import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -19,6 +18,8 @@ import usdt from '../../../images/usdt.png';
 import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
+import { BackButton } from '../../../components/base/BackButton/BackButton';
+import { notify } from '../../../components/utils/utils';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
@@ -30,8 +31,6 @@ const AddLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const history = useHistory();
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
@@ -66,14 +65,6 @@ const AddLiquidity = (): JSX.Element => {
       setQuoteAmount((output / payloadData.preferred_unit.value).toString());
       setTokenAmount(input);
     }
-  };
-
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
   };
 
   const calcAmountPercent = (
@@ -158,6 +149,8 @@ const AddLiquidity = (): JSX.Element => {
         if (fundingTxId && fundingTxId !== '') {
           setQuoteAmount('0');
           setTokenAmount('0');
+          setLbtcPercent(undefined);
+          setUsdtPercent(undefined);
 
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
@@ -200,9 +193,15 @@ const AddLiquidity = (): JSX.Element => {
             setLocalData(newStoreData);
           }
 
-          notify('Commitment Tx Id : ', commitmentTxId);
+          notify(
+            <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+              See in Explorer
+            </a>,
+            'Commitment Tx created successfully!',
+            'success',
+          );
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       }
     }
@@ -225,10 +224,7 @@ const AddLiquidity = (): JSX.Element => {
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
-        <Button className="add-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="add-liquidity-back-icon" icon="angle-left" size="4x" />
-          <div className="add-liquidity-back-text">L-BTC/USDT</div>
-        </Button>
+        <BackButton />
         <div>
           <div className="add-liquidity-main">
             <div className="add-liquidity-item pt8">

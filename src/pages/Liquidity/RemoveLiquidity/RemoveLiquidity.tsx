@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Icon, Slider, Notification } from 'rsuite';
+import { Button, Content, Slider } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -13,6 +12,8 @@ import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig } from '../../../helper';
+import { BackButton } from '../../../components/base/BackButton/BackButton';
+import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
 const RemoveLiquidity = (): JSX.Element => {
@@ -23,8 +24,6 @@ const RemoveLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const history = useHistory();
 
   useEffect(() => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
@@ -46,14 +45,6 @@ const RemoveLiquidity = (): JSX.Element => {
 
     setCalcLpTokenAmount(lpTokenAmountInput);
   }, [removalPercentage, lpTokenAmount]);
-
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
-  };
 
   const removeLiquidityClick = async () => {
     if (payloadData.wallet?.marina) {
@@ -122,9 +113,15 @@ const RemoveLiquidity = (): JSX.Element => {
             setLocalData(newStoreData);
           }
 
-          notify('Commitment Tx Id : ', commitmentTxId);
+          notify(
+            <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+              See in Explorer
+            </a>,
+            'Commitment Tx created successfully!',
+            'success',
+          );
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       }
     }
@@ -146,10 +143,7 @@ const RemoveLiquidity = (): JSX.Element => {
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
-        <Button className="remove-liquidity-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="remove-liquidity-back-icon" icon="angle-left" size="4x" />
-          <div className="remove-liquidity-back-text">L-BTC/USDT</div>
-        </Button>
+        <BackButton />
         <div>
           <div className="remove-liquidity-main">
             <div className="remove-liquidity-text">
