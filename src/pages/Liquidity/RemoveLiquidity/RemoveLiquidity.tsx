@@ -112,7 +112,12 @@ const RemoveLiquidity = (): JSX.Element => {
 
             setLocalData(newStoreData);
           }
-          notify(commitmentTxId, 'Commitment Tx Id : ', 'success');
+
+          notify(
+            <a href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>See in Explorer</a>,
+            'Commitment Tx created successfully!',
+            'success',
+          );
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }

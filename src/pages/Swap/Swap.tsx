@@ -236,7 +236,7 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        notify(fundingTxId, 'Funding Tx Id : ', 'success');
+        // notify(fundingTxId, 'Funding Tx Id : ', 'success');
 
         if (fundingTxId && fundingTxId !== '') {
           setInputFromAmount('0.0');
@@ -272,6 +272,11 @@ export const Swap = (): JSX.Element => {
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
+            notify(
+              <a href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>See in Explorer</a>,
+              'Commitment Tx created successfully!',
+              'success',
+            );
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: numberFromAmount,
