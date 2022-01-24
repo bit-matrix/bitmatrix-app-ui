@@ -9,12 +9,17 @@ import ArrowUpIcon from '../base/Svg/Icons/ArrowUp';
 import ArrowDownIcon from '../base/Svg/Icons/ArrowDown';
 
 export const notify = (
-  content: string,
+  content: JSX.Element | string,
   header?: string,
   type?: MessageType,
   placement: PlacementType = 'topEnd',
 ): string => {
-  return toaster.push(<CustomNotify header={header} content={content} type={type} />, { placement });
+  return toaster.push(
+    <CustomNotify header={header} type={type}>
+      {content}
+    </CustomNotify>,
+    { placement },
+  );
 };
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
