@@ -5,14 +5,13 @@ import './CustomNotify.scss';
 
 type Props = {
   header?: string;
-  content: string;
   type?: MessageType;
 };
 
-export const CustomNotify: React.FC<Props> = ({ type = 'info', header = type, content }) => {
+export const CustomNotify: React.FC<Props> = ({ type = 'info', header = type, children }) => {
   return (
     <Notification className="custom-notify" type={type} header={header} closable duration={2000}>
-      {content}
+      {children}
     </Notification>
   );
 };
