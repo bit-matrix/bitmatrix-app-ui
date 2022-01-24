@@ -149,6 +149,8 @@ const AddLiquidity = (): JSX.Element => {
         if (fundingTxId && fundingTxId !== '') {
           setQuoteAmount('0');
           setTokenAmount('0');
+          setLbtcPercent(undefined);
+          setUsdtPercent(undefined);
 
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
