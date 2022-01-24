@@ -127,7 +127,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         </Button>
       </li>
 
-      <li className="navbar-item mobile-hidden ">
+      {/* <li className="navbar-item mobile-hidden ">
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.FACTORY) && 'active'}`}
           onClick={() => {
@@ -136,7 +136,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         >
           Factory
         </Button>
-      </li>
+      </li> */}
 
       <li className="navbar-item ">
         <Button
