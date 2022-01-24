@@ -13,13 +13,18 @@ export const notify = (
   header?: string,
   type?: MessageType,
   placement: PlacementType = 'topEnd',
-): string => {
-  return toaster.push(
+  duration = 10000,
+): any => {
+  toaster.push(
     <CustomNotify header={header} type={type}>
       {content}
     </CustomNotify>,
     { placement },
   );
+
+  setTimeout(() => {
+    toaster.clear();
+  }, duration);
 };
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {

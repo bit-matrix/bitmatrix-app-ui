@@ -194,7 +194,9 @@ const AddLiquidity = (): JSX.Element => {
           }
 
           notify(
-            <a href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>See in Explorer</a>,
+            <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+              See in Explorer
+            </a>,
             'Commitment Tx created successfully!',
             'success',
           );

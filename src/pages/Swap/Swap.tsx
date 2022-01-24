@@ -273,7 +273,9 @@ export const Swap = (): JSX.Element => {
 
           if (commitmentTxId && commitmentTxId !== '') {
             notify(
-              <a href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>See in Explorer</a>,
+              <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+                See in Explorer
+              </a>,
               'Commitment Tx created successfully!',
               'success',
             );
