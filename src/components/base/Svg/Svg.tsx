@@ -9,9 +9,9 @@ const Svg: React.FC<SvgType> = ({
   color,
   size,
   viewBox = '0 0 24 24',
-  width,
-  height,
-  className,
+  width = '2rem',
+  height = '2rem',
+  className = '',
   children,
 }) => {
   const style = {
@@ -22,13 +22,7 @@ const Svg: React.FC<SvgType> = ({
   };
 
   return (
-    <svg
-      className={`${className} svg-main`}
-      style={style}
-      viewBox={viewBox}
-      width={width}
-      height={height}
-    >
+    <svg className={`${className} svg-main`} style={style} viewBox={viewBox} width={width} height={height}>
       <path d={path} />
       {children}
     </svg>

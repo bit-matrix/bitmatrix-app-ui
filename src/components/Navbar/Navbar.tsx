@@ -35,7 +35,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = (): JSX.Element | undefined => {
+  const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       return (
         <div>
@@ -51,6 +51,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         }
       }
     }
+    return <div></div>;
   };
 
   const infoTab = (): JSX.Element | undefined => {
@@ -126,7 +127,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         </Button>
       </li>
 
-      <li className="navbar-item mobile-hidden ">
+      {/* <li className="navbar-item mobile-hidden ">
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.FACTORY) && 'active'}`}
           onClick={() => {
@@ -135,7 +136,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         >
           Factory
         </Button>
-      </li>
+      </li> */}
 
       <li className="navbar-item ">
         <Button

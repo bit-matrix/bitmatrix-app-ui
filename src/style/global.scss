@@ -1,4 +1,5 @@
 @import './themes/bitmatrix.scss';
+@import '~rsuite/dist/rsuite.min.css';
 
 *,
 *:before,
@@ -15,7 +16,7 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $bmMediumDarkGray;
+  // color: $bmMediumDarkGray;
 }
 
 html,
@@ -25,6 +26,7 @@ body,
   width: 100% !important;
   height: 100% !important;
   background-color: $bmDeepFir !important;
+  color: $bmMediumDarkGray;
 }
 
 .uppercase {

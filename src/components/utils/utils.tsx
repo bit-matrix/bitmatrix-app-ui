@@ -1,6 +1,31 @@
+import { toaster } from 'rsuite';
+import { CustomNotify } from '../CustomNotify/CustomNotify';
+import { MessageType } from 'rsuite/esm/Notification/Notification';
+import { PlacementType } from 'rsuite/esm/toaster/ToastContainer';
+import { ChartData } from '../AreaChart/AreaChart';
 import { BmChart, Pool } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import { ChartData } from '../../components/AreaChart/AreaChart';
+import ArrowUpIcon from '../base/Svg/Icons/ArrowUp';
+import ArrowDownIcon from '../base/Svg/Icons/ArrowDown';
+
+export const notify = (
+  content: JSX.Element | string,
+  header?: string,
+  type?: MessageType,
+  placement: PlacementType = 'topEnd',
+  duration = 10000,
+): any => {
+  toaster.push(
+    <CustomNotify header={header} type={type}>
+      {content}
+    </CustomNotify>,
+    { placement },
+  );
+
+  setTimeout(() => {
+    toaster.clear();
+  }, duration);
+};
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
   if (chartData.length === 0) return [];
@@ -133,18 +158,22 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   let volumeRate = {
     value: '0',
     direction: 'up',
+    icon: <ArrowUpIcon />,
   };
   let feeRate = {
     value: '0',
     direction: 'up',
+    icon: <ArrowUpIcon />,
   };
   let tvlRate = {
     value: '0',
     direction: 'up',
+    icon: <ArrowUpIcon />,
   };
   let priceRate = {
     value: '0',
     direction: 'up',
+    icon: <ArrowUpIcon />,
   };
 
   if (allPriceData.length > 2) {
@@ -152,6 +181,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     priceRate = {
       value: (todayPrice / previousPriceData.close).toFixed(2),
       direction: todayPrice > previousPriceData.close ? 'up' : 'down',
+      icon: todayPrice > previousPriceData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
     };
   }
 
@@ -161,6 +191,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     volumeRate = {
       value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
       direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
+      icon: todayVolumeData.close > previousVolumeData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
     };
   }
 
@@ -170,6 +201,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     feeRate = {
       value: (todayFeeData.close / previousFeeData.close).toFixed(2),
       direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
+      icon: todayFeeData.close > previousFeeData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
     };
   }
 
@@ -178,6 +210,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     tvlRate = {
       value: (todayTvlData / previousTvlData.close).toFixed(2),
       direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
+      icon: todayTvlData > previousTvlData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
     };
   }
 

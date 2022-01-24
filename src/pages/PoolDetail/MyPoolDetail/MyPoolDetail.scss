@@ -31,21 +31,15 @@
   border-radius: 1rem !important;
   background: $bmNero !important;
   opacity: 0.8;
+  padding: 8px 12px 8px 0;
 
   &:hover {
     opacity: 1;
   }
 
   .my-pool-detail-back-text {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
     color: $bmPaleGreen;
-  }
-
-  .my-pool-detail-back-icon {
-    height: 3rem !important;
-    font-size: 3rem !important;
-    color: $bmPaleGreen !important;
-    cursor: pointer;
   }
 }
 
@@ -194,11 +188,6 @@
     margin-left: 0.5rem;
     height: 100%;
     margin-bottom: unset;
-  }
-
-  .my-pool-detail-back-button {
-    width: 17rem;
-    height: 2.75rem;
   }
 
   .my-pool-detail-button {
