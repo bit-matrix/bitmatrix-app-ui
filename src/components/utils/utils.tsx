@@ -28,7 +28,7 @@ export const notify = (
 };
 
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
-  if (chartData.length === 0) return [];
+  if (chartData.length === 0) return [{ date: '', close: 0 }];
 
   const res = chartData.map((d) => {
     const datetime = new Date(d.time * 1000);
@@ -62,7 +62,7 @@ export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
 };
 
 export const groupByDailyTvl = (chartData: BmChart[]): ChartData[] => {
-  if (chartData.length === 0) return [];
+  if (chartData.length === 0) return [{ date: '', close: 0 }];
 
   const res = chartData.map((d) => {
     const datetime = new Date(d.time * 1000);
@@ -102,7 +102,7 @@ export const groupByDailyTvl = (chartData: BmChart[]): ChartData[] => {
 };
 
 export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
-  if (chartData.length === 0) return [];
+  if (chartData.length === 0) return [{ date: '', close: 0 }];
 
   const res = chartData.map((d) => {
     const datetime = new Date(d.time * 1000);
