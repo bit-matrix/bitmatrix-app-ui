@@ -33,9 +33,9 @@ export const Advanced = (): JSX.Element => {
       <div className="modal-container">
         <Modal
           className="wallet-confirm-modal"
-          show={showConfirmModal}
+          open={showConfirmModal}
           keyboard={false}
-          onHide={() => setShowConfirmModal(false)}
+          onClose={() => setShowConfirmModal(false)}
         >
           <Modal.Header>
             <Modal.Title>Disconnect Wallet Confirm</Modal.Title>

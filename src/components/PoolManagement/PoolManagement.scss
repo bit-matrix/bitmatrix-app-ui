@@ -14,7 +14,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
 }
 
 .pool-page-content {
@@ -61,11 +61,9 @@
 .pool-page-button {
   background-color: transparent !important;
   color: $bmPaleGreen;
-}
-
-.pool-page-icon {
-  color: $bmPaleGreen;
-  font-size: 1.5rem !important;
+  cursor: pointer;
+  margin-top: 1rem;
+  line-height: 0;
 }
 
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,

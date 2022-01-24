@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button, Content, Dropdown, Icon, Input, Uploader } from 'rsuite';
-import { FileType } from 'rsuite/lib/Uploader';
+import { Button, Content, Dropdown, Input, Uploader } from 'rsuite';
+import { FileType } from 'rsuite/esm/Uploader/Uploader';
+import { BackButton } from '../../../../components/base/BackButton/BackButton';
 import './IssueToken.scss';
 
 export const IssueToken = (): JSX.Element => {
@@ -11,8 +11,6 @@ export const IssueToken = (): JSX.Element => {
   const [tokenIcon, setTokenIcon] = useState<FileType[]>([]);
   const [precision, setPrecision] = useState();
 
-  const history = useHistory();
-
   const onSelectPrecision = (eventKey: any) => {
     setPrecision(eventKey);
   };
@@ -20,10 +18,7 @@ export const IssueToken = (): JSX.Element => {
   return (
     <div className="issue-token-page-main">
       <Content className="issue-token-page-content">
-        <Button className="issue-token-page-back-button" onClick={() => history.goBack()}>
-          <Icon className="issue-token-back-icon" icon="angle-left" size="4x" />
-          <div className="issue-token-back-text">Token Issuance</div>
-        </Button>
+        <BackButton />
         <div>
           <div className="issue-token-page-line-1">
             <div>

@@ -3,12 +3,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
-import { Button, Icon, IconButton, Modal } from 'rsuite';
+import { Button, Modal } from 'rsuite';
 import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
 import SettingsContext from '../../context/SettingsContext';
+import SliderIcon from '../base/Svg/Icons/Slider';
+import AddIcon from '../base/Svg/Icons/Add';
 import './PoolManagement.scss';
 
 type Props = {
@@ -104,8 +106,8 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
       <Modal
         className="pool-list-modal"
         backdrop={true}
-        show={showPoolListModal}
-        onHide={() => setShowPoolListModal(false)}
+        open={showPoolListModal}
+        onClose={() => setShowPoolListModal(false)}
       >
         <Modal.Header>
           <Modal.Title>Choose a pool</Modal.Title>
@@ -133,18 +135,20 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   return (
     <div className="pool-page-main">
       <div className="pool-page-header">
-        <IconButton className="pool-page-button" icon={<Icon className="pool-page-icon" icon="sliders" size="4x" />} />
-
+        <div className="pool-page-button pool-page-icon">
+          <SliderIcon width="1.25rem" height="1.5rem" />
+        </div>
         <TabMenu
           menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
           selectedItem={selectedTab}
           onClick={(eventKey: any) => setSelectedTab(eventKey)}
         />
-        <IconButton
-          className="pool-page-button"
-          onClick={() => setShowButtons(!showButtons)}
-          icon={<Icon className="pool-page-icon" icon="plus" size="4x" />}
-        />
+        <div className="pool-page-button" onClick={() => setShowButtons(!showButtons)}>
+          <AddIcon width="1.5rem" height="1.5rem" />
+        </div>
+
+        {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
+
         {showButtons && addButtons()}
         {showPoolListModal && poolListModal()}
       </div>

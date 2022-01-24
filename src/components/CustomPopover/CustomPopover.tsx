@@ -32,6 +32,7 @@ type Props = {
   placement: Placement;
   title?: string;
   content: string;
+  children: React.ReactElement;
 };
 
 export const CustomPopover: React.FC<Props> = ({ trigger = 'hover', placement, title, content, children }) => {

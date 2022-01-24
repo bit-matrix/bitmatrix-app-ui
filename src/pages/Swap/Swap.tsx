@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Notification, Content } from 'rsuite';
+import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -17,6 +17,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
+import { notify } from '../../components/utils/utils';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -235,11 +236,12 @@ export const Swap = (): JSX.Element => {
 
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
-        // notify('Funding Tx Id : ', fundingTxId);
+        // notify(fundingTxId, 'Funding Tx Id : ', 'success');
 
         if (fundingTxId && fundingTxId !== '') {
           setInputFromAmount('0.0');
           setInputToAmount('0');
+          setSelectedFromAmountPercent(undefined);
 
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
@@ -270,6 +272,13 @@ export const Swap = (): JSX.Element => {
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
+            notify(
+              <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+                See in Explorer
+              </a>,
+              'Commitment Tx created successfully!',
+              'success',
+            );
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: numberFromAmount,
@@ -294,22 +303,14 @@ export const Swap = (): JSX.Element => {
 
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
-          notify('Wallet Error : ', 'Funding transaction could not be created.');
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
         }
       } else {
-        notify('Error : ', 'Pool Error');
+        notify('Pool Error', 'Error : ', 'error');
       }
     } else {
-      notify('Error : ', 'Wallet Error');
+      notify('Wallet Error', 'Error : ', 'error');
     }
-  };
-
-  const notify = (title: string, description: string) => {
-    Notification.open({
-      title: title,
-      description: <div className="notificationTx">{description}</div>,
-      duration: 20000,
-    });
   };
 
   const infoMessage = (): string => {

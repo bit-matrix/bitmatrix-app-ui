@@ -3,8 +3,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { api, convertion } from '@bitmatrix/lib';
 import { BmChart, Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
-import { calculateChartData } from '../utils';
-import { Button, Icon, Loader } from 'rsuite';
+import { calculateChartData } from '../../../components/utils/utils';
+import { Button, Loader } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../../components/TabMenu/TabMenu';
@@ -16,6 +16,7 @@ import info from '../../../images/info2.png';
 import lbtcImage from '../../../images/liquid_btc.png';
 import usdtImage from '../../../images/usdt.png';
 import Decimal from 'decimal.js';
+import { BackButton } from '../../../components/base/BackButton/BackButton';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -120,12 +121,7 @@ export const MyPoolDetail: React.FC = () => {
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
-              <Button className="my-pool-detail-back-button" onClick={() => history.goBack()}>
-                <Icon className="my-pool-detail-back-icon" icon="angle-left" size="4x" />
-                <div className="my-pool-detail-back-text">
-                  {pool.quote.ticker} / {pool.token.ticker}
-                </div>
-              </Button>
+              <BackButton />
             </div>
             <div className="my-pool-detail-header-right">
               <TabMenu
