@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Notification, Content } from 'rsuite';
+import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
