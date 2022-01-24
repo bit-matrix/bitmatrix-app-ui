@@ -241,6 +241,7 @@ export const Swap = (): JSX.Element => {
         if (fundingTxId && fundingTxId !== '') {
           setInputFromAmount('0.0');
           setInputToAmount('0');
+          setSelectedFromAmountPercent(undefined);
 
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
 
