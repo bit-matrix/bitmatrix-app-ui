@@ -6,6 +6,12 @@
 
   .rs-btn {
     width: 7.5rem !important;
+    color: $bmShadyLady;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .rs-btn-default {
