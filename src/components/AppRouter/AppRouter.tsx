@@ -106,7 +106,7 @@ export const AppRouter = (): JSX.Element => {
       .getPools()
       .then((pools: ModelPool[]) => {
         const filteredPool = pools.filter(
-          (p) => p.id !== 'db7a0fa02b9649bb70d084f24412028a8b4157c91d07715a56870a161f041cb3',
+          (p) => p.id === '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
         );
 
         if (isInitialize) {

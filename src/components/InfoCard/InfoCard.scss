@@ -20,7 +20,7 @@
   }
 
   .info-card-content {
-    max-height: 11.5rem;
+    max-height: 28.5rem;
     overflow-y: auto;
     top: 0.25rem;
     width: 100%;
@@ -34,6 +34,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
+      &:hover {
+        opacity: 0.6;
+      }
 
       &:first-child {
         border-top-left-radius: 1rem;
