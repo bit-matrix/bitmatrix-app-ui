@@ -35,6 +35,10 @@
       align-items: center;
       justify-content: space-between;
 
+      &:hover {
+        opacity: 0.6;
+      }
+
       &:first-child {
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
