@@ -19,6 +19,7 @@ import Decimal from 'decimal.js';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
+import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -350,7 +351,7 @@ export const Swap = (): JSX.Element => {
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={calcAmountPercent}
               />
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="from-input-content">
                 <div className="from-amount-div">
                   <div className="from-text">From</div>
                   <NumericalInput
@@ -363,20 +364,7 @@ export const Swap = (): JSX.Element => {
               </div>
             </div>
             <div className="swap-arrow-icon" onClick={swapRouteChange}>
-              <svg
-                width="1.05rem"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="arrow-down"
-                role="img"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
-                ></path>
-              </svg>
+              <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
             <div className="from-content">
               <div className="from-amount-div">

@@ -43,6 +43,11 @@
   position: relative;
 }
 
+.from-input-content {
+  display: flex;
+  align-items: center;
+}
+
 .from-amount-div {
   padding: 0.5rem 1rem;
 }
