@@ -145,6 +145,16 @@ export const AppRouter = (): JSX.Element => {
         unconfirmedTxs.forEach((transaction) => {
           if (transaction.txId) {
             api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
+              if (ctxResponse) {
+                const newTxHistory = [...txHistory];
+                const willChangedTx = newTxHistory.findIndex((ntx) => {
+                  return ntx.txId === transaction.txId;
+                });
+
+                newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
+                setLocalData(newTxHistory);
+              }
+
               if (!ctxResponse) {
                 api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
                   if (ptxResponse) {
