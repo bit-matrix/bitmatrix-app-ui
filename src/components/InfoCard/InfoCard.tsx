@@ -28,7 +28,7 @@ export const InfoCard: React.FC = () => {
             className="explorer-div"
             onClick={() => window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')}
           >
-            Viev in Block Explorer <ExportIcon />
+            View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" />
           </div>
         </>
       );
