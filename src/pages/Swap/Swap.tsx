@@ -28,9 +28,9 @@ export const Swap = (): JSX.Element => {
     to: SWAP_ASSET;
   }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
 
-  const [inputFromAmount, setInputFromAmount] = useState<string>('0.0');
+  const [inputFromAmount, setInputFromAmount] = useState<string>('');
 
-  const [inputToAmount, setInputToAmount] = useState<string>('0');
+  const [inputToAmount, setInputToAmount] = useState<string>('');
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
@@ -54,13 +54,17 @@ export const Swap = (): JSX.Element => {
     }
 
     const output = convertion.convertForCtx(inputNum, payloadData.slippage, currentPool, pool_config, methodCall);
-
-    if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-      setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+    if (output.amount > 0) {
+      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      } else {
+        setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      }
     } else {
-      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
-      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      setInputToAmount('');
+      setAmountWithSlippage(0);
     }
   };
 
@@ -179,8 +183,8 @@ export const Swap = (): JSX.Element => {
       }
     }
 
-    setInputFromAmount('0.0');
-    setInputToAmount('0');
+    setInputFromAmount('');
+    setInputToAmount('');
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -197,8 +201,8 @@ export const Swap = (): JSX.Element => {
       });
     }
 
-    setInputFromAmount('0.0');
-    setInputToAmount('0');
+    setInputFromAmount('');
+    setInputToAmount('');
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -239,8 +243,8 @@ export const Swap = (): JSX.Element => {
         // notify(fundingTxId, 'Funding Tx Id : ', 'success');
 
         if (fundingTxId && fundingTxId !== '') {
-          setInputFromAmount('0.0');
-          setInputToAmount('0');
+          setInputFromAmount('');
+          setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
 
           const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
@@ -354,6 +358,8 @@ export const Swap = (): JSX.Element => {
                     autoComplete="off"
                     autoCorrect="off"
                     type="text"
+                    placeholder="0.0"
+                    // maxLength={5}
                     pattern="^[0-9]*[.,]?[0-9]*$"
                     spellCheck="false"
                     value={inputFromAmount}
@@ -388,6 +394,8 @@ export const Swap = (): JSX.Element => {
                   autoComplete="off"
                   autoCorrect="off"
                   type="text"
+                  placeholder="0.0"
+                  // maxLength={5}
                   pattern="^[0-9]*[.,]?[0-9]*$"
                   spellCheck="false"
                   value={inputToAmount}
