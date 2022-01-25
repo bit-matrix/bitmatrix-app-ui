@@ -26,6 +26,7 @@
     width: 100%;
     border-top-left-radius: 0.875rem;
     border-top-right-radius: 0.875rem;
+    position: relative;
 
     .info-card-item {
       background: $bmDeepFir;
@@ -34,10 +35,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-
-      &:hover {
-        opacity: 0.6;
-      }
 
       &:first-child {
         border-top-left-radius: 1rem;
@@ -72,4 +69,8 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  position: absolute;
+  width: 100%;
+  z-index: 999;
+  background-color: rgba(black, 0.8);
 }
