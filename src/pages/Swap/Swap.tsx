@@ -18,6 +18,7 @@ import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
+import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -352,18 +353,10 @@ export const Swap = (): JSX.Element => {
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="from-amount-div">
                   <div className="from-text">From</div>
-                  <input
+                  <NumericalInput
                     className="from-input"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    type="text"
-                    placeholder="0.0"
-                    // maxLength={5}
-                    pattern="^[0-9]*[.,]?[0-9]*$"
-                    spellCheck="false"
-                    value={inputFromAmount}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputFromAmount(event.target.value)}
+                    inputValue={inputFromAmount}
+                    onChange={(inputValue) => setInputFromAmount(inputValue)}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -388,18 +381,10 @@ export const Swap = (): JSX.Element => {
             <div className="from-content">
               <div className="from-amount-div">
                 <div className="from-text">To</div>
-                <input
+                <NumericalInput
                   className="from-input"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  type="text"
-                  placeholder="0.0"
-                  // maxLength={5}
-                  pattern="^[0-9]*[.,]?[0-9]*$"
-                  spellCheck="false"
-                  value={inputToAmount}
-                  // onChange={onChangeToInput}
+                  inputValue={inputToAmount}
+                  onChange={(inputValue) => setInputToAmount(inputValue)}
                 />
               </div>
               <SwapAssetList

@@ -20,13 +20,14 @@ import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
+import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
   const [lbctPercent, setLbtcPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
-  const [tokenAmount, setTokenAmount] = useState<string>('0');
-  const [quoteAmount, setQuoteAmount] = useState<string>('0');
+  const [tokenAmount, setTokenAmount] = useState<string>('');
+  const [quoteAmount, setQuoteAmount] = useState<string>('');
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -147,8 +148,8 @@ const AddLiquidity = (): JSX.Element => {
         console.log('fundingTxId', fundingTxId);
 
         if (fundingTxId && fundingTxId !== '') {
-          setQuoteAmount('0');
-          setTokenAmount('0');
+          setQuoteAmount('');
+          setTokenAmount('');
           setLbtcPercent(undefined);
           setUsdtPercent(undefined);
 
@@ -240,16 +241,10 @@ const AddLiquidity = (): JSX.Element => {
                     <div className="add-liquidity-text">{SWAP_ASSET.LBTC} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
-                  <input
+                  <NumericalInput
                     className="add-liquidity-input"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    type="text"
-                    pattern="^[0-9]*[.,]?[0-9]*$"
-                    spellCheck="false"
-                    value={quoteAmount}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeQuoteAmount(event.target.value)}
+                    inputValue={quoteAmount}
+                    onChange={(inputValue) => onChangeQuoteAmount(inputValue)}
                   />
                 </div>
               </div>
@@ -270,16 +265,10 @@ const AddLiquidity = (): JSX.Element => {
                     <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
                     <img className="liquidity-usdt-icon" src={usdt} alt="" />
                   </div>
-                  <input
+                  <NumericalInput
                     className="add-liquidity-input"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    type="text"
-                    pattern="^[0-9]*[.,]?[0-9]*$"
-                    spellCheck="false"
-                    value={tokenAmount}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onChangeTokenAmount(event.target.value)}
+                    inputValue={tokenAmount}
+                    onChange={(inputValue) => onChangeTokenAmount(inputValue)}
                   />
                 </div>
               </div>
