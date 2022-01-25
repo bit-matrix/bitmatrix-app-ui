@@ -357,7 +357,10 @@ export const Swap = (): JSX.Element => {
                   <NumericalInput
                     className="from-input"
                     inputValue={inputFromAmount}
-                    onChange={(inputValue) => setInputFromAmount(inputValue)}
+                    onChange={(inputValue) => {
+                      setInputFromAmount(inputValue);
+                      setSelectedFromAmountPercent(undefined);
+                    }}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -372,7 +375,10 @@ export const Swap = (): JSX.Element => {
                 <NumericalInput
                   className="from-input"
                   inputValue={inputToAmount}
-                  onChange={(inputValue) => setInputToAmount(inputValue)}
+                  onChange={(inputValue) => {
+                    setInputToAmount(inputValue);
+                    setSelectedFromAmountPercent(undefined);
+                  }}
                 />
               </div>
               <SwapAssetList
