@@ -10,6 +10,7 @@ import liqadd from '../../images/liqadd.png';
 import liqremove from '../../images/liqremove.png';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import './InfoCard.scss';
+import ExportIcon from '../base/Svg/Icons/Export';
 
 export const InfoCard: React.FC = () => {
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -19,41 +20,58 @@ export const InfoCard: React.FC = () => {
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
     let messageBody: JSX.Element | undefined;
 
-    if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+    if (!cs.completed) {
       messageBody = (
         <>
-          <div className="info-card-item-icon ">
-            <ExchangeIcon width="1rem" height="1rem" />
-          </div>
-          <div>
-            Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
-            {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
+          <div className="info-card-item-icon "></div>
+          <div
+            className="explorer-div"
+            onClick={() => window.open(`https://blockstream.info/liquidtestnet/tx/${cs.txId}`, '_blank')}
+          >
+            Viev in Block Explorer <ExportIcon />
           </div>
         </>
       );
+    } else {
+      if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+        messageBody = (
+          <>
+            <div className="info-card-item-icon ">
+              <ExchangeIcon width="1rem" height="1rem" />
+            </div>
+            <div>
+              Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
+              {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
+            </div>
+          </>
+        );
+      }
+
+      if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
+        messageBody = (
+          <>
+            <img className="info-card-item-icon-2" src={liqadd} alt="" />
+            <div>
+              Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+              {cs.tokenAmount} {cs.tokenAsset}
+            </div>
+          </>
+        );
+      }
+
+      if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
+        messageBody = (
+          <>
+            <img className="info-card-item-icon-2" src={liqremove} alt="" />
+            <div>
+              Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+              {cs.tokenAmount} {cs.tokenAsset}
+            </div>
+          </>
+        );
+      }
     }
-    if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
-      messageBody = (
-        <>
-          <img className="info-card-item-icon-2" src={liqadd} alt="" />
-          <div>
-            Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {cs.tokenAmount} {cs.tokenAsset}
-          </div>
-        </>
-      );
-    }
-    if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
-      messageBody = (
-        <>
-          <img className="info-card-item-icon-2" src={liqremove} alt="" />
-          <div>
-            Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {cs.tokenAmount} {cs.tokenAsset}
-          </div>
-        </>
-      );
-    }
+
     return (
       <div key={cs.txId} className="info-card-item">
         {messageBody}
@@ -76,7 +94,7 @@ export const InfoCard: React.FC = () => {
               return message(dt);
             })}
         </div>
-        <div className="info-card-footer">No other record found.</div>
+        <div className="info-card-footer">Recent Activity</div>
       </div>
     );
   }
