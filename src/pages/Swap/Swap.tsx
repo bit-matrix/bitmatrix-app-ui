@@ -279,6 +279,8 @@ export const Swap = (): JSX.Element => {
           },
         ]);
 
+        setLoading(true);
+
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
         // notify(fundingTxId, 'Funding Tx Id : ', 'success');
@@ -435,7 +437,6 @@ export const Swap = (): JSX.Element => {
               text="Swap"
               onClick={() => {
                 swapClick();
-                setLoading(true);
               }}
               disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
             />
