@@ -179,6 +179,8 @@ const AddLiquidity = (): JSX.Element => {
           },
         ]);
 
+        setLoading(true);
+
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
         console.log('fundingTxId', fundingTxId);
@@ -349,7 +351,6 @@ const AddLiquidity = (): JSX.Element => {
               text="Add Liquidity"
               onClick={() => {
                 addLiquidityClick();
-                setLoading(true);
               }}
               disabled={
                 Number(quoteAmount) <= 0 ||

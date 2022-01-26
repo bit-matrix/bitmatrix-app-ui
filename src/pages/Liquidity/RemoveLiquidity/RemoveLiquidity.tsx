@@ -69,6 +69,8 @@ const RemoveLiquidity = (): JSX.Element => {
           },
         ]);
 
+        setLoading(true);
+
         const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
 
         if (fundingTxId && fundingTxId !== '') {
@@ -216,7 +218,6 @@ const RemoveLiquidity = (): JSX.Element => {
             text="Remove Liquidity"
             onClick={() => {
               removeLiquidityClick();
-              setLoading(true);
             }}
             disabled={calcLpTokenAmount <= 0}
             className="remove-liquidity-button"
