@@ -186,7 +186,7 @@ export const Swap = (): JSX.Element => {
         poolValue = tokenAmountInPool;
       }
 
-      if (inputValue < inputAmount && inputValue < poolValue) {
+      if (inputValue <= inputAmount && inputValue <= poolValue) {
         isValid = true;
       } else {
         isValid = false;
