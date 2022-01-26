@@ -43,6 +43,10 @@
       align-items: center;
       padding: 0.75rem 0;
 
+      .add-liquidity-invalid-content {
+        border: 1px solid $bmRed !important;
+      }
+
       .add-liquidity-item {
         display: flex;
         border: 1px solid $bmDimGray;

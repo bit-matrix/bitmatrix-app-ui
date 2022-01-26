@@ -117,6 +117,42 @@ const AddLiquidity = (): JSX.Element => {
     }
   };
 
+  const inputsIsValid = () => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+      let tokenIsValid = false;
+      let quoteIsValid = false;
+
+      const currentPool = payloadData.pools[0];
+
+      const quoteAssetId = currentPool.quote.asset;
+      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteAmountInPool = Number(currentPool.quote.value);
+
+      const tokenAssetId = currentPool.token.asset;
+      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenAmountInPool = Number(currentPool.token.value) / PREFERRED_UNIT_VALUE.LBTC;
+
+      if (quoteAmountInWallet && tokenAmountInWallet) {
+        const quoteAmountWallet = quoteAmountInWallet / payloadData.preferred_unit.value;
+        const tokenAmountWallet = tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC;
+
+        if (Number(quoteAmount) < quoteAmountWallet && Number(quoteAmount) < quoteAmountInPool) {
+          quoteIsValid = true;
+        } else {
+          quoteIsValid = false;
+        }
+
+        if (Number(tokenAmount) < tokenAmountWallet && Number(tokenAmount) < tokenAmountInPool) {
+          tokenIsValid = true;
+        } else {
+          tokenIsValid = false;
+        }
+
+        return { tokenIsValid, quoteIsValid };
+      }
+    }
+  };
+
   const addLiquidityClick = async () => {
     if (payloadData.wallet?.marina) {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
@@ -228,7 +264,11 @@ const AddLiquidity = (): JSX.Element => {
         <BackButton />
         <div>
           <div className="add-liquidity-main">
-            <div className="add-liquidity-item pt8">
+            <div
+              className={`add-liquidity-item pt8 ${
+                !inputsIsValid()?.quoteIsValid ? 'add-liquidity-invalid-content' : ''
+              }`}
+            >
               <SwapFromTab
                 selectedFromAmountPercent={lbctPercent}
                 setselectedFromAmountPercent={(lbtcPercent: FROM_AMOUNT_PERCENT | undefined) =>
@@ -252,7 +292,11 @@ const AddLiquidity = (): JSX.Element => {
             <div className="add-liquidity-plus-icon">
               <img className="add-liquidity-page-icons" src={plus} alt="" />
             </div>
-            <div className="add-liquidity-item pt8">
+            <div
+              className={`add-liquidity-item pt8 ${
+                !inputsIsValid()?.tokenIsValid ? 'add-liquidity-invalid-content' : ''
+              }`}
+            >
               <SwapFromTab
                 selectedFromAmountPercent={usdtPercent}
                 setselectedFromAmountPercent={(usdtPercent: FROM_AMOUNT_PERCENT | undefined) =>
@@ -301,7 +345,12 @@ const AddLiquidity = (): JSX.Element => {
             <WalletButton
               text="Add Liquidity"
               onClick={() => addLiquidityClick()}
-              disabled={Number(quoteAmount) <= 0 || Number(tokenAmount) <= 0}
+              disabled={
+                Number(quoteAmount) <= 0 ||
+                Number(tokenAmount) <= 0 ||
+                !inputsIsValid()?.tokenIsValid ||
+                !inputsIsValid()?.quoteIsValid
+              }
               className="add-liquidity-button"
             />
           </div>
