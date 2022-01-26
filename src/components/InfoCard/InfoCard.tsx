@@ -24,7 +24,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1rem" height="1rem" />
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
           <div>
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
