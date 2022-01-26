@@ -158,6 +158,45 @@ export const Swap = (): JSX.Element => {
     setSelectedFromAmountPercent(newFromAmountPercent);
   };
 
+  const inputIsValid = () => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+      let inputAmount = 0;
+      let inputValue = 0;
+      let poolValue = 0;
+
+      const currentPool = payloadData.pools[0];
+
+      const quoteAssetId = currentPool.quote.asset;
+      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteAmountInPool = Number(currentPool.quote.value);
+
+      const tokenAssetId = currentPool.token.asset;
+      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenAmountInPool = Number(currentPool.token.value) / PREFERRED_UNIT_VALUE.LBTC;
+
+      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
+        inputAmount = quoteAmountInWallet / payloadData.preferred_unit.value;
+        inputValue = Number(inputFromAmount);
+        poolValue = quoteAmountInPool;
+      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
+        inputAmount = tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC;
+        inputValue = Number(inputToAmount);
+        poolValue = tokenAmountInPool;
+      }
+
+      let isValid = false;
+
+      if (inputValue < inputAmount && inputValue < poolValue) {
+        isValid = true;
+      } else {
+        isValid = false;
+      }
+
+      return isValid;
+    }
+    return true;
+  };
+
   const assetOnChange = (asset: SWAP_ASSET, isFrom = true) => {
     if (isFrom) {
       if (asset === SWAP_ASSET.LBTC) {
@@ -346,7 +385,7 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            <div className="from-content pt8">
+            <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={calcAmountPercent}
@@ -386,7 +425,7 @@ export const Swap = (): JSX.Element => {
                 setSelectedAsset={(asset: SWAP_ASSET) => assetOnChange(asset, false)}
               />
             </div>
-            <WalletButton text="Swap" onClick={() => swapClick()} disabled={Number(inputToAmount) <= 0} />
+            <WalletButton text="Swap" onClick={() => swapClick()} disabled={!inputIsValid()} />
           </div>
         </div>
         <Info content={infoMessage()} />

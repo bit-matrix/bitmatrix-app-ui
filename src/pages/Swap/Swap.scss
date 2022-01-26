@@ -43,6 +43,10 @@
   position: relative;
 }
 
+.invalid-content {
+  border: 1px solid $bmRed;
+}
+
 .from-input-content {
   display: flex;
   align-items: center;
