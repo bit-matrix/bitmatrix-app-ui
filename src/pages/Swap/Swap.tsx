@@ -161,8 +161,10 @@ export const Swap = (): JSX.Element => {
   const inputIsValid = () => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
       let inputAmount = 0;
-      let inputValue = 0;
       let poolValue = 0;
+
+      const inputValue = Number(inputFromAmount);
+      let isValid = false;
 
       const currentPool = payloadData.pools[0];
 
@@ -176,15 +178,11 @@ export const Swap = (): JSX.Element => {
 
       if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
         inputAmount = quoteAmountInWallet / payloadData.preferred_unit.value;
-        inputValue = Number(inputFromAmount);
         poolValue = quoteAmountInPool;
       } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
         inputAmount = tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC;
-        inputValue = Number(inputToAmount);
         poolValue = tokenAmountInPool;
       }
-
-      let isValid = false;
 
       if (inputValue < inputAmount && inputValue < poolValue) {
         isValid = true;
