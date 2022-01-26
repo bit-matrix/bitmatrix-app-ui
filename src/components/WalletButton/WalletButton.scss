@@ -14,6 +14,11 @@
   &:hover {
     opacity: 1;
   }
+
+  &:disabled {
+    background-color: $bmMortar !important;
+    // opacity: 0.5;
+  }
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
