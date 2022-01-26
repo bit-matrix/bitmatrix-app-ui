@@ -423,7 +423,11 @@ export const Swap = (): JSX.Element => {
                 setSelectedAsset={(asset: SWAP_ASSET) => assetOnChange(asset, false)}
               />
             </div>
-            <WalletButton text="Swap" onClick={() => swapClick()} disabled={!inputIsValid()} />
+            <WalletButton
+              text="Swap"
+              onClick={() => swapClick()}
+              disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
+            />
           </div>
         </div>
         <Info content={infoMessage()} />
