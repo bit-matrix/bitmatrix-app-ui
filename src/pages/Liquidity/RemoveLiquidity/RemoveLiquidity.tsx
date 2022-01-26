@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Button, Content, Slider } from 'rsuite';
+import { Button, Content, Loader, Slider } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
@@ -20,7 +20,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<number>(100);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
-
+  const [loading, setLoading] = useState<boolean>(false);
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -120,8 +120,10 @@ const RemoveLiquidity = (): JSX.Element => {
             'Commitment Tx created successfully!',
             'success',
           );
+          setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
         }
       }
     }
@@ -143,6 +145,7 @@ const RemoveLiquidity = (): JSX.Element => {
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
+        {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />}
         <BackButton />
         <div>
           <div className="remove-liquidity-main">
@@ -211,7 +214,10 @@ const RemoveLiquidity = (): JSX.Element => {
         <div className="remove-liquidity-button-content">
           <WalletButton
             text="Remove Liquidity"
-            onClick={() => removeLiquidityClick()}
+            onClick={() => {
+              removeLiquidityClick();
+              setLoading(true);
+            }}
             disabled={calcLpTokenAmount <= 0}
             className="remove-liquidity-button"
           />
