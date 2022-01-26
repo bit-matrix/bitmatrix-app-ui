@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Content } from 'rsuite';
+import { Content, Loader } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -37,6 +37,8 @@ export const Swap = (): JSX.Element => {
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -340,6 +342,8 @@ export const Swap = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setLocalData(newStoreData);
+
+            setLoading(false);
           } /* else {
             notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
           } */
@@ -347,12 +351,15 @@ export const Swap = (): JSX.Element => {
           // notify('Commitment Tx Id : ', commitmentTxId);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
         }
       } else {
         notify('Pool Error', 'Error : ', 'error');
+        setLoading(false);
       }
     } else {
       notify('Wallet Error', 'Error : ', 'error');
+      setLoading(false);
     }
   };
 
@@ -383,6 +390,7 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
+            {loading && <Loader className="swap-page-loading" size="md" inverse center />}
             <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
@@ -425,7 +433,10 @@ export const Swap = (): JSX.Element => {
             </div>
             <WalletButton
               text="Swap"
-              onClick={() => swapClick()}
+              onClick={() => {
+                swapClick();
+                setLoading(true);
+              }}
               disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
             />
           </div>

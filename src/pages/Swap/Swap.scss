@@ -33,6 +33,14 @@
   min-height: 20.8125rem;
 }
 
+.swap-page-loading {
+  z-index: 999;
+  position: fixed;
+  background: #171718;
+  opacity: 0.5;
+  bottom: 4rem !important;
+}
+
 .from-content {
   display: flex;
   // align-items: center;
