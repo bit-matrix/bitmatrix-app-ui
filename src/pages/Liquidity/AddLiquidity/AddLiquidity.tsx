@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Content } from 'rsuite';
+import { Content, Loader } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -28,7 +28,7 @@ const AddLiquidity = (): JSX.Element => {
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenAmount, setTokenAmount] = useState<string>('');
   const [quoteAmount, setQuoteAmount] = useState<string>('');
-
+  const [loading, setLoading] = useState<boolean>(false);
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -237,8 +237,10 @@ const AddLiquidity = (): JSX.Element => {
             'Commitment Tx created successfully!',
             'success',
           );
+          setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
         }
       }
     }
@@ -261,6 +263,7 @@ const AddLiquidity = (): JSX.Element => {
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
+        {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />}
         <BackButton />
         <div>
           <div className="add-liquidity-main">
@@ -344,7 +347,10 @@ const AddLiquidity = (): JSX.Element => {
           <div className="add-liquidity-button-content">
             <WalletButton
               text="Add Liquidity"
-              onClick={() => addLiquidityClick()}
+              onClick={() => {
+                addLiquidityClick();
+                setLoading(true);
+              }}
               disabled={
                 Number(quoteAmount) <= 0 ||
                 Number(tokenAmount) <= 0 ||

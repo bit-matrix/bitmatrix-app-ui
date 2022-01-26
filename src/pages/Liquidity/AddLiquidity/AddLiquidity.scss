@@ -36,6 +36,14 @@
     z-index: 6;
     width: 95%;
 
+    .add-liquidity-page-loading {
+      z-index: 999;
+      position: fixed;
+      background: #171718;
+      opacity: 0.5;
+      bottom: 3rem !important;
+    }
+
     .add-liquidity-main {
       display: flex;
       flex-direction: column;
