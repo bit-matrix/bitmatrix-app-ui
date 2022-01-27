@@ -4,7 +4,10 @@ import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Info } from '../../components/common/Info/Info';
 import HomeIcon from '../../images/homeweb.png';
+import homeWebBase64 from '../../images/homeWebBase64';
+import homeMobileBase64 from '../../images/homeMobileBase64';
 import mobileHomeIcon from '../../images/mobilehome.png';
+import ImgLazy from '../../components/ImgLazy/ImgLazy';
 import './Home.scss';
 
 export const Home = (): JSX.Element => {
@@ -16,7 +19,8 @@ export const Home = (): JSX.Element => {
         <div className="home-page-desc">
           <h3 className="home-page-desc-header">Automated Liquidity Provision on Liquid is Here!</h3>
           <div className="home-page-img-content desktop-hidden">
-            <img className="home-page-img" src={mobileHomeIcon} alt="Home" />
+            {/* <img className="home-page-img" src={mobileHomeIcon} alt="Home" /> */}
+            <ImgLazy src={mobileHomeIcon} alt="" x={288} y={221} minifyImg={homeMobileBase64} />
           </div>
           <div className="home-page-desc-content">
             <p>
@@ -49,7 +53,7 @@ export const Home = (): JSX.Element => {
         </div>
         <div className="home-page-img-content mobile-hidden">
           <picture>
-            <img className="home-page-img" src={HomeIcon} alt="Home" />
+            <ImgLazy src={HomeIcon} alt="" x={590} y={768} minifyImg={homeWebBase64} />
           </picture>
         </div>
       </div>
