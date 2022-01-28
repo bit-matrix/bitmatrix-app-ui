@@ -134,7 +134,7 @@ const AddLiquidity = (): JSX.Element => {
 
       if (quoteAmountInWallet && tokenAmountInWallet) {
         const quoteAmountWallet = quoteAmountInWallet / payloadData.preferred_unit.value;
-        const tokenAmountWallet = tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC;
+        const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
         if (Number(quoteAmount) <= quoteAmountWallet && Number(quoteAmount) <= quoteAmountInPool) {
           quoteIsValid = true;
@@ -142,7 +142,7 @@ const AddLiquidity = (): JSX.Element => {
           quoteIsValid = false;
         }
 
-        if (Number(tokenAmount) <= tokenAmountWallet && Number(tokenAmount) <= tokenAmountInPool) {
+        if (Number(tokenAmount) <= Number(tokenAmountWallet) && Number(tokenAmount) <= tokenAmountInPool) {
           tokenIsValid = true;
         } else {
           tokenIsValid = false;
