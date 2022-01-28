@@ -18,6 +18,7 @@ import usdtImage from '../../../images/usdt.png';
 import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import './MyPoolDetail.scss';
+import Numeral from 'numeral';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
@@ -65,8 +66,12 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = (quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value).toString();
-      const pooledToken = (quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+      const pooledQuote = Numeral(quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value).format(
+        '(0.00a)',
+      );
+      const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
+        '(0.00a)',
+      );
       const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
       const poolRate = (Number(recipientValue.poolRate) * 100).toFixed(2);
 
