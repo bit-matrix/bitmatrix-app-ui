@@ -26,7 +26,13 @@ export const InfoCard: React.FC = () => {
           <div className="info-card-item-icon">
             <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
-          <div>
+          <div
+            className="info-card-item-text"
+            unselectable="on"
+            onMouseDown={() => {
+              return false;
+            }}
+          >
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
             {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
           </div>
@@ -38,7 +44,13 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <img className="info-card-item-icon-2" src={liqadd} alt="" />
-          <div>
+          <div
+            className="info-card-item-text"
+            unselectable="on"
+            onMouseDown={() => {
+              return false;
+            }}
+          >
             Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
             {cs.tokenAmount} {cs.tokenAsset}
           </div>
@@ -50,7 +62,13 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <img className="info-card-item-icon-2" src={liqremove} alt="" />
-          <div>
+          <div
+            className="info-card-item-text"
+            unselectable="on"
+            onMouseDown={() => {
+              return false;
+            }}
+          >
             Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
             {cs.tokenAmount} {cs.tokenAsset}
           </div>
