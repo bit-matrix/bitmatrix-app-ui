@@ -70,6 +70,9 @@
   z-index: 999;
   background-color: rgba(black, 0.8);
   opacity: 0;
+  transition-property: opacity;
+  transition-duration: 1s;
+  transition-delay: 0.2s;
 
   &:hover {
     opacity: 1;
