@@ -69,4 +69,9 @@
   left: 0;
   z-index: 999;
   background-color: rgba(black, 0.8);
+  opacity: 0;
+
+  &:hover {
+    opacity: 1;
+  }
 }
