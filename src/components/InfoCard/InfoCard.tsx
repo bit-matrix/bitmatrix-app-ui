@@ -5,12 +5,13 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
+import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import liqadd from '../../images/liqadd.png';
 import liqremove from '../../images/liqremove.png';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
-import './InfoCard.scss';
 import ExportIcon from '../base/Svg/Icons/Export';
+import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -20,7 +21,7 @@ export const InfoCard: React.FC = () => {
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
     let messageBody: JSX.Element | undefined;
 
-    if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN || cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+    if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
       messageBody = (
         <>
           <div className="info-card-item-icon">
@@ -34,7 +35,27 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
-            {cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC})
+            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
+          </div>
+        </>
+      );
+    }
+
+    if (cs.method === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+      messageBody = (
+        <>
+          <div className="info-card-item-icon">
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
+          </div>
+          <div
+            className="info-card-item-text"
+            unselectable="on"
+            onMouseDown={() => {
+              return false;
+            }}
+          >
+            Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
+            {cs.quoteAsset} (min {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC})
           </div>
         </>
       );
