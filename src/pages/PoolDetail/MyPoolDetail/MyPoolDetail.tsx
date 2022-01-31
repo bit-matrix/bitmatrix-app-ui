@@ -45,6 +45,9 @@ export const MyPoolDetail: React.FC = () => {
       .then((poolChartData: BmChart[]) => {
         setChartData(poolChartData);
       })
+      .catch(() => {
+        setChartData([]);
+      })
       .finally(() => {
         setLoading(false);
       });
