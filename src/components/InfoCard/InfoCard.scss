@@ -41,8 +41,13 @@
         border-top-right-radius: 1rem;
       }
 
-      .info-card-item-icon-2 {
-        width: 1.563rem;
+      .info-card-item-icon {
+        display: flex;
+        align-items: center;
+      }
+
+      .info-card-img {
+        width: 1.5rem;
       }
     }
   }

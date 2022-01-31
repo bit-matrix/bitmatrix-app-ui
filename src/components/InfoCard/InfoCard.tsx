@@ -25,7 +25,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.25rem" />
+            <ExchangeIcon width="1.25rem" height="1.5rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -45,7 +45,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.25rem" />
+            <ExchangeIcon width="1.25rem" height="1.5rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -64,7 +64,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="info-card-item-icon-2" src={liqadd} alt="" />
+          <img className="info-card-item-icon info-card-img" src={liqadd} alt="" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -73,7 +73,7 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {cs.tokenAmount} {cs.tokenAsset}
+            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
@@ -82,7 +82,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="info-card-item-icon-2" src={liqremove} alt="" />
+          <img className="info-card-item-icon info-card-img" src={liqremove} alt="" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -91,7 +91,7 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {cs.tokenAmount} {cs.tokenAsset}
+            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
