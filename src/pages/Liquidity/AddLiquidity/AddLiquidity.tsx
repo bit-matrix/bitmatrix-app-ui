@@ -84,9 +84,18 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
+      const totalFee =
+        primaryPoolConfig.baseFee.number +
+        primaryPoolConfig.commitmentTxFee.number +
+        primaryPoolConfig.defaultOrderingFee.number +
+        primaryPoolConfig.serviceFee.number +
+        1000;
+
       if (lbctPercent && quoteAmountInWallet) {
         if (lbctPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (quoteAmountInWallet / payloadData.preferred_unit.value).toString();
+          inputAmount = ((quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value).toString();
         }
         if (lbctPercent === FROM_AMOUNT_PERCENT.HALF) {
           const quoteAmountInWalletHalf = quoteAmountInWallet / 2;

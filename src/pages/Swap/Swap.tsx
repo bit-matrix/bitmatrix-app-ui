@@ -130,9 +130,16 @@ export const Swap = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
+      const totalFee =
+        poolConfig.baseFee.number +
+        poolConfig.commitmentTxFee.number +
+        poolConfig.defaultOrderingFee.number +
+        poolConfig.serviceFee.number +
+        1000;
+
       if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (quoteAmountInWallet / payloadData.preferred_unit.value).toString();
+          inputAmount = ((quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value).toString();
         }
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
           const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
@@ -326,12 +333,13 @@ export const Swap = (): JSX.Element => {
               'Commitment Tx created successfully!',
               'success',
             );
+
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: numberFromAmount,
-              quoteAsset: selectedAsset.from,
-              tokenAmount: numberToAmount,
-              tokenAsset: selectedAsset.to,
+              quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
+              quoteAsset: payloadData.pools[0].quote.ticker,
+              tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
+              tokenAsset: payloadData.pools[0].token.ticker,
               timestamp: new Date().valueOf(),
               success: false,
               completed: false,
@@ -346,11 +354,10 @@ export const Swap = (): JSX.Element => {
             setLocalData(newStoreData);
 
             setLoading(false);
-          } /* else {
-            notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
-          } */
-
-          // notify('Commitment Tx Id : ', commitmentTxId);
+          } else {
+            notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
+            setLoading(false);
+          }
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);
