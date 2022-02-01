@@ -4,4 +4,5 @@ export type IconSvg = {
   size?: string;
   width?: string;
   height?: string;
+  className?: string;
 };
