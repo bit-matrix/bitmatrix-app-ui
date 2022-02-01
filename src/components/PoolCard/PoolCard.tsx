@@ -4,6 +4,7 @@ import Numeral from 'numeral';
 import { Pool } from '@bitmatrix/models';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import { Tag } from 'rsuite';
 import './PoolCard.scss';
 
 type Props = {
@@ -22,21 +23,36 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
           <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
           <AssetIcon symbol={pool.token.ticker as SWAP_ASSET} />
         </div>
-        <div className="column-1-item token-item">
-          {pool.quote.ticker} / {pool.token.ticker}
+        <div className="column-1-item token-content">
+          <div>
+            {pool.quote.ticker} / {pool.token.ticker}
+          </div>
+          <div className="token-item">$35,266.387</div>
         </div>
-        <div className="column-1-item percent">0.2%</div>
+        <div className="column-1-item percent">
+          <img
+            className="percent-img"
+            src="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/1839.svg"
+            alt=""
+          />
+        </div>
       </div>
 
       <div className="pool-card-item column-2 mobile-hidden">
         <table>
           <tbody>
             <tr>
-              <th>TVL</th>
+              <th>
+                <span>TVL</span>&nbsp; <Tag color="green">Green</Tag>
+              </th>
               {showDetail && (
                 <>
-                  <th>Volume 24h</th>
-                  <th>Fees 24h</th>
+                  <th>
+                    <span>Volume</span>&nbsp; <Tag color="red">Red</Tag>
+                  </th>
+                  <th>
+                    <span>Fees</span>&nbsp; <Tag color="green">Green</Tag>
+                  </th>
                 </>
               )}
             </tr>
