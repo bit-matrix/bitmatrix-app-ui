@@ -134,15 +134,15 @@ export const PoolDetail: React.FC = () => {
               </div>
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
-                  <div className="my-pool-detail-img-content left-side">
-                    <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                  <div className="pool-detail-img-content left-side">
+                    <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
                     {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
                 </div>
 
                 <div className="pool-detail-amount-item">
-                  <div className="my-pool-detail-img-content left-side">
-                    <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                  <div className="pool-detail-img-content left-side">
+                    <TetherIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
                     {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
                 </div>
