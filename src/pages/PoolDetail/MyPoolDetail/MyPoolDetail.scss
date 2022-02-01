@@ -87,8 +87,10 @@
 }
 
 .my-pool-detail-content-left-header {
+  display: flex;
+  align-items: center;
   padding-left: 0.25rem;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 500;
   color: $bmDimGray;
 }
@@ -122,7 +124,7 @@
   background: $bmBlack;
   border-radius: 1rem;
   width: 48%;
-  height: 3rem;
+  height: 2.5rem;
   padding-left: 0.5rem;
 }
 

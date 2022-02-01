@@ -13,14 +13,12 @@ import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../../context/SettingsContext';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import info from '../../../images/info2.png';
-import lbtcImage from '../../../images/liquid_btc.png';
-import usdtImage from '../../../images/usdt.png';
 import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
-import './MyPoolDetail.scss';
 import Numeral from 'numeral';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
@@ -149,14 +147,14 @@ export const MyPoolDetail: React.FC = () => {
                 <div className="my-pooled-assets-content">
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
-                      <LbtcIcon className="my-pool-detail-img" width="1.75rem" height="1.75rem" />
+                      <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
                       {calcPooledAssets().pooledQuote}
                     </div>
                   </div>
 
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
-                      <TetherIcon className="my-pool-detail-img" width="1.75rem" height="1.75rem" />
+                      <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
                       {calcPooledAssets().pooledToken}
                     </div>
                   </div>
@@ -206,7 +204,7 @@ export const MyPoolDetail: React.FC = () => {
 
                 <Button
                   appearance="default"
-                  className="primary-button my-pool-detail-button mobile-hidden"
+                  className="primary-button my-pool-detail-button mt3 mobile-hidden"
                   onClick={() => {
                     history.push(ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity');
                   }}
