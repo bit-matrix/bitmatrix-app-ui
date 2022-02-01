@@ -142,76 +142,70 @@ export const MyPoolDetail: React.FC = () => {
           <div className="my-pool-detail-content">
             <div className="my-pool-detail-content-right desktop-hidden">{renderChart(data)}</div>
             <div className="my-pool-detail-content-left">
-              <div className="my-pooled-assets">
-                <div className="my-pool-detail-content-left-header">My pooled assets</div>
-                <div className="my-pooled-assets-content">
-                  <div className="my-pooled-assets-item">
-                    <div className="my-pool-detail-img-content left-side">
-                      <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
-                      {calcPooledAssets().pooledQuote}
-                    </div>
+              <div className="my-pool-detail-content-left-header">My pooled assets</div>
+              <div className="my-pooled-assets-content">
+                <div className="my-pooled-assets-item">
+                  <div className="my-pool-detail-img-content">
+                    <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    {calcPooledAssets().pooledQuote}
                   </div>
+                </div>
 
-                  <div className="my-pooled-assets-item">
-                    <div className="my-pool-detail-img-content left-side">
-                      <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
-                      {calcPooledAssets().pooledToken}
-                    </div>
+                <div className="my-pooled-assets-item">
+                  <div className="my-pool-detail-img-content">
+                    <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    {calcPooledAssets().pooledToken}
                   </div>
                 </div>
               </div>
 
-              <div className="my-liquidity-portion">
-                <div className="my-pool-detail-content-left-header">My liquidity portion</div>
-                <div className="my-pool-detail-item">
-                  <div className="my-pool-detail-img-content left-side">
-                    <span className="portion-item">LP&nbsp;</span>
-                    {calcPooledAssets().pooledLp}
-                  </div>
-                  <CustomPopover
-                    placement="autoHorizontal"
-                    title="LP"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                  >
-                    <img className="general-icon" src={info} alt="info" />
-                  </CustomPopover>
+              <div className="my-pool-detail-content-left-header">My liquidity portion</div>
+              <div className="my-pool-detail-item">
+                <div className="my-pool-detail-img-content">
+                  <span className="portion-item">LP&nbsp;</span>
+                  {calcPooledAssets().pooledLp}
                 </div>
-                <div className="my-pool-detail-item">
-                  <div className="my-pool-detail-img-content left-side">
-                    <span className="portion-item">%&nbsp;</span>
-                    {calcPooledAssets().poolRate}
-                  </div>
-
-                  <CustomPopover
-                    placement="autoHorizontal"
-                    title="%"
-                    content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                  >
-                    <img className="general-icon" src={info} alt="info" />
-                  </CustomPopover>
-                </div>
-              </div>
-              <div className="my-pool-detail-buttons">
-                <Button
-                  appearance="default"
-                  className="primary-button my-pool-detail-button mt3 mobile-hidden"
-                  onClick={() => {
-                    history.push(ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity');
-                  }}
+                <CustomPopover
+                  placement="autoHorizontal"
+                  title="LP"
+                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
                 >
-                  Add Liquidity
-                </Button>
-
-                <Button
-                  appearance="default"
-                  className="primary-button my-pool-detail-button mt3 mobile-hidden"
-                  onClick={() => {
-                    history.push(ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity');
-                  }}
-                >
-                  Remove Liquidity
-                </Button>
+                  <img className="general-icon" src={info} alt="info" />
+                </CustomPopover>
               </div>
+              <div className="my-pool-detail-item">
+                <div className="my-pool-detail-img-content">
+                  <span className="portion-item">%&nbsp;</span>
+                  {calcPooledAssets().poolRate}
+                </div>
+
+                <CustomPopover
+                  placement="autoHorizontal"
+                  title="%"
+                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                >
+                  <img className="general-icon" src={info} alt="info" />
+                </CustomPopover>
+              </div>
+              <Button
+                appearance="default"
+                className="primary-button my-pool-detail-button mt3 mobile-hidden"
+                onClick={() => {
+                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity');
+                }}
+              >
+                Add Liquidity
+              </Button>
+
+              <Button
+                appearance="default"
+                className="primary-button my-pool-detail-button mt3 mobile-hidden"
+                onClick={() => {
+                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity');
+                }}
+              >
+                Remove Liquidity
+              </Button>
             </div>
             <div className="my-pool-detail-content-right mobile-hidden">{renderChart(data)}</div>
           </div>
