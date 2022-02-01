@@ -40,22 +40,16 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         activeKey={selectedAsset}
       >
         <Dropdown.Item eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
-          {
-            <div className="swap-dropdown-item">
-              <LbtcIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
-              {/* <img className="swap-dropdown-item-img" src={lbtcImage} alt={SWAP_ASSET.LBTC} /> */}
-              <span>{SWAP_ASSET.LBTC}</span>
-            </div>
-          }
+          <div className="swap-dropdown-item">
+            <LbtcIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
+            <span>{SWAP_ASSET.LBTC}</span>
+          </div>
         </Dropdown.Item>
         <Dropdown.Item eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
-          {
-            <div className="swap-dropdown-item">
-              <TetherIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
-              {/* <img className="swap-dropdown-item-img" src={usdtImage} alt={SWAP_ASSET.USDT} /> */}
-              <span>{SWAP_ASSET.USDT}</span>
-            </div>
-          }
+          <div className="swap-dropdown-item">
+            <TetherIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
+            <span>{SWAP_ASSET.USDT}</span>
+          </div>
         </Dropdown.Item>
       </Dropdown>
     </div>
