@@ -134,14 +134,14 @@ export const PoolDetail: React.FC = () => {
               </div>
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
-                  <div className="pool-detail-img-content left-side">
+                  <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
                     {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
                 </div>
 
                 <div className="pool-detail-amount-item">
-                  <div className="pool-detail-img-content left-side">
+                  <div className="pool-detail-img-content">
                     <TetherIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
                     {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
@@ -162,9 +162,9 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-metrics">
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
-                    <div className="left-side">{pool.quote.ticker} Price</div>
-                    <div className="pool-detail-table-text left-side">${data.todayPrice.toLocaleString()}</div>
-                    <div className="left-side">
+                    <div>{pool.quote.ticker} Price</div>
+                    <div className="pool-detail-table-text">${data.todayPrice.toLocaleString()}</div>
+                    <div>
                       {data.priceRate.icon}
                       <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                         {data.priceRate.value}%
@@ -186,9 +186,9 @@ export const PoolDetail: React.FC = () => {
                 </div>
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
-                    <div className="left-side">TVL</div>
+                    <div>TVL</div>
                     <div className="pool-detail-table-text">${Numeral(data.todayTvlData).format('(0.00a)')}</div>
-                    <div className="left-side">
+                    <div>
                       {data.tvlRate.icon}
                       <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                         {data.tvlRate.value}%
