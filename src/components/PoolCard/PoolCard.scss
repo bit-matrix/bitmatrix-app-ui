@@ -8,16 +8,22 @@
   color: $bmWhite;
   height: 5rem;
   cursor: pointer;
+  width: 100%;
 }
 
 .pool-card-item {
   margin: 0 1rem 0 0.5rem;
+  width: 50%;
   .percent {
     .percent-img {
       background-color: transparent;
       filter: hue-rotate(85deg) saturate(80%) brightness(0.85);
       width: 7rem;
     }
+  }
+
+  table {
+    width: 100%;
   }
 }
 
@@ -66,6 +72,13 @@
 .pool-card-main .column-2 th,
 td {
   color: $bmWhite;
+}
+
+.pool-card-loading-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
