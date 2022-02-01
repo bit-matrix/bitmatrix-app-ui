@@ -19,6 +19,8 @@ import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import './MyPoolDetail.scss';
 import Numeral from 'numeral';
+import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
@@ -147,14 +149,14 @@ export const MyPoolDetail: React.FC = () => {
                 <div className="my-pooled-assets-content">
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
-                      <img className="my-pool-detail-img" src={lbtcImage} alt="" />
+                      <LbtcIcon className="my-pool-detail-img" width="1.75rem" height="1.75rem" />
                       {calcPooledAssets().pooledQuote}
                     </div>
                   </div>
 
                   <div className="my-pooled-assets-item">
                     <div className="my-pool-detail-img-content left-side">
-                      <img className="my-pool-detail-img" src={usdtImage} alt="" />
+                      <TetherIcon className="my-pool-detail-img" width="1.75rem" height="1.75rem" />
                       {calcPooledAssets().pooledToken}
                     </div>
                   </div>

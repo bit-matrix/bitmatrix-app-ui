@@ -16,6 +16,8 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
 import BackIcon from '../../components/base/Svg/Icons/Back';
 import './PoolDetail.scss';
+import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../components/base/Svg/Icons/Tether';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -124,7 +126,7 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-detail-amount">
                 <div className="pool-detail-item">
                   <div className="pool-detail-img-content left-side">
-                    <img className="pool-detail-img" src={lbtcImage} alt="" />
+                    <LbtcIcon className="pool-detail-img" width="1.75rem" height="1.75rem" />
                     <span className="mobile-hidden">{pool.quote.ticker}</span>
                   </div>
                   {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
@@ -132,7 +134,7 @@ export const PoolDetail: React.FC = () => {
 
                 <div className="pool-detail-item">
                   <div className="pool-detail-img-content left-side">
-                    <img className="pool-detail-img" src={usdtImage} alt="" />
+                    <TetherIcon className="pool-detail-img" width="1.75rem" height="1.75rem" />
                     <span className="mobile-hidden">{pool.token.ticker}</span>
                   </div>
                   {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
