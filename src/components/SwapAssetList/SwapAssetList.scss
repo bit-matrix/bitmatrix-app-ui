@@ -54,4 +54,10 @@
     background-color: $bmShadyLady !important;
     color: $bmMediumDarkGray !important;
   }
+
+  .swap-dropdown-item {
+    .swap-dropdown-item-img {
+      margin-right: 0.5rem;
+    }
+  }
 }
