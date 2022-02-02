@@ -7,6 +7,7 @@ import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
+import { XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
 
 type Props = {
@@ -59,11 +60,12 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               </div>
             </div>
             <div className="column-1-item percent">
-              <img
+              {/* <img
                 className="percent-img"
                 src="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/1839.svg"
                 alt=""
-              />
+              /> */}
+              <XyChart data={data.allPriceData} />
             </div>
           </div>
 
