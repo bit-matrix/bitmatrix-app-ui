@@ -1,9 +1,10 @@
 import React from 'react';
-import { Dropdown } from 'rsuite';
+import { Dropdown, IconButton } from 'rsuite';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import LbtcIcon from '../base/Svg/Icons/Lbtc';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import './SwapAssetList.scss';
+import PlusIcon from '@rsuite/icons/Plus';
 
 type Props = {
   selectedAsset: SWAP_ASSET;
@@ -39,17 +40,13 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
         }
         activeKey={selectedAsset}
       >
-        <Dropdown.Item eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
-          <div className="swap-dropdown-item">
-            <LbtcIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
-            <span>{SWAP_ASSET.LBTC}</span>
-          </div>
+        <Dropdown.Item className="swap-dropdown-item" eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
+          <LbtcIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
+          {SWAP_ASSET.LBTC}
         </Dropdown.Item>
-        <Dropdown.Item eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
-          <div className="swap-dropdown-item">
-            <TetherIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
-            <span>{SWAP_ASSET.USDT}</span>
-          </div>
+        <Dropdown.Item className="swap-dropdown-item" eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
+          <TetherIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
+          {SWAP_ASSET.USDT}
         </Dropdown.Item>
       </Dropdown>
     </div>
