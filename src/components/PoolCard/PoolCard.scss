@@ -22,9 +22,17 @@
     }
   }
 
-  table {
-    width: 100%;
+  .pool-card-list {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    list-style: none;
+    margin: 0;
   }
+}
+
+.pool-card-modal-content {
+  width: 100% !important;
 }
 
 .order-item {
@@ -44,6 +52,9 @@
 .pool-card-main .column-1 {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin: 0 0.5rem;
+  width: 50%;
 }
 
 .pool-card-item .column-1-item {
@@ -69,11 +80,6 @@
   font-weight: 600;
 }
 
-.pool-card-main .column-2 th,
-td {
-  color: $bmWhite;
-}
-
 .pool-card-loading-content {
   width: 100%;
   display: flex;
@@ -91,15 +97,5 @@ td {
 
   .pool-card-item {
     margin: 0 0.5rem;
-  }
-
-  .column-2 {
-    display: initial;
-  }
-
-  .pool-card-main .column-2 th,
-  td {
-    text-align: left;
-    padding: 0.25rem !important;
   }
 }
