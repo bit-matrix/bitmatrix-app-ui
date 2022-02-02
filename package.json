@@ -22,6 +22,7 @@
     "@visx/scale": "^1.14.0",
     "@visx/shape": "^1.14.0",
     "@visx/tooltip": "^1.7.2",
+    "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
     "ldk": "0.4.0",
     "marina-provider": "^1.4.4",
@@ -33,6 +34,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-transition-switch": "^1.1.2",
     "react-scripts": "4.0.3",
+    "react-spring": "^9.4.2",
     "rsuite": "^5.5.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
