@@ -54,7 +54,9 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               <div>
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
-              <div className="token-item">${data.todayPrice.toLocaleString()}</div>
+              <div className={`token-item pool-card-${data.priceRate.direction}-text`}>
+                ${data.todayPrice.toLocaleString()}
+              </div>
             </div>
             <div className="column-1-item percent">
               <img
@@ -69,7 +71,8 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
             <ul className="pool-card-list">
               <li>
                 <div>
-                  <span>TVL</span>&nbsp; <Tag color="green">{data.tvlRate.value}%</Tag>
+                  <span>TVL</span>&nbsp;
+                  <Tag color={`${data.tvlRate.direction === 'up' ? 'green' : 'red'}`}>{data.tvlRate.value}%</Tag>
                 </div>
                 <div>${Numeral(data.todayTvlData).format('(0.00a)')}</div>
               </li>
@@ -77,13 +80,17 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
                 <>
                   <li>
                     <div>
-                      <span>Volume</span>&nbsp; <Tag color="red">{data.volumeRate.value}%</Tag>
+                      <span>Volume</span>&nbsp;
+                      <Tag color={`${data.volumeRate.direction === 'up' ? 'green' : 'red'}`}>
+                        {data.volumeRate.value}%
+                      </Tag>
                     </div>
                     <div>${Numeral(data.todayVolumeData.close).format('(0.00a)')}</div>
                   </li>
                   <li>
                     <div>
-                      <span>Fees</span>&nbsp; <Tag color="green">{data.feeRate.value}%</Tag>
+                      <span>Fees</span>&nbsp;
+                      <Tag color={`${data.feeRate.direction === 'up' ? 'green' : 'red'}`}>{data.feeRate.value}%</Tag>
                     </div>
                     <div>
                       <td>${Numeral(data.todayFeeData.close).format('(0.00a)')}</td>
