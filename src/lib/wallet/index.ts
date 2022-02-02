@@ -1,4 +1,4 @@
-import { Balance } from 'marina-provider';
+import { Balance, MarinaEventType } from 'marina-provider';
 import { IWallet } from './IWallet';
 import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
 import Marina from './marina/marina';
@@ -12,6 +12,7 @@ export class Wallet implements IWallet {
     // TODO default wallet
     else this.wallet = new Marina();
   }
+  public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
 
   public exist = (): boolean => this.wallet.exist();
 

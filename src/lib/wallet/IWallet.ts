@@ -1,8 +1,10 @@
-import { Balance } from 'marina-provider';
+import { Balance, EventListenerID, MarinaEventType } from 'marina-provider';
 import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
 
 export interface IWallet {
   exist(): boolean;
+
+  on(type: MarinaEventType, callback: (payload: any) => void): EventListenerID;
 
   isEnabled(): Promise<boolean>;
 
