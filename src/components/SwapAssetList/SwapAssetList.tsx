@@ -1,10 +1,9 @@
 import React from 'react';
-import { Dropdown, IconButton } from 'rsuite';
+import { Dropdown } from 'rsuite';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import LbtcIcon from '../base/Svg/Icons/Lbtc';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import './SwapAssetList.scss';
-import PlusIcon from '@rsuite/icons/Plus';
 
 type Props = {
   selectedAsset: SWAP_ASSET;
