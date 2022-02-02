@@ -8,6 +8,7 @@ import { Loading } from '../Loading/Loading';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
 import { XyChart } from '../XyChart/XyChart';
+import { mockData } from '../AreaChart/Data';
 import './PoolCard.scss';
 
 type Props = {
@@ -65,7 +66,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
                 src="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/1839.svg"
                 alt=""
               /> */}
-              <XyChart data={data.allPriceData} />
+              <XyChart data={mockData} />
             </div>
           </div>
 
@@ -94,9 +95,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
                       <span>Fees</span>&nbsp;
                       <Tag color={`${data.feeRate.direction === 'up' ? 'green' : 'red'}`}>{data.feeRate.value}%</Tag>
                     </div>
-                    <div>
-                      <td>${Numeral(data.todayFeeData.close).format('(0.00a)')}</td>
-                    </div>
+                    <div>${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
                   </li>
                 </>
               )}

@@ -14,9 +14,9 @@ type Props = {
 };
 
 export const XyChart: React.FC<Props> = ({
-  width = 150,
-  height = 120,
-  margin = { left: -10, top: 60, bottom: 0, right: 0 },
+  width = 120,
+  height = 80,
+  margin = { left: -10, top: 20, bottom: 0, right: 0 },
   data,
 }): JSX.Element => {
   const accessors = {
