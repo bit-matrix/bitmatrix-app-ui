@@ -44,7 +44,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
         </div>
       ) : (
         <>
-          <div className="pool-card-item column-1">
+          <div className={`pool-card-item column-1 ${!showDetail && 'pool-card-modal-content'}`}>
             <div className="column-1-item order-item">#{rank}</div>
             <div className="column-1-item ">
               <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
@@ -54,7 +54,9 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               <div>
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
-              <div className="token-item">${data.todayPrice.toLocaleString()}</div>
+              <div className={`token-item pool-card-${data.priceRate.direction}-text`}>
+                ${data.todayPrice.toLocaleString()}
+              </div>
             </div>
             <div className="column-1-item percent">
               <img
@@ -65,35 +67,38 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
             </div>
           </div>
 
-          <div className="pool-card-item column-2 mobile-hidden">
-            <table>
-              <tbody>
-                <tr>
-                  <th>
-                    <span>TVL</span>&nbsp; <Tag color="green">{data.tvlRate.value}%</Tag>
-                  </th>
-                  {showDetail && (
-                    <>
-                      <th>
-                        <span>Volume</span>&nbsp; <Tag color="red">{data.volumeRate.value}%</Tag>
-                      </th>
-                      <th>
-                        <span>Fees</span>&nbsp; <Tag color="green">{data.feeRate.value}%</Tag>
-                      </th>
-                    </>
-                  )}
-                </tr>
-                <tr>
-                  <td>${Numeral(data.todayTvlData).format('(0.00a)')}</td>
-                  {showDetail && (
-                    <>
-                      <td>${Numeral(data.todayVolumeData.close).format('(0.00a)')}</td>
+          <div className={`pool-card-item mobile-hidden ${!showDetail && 'pool-card-modal-content'}`}>
+            <ul className="pool-card-list">
+              <li>
+                <div>
+                  <span>TVL</span>&nbsp;
+                  <Tag color={`${data.tvlRate.direction === 'up' ? 'green' : 'red'}`}>{data.tvlRate.value}%</Tag>
+                </div>
+                <div>${Numeral(data.todayTvlData).format('(0.00a)')}</div>
+              </li>
+              {showDetail && (
+                <>
+                  <li>
+                    <div>
+                      <span>Volume</span>&nbsp;
+                      <Tag color={`${data.volumeRate.direction === 'up' ? 'green' : 'red'}`}>
+                        {data.volumeRate.value}%
+                      </Tag>
+                    </div>
+                    <div>${Numeral(data.todayVolumeData.close).format('(0.00a)')}</div>
+                  </li>
+                  <li>
+                    <div>
+                      <span>Fees</span>&nbsp;
+                      <Tag color={`${data.feeRate.direction === 'up' ? 'green' : 'red'}`}>{data.feeRate.value}%</Tag>
+                    </div>
+                    <div>
                       <td>${Numeral(data.todayFeeData.close).format('(0.00a)')}</td>
-                    </>
-                  )}
-                </tr>
-              </tbody>
-            </table>
+                    </div>
+                  </li>
+                </>
+              )}
+            </ul>
           </div>
         </>
       )}
