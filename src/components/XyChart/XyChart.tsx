@@ -21,11 +21,6 @@ export const XyChart: React.FC<Props> = ({
   color = '#78B98C',
   data,
 }): JSX.Element => {
-  const accessors = {
-    xAccessor: (d: ChartData) => d.date,
-    yAccessor: (d: ChartData) => d.close,
-  };
-
   return (
     <div className="App">
       <XYChart
@@ -36,7 +31,14 @@ export const XyChart: React.FC<Props> = ({
         yScale={{ type: 'linear' }}
         horizontal
       >
-        <AnimatedLineSeries curve={curveLinear} dataKey="Line 1" data={data} {...accessors} stroke={color} />
+        <AnimatedLineSeries
+          curve={curveLinear}
+          dataKey="Line 1"
+          data={data}
+          xAccessor={(d: ChartData | undefined) => (d ? d.date : '')}
+          yAccessor={(d: ChartData | undefined) => (d ? d.close : 0)}
+          stroke={color}
+        />
       </XYChart>
     </div>
   );
