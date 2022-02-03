@@ -23,9 +23,11 @@ export interface Recipient {
 }
 
 export interface MarinaProvider {
+  enable(): Promise<void>;
+
   on(type: MarinaEventType, callback: (payload: any) => void): EventListenerID;
 
-  enable(): Promise<void>;
+  off(listenerId: EventListenerID): void;
 
   disable(): Promise<void>;
 

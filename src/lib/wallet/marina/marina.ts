@@ -1,4 +1,4 @@
-import { Balance, MarinaEventType } from 'marina-provider';
+import { Balance, EventListenerID, MarinaEventType } from 'marina-provider';
 import { IWallet } from '../IWallet';
 import { MarinaAddressInterface, MarinaProvider, MarinaTransactionHex, Recipient } from './IMarina';
 
@@ -17,11 +17,15 @@ export default class Marina implements IWallet {
     this.marina = window.marina;
   }
 
-  on(type: MarinaEventType, callback: (payload: any) => void): string {
+  on = (type: MarinaEventType, callback: (payload: any) => void): string => {
     if (this.exist() && marina) return marina.on(type, callback);
 
     return 'Marina wallet disabled.';
-  }
+  };
+
+  off = (listenerId: EventListenerID): void => {
+    if (this.exist() && marina) marina.off(listenerId);
+  };
 
   exist = (): boolean => typeof window.marina !== 'undefined';
 

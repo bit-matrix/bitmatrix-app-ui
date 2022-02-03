@@ -6,6 +6,8 @@ export interface IWallet {
 
   on(type: MarinaEventType, callback: (payload: any) => void): EventListenerID;
 
+  off(listenerId: EventListenerID): void;
+
   isEnabled(): Promise<boolean>;
 
   enable(): Promise<void>;
