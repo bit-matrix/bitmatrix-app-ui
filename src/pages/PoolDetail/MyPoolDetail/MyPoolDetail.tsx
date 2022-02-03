@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { api, convertion } from '@bitmatrix/lib';
-import { BmChart, Pool } from '@bitmatrix/models';
+import { convertion } from '@bitmatrix/lib';
+import { Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../../components/utils/utils';
-import { Button, Loader } from 'rsuite';
+import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../../components/TabMenu/TabMenu';
@@ -22,8 +22,6 @@ import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
-  const [chartData, setChartData] = useState<BmChart[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [pool, setPool] = useState<Pool>();
 
   const { payloadData } = useContext(SettingsContext);
@@ -35,23 +33,10 @@ export const MyPoolDetail: React.FC = () => {
   useEffect(() => {
     if (payloadData.pools && payloadData.pools.length > 0) {
       const currentPool = payloadData.pools.find((pl) => pl.id === id);
+
       setPool(currentPool);
     }
   }, [payloadData.pools]);
-
-  useEffect(() => {
-    api
-      .getPoolChartData(id)
-      .then((poolChartData: BmChart[]) => {
-        setChartData(poolChartData);
-      })
-      .catch(() => {
-        setChartData([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [id]);
 
   const calcPooledAssets = () => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
@@ -113,17 +98,10 @@ export const MyPoolDetail: React.FC = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-      </div>
-    );
-  } else if (pool === undefined) {
+  if (pool === undefined || payloadData.pool_chart_data === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(chartData, pool);
-
+    const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="my-pool-detail-container">
         <div className="my-pool-detail-main">

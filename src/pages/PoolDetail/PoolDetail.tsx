@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../components/utils/utils';
-import { Button, Loader } from 'rsuite';
+import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
-import { BmChart, Pool } from '@bitmatrix/models';
+import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
@@ -21,8 +20,6 @@ import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
-  const [chartData, setChartData] = useState<BmChart[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [pool, setPool] = useState<Pool>();
 
   const { payloadData } = useContext(SettingsContext);
@@ -37,20 +34,6 @@ export const PoolDetail: React.FC = () => {
       setPool(currentPool);
     }
   }, [payloadData.pools]);
-
-  useEffect(() => {
-    api
-      .getPoolChartData(id)
-      .then((poolChartData: BmChart[]) => {
-        setChartData(poolChartData);
-      })
-      .catch(() => {
-        setChartData([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [id]);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -83,17 +66,10 @@ export const PoolDetail: React.FC = () => {
     );
   };
 
-  if (loading) {
-    return (
-      <div id="loaderInverseWrapper" style={{ height: 200 }}>
-        <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-      </div>
-    );
-  } else if (pool === undefined) {
+  if (pool === undefined || payloadData.pool_chart_data === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(chartData, pool);
-
+    const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
