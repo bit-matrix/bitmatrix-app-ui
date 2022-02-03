@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig, BmChart } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
@@ -35,10 +35,11 @@ export const AppRouter = (): JSX.Element => {
 
   // fetch pools with timer
   useEffect(() => {
-    fetchPools(true);
-
+    fetchData(true);
+    // fetchPools(true);
     setInterval(() => {
-      fetchPools(false);
+      fetchData(false);
+      // fetchPools(false);
     }, 10000);
   }, []);
 
@@ -101,38 +102,49 @@ export const AppRouter = (): JSX.Element => {
     }
   };
 
-  const fetchPools = (isInitialize: boolean) => {
-    api
-      .getPools()
-      .then((pools: ModelPool[]) => {
-        const filteredPool = pools.filter(
-          (p) => p.id === '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
-        );
+  const fetchData = async (isInitialize: boolean) => {
+    const pools: ModelPool[] = await api.getPools();
 
-        if (isInitialize) {
-          api.getBmConfigs(filteredPool[0].id).then((pool_config: BmConfig) => {
-            dispatch({
-              type: SETTINGS_ACTION_TYPES.SET_POOL_CONFIG,
-              payload: {
-                ...payloadData,
-                pool_config,
-              },
-            });
-          });
-        }
+    const filteredPool = pools.filter(
+      (p) => p.id === '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
+    );
 
-        checkLastTxStatus(filteredPool[0].id);
-        dispatch({
-          type: SETTINGS_ACTION_TYPES.SET_POOLS,
-          payload: {
-            ...payloadData,
-            pools: filteredPool,
-          },
-        });
-      })
-      .finally(() => {
-        setLoading(false);
+    const poolId: string = filteredPool[0].id;
+
+    dispatch({
+      type: SETTINGS_ACTION_TYPES.SET_POOLS,
+      payload: {
+        ...payloadData,
+        pools: filteredPool,
+      },
+    });
+
+    checkLastTxStatus(poolId);
+
+    if (isInitialize) {
+      const pool_config: BmConfig = await api.getBmConfigs(poolId);
+
+      dispatch({
+        type: SETTINGS_ACTION_TYPES.SET_POOL_CONFIG,
+        payload: {
+          ...payloadData,
+          pool_config,
+        },
       });
+    }
+
+    if (location.pathname.startsWith('/pool') || isInitialize) {
+      const pool_chart_data: BmChart[] = await api.getPoolChartData(poolId);
+
+      dispatch({
+        type: SETTINGS_ACTION_TYPES.SET_POOL_CHART_DATA,
+        payload: {
+          ...payloadData,
+          pool_chart_data,
+        },
+      });
+    }
+    setLoading(false);
   };
 
   const checkLastTxStatus = (poolId: string) => {
