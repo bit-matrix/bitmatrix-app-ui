@@ -7,8 +7,7 @@ import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
-import { XyChart } from '../XyChart/XyChart';
-import { mockData } from '../AreaChart/Data';
+import { ChartData, XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
 
 type Props = {
@@ -38,6 +37,8 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
 
   const data = calculateChartData(chartData, pool);
 
+  const chartColor = data.priceRate.direction === 'up' ? '#78B98C' : '#de5b4c';
+
   return (
     <div className="pool-card-main" onClick={() => onClick(pool.id)}>
       {loading ? (
@@ -61,12 +62,9 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               </div>
             </div>
             <div className="column-1-item percent">
-              {/* <img
-                className="percent-img"
-                src="https://s3.coinmarketcap.com/generated/sparklines/web/7d/2781/1839.svg"
-                alt=""
-              /> */}
-              <XyChart data={mockData} />
+              {data.allPriceData.findIndex((d: ChartData) => d.close === 0) === -1 && (
+                <XyChart data={data.allPriceData} color={chartColor} />
+              )}
             </div>
           </div>
 

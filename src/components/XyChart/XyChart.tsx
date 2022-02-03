@@ -11,25 +11,19 @@ type Props = {
   height?: number;
   data: ChartData[];
   margin?: { top: number; right: number; bottom: number; left: number };
+  color?: string;
 };
 
 export const XyChart: React.FC<Props> = ({
-  width = 120,
-  height = 80,
-  margin = { left: -10, top: 20, bottom: 0, right: 0 },
+  width = 150,
+  height = 50,
+  margin = { left: 0, top: 20, bottom: 0, right: 0 },
+  color = '#78B98C',
   data,
 }): JSX.Element => {
   const accessors = {
     xAccessor: (d: ChartData) => d.date,
     yAccessor: (d: ChartData) => d.close,
-  };
-
-  const glyphColor = (d: ChartData): string => {
-    if (d.close < 80) {
-      return 'red';
-    } else {
-      return '#78B98C';
-    }
   };
 
   return (
@@ -42,13 +36,7 @@ export const XyChart: React.FC<Props> = ({
         yScale={{ type: 'linear' }}
         horizontal
       >
-        <AnimatedLineSeries
-          curve={curveLinear}
-          dataKey="Line 1"
-          data={data}
-          {...accessors}
-          stroke={glyphColor(data[0])}
-        />
+        <AnimatedLineSeries curve={curveLinear} dataKey="Line 1" data={data} {...accessors} stroke={color} />
       </XYChart>
     </div>
   );

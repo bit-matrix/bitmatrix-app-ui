@@ -14,13 +14,6 @@
 .pool-card-item {
   margin: 0 1rem 0 0.5rem;
   width: 50%;
-  .percent {
-    .percent-img {
-      background-color: transparent;
-      filter: hue-rotate(85deg) saturate(80%) brightness(0.85);
-      width: 7rem;
-    }
-  }
 
   .pool-card-list {
     display: flex;
