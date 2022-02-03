@@ -7,7 +7,7 @@ import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
-import { ChartData, XyChart } from '../XyChart/XyChart';
+import { XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
 
 type Props = {
@@ -62,9 +62,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               </div>
             </div>
             <div className="column-1-item percent">
-              {data.allPriceData.findIndex((d: ChartData) => d.close === 0) === -1 && (
-                <XyChart data={data.allPriceData} color={chartColor} />
-              )}
+              <XyChart data={data.allPriceData} color={chartColor} />
             </div>
           </div>
 
