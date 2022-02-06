@@ -1,5 +1,5 @@
 import { fetchAndUnblindUtxos, UnblindedOutput } from 'ldk';
-import { MarinaAddressInterface } from '../wallet/marina/IMarina';
+import { AddressInterface } from 'marina-provider';
 
 export const ESPLORA_API_URL = 'https://electrs.bitmatrix-aggregate.com';
 
@@ -8,7 +8,7 @@ export const ESPLORA_API_URL = 'https://electrs.bitmatrix-aggregate.com';
 // Get all addresses and blinding keys from marina
 // const addrs = await window.marina.getAddresses();
 
-export const fetchUTXOS = async (addresses: MarinaAddressInterface[]): Promise<UnblindedOutput[]> => {
+export const fetchUTXOS = async (addresses: AddressInterface[]): Promise<UnblindedOutput[]> => {
   // fetch and unblind all utxos for given array of address
   //
   // THIS CAN TAKE A LOT OF TIME TO COMPLETE!
