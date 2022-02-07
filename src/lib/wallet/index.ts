@@ -30,4 +30,6 @@ export class Wallet implements IWallet {
   public sendTransaction = (recipients: Recipient[]): Promise<TransactionID> => this.wallet.sendTransaction(recipients);
 
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
+
+  public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
 }

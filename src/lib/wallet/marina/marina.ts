@@ -75,6 +75,12 @@ export default class Marina implements MarinaProvider {
     throw new Error('Marina wallet disabled.');
   }
 
+  getNextChangeAddress(): Promise<AddressInterface> {
+    if (this.exist() && this.marina) return this.marina.getNextChangeAddress();
+
+    throw new Error('Marina wallet disabled.');
+  }
+
   getBalances(): Promise<Balance[]> {
     if (this.exist() && this.marina) return this.marina.getBalances();
     // else throw "Install Marina first";
@@ -87,9 +93,7 @@ export default class Marina implements MarinaProvider {
   getNetwork(): Promise<NetworkString> {
     throw new Error('Method not implemented.');
   }
-  getNextChangeAddress(): Promise<AddressInterface> {
-    throw new Error('Method not implemented.');
-  }
+
   blindTransaction(pset: string): Promise<string> {
     throw new Error('Method not implemented.');
   }

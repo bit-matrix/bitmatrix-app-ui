@@ -20,4 +20,6 @@ export interface IWallet {
   sendTransaction(recipients: Recipient[]): Promise<TransactionID>;
 
   getBalances(): Promise<Balance[]>;
+
+  getNextChangeAddress(): Promise<AddressInterface>;
 }
