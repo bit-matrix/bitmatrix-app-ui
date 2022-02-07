@@ -1,5 +1,4 @@
-import { Balance, EventListenerID, MarinaEventType } from 'marina-provider';
-import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
+import { AddressInterface, Balance, EventListenerID, MarinaEventType, Recipient, TransactionID } from 'marina-provider';
 
 export interface IWallet {
   exist(): boolean;
@@ -14,11 +13,13 @@ export interface IWallet {
 
   disable(): Promise<void>;
 
-  getNextAddress(): Promise<MarinaAddressInterface>;
+  getNextAddress(): Promise<AddressInterface>;
 
-  getAddresses(): Promise<MarinaAddressInterface[]>;
+  getAddresses(): Promise<AddressInterface[]>;
 
-  sendTransaction(recipients: Recipient[]): Promise<MarinaTransactionHex>;
+  sendTransaction(recipients: Recipient[]): Promise<TransactionID>;
 
   getBalances(): Promise<Balance[]>;
+
+  getNextChangeAddress(): Promise<AddressInterface>;
 }

@@ -273,7 +273,7 @@ export const Swap = (): JSX.Element => {
       if (payloadData.pools && payloadData.pool_config) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
 
-        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
+        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -288,26 +288,20 @@ export const Swap = (): JSX.Element => {
 
         setLoading(true);
 
-        const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
+        const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
-        // notify(fundingTxId, 'Funding Tx Id : ', 'success');
-
-        if (fundingTxId && fundingTxId !== '') {
+        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
 
-          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
-
-          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
-
-          let commitment;
+          let commitment: string;
 
           if (selectedAsset.from === SWAP_ASSET.LBTC) {
             commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
@@ -316,13 +310,14 @@ export const Swap = (): JSX.Element => {
             commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
             );
           }
 
+          // await sleep(5000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {

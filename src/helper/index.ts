@@ -35,3 +35,5 @@ export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
   newPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
   return newPoolConfig;
 };
+
+export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
