@@ -288,22 +288,20 @@ export const Swap = (): JSX.Element => {
 
         setLoading(true);
 
-        // notify(fundingTxId, 'Funding Tx Id : ', 'success');
+        const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '') {
+        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
 
-          //@to-do get publickey
-          const publicKey = '';
-          let commitment;
+          let commitment: string;
 
           if (selectedAsset.from === SWAP_ASSET.LBTC) {
             commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
@@ -312,13 +310,14 @@ export const Swap = (): JSX.Element => {
             commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
             );
           }
 
+          // await sleep(5000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
