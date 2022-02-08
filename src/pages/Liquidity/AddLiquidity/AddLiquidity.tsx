@@ -46,7 +46,7 @@ const AddLiquidity = (): JSX.Element => {
       );
 
       setQuoteAmount(input);
-      setTokenAmount((output / PREFERRED_UNIT_VALUE.LBTC).toString());
+      setTokenAmount((output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
     }
   };
 
@@ -292,6 +292,7 @@ const AddLiquidity = (): JSX.Element => {
                     className="add-liquidity-input"
                     inputValue={quoteAmount}
                     onChange={(inputValue) => onChangeQuoteAmount(inputValue)}
+                    decimalLength={8}
                   />
                 </div>
               </div>
