@@ -4,10 +4,11 @@ type Props = {
   onChange: (inputValue: string) => void;
   inputValue: string;
   className?: string;
+  decimalLength?: number;
 };
 
-export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, className }) => {
-  const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`);
+export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, className, decimalLength = 2 }) => {
+  const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d{0,${decimalLength}}$`);
 
   const escapeRegExp = (string: string): string => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -27,7 +28,6 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
       autoCorrect="off"
       type="text"
       placeholder="0.0"
-      pattern="^[0-9]*[.,]?[0-9]*$"
       spellCheck="false"
       value={inputValue}
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
