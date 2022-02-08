@@ -411,6 +411,7 @@ export const Swap = (): JSX.Element => {
                       setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
                     }}
+                    decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -429,6 +430,7 @@ export const Swap = (): JSX.Element => {
                     setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
                   }}
+                  decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
                 />
               </div>
               <SwapAssetList
