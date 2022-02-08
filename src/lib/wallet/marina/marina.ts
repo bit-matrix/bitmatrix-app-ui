@@ -87,20 +87,20 @@ export default class Marina implements MarinaProvider {
     throw new Error('Marina wallet disabled.');
   }
 
-  setAccount(account: number): Promise<void> {
+  setAccount(/*account: number*/): Promise<void> {
     throw new Error('Method not implemented.');
   }
   getNetwork(): Promise<NetworkString> {
     throw new Error('Method not implemented.');
   }
 
-  blindTransaction(pset: string): Promise<string> {
+  blindTransaction(/*pset: string*/): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  signTransaction(pset: string): Promise<string> {
+  signTransaction(/*pset: string*/): Promise<string> {
     throw new Error('Method not implemented.');
   }
-  signMessage(message: string): Promise<SignedMessage> {
+  signMessage(/*message: string*/): Promise<SignedMessage> {
     throw new Error('Method not implemented.');
   }
   getCoins(): Promise<Utxo[]> {
