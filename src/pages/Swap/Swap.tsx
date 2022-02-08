@@ -171,7 +171,6 @@ export const Swap = (): JSX.Element => {
   const inputIsValid = () => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
       let inputAmount = 0;
-      let poolValue = 0;
 
       const inputValue = Number(inputFromAmount);
       let isValid = false;
@@ -180,21 +179,17 @@ export const Swap = (): JSX.Element => {
 
       const quoteAssetId = currentPool.quote.asset;
       const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
-      const quoteAmountInPool = Number(currentPool.quote.value);
 
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
-      const tokenAmountInPool = Number(currentPool.token.value) / PREFERRED_UNIT_VALUE.LBTC;
 
       if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
         inputAmount = quoteAmountInWallet / payloadData.preferred_unit.value;
-        poolValue = quoteAmountInPool;
       } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
         inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-        poolValue = tokenAmountInPool;
       }
 
-      if (inputValue <= inputAmount && inputValue <= poolValue) {
+      if (inputValue <= inputAmount) {
         isValid = true;
       } else {
         isValid = false;
