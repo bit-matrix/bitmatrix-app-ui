@@ -9,7 +9,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getPrimaryPoolConfig, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -175,7 +175,7 @@ const AddLiquidity = (): JSX.Element => {
 
         const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
 
-        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
+        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -190,31 +190,26 @@ const AddLiquidity = (): JSX.Element => {
 
         setLoading(true);
 
-        const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
+        const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
-        console.log('fundingTxId', fundingTxId);
-
-        if (fundingTxId && fundingTxId !== '') {
+        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setQuoteAmount('');
           setTokenAmount('');
           setLbtcPercent(undefined);
           setUsdtPercent(undefined);
 
-          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
-
-          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
           const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
             quoteAmountN,
             tokenAmountN,
             fundingTxId,
-            publicKey,
+            addressInformation.publicKey,
             primaryPoolConfig,
             pool,
           );
 
-          console.log('commitment raw hex :', commitment);
+          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
