@@ -36,6 +36,14 @@
     z-index: 6;
     width: 95%;
 
+    .remove-liquidity-page-loading {
+      z-index: 999;
+      position: fixed;
+      background: #171718;
+      opacity: 0.5;
+      bottom: 1.75rem !important;
+    }
+
     .remove-liquidity-main {
       margin: 2rem 0 3rem 0;
       .remove-liquidity-text {

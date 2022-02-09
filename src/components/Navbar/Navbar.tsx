@@ -64,9 +64,15 @@ export const Navbar: React.FC = (): JSX.Element => {
               className="navbar-item-circle-div"
               onBlur={() => {
                 if (txHistory && txHistory.length > 0) {
-                  if (txHistory[txHistory.length - 1].completed) {
+                  const completedTxs = txHistory.filter((txh) => txh.completed === true);
+                  if (completedTxs.length > 0) {
                     const newTxHistory = [...txHistory];
-                    newTxHistory[newTxHistory.length - 1].seen = true;
+                    completedTxs.forEach((tx) => {
+                      const txIndex = newTxHistory.findIndex((newTxH) => newTxH.txId === tx.txId);
+                      if (txIndex > -1) {
+                        newTxHistory[txIndex].seen = true;
+                      }
+                    });
                     setLocalData(newTxHistory);
                   }
                 }

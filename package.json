@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.17",
+    "@bitmatrix/lib": "^0.0.24",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -22,9 +22,10 @@
     "@visx/scale": "^1.14.0",
     "@visx/shape": "^1.14.0",
     "@visx/tooltip": "^1.7.2",
+    "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
     "ldk": "0.4.0",
-    "marina-provider": "^1.4.4",
+    "marina-provider": "^1.4.6",
     "node-sass": "^4.14",
     "numeral": "^2.0.6",
     "react": "^17.0.2",
@@ -33,6 +34,7 @@
     "react-router-dom": "^5.2.0",
     "react-router-transition-switch": "^1.1.2",
     "react-scripts": "4.0.3",
+    "react-spring": "^9.4.2",
     "rsuite": "^5.5.0",
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"

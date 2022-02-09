@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Content } from 'rsuite';
+import { Content, Loader } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -18,7 +18,10 @@ import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
+import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
+import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import './Swap.scss';
+import { sleep } from '../../helper';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -28,13 +31,15 @@ export const Swap = (): JSX.Element => {
     to: SWAP_ASSET;
   }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
 
-  const [inputFromAmount, setInputFromAmount] = useState<string>('0.0');
+  const [inputFromAmount, setInputFromAmount] = useState<string>('');
 
-  const [inputToAmount, setInputToAmount] = useState<string>('0');
+  const [inputToAmount, setInputToAmount] = useState<string>('');
 
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -54,24 +59,29 @@ export const Swap = (): JSX.Element => {
     }
 
     const output = convertion.convertForCtx(inputNum, payloadData.slippage, currentPool, pool_config, methodCall);
-
-    if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-      setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+    if (output.amount > 0) {
+      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      } else {
+        setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      }
     } else {
-      setInputToAmount((output.amount / payloadData.preferred_unit.value).toString());
-      setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+      setInputToAmount('');
+      setAmountWithSlippage(0);
     }
   };
 
   useEffect(() => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
       onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
+      // onChangeToInput(inputToAmount);
     }
   }, [inputFromAmount, payloadData]);
 
-  const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-    let inputNum = Number(inputElement.target.value);
+  const onChangeToInput = (input: string) => {
+    let inputNum = Number(input);
 
     if (payloadData.pools && payloadData.pool_config) {
       let methodCall;
@@ -100,7 +110,7 @@ export const Swap = (): JSX.Element => {
         setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
       }
 
-      setInputToAmount(inputElement.target.value);
+      setInputToAmount(input);
     }
   };
 
@@ -117,9 +127,16 @@ export const Swap = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
+      const totalFee =
+        poolConfig.baseFee.number +
+        poolConfig.commitmentTxFee.number +
+        poolConfig.defaultOrderingFee.number +
+        poolConfig.serviceFee.number +
+        1000;
+
       if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (quoteAmountInWallet / payloadData.preferred_unit.value).toString();
+          inputAmount = ((quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value).toString();
         }
         if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
           const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
@@ -145,6 +162,38 @@ export const Swap = (): JSX.Element => {
       setInputFromAmount(inputAmount);
     }
     setSelectedFromAmountPercent(newFromAmountPercent);
+  };
+
+  const inputIsValid = () => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+      let inputAmount = 0;
+
+      const inputValue = Number(inputFromAmount);
+      let isValid = false;
+
+      const currentPool = payloadData.pools[0];
+
+      const quoteAssetId = currentPool.quote.asset;
+      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+
+      const tokenAssetId = currentPool.token.asset;
+      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+
+      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
+        inputAmount = quoteAmountInWallet / payloadData.preferred_unit.value;
+      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
+        inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+      }
+
+      if (inputValue <= inputAmount) {
+        isValid = true;
+      } else {
+        isValid = false;
+      }
+
+      return isValid;
+    }
+    return true;
   };
 
   const assetOnChange = (asset: SWAP_ASSET, isFrom = true) => {
@@ -174,8 +223,8 @@ export const Swap = (): JSX.Element => {
       }
     }
 
-    setInputFromAmount('0.0');
-    setInputToAmount('0');
+    setInputFromAmount('');
+    setInputToAmount('');
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -192,8 +241,8 @@ export const Swap = (): JSX.Element => {
       });
     }
 
-    setInputFromAmount('0.0');
-    setInputToAmount('0');
+    setInputFromAmount('');
+    setInputToAmount('');
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -216,7 +265,7 @@ export const Swap = (): JSX.Element => {
       if (payloadData.pools && payloadData.pool_config) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
 
-        const rawTxHex = await payloadData.wallet.marina.sendTransaction([
+        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
           {
             address: fundingTxInputs.fundingOutput1Address,
             value: fundingTxInputs.fundingOutput1Value,
@@ -229,26 +278,22 @@ export const Swap = (): JSX.Element => {
           },
         ]);
 
-        const fundingTxId = await api.sendRawTransaction(rawTxHex || '');
+        setLoading(true);
 
-        // notify(fundingTxId, 'Funding Tx Id : ', 'success');
+        const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '') {
-          setInputFromAmount('0.0');
-          setInputToAmount('0');
+        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          setInputFromAmount('');
+          setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
 
-          const fundingTxDecode = await api.decodeRawTransaction(rawTxHex || '');
-
-          const publicKey = fundingTxDecode.vin[0].txinwitness[1];
-
-          let commitment;
+          let commitment: string;
 
           if (selectedAsset.from === SWAP_ASSET.LBTC) {
             commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
@@ -257,13 +302,14 @@ export const Swap = (): JSX.Element => {
             commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
-              publicKey,
+              addressInformation.publicKey,
               numberToAmount,
               payloadData.pool_config,
               payloadData.pools[0],
             );
           }
 
+          await sleep(10000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
@@ -274,12 +320,13 @@ export const Swap = (): JSX.Element => {
               'Commitment Tx created successfully!',
               'success',
             );
+
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: numberFromAmount,
-              quoteAsset: selectedAsset.from,
-              tokenAmount: numberToAmount,
-              tokenAsset: selectedAsset.to,
+              quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
+              quoteAsset: payloadData.pools[0].quote.ticker,
+              tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
+              tokenAsset: payloadData.pools[0].token.ticker,
               timestamp: new Date().valueOf(),
               success: false,
               completed: false,
@@ -292,19 +339,23 @@ export const Swap = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setLocalData(newStoreData);
-          } /* else {
-            notify('Bitmatrix Error : ', 'Commitment transaction could not be created.');
-          } */
 
-          // notify('Commitment Tx Id : ', commitmentTxId);
+            setLoading(false);
+          } else {
+            notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
+            setLoading(false);
+          }
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
         }
       } else {
         notify('Pool Error', 'Error : ', 'error');
+        setLoading(false);
       }
     } else {
       notify('Wallet Error', 'Error : ', 'error');
+      setLoading(false);
     }
   };
 
@@ -335,58 +386,42 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            <div className="from-content pt8">
+            {loading && <Loader className="swap-page-loading" size="md" inverse center />}
+            <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={calcAmountPercent}
               />
-              <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="from-input-content">
                 <div className="from-amount-div">
                   <div className="from-text">From</div>
-                  <input
+                  <NumericalInput
                     className="from-input"
-                    inputMode="decimal"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    type="text"
-                    pattern="^[0-9]*[.,]?[0-9]*$"
-                    spellCheck="false"
-                    value={inputFromAmount}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => setInputFromAmount(event.target.value)}
+                    inputValue={inputFromAmount}
+                    onChange={(inputValue) => {
+                      setInputFromAmount(inputValue);
+                      setSelectedFromAmountPercent(undefined);
+                    }}
+                    decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
               </div>
             </div>
             <div className="swap-arrow-icon" onClick={swapRouteChange}>
-              <svg
-                width="1.05rem"
-                aria-hidden="true"
-                focusable="false"
-                data-prefix="fas"
-                data-icon="arrow-down"
-                role="img"
-                viewBox="0 0 448 512"
-              >
-                <path
-                  fill="currentColor"
-                  d="M413.1 222.5l22.2 22.2c9.4 9.4 9.4 24.6 0 33.9L241 473c-9.4 9.4-24.6 9.4-33.9 0L12.7 278.6c-9.4-9.4-9.4-24.6 0-33.9l22.2-22.2c9.5-9.5 25-9.3 34.3.4L184 343.4V56c0-13.3 10.7-24 24-24h32c13.3 0 24 10.7 24 24v287.4l114.8-120.5c9.3-9.8 24.8-10 34.3-.4z"
-                ></path>
-              </svg>
+              <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
             <div className="from-content">
               <div className="from-amount-div">
                 <div className="from-text">To</div>
-                <input
+                <NumericalInput
                   className="from-input"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  autoCorrect="off"
-                  type="text"
-                  pattern="^[0-9]*[.,]?[0-9]*$"
-                  spellCheck="false"
-                  value={inputToAmount}
-                  onChange={onChangeToInput}
+                  inputValue={inputToAmount}
+                  onChange={(inputValue) => {
+                    setInputToAmount(inputValue);
+                    setSelectedFromAmountPercent(undefined);
+                  }}
+                  decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
                 />
               </div>
               <SwapAssetList
@@ -394,7 +429,13 @@ export const Swap = (): JSX.Element => {
                 setSelectedAsset={(asset: SWAP_ASSET) => assetOnChange(asset, false)}
               />
             </div>
-            <WalletButton text="Swap" onClick={() => swapClick()} disabled={Number(inputToAmount) <= 0} />
+            <WalletButton
+              text="Swap"
+              onClick={() => {
+                swapClick();
+              }}
+              disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
+            />
           </div>
         </div>
         <Info content={infoMessage()} />
