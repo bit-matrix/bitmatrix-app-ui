@@ -20,8 +20,8 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import './Swap.scss';
 import { sleep } from '../../helper';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -71,14 +71,9 @@ export const Swap = (): JSX.Element => {
       setInputToAmount('');
       setAmountWithSlippage(0);
     }
-  };
 
-  useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
-      onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
-      // onChangeToInput(inputToAmount);
-    }
-  }, [inputFromAmount, payloadData]);
+    setInputFromAmount(input);
+  };
 
   const onChangeToInput = (input: string) => {
     let inputNum = Number(input);
@@ -101,15 +96,18 @@ export const Swap = (): JSX.Element => {
         payloadData.pool_config,
         methodCall,
       );
-
-      if (selectedAsset.to === SWAP_ASSET.LBTC) {
-        setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      if (output.amount > 0) {
+        if (selectedAsset.to === SWAP_ASSET.LBTC) {
+          setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+        } else {
+          setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
+          setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+        }
       } else {
-        setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+        setInputFromAmount('');
+        setAmountWithSlippage(0);
       }
-
       setInputToAmount(input);
     }
   };
@@ -158,7 +156,6 @@ export const Swap = (): JSX.Element => {
         }
       }
 
-      // onChangeFromInput(inputAmount);
       setInputFromAmount(inputAmount);
     }
     setSelectedFromAmountPercent(newFromAmountPercent);
@@ -399,8 +396,10 @@ export const Swap = (): JSX.Element => {
                     className="from-input"
                     inputValue={inputFromAmount}
                     onChange={(inputValue) => {
-                      setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
+                      if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
+                        onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputValue);
+                      }
                     }}
                     decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
                   />
@@ -418,8 +417,8 @@ export const Swap = (): JSX.Element => {
                   className="from-input"
                   inputValue={inputToAmount}
                   onChange={(inputValue) => {
-                    setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
+                    onChangeToInput(inputValue);
                   }}
                   decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
                 />
