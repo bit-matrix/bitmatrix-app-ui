@@ -20,8 +20,8 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import './Swap.scss';
 import { sleep } from '../../helper';
+import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -71,52 +71,46 @@ export const Swap = (): JSX.Element => {
       setInputToAmount('');
       setAmountWithSlippage(0);
     }
+
+    setInputFromAmount(input);
   };
 
-  useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
-      onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
+  const onChangeToInput = (input: string) => {
+    let inputNum = Number(input);
+
+    if (payloadData.pools && payloadData.pool_config) {
+      let methodCall;
+
+      if (selectedAsset.to === SWAP_ASSET.LBTC) {
+        inputNum = inputNum * payloadData.preferred_unit.value;
+        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+      } else {
+        inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+      }
+
+      const output = convertion.convertForCtx2(
+        inputNum,
+        payloadData.slippage,
+        payloadData.pools[0],
+        payloadData.pool_config,
+        methodCall,
+      );
+      if (output.amount > 0) {
+        if (selectedAsset.to === SWAP_ASSET.LBTC) {
+          setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+        } else {
+          setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
+          setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+        }
+      } else {
+        setInputFromAmount('');
+        setAmountWithSlippage(0);
+      }
+      setInputToAmount(input);
     }
-  }, [inputFromAmount, payloadData]);
-
-  // const onChangeToInput = (inputElement: React.ChangeEvent<HTMLInputElement>) => {
-  //   let inputNum = Number(inputElement.target.value);
-
-  //   if (payloadData.pools && payloadData.pool_config) {
-  //     let methodCall;
-
-  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
-  //       console.log('lbtc');
-  //       inputNum = inputNum * payloadData.preferred_unit.value;
-  //       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //     } else {
-  //       console.log('usdt');
-  //       inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-  //       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  //     }
-
-  //     console.log(inputNum);
-  //     const output = convertion.convertForCtx(
-  //       inputNum,
-  //       payloadData.slippage,
-  //       payloadData.pools[0],
-  //       payloadData.pool_config,
-  //       methodCall,
-  //     );
-
-  //     console.log('2', output);
-
-  //     if (selectedAsset.to === SWAP_ASSET.LBTC) {
-  //       setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-  //       setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-  //     } else {
-  //       setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
-  //       setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
-  //     }
-
-  //     setInputToAmount(inputElement.target.value);
-  //   }
-  // };
+  };
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
@@ -162,7 +156,6 @@ export const Swap = (): JSX.Element => {
         }
       }
 
-      // onChangeFromInput(inputAmount);
       setInputFromAmount(inputAmount);
     }
     setSelectedFromAmountPercent(newFromAmountPercent);
@@ -403,8 +396,10 @@ export const Swap = (): JSX.Element => {
                     className="from-input"
                     inputValue={inputFromAmount}
                     onChange={(inputValue) => {
-                      setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
+                      if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
+                        onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputValue);
+                      }
                     }}
                     decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
                   />
@@ -422,8 +417,8 @@ export const Swap = (): JSX.Element => {
                   className="from-input"
                   inputValue={inputToAmount}
                   onChange={(inputValue) => {
-                    setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
+                    onChangeToInput(inputValue);
                   }}
                   decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
                 />
