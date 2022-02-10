@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { Loader, Modal } from 'rsuite';
-import { MarinaAddressInterface } from '../../lib/wallet/marina/IMarina';
 import { UnblindedOutput } from 'ldk';
 import importSeed from '../../images/key_1.png';
 import marinaWallet from '../../images/marina.png';
@@ -11,13 +10,14 @@ import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { Wallet } from '../../lib/wallet';
 import './WalletListModal.scss';
+import { AddressInterface } from 'marina-provider';
 
 type Props = {
   show: boolean;
   wallet?: IWallet;
   // walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
-  setNewAddress?: (newAddress: MarinaAddressInterface) => void;
+  setNewAddress?: (newAddress: AddressInterface) => void;
   setUtxos?: (utxos: UnblindedOutput[]) => void;
 };
 

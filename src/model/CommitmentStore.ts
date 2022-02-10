@@ -13,4 +13,5 @@ export type CommitmentStore = {
   completed: boolean;
   seen: boolean;
   method: CALL_METHOD;
+  poolTxId?: string;
 };

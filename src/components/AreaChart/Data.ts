@@ -1,4 +1,4 @@
-export const data = [
+export const mockData = [
   {
     date: '2021-05-11T08:00:00.000Z',
     close: 80,

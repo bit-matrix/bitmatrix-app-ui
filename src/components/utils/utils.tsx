@@ -158,22 +158,22 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   let volumeRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon />,
+    icon: <ArrowUpIcon fill="#00FF00" />,
   };
   let feeRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon />,
+    icon: <ArrowUpIcon fill="#00FF00" />,
   };
   let tvlRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon />,
+    icon: <ArrowUpIcon fill="#00FF00" />,
   };
   let priceRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon />,
+    icon: <ArrowUpIcon fill="#00FF00" />,
   };
 
   if (allPriceData.length > 2) {
@@ -181,7 +181,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     priceRate = {
       value: (todayPrice / previousPriceData.close).toFixed(2),
       direction: todayPrice > previousPriceData.close ? 'up' : 'down',
-      icon: todayPrice > previousPriceData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
+      icon: todayPrice > previousPriceData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
     };
   }
 
@@ -191,7 +191,12 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     volumeRate = {
       value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
       direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
-      icon: todayVolumeData.close > previousVolumeData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
+      icon:
+        todayVolumeData.close > previousVolumeData.close ? (
+          <ArrowUpIcon fill="#00FF00" />
+        ) : (
+          <ArrowDownIcon fill="#ff0000" />
+        ),
     };
   }
 
@@ -201,7 +206,8 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     feeRate = {
       value: (todayFeeData.close / previousFeeData.close).toFixed(2),
       direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
-      icon: todayFeeData.close > previousFeeData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
+      icon:
+        todayFeeData.close > previousFeeData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
     };
   }
 
@@ -210,7 +216,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     tvlRate = {
       value: (todayTvlData / previousTvlData.close).toFixed(2),
       direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
-      icon: todayTvlData > previousTvlData.close ? <ArrowUpIcon /> : <ArrowDownIcon />,
+      icon: todayTvlData > previousTvlData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
     };
   }
 

@@ -35,6 +35,7 @@
   align-items: center;
   justify-content: center;
   margin-top: 3rem;
+  background: $bmBlack !important;
 }
 
 @media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {

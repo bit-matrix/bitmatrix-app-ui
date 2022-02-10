@@ -2,11 +2,11 @@
 
 .info-card-main {
   background: $bmBastille;
-  border-radius: 0.875rem;
+  border-radius: 1rem;
   min-width: 25rem;
   position: relative;
   min-height: 6.5rem;
-  padding: 0.25rem;
+  padding: 0 0.25rem;
   border: 1px solid $bmBastille;
 
   ::-webkit-scrollbar-track {
@@ -20,12 +20,13 @@
   }
 
   .info-card-content {
-    max-height: 11.5rem;
+    max-height: 30.5rem;
     overflow-y: auto;
     top: 0.25rem;
     width: 100%;
     border-top-left-radius: 0.875rem;
     border-top-right-radius: 0.875rem;
+    position: relative;
 
     .info-card-item {
       background: $bmDeepFir;
@@ -41,12 +42,12 @@
       }
 
       .info-card-item-icon {
-        font-size: 1rem !important;
+        display: flex;
+        align-items: center;
       }
 
-      .info-card-item-icon-2 {
-        width: 1rem;
-        transform: scale(140%);
+      .info-card-img {
+        width: 1.5rem;
       }
     }
   }
@@ -61,4 +62,32 @@
     color: $bmAluminium;
     width: 100%;
   }
+}
+
+.explorer-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(black, 0.8);
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 1s;
+  transition-delay: 0.2s;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.info-card-item-text {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
 }
