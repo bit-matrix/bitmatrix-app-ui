@@ -6,6 +6,12 @@
 
   .rs-btn {
     width: 7.5rem !important;
+    color: $bmShadyLady;
+    opacity: 0.8;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .rs-btn-default {
@@ -47,5 +53,11 @@
   .rs-dropdown-item-active {
     background-color: $bmShadyLady !important;
     color: $bmMediumDarkGray !important;
+  }
+
+  .swap-dropdown-item {
+    .swap-dropdown-item-img {
+      margin-right: 0.5rem;
+    }
   }
 }

@@ -52,6 +52,12 @@ const reducer = (
         wallet: action.payload.wallet,
       };
 
+    case SETTINGS_ACTION_TYPES.SET_POOL_CHART_DATA:
+      return {
+        ...state,
+        pool_chart_data: action.payload.pool_chart_data,
+      };
+
     default:
       return state;
   }

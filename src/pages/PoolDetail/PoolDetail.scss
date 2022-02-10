@@ -1,7 +1,6 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  // height: 33rem;
   width: 95%;
 }
 
@@ -11,7 +10,6 @@
   border-radius: 1.5rem;
   height: 31rem;
   width: 100%;
-  // margin-top: 3.5rem;
 }
 
 .pool-detail-header-left {
@@ -40,65 +38,38 @@
   color: $bmAluminium;
 }
 
-.pool-detail-item {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0.25rem;
-
-  .left-side {
-    width: 65%;
-  }
-}
-
 .pool-detail-img-content {
   display: flex;
   align-items: center;
+  color: $bmWhiteSmoke;
 }
 
 .pool-detail-img {
-  width: 1.5rem;
   margin-right: 0.25rem;
 }
 
 .pool-detail-amount {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  width: 90%;
-}
-
-.pool-detail-volume-fee {
+  align-items: center;
+  margin: 0.5rem 0;
   width: 100%;
-  margin: 0.25rem 0;
-}
 
-.pool-detail-table {
-  width: 100%;
-  text-align: center;
-}
-
-.pool-detail-table td,
-th {
-  text-align: center;
-  padding: 0.25rem 1rem;
-  min-width: 8rem;
-}
-
-.pool-detail-arrow-down-icon {
-  color: $bmRed;
-  font-size: 0.8rem !important;
+  .pool-detail-amount-item {
+    display: flex;
+    align-items: center;
+    background: $bmBlack;
+    border-radius: 1rem;
+    width: 48%;
+    height: 2.5rem;
+    padding-left: 0.5rem;
+  }
 }
 
 .pool-detail-table-arrow-down-text {
   margin-left: 0.25rem;
   color: $bmRed;
   font-size: 0.75rem;
-}
-
-.pool-detail-arrow-up-icon {
-  color: $bmGreen;
-  font-size: 0.8rem !important;
 }
 
 .pool-detail-table-arrow-up-text {
@@ -109,34 +80,8 @@ th {
 
 .pool-detail-table-text {
   color: $LightGray;
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-weight: 600;
-}
-
-.pool-detail-item-detail {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: 0rem 0.125rem 0rem 0.125rem;
-
-  .left-side {
-    width: 65%;
-  }
-}
-
-.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle,
-.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content,
-.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:hover,
-.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:hover,
-.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:focus,
-.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
-.pool-detail-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
-.pool-detail-tabs .rs-nav-item-active > .rs-nav-item-content:active {
-  color: $bmPaleGreen !important;
-}
-
-.pool-detail-tabs .rs-nav-item-content::before {
-  background-color: $bmPaleGreen !important;
 }
 
 .pool-detail-content-right {
@@ -144,14 +89,13 @@ th {
   height: calc(100% - 21rem);
 }
 
-.pool-detail-content-right svg {
-  border-radius: 1rem;
-}
-
 .pool-detail-content-left-header {
-  padding-left: 0.5rem;
-  font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  padding-left: 0.25rem;
+  font-size: 0.875rem;
   font-weight: 500;
+  color: $bmDimGray;
 }
 
 .pool-detail-button {
@@ -172,7 +116,31 @@ th {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 0.25rem;
+  margin-top: 0.75rem;
+}
+
+.pool-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+
+  .pool-metrics-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .pool-metrics-item {
+      background: #000000;
+      border-radius: 1rem;
+      width: 48%;
+      height: 4.75rem;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+  }
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
@@ -183,7 +151,6 @@ th {
   .pool-detail-main {
     width: 60rem;
     height: 28rem;
-    // margin-top: 2.5rem;
   }
 
   .pool-detail-header {
@@ -206,22 +173,13 @@ th {
   }
 
   .pool-detail-content-left {
-    // width: calc(30% - 0.5rem);
     width: 17rem;
     height: 100%;
     margin-right: 0.5rem;
     background: $bmBlackRussian;
     border-radius: 1rem;
-    padding: 1rem;
+    padding: 0.75rem;
     color: $bmAluminium;
-  }
-
-  .pool-detail-tabs {
-    margin-right: 5rem;
-  }
-
-  .pool-detail-navbar-item .rs-nav-item-content {
-    padding: 0.5rem 1.5rem !important;
   }
 
   .pool-detail-content-right {
@@ -236,25 +194,7 @@ th {
     height: 2.75rem;
   }
 
-  .pool-detail-amount {
-    margin: 0.5rem 0;
-    display: block;
-    width: 100%;
-  }
-
-  .pool-detail-volume-fee {
-    margin: 0.5rem 0;
-  }
-
-  .pool-detail-item {
-    margin: 0.5rem;
-  }
-
-  .pool-detail-item-detail {
-    margin: 0.5rem 0.5rem 0.25rem 0.5rem;
-  }
-
   .pool-detail-img {
-    margin-right: 1rem;
+    margin-right: 0.5rem;
   }
 }

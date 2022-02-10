@@ -1,6 +1,5 @@
-import { Balance } from 'marina-provider';
+import { AddressInterface, Balance, EventListenerID, MarinaEventType, Recipient, TransactionID } from 'marina-provider';
 import { IWallet } from './IWallet';
-import { MarinaAddressInterface, MarinaTransactionHex, Recipient } from './marina/IMarina';
 import Marina from './marina/marina';
 import { WALLET_NAME } from './WALLET_NAME';
 
@@ -12,6 +11,9 @@ export class Wallet implements IWallet {
     // TODO default wallet
     else this.wallet = new Marina();
   }
+  public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
+
+  public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
 
   public exist = (): boolean => this.wallet.exist();
 
@@ -21,12 +23,13 @@ export class Wallet implements IWallet {
 
   public disable = (): Promise<void> => this.wallet.disable();
 
-  public getNextAddress = (): Promise<MarinaAddressInterface> => this.wallet.getNextAddress();
+  public getNextAddress = (): Promise<AddressInterface> => this.wallet.getNextAddress();
 
-  public getAddresses = (): Promise<MarinaAddressInterface[]> => this.wallet.getAddresses();
+  public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
 
-  public sendTransaction = (recipients: Recipient[]): Promise<MarinaTransactionHex> =>
-    this.wallet.sendTransaction(recipients);
+  public sendTransaction = (recipients: Recipient[]): Promise<TransactionID> => this.wallet.sendTransaction(recipients);
 
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
+
+  public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
 }

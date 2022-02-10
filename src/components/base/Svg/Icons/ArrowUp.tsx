@@ -2,7 +2,7 @@ import React from 'react';
 import Svg from '../Svg';
 import { IconSvg } from './IconSvg';
 
-const ArrowUpIcon: React.FC<IconSvg> = ({ fill = '#00FF00', bgColor, width = '0.85rem', height = '0.85rem' }) => (
+const ArrowUpIcon: React.FC<IconSvg> = ({ fill, bgColor, width = '0.85rem', height = '0.85rem' }) => (
   <Svg
     fill={fill}
     bgColor={bgColor}
