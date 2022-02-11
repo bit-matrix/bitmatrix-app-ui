@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Content, Loader } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
@@ -43,7 +44,19 @@ export const Swap = (): JSX.Element => {
 
   const { payloadData } = useContext(SettingsContext);
 
+  const [swapWay, setSwapWay] = useState<SWAP_WAY>(SWAP_WAY.FROM);
+
   document.title = ROUTE_PATH_TITLE.SWAP;
+
+  useEffect(() => {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
+      if (swapWay === 'from') {
+        onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
+      } else {
+        onChangeToInput(inputToAmount);
+      }
+    }
+  }, [payloadData, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
 
   const onChangeFromInput = (currentPool: Pool, pool_config: BmConfig, input: string) => {
     let inputNum = Number(input);
@@ -114,6 +127,8 @@ export const Swap = (): JSX.Element => {
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+      setSwapWay(SWAP_WAY.FROM);
+
       const currentPool = payloadData.pools[0];
       const poolConfig = payloadData.pool_config;
 
@@ -155,7 +170,6 @@ export const Swap = (): JSX.Element => {
           inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
         }
       }
-
       setInputFromAmount(inputAmount);
     }
     setSelectedFromAmountPercent(newFromAmountPercent);
@@ -261,23 +275,30 @@ export const Swap = (): JSX.Element => {
 
       if (payloadData.pools && payloadData.pool_config) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
+        let fundingTxId;
 
-        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
-          {
-            address: fundingTxInputs.fundingOutput1Address,
-            value: fundingTxInputs.fundingOutput1Value,
-            asset: fundingTxInputs.fundingOutput1AssetId,
-          },
-          {
-            address: fundingTxInputs.fundingOutput2Address,
-            value: fundingTxInputs.fundingOutput2Value,
-            asset: fundingTxInputs.fundingOutput2AssetId,
-          },
-        ]);
-
-        setLoading(true);
+        try {
+          setLoading(true);
+          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+            {
+              address: fundingTxInputs.fundingOutput1Address,
+              value: fundingTxInputs.fundingOutput1Value,
+              asset: fundingTxInputs.fundingOutput1AssetId,
+            },
+            {
+              address: fundingTxInputs.fundingOutput2Address,
+              value: fundingTxInputs.fundingOutput2Value,
+              asset: fundingTxInputs.fundingOutput2AssetId,
+            },
+          ]);
+        } catch (err: any) {
+          notify(err.toString(), 'Wallet Error : ', 'error');
+          setLoading(false);
+          return Promise.reject();
+        }
 
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
+        console.log('31', fundingTxId);
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
@@ -306,7 +327,7 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(10000);
+          await sleep(4000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
@@ -396,10 +417,9 @@ export const Swap = (): JSX.Element => {
                     className="from-input"
                     inputValue={inputFromAmount}
                     onChange={(inputValue) => {
+                      setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
-                      if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
-                        onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputValue);
-                      }
+                      setSwapWay(SWAP_WAY.FROM);
                     }}
                     decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
                   />
@@ -417,8 +437,9 @@ export const Swap = (): JSX.Element => {
                   className="from-input"
                   inputValue={inputToAmount}
                   onChange={(inputValue) => {
+                    setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
-                    onChangeToInput(inputValue);
+                    setSwapWay(SWAP_WAY.TO);
                   }}
                   decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
                 />

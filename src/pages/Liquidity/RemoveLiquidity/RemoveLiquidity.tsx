@@ -56,20 +56,27 @@ const RemoveLiquidity = (): JSX.Element => {
 
         const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
 
-        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
-          {
-            address: fundingTxInputs.fundingOutput1Address,
-            value: fundingTxInputs.fundingOutput1Value,
-            asset: fundingTxInputs.fundingOutput1AssetId,
-          },
-          {
-            address: fundingTxInputs.fundingOutput2Address,
-            value: fundingTxInputs.fundingOutput2Value,
-            asset: fundingTxInputs.fundingOutput2AssetId,
-          },
-        ]);
+        let fundingTxId;
 
-        setLoading(true);
+        try {
+          setLoading(true);
+          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+            {
+              address: fundingTxInputs.fundingOutput1Address,
+              value: fundingTxInputs.fundingOutput1Value,
+              asset: fundingTxInputs.fundingOutput1AssetId,
+            },
+            {
+              address: fundingTxInputs.fundingOutput2Address,
+              value: fundingTxInputs.fundingOutput2Value,
+              asset: fundingTxInputs.fundingOutput2AssetId,
+            },
+          ]);
+        } catch (err: any) {
+          notify(err.toString(), 'Wallet Error : ', 'error');
+          setLoading(false);
+          return Promise.reject();
+        }
 
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
@@ -84,7 +91,7 @@ const RemoveLiquidity = (): JSX.Element => {
             pool,
           );
 
-          await sleep(10000);
+          await sleep(4000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
