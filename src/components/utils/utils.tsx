@@ -179,7 +179,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   if (allPriceData.length > 2) {
     previousPriceData = allPriceData[allPriceData.length - 2];
     priceRate = {
-      value: (todayPrice / previousPriceData.close).toFixed(2),
+      value: ((todayPrice / previousPriceData.close) * 100).toFixed(2),
       direction: todayPrice > previousPriceData.close ? 'up' : 'down',
       icon: todayPrice > previousPriceData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
     };
@@ -189,7 +189,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     previousVolumeData = allVolumeData[allVolumeData.length - 2];
 
     volumeRate = {
-      value: (todayVolumeData.close / previousVolumeData.close).toFixed(2),
+      value: ((todayVolumeData.close / previousVolumeData.close) * 100).toFixed(2),
       direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
       icon:
         todayVolumeData.close > previousVolumeData.close ? (
@@ -204,7 +204,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
     previousFeeData = allFeeData[allFeeData.length - 2];
 
     feeRate = {
-      value: (todayFeeData.close / previousFeeData.close).toFixed(2),
+      value: ((todayFeeData.close / previousFeeData.close) * 100).toFixed(2),
       direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
       icon:
         todayFeeData.close > previousFeeData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
@@ -214,7 +214,7 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   if (allTvlData.length > 2) {
     previousTvlData = allTvlData[allTvlData.length - 2];
     tvlRate = {
-      value: (todayTvlData / previousTvlData.close).toFixed(2),
+      value: ((todayTvlData / previousTvlData.close) * 100).toFixed(2),
       direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
       icon: todayTvlData > previousTvlData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
     };
