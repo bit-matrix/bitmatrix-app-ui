@@ -275,23 +275,30 @@ export const Swap = (): JSX.Element => {
 
       if (payloadData.pools && payloadData.pool_config) {
         const fundingTxInputs = fundingTx(numberFromAmount, payloadData.pools[0], payloadData.pool_config, methodCall);
+        let fundingTxId;
 
-        const fundingTxId = await payloadData.wallet.marina.sendTransaction([
-          {
-            address: fundingTxInputs.fundingOutput1Address,
-            value: fundingTxInputs.fundingOutput1Value,
-            asset: fundingTxInputs.fundingOutput1AssetId,
-          },
-          {
-            address: fundingTxInputs.fundingOutput2Address,
-            value: fundingTxInputs.fundingOutput2Value,
-            asset: fundingTxInputs.fundingOutput2AssetId,
-          },
-        ]);
-
-        setLoading(true);
+        try {
+          setLoading(true);
+          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+            {
+              address: fundingTxInputs.fundingOutput1Address,
+              value: fundingTxInputs.fundingOutput1Value,
+              asset: fundingTxInputs.fundingOutput1AssetId,
+            },
+            {
+              address: fundingTxInputs.fundingOutput2Address,
+              value: fundingTxInputs.fundingOutput2Value,
+              asset: fundingTxInputs.fundingOutput2AssetId,
+            },
+          ]);
+        } catch (err: any) {
+          notify(err.toString(), 'Wallet Error : ', 'error');
+          setLoading(false);
+          return Promise.reject();
+        }
 
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
+        console.log('31', fundingTxId);
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
@@ -320,7 +327,7 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(10000);
+          await sleep(4000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
