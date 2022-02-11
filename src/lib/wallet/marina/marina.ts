@@ -26,6 +26,9 @@ export default class Marina implements MarinaProvider {
   constructor() {
     this.marina = window.marina;
   }
+  reloadCoins(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
 
   on = (type: MarinaEventType, callback: (payload: any) => void): string => {
     if (this.exist() && marina) return marina.on(type, callback);

@@ -7,11 +7,9 @@ import reportWebVitals from './reportWebVitals';
 import { CustomProvider } from 'rsuite';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <CustomProvider theme="dark">
-      <App />
-    </CustomProvider>
-  </React.StrictMode>,
+  <CustomProvider theme="dark">
+    <App />
+  </CustomProvider>,
   document.getElementById('root'),
 );
 
