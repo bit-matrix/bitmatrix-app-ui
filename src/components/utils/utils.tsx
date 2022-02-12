@@ -137,6 +137,24 @@ export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
   return result;
 };
 
+const chartDataDiff = (currentData: number, previousData: number) => {
+  let currentValue = 0;
+  let direction = '';
+  let icon = <ArrowDownIcon fill="#ff0000" />;
+
+  if (currentData > previousData) {
+    currentValue = ((currentData - previousData) / previousData) * 100;
+    direction = 'up';
+    icon = <ArrowUpIcon fill="#00FF00" />;
+  } else {
+    currentValue = ((currentData - previousData) / currentData) * 100;
+    direction = 'down';
+    icon = <ArrowDownIcon fill="#ff0000" />;
+  }
+
+  return { value: Math.abs(currentValue).toFixed(2), direction, icon };
+};
+
 export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   const allPriceData = groupBydailyPrice(chartData);
   const allVolumeData = groupBydailyVolume(chartData);
@@ -178,45 +196,46 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
 
   if (allPriceData.length > 2) {
     previousPriceData = allPriceData[allPriceData.length - 2];
+    const data = chartDataDiff(todayPrice, previousPriceData.close);
+
     priceRate = {
-      value: ((todayPrice / previousPriceData.close) * 100).toFixed(2),
-      direction: todayPrice > previousPriceData.close ? 'up' : 'down',
-      icon: todayPrice > previousPriceData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
+      value: data.value,
+      direction: data.direction,
+      icon: data.icon,
     };
   }
 
   if (allVolumeData.length > 2) {
     previousVolumeData = allVolumeData[allVolumeData.length - 2];
 
+    const data = chartDataDiff(todayVolumeData.close, previousVolumeData.close);
+
     volumeRate = {
-      value: ((todayVolumeData.close / previousVolumeData.close) * 100).toFixed(2),
-      direction: todayVolumeData.close > previousVolumeData.close ? 'up' : 'down',
-      icon:
-        todayVolumeData.close > previousVolumeData.close ? (
-          <ArrowUpIcon fill="#00FF00" />
-        ) : (
-          <ArrowDownIcon fill="#ff0000" />
-        ),
+      value: data.value,
+      direction: data.direction,
+      icon: data.icon,
     };
   }
 
   if (allFeeData.length > 2) {
     previousFeeData = allFeeData[allFeeData.length - 2];
+    const data = chartDataDiff(todayFeeData.close, previousFeeData.close);
 
     feeRate = {
-      value: ((todayFeeData.close / previousFeeData.close) * 100).toFixed(2),
-      direction: todayFeeData.close > previousFeeData.close ? 'up' : 'down',
-      icon:
-        todayFeeData.close > previousFeeData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
+      value: data.value,
+      direction: data.direction,
+      icon: data.icon,
     };
   }
 
   if (allTvlData.length > 2) {
     previousTvlData = allTvlData[allTvlData.length - 2];
+    const data = chartDataDiff(todayTvlData, previousTvlData.close);
+
     tvlRate = {
-      value: ((todayTvlData / previousTvlData.close) * 100).toFixed(2),
-      direction: todayTvlData > previousTvlData.close ? 'up' : 'down',
-      icon: todayTvlData > previousTvlData.close ? <ArrowUpIcon fill="#00FF00" /> : <ArrowDownIcon fill="#ff0000" />,
+      value: data.value,
+      direction: data.direction,
+      icon: data.icon,
     };
   }
 

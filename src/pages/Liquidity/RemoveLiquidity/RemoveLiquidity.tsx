@@ -59,7 +59,6 @@ const RemoveLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          setLoading(true);
           fundingTxId = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
@@ -72,6 +71,8 @@ const RemoveLiquidity = (): JSX.Element => {
               asset: fundingTxInputs.fundingOutput2AssetId,
             },
           ]);
+
+          setLoading(true);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -91,7 +92,7 @@ const RemoveLiquidity = (): JSX.Element => {
             pool,
           );
 
-          await sleep(4000);
+          await sleep(5000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
@@ -120,13 +121,13 @@ const RemoveLiquidity = (): JSX.Element => {
             setLocalData(newStoreData);
           }
 
-          notify(
-            <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-              See in Explorer
-            </a>,
-            'Commitment Tx created successfully!',
-            'success',
-          );
+          // notify(
+          //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+          //     See in Explorer
+          //   </a>,
+          //   'Commitment Tx created successfully!',
+          //   'success',
+          // );
           setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');

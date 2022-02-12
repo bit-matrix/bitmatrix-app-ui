@@ -278,7 +278,6 @@ export const Swap = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          setLoading(true);
           fundingTxId = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
@@ -291,6 +290,8 @@ export const Swap = (): JSX.Element => {
               asset: fundingTxInputs.fundingOutput2AssetId,
             },
           ]);
+
+          setLoading(true);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -327,17 +328,17 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(4000);
+          await sleep(5000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
-            notify(
-              <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-                See in Explorer
-              </a>,
-              'Commitment Tx created successfully!',
-              'success',
-            );
+            // notify(
+            //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+            //     See in Explorer
+            //   </a>,
+            //   'Commitment Tx created successfully!',
+            //   'success',
+            // );
 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
