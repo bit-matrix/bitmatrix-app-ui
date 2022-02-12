@@ -328,7 +328,7 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(5000);
+          await sleep(10000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {

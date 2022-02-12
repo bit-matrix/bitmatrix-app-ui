@@ -92,7 +92,7 @@ const RemoveLiquidity = (): JSX.Element => {
             pool,
           );
 
-          await sleep(5000);
+          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
