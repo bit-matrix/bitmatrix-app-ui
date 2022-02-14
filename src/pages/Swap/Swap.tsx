@@ -179,6 +179,13 @@ export const Swap = (): JSX.Element => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
       let inputAmount = 0;
 
+      const totalFee =
+        payloadData.pool_config.baseFee.number +
+        payloadData.pool_config.commitmentTxFee.number +
+        payloadData.pool_config.defaultOrderingFee.number +
+        payloadData.pool_config.serviceFee.number +
+        1000;
+
       const inputValue = Number(inputFromAmount);
       let isValid = false;
 
@@ -191,7 +198,7 @@ export const Swap = (): JSX.Element => {
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
-        inputAmount = quoteAmountInWallet / payloadData.preferred_unit.value;
+        inputAmount = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
       } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
         inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
       }

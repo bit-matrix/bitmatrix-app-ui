@@ -133,6 +133,13 @@ const AddLiquidity = (): JSX.Element => {
 
       const currentPool = payloadData.pools[0];
 
+      const totalFee =
+        payloadData.pool_config.baseFee.number +
+        payloadData.pool_config.commitmentTxFee.number +
+        payloadData.pool_config.defaultOrderingFee.number +
+        payloadData.pool_config.serviceFee.number +
+        1000;
+
       const quoteAssetId = currentPool.quote.asset;
       const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
@@ -140,7 +147,7 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       if (quoteAmountInWallet && tokenAmountInWallet) {
-        const quoteAmountWallet = quoteAmountInWallet / payloadData.preferred_unit.value;
+        const quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
         const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
         if (Number(quoteAmount) <= quoteAmountWallet) {
