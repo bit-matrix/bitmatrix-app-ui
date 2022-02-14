@@ -51,7 +51,7 @@ export const General = (): JSX.Element => {
           <CustomPopover
             placement="autoHorizontal"
             title="Preferred Unit"
-            content="Your metric system of denominations used as units of Bitcoin. The smallest denomination base unit is sats."
+            content="Your metric preference of denominations used as units of Bitcoin. The smallest denomination base unit is sats."
           >
             <img className="general-icon" src={info} alt="info" />
           </CustomPopover>
