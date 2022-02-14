@@ -47,7 +47,7 @@
 }
 
 .pool-card-modal-column-2 {
-  width: 25%;
+  width: 0%;
 }
 
 .pool-card-img {
@@ -88,5 +88,9 @@
 
   .pool-card-modal-column-1 {
     width: 75%;
+  }
+
+  .pool-card-modal-column-2 {
+    width: 25%;
   }
 }
