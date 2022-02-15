@@ -139,11 +139,13 @@ const AddLiquidity = (): JSX.Element => {
 
       const currentPool = payloadData.pools[0];
 
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
       const totalFee =
-        payloadData.pool_config.baseFee.number +
-        payloadData.pool_config.commitmentTxFee.number +
-        payloadData.pool_config.defaultOrderingFee.number +
-        payloadData.pool_config.serviceFee.number +
+        primaryPoolConfig.baseFee.number +
+        primaryPoolConfig.commitmentTxFee.number +
+        primaryPoolConfig.defaultOrderingFee.number +
+        primaryPoolConfig.serviceFee.number +
         1000;
 
       const quoteAssetId = currentPool.quote.asset;
