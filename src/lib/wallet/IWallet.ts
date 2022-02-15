@@ -1,4 +1,11 @@
-import { AddressInterface, Balance, EventListenerID, MarinaEventType, Recipient, TransactionID } from 'marina-provider';
+import {
+  AddressInterface,
+  Balance,
+  EventListenerID,
+  MarinaEventType,
+  Recipient,
+  SentTransaction,
+} from 'marina-provider';
 
 export interface IWallet {
   exist(): boolean;
@@ -17,7 +24,7 @@ export interface IWallet {
 
   getAddresses(): Promise<AddressInterface[]>;
 
-  sendTransaction(recipients: Recipient[]): Promise<TransactionID>;
+  sendTransaction(recipients: Recipient[]): Promise<SentTransaction>;
 
   getBalances(): Promise<Balance[]>;
 

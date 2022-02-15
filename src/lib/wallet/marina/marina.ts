@@ -6,9 +6,9 @@ import {
   MarinaProvider,
   NetworkString,
   Recipient,
+  SentTransaction,
   SignedMessage,
   Transaction,
-  TransactionID,
   Utxo,
 } from 'marina-provider';
 
@@ -72,7 +72,7 @@ export default class Marina implements MarinaProvider {
     throw new Error('Marina wallet disabled.');
   }
 
-  sendTransaction(recipients: Recipient[]): Promise<TransactionID> {
+  sendTransaction(recipients: Recipient[]): Promise<SentTransaction> {
     if (this.exist() && this.marina) return this.marina.sendTransaction(recipients);
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
