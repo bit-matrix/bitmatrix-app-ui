@@ -21,7 +21,6 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { sleep } from '../../helper';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -278,7 +277,7 @@ export const Swap = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+          const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -291,6 +290,10 @@ export const Swap = (): JSX.Element => {
             },
           ]);
 
+          console.log(fundingTx);
+
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
+
           setLoading(true);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
@@ -299,7 +302,6 @@ export const Swap = (): JSX.Element => {
         }
 
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
-        console.log('31', fundingTxId);
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
@@ -328,7 +330,6 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(10000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {

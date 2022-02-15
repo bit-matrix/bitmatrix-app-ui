@@ -9,7 +9,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -176,7 +176,7 @@ const AddLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+          const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -188,6 +188,8 @@ const AddLiquidity = (): JSX.Element => {
               asset: fundingTxInputs.fundingOutput2AssetId,
             },
           ]);
+
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
 
           setLoading(true);
         } catch (err: any) {
@@ -216,8 +218,6 @@ const AddLiquidity = (): JSX.Element => {
             primaryPoolConfig,
             pool,
           );
-
-          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 

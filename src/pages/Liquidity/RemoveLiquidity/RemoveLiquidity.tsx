@@ -11,7 +11,7 @@ import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -59,7 +59,7 @@ const RemoveLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await payloadData.wallet.marina.sendTransaction([
+          const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -71,6 +71,8 @@ const RemoveLiquidity = (): JSX.Element => {
               asset: fundingTxInputs.fundingOutput2AssetId,
             },
           ]);
+
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
 
           setLoading(true);
         } catch (err: any) {
@@ -91,8 +93,6 @@ const RemoveLiquidity = (): JSX.Element => {
             primaryPoolConfig,
             pool,
           );
-
-          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
