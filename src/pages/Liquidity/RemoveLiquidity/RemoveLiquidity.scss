@@ -7,24 +7,6 @@
   flex-direction: column;
   background: $bmDeepFir;
   width: 100%;
-  animation: fadeAndScale 1s linear;
-  animation-delay: -0.2s;
-  transform-origin: center bottom;
-
-  @keyframes fadeAndScale {
-    0% {
-      opacity: 0;
-      transform: scale3d(0.5, 0.5, 1);
-    }
-    50% {
-      opacity: 0;
-      transform: scale3d(0.75, 0.75, 1);
-    }
-    100% {
-      opacity: 1;
-      transform: scale3d(1, 1, 1);
-    }
-  }
 
   .remove-liquidity-page-content {
     position: relative;
@@ -35,6 +17,26 @@
     min-height: 20.8125rem;
     z-index: 6;
     width: 95%;
+    animation: shrink 0.3s linear;
+    animation-delay: -0.1s;
+
+    @keyframes shrink {
+      // 25% {
+      //   width: 55rem;
+      // }
+      // 50% {
+      //   width: 50rem;
+      // }
+      // 100% {
+      //   width: 45rem;
+      // }
+      from {
+        width: 60rem;
+      }
+      to {
+        width: 45rem;
+      }
+    }
 
     .remove-liquidity-page-loading {
       z-index: 999;
