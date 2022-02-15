@@ -189,9 +189,8 @@ const AddLiquidity = (): JSX.Element => {
             },
           ]);
 
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-
           setLoading(true);
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
