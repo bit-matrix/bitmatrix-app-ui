@@ -1,4 +1,11 @@
-import { AddressInterface, Balance, EventListenerID, MarinaEventType, Recipient, TransactionID } from 'marina-provider';
+import {
+  AddressInterface,
+  Balance,
+  EventListenerID,
+  MarinaEventType,
+  Recipient,
+  SentTransaction,
+} from 'marina-provider';
 import { IWallet } from './IWallet';
 import Marina from './marina/marina';
 import { WALLET_NAME } from './WALLET_NAME';
@@ -27,7 +34,8 @@ export class Wallet implements IWallet {
 
   public getAddresses = (): Promise<AddressInterface[]> => this.wallet.getAddresses();
 
-  public sendTransaction = (recipients: Recipient[]): Promise<TransactionID> => this.wallet.sendTransaction(recipients);
+  public sendTransaction = (recipients: Recipient[]): Promise<SentTransaction> =>
+    this.wallet.sendTransaction(recipients);
 
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 
