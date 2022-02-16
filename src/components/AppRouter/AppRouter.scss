@@ -36,16 +36,20 @@
   justify-content: center;
   margin-top: 3rem;
   background: $bmBlack !important;
+
+  .app-content {
+    width: 100%;
+  }
 }
 
 @media (min-height: $mobile-view-breakpoint) and (min-width: $mobile-view-breakpoint) {
   .app-container {
     width: 100%;
-    height: calc(100% - 13.5rem);
+    height: calc(100% - 14.5rem);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 2.5rem;
+    margin-top: 3.5rem;
   }
 
   .secret-top-div {

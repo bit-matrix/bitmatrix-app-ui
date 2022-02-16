@@ -129,7 +129,7 @@
   background-color: $bmEbony;
   border-radius: 1.25rem;
   padding: 0.35rem;
-  animation: fadein 2s ease;
+  animation: fadein 1s ease;
 
   @keyframes fadein {
     from {
@@ -189,11 +189,11 @@
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-page-main {
-    width: 48rem;
+    width: 45rem;
   }
 
   .pool-page-content {
-    height: 52vh;
+    height: 23rem;
   }
 
   .tab-1 {

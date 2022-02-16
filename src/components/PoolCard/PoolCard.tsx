@@ -26,26 +26,28 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
     const chartColor = data.priceRate.direction === 'up' ? '#78B98C' : '#de5b4c';
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
-        <div className={`pool-card-item column-1 ${!showDetail && 'pool-card-modal-content'}`}>
-          <div className="column-1-item order-item">#{rank}</div>
-          <div className="column-1-item ">
-            <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
-            <AssetIcon symbol={pool.token.ticker as SWAP_ASSET} />
-          </div>
-          <div className="column-1-item token-content">
-            <div>
-              {pool.quote.ticker} / {pool.token.ticker}
-            </div>
-            <div className={`token-item pool-card-${data.priceRate.direction}-text`}>
-              ${data.todayPrice.toLocaleString()}
-            </div>
-          </div>
-          <div className="column-1-item percent">
-            <XyChart data={data.allPriceData} color={chartColor} />
-          </div>
+        <div className={`pool-card-column ${!showDetail && 'pool-card-modal-column-1'}`}>
+          <ul className="pool-card-list">
+            <li className="column-1-item">#{rank}</li>
+            <li className="column-1-item ">
+              <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
+              <AssetIcon symbol={pool.token.ticker as SWAP_ASSET} />
+            </li>
+            <li className="column-1-item">
+              <div>
+                {pool.quote.ticker} / {pool.token.ticker}
+              </div>
+              <div className={`token-item pool-card-${data.priceRate.direction}-text`}>
+                ${data.todayPrice.toLocaleString()}
+              </div>
+            </li>
+            <li className="column-1-item percent">
+              <XyChart data={data.allPriceData} color={chartColor} />
+            </li>
+          </ul>
         </div>
 
-        <div className={`pool-card-item mobile-hidden ${!showDetail && 'pool-card-modal-content'}`}>
+        <div className={`pool-card-column mobile-hidden ${!showDetail && 'pool-card-modal-column-2'}`}>
           <ul className="pool-card-list">
             <li>
               <div>
