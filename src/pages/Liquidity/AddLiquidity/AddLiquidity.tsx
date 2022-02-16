@@ -6,7 +6,6 @@ import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
-import { SettingsStore } from '../../../model/SettingsStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
@@ -33,11 +32,6 @@ const AddLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const getPreferredUnitData = (): SettingsStore | undefined => {
-    const value = localStorage.getItem('BmSettings');
-    return value !== null ? JSON.parse(value) : undefined;
-  };
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
@@ -309,7 +303,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">tL-{getPreferredUnitData()?.preferred_unit.text} Liquidity</div>
+                    <div className="add-liquidity-text">tL-{payloadData.preferred_unit.text} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
                   <NumericalInput
