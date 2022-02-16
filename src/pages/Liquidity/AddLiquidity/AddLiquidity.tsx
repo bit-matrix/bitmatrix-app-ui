@@ -133,6 +133,15 @@ const AddLiquidity = (): JSX.Element => {
 
       const currentPool = payloadData.pools[0];
 
+      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+
+      const totalFee =
+        primaryPoolConfig.baseFee.number +
+        primaryPoolConfig.commitmentTxFee.number +
+        primaryPoolConfig.defaultOrderingFee.number +
+        primaryPoolConfig.serviceFee.number +
+        1000;
+
       const quoteAssetId = currentPool.quote.asset;
       const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
@@ -140,7 +149,7 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       if (quoteAmountInWallet && tokenAmountInWallet) {
-        const quoteAmountWallet = quoteAmountInWallet / payloadData.preferred_unit.value;
+        const quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
         const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
         if (Number(quoteAmount) <= quoteAmountWallet) {
@@ -294,7 +303,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{SWAP_ASSET.LBTC} Liquidity</div>
+                    <div className="add-liquidity-text">tL-{payloadData.preferred_unit.text} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
                   <NumericalInput

@@ -15,7 +15,7 @@ type Props = {
 };
 
 export const XyChart: React.FC<Props> = ({
-  width = 120,
+  width = 100,
   height = 50,
   margin = { left: 0, top: 20, bottom: 0, right: 0 },
   color = '#78B98C',

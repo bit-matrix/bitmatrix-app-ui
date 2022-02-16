@@ -200,19 +200,21 @@ export const AppRouter = (): JSX.Element => {
               <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
             </div>
           ) : (
-            <Switch component={Fader}>
-              <Route exact path={ROUTE_PATH.HOME} component={Home} />
-              <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-              <Route exact path={ROUTE_PATH.POOL} component={Pool} />
-              <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
-              <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-              <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-              <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-              <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
-              {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
+            <div className="app-content">
+              <Switch component={Fader}>
+                <Route exact path={ROUTE_PATH.HOME} component={Home} />
+                <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+                <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+                <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
+                <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
+                <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
+                <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
+                <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+                {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
-              <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
-            </Switch>
+                <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
+              </Switch>
+            </div>
           )}
         </div>
         <Footer />

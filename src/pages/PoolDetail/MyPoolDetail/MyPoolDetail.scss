@@ -3,6 +3,8 @@
 .my-pool-detail-container {
   // height: 33rem;
   width: 95%;
+  display: flex;
+  justify-content: center;
 }
 
 .my-pool-detail-main {
@@ -12,6 +14,17 @@
   height: 31rem;
   width: 100%;
   // margin-top: 3.5rem;
+  animation: grow 0.3s ease-in-out;
+  animation-delay: -0.1s;
+
+  @keyframes grow {
+    from {
+      width: 45rem;
+    }
+    to {
+      width: 60rem;
+    }
+  }
 }
 
 .my-pool-detail-header {
