@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'rsuite';
-import SettingsContext from '../../context/SettingsContext';
+import { useWalletContext } from '../../context';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
 
@@ -13,28 +13,24 @@ type Props = {
 
 export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className = 'wallet-button' }) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
-  const { payloadData } = useContext(SettingsContext);
+  const { walletContext } = useWalletContext();
 
   return (
     <>
-      <WalletListModal
-        show={showWalletList}
-        wallet={payloadData.wallet?.marina}
-        close={() => setShowWalletList(false)}
-      />
+      <WalletListModal show={showWalletList} wallet={walletContext?.marina} close={() => setShowWalletList(false)} />
       <Button
         appearance="default"
         className={className}
         onClick={() => {
-          if (payloadData.wallet?.isEnabled) {
+          if (walletContext?.isEnabled) {
             onClick();
           } else {
             setShowWalletList(true);
           }
         }}
-        disabled={payloadData.wallet?.isEnabled && disabled}
+        disabled={walletContext?.isEnabled && disabled}
       >
-        {payloadData.wallet?.isEnabled ? text : 'Connect Wallet'}
+        {walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>
     </>
   );
