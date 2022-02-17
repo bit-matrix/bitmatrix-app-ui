@@ -284,6 +284,7 @@ export const Swap = (): JSX.Element => {
         let fundingTxId;
 
         try {
+          setLoading(true);
           const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
@@ -297,7 +298,6 @@ export const Swap = (): JSX.Element => {
             },
           ]);
 
-          setLoading(true);
           fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
@@ -410,7 +410,7 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            {loading && <Loader className="swap-page-loading" size="md" inverse center />}
+            {/* {loading && <Loader className="swap-page-loading" size="md" inverse center />} */}
             <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
@@ -460,6 +460,7 @@ export const Swap = (): JSX.Element => {
               onClick={() => {
                 swapClick();
               }}
+              loading={loading}
               disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
             />
           </div>

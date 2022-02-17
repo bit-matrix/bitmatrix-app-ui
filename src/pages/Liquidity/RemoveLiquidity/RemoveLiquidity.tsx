@@ -59,6 +59,7 @@ const RemoveLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
+          setLoading(true);
           const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
@@ -71,8 +72,6 @@ const RemoveLiquidity = (): JSX.Element => {
               asset: fundingTxInputs.fundingOutput2AssetId,
             },
           ]);
-
-          setLoading(true);
 
           fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
@@ -153,7 +152,7 @@ const RemoveLiquidity = (): JSX.Element => {
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
-        {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />}
+        {/* {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />} */}
         <BackButton />
         <div>
           <div className="remove-liquidity-main">
@@ -222,6 +221,7 @@ const RemoveLiquidity = (): JSX.Element => {
         <div className="remove-liquidity-button-content">
           <WalletButton
             text="Remove Liquidity"
+            loading={loading}
             onClick={() => {
               removeLiquidityClick();
             }}
