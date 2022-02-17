@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { Content, Loader } from 'rsuite';
+import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -185,6 +185,7 @@ const AddLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
+          setLoading(true);
           const fundingTx = await payloadData.wallet.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
@@ -198,7 +199,6 @@ const AddLiquidity = (): JSX.Element => {
             },
           ]);
 
-          setLoading(true);
           fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
@@ -285,7 +285,7 @@ const AddLiquidity = (): JSX.Element => {
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
-        {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />}
+        {/* {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />} */}
         <BackButton />
         <div>
           <div className="add-liquidity-main">
@@ -370,6 +370,7 @@ const AddLiquidity = (): JSX.Element => {
           <div className="add-liquidity-button-content">
             <WalletButton
               text="Add Liquidity"
+              loading={loading}
               onClick={() => {
                 addLiquidityClick();
               }}
