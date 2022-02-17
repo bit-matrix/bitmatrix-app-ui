@@ -5,11 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
+import { AppContextProvider } from './context';
 
 ReactDOM.render(
-  <CustomProvider theme="dark">
-    <App />
-  </CustomProvider>,
+  <AppContextProvider>
+    <CustomProvider theme="dark">
+      <App />
+    </CustomProvider>
+  </AppContextProvider>,
   document.getElementById('root'),
 );
 
