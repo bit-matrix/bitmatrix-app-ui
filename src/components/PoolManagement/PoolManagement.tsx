@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useWalletContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
@@ -8,7 +9,6 @@ import { TabMenu } from '../TabMenu/TabMenu';
 import Backdrop from '../Backdrop/Backdrop';
 import { Pool } from '@bitmatrix/models';
 import { PoolCard } from '../PoolCard/PoolCard';
-import SettingsContext from '../../context/SettingsContext';
 import SliderIcon from '../base/Svg/Icons/Slider';
 import AddIcon from '../base/Svg/Icons/Add';
 import './PoolManagement.scss';
@@ -23,13 +23,13 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
-  const { payloadData } = useContext(SettingsContext);
+  const { walletContext } = useWalletContext();
 
   const history = useHistory();
 
   useEffect(() => {
-    if (pools && pools.length > 0 && payloadData.wallet && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
-      const balanceAssets = payloadData.wallet?.balances.map((bl) => bl.asset.assetHash);
+    if (pools && pools.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+      const balanceAssets = walletContext?.balances.map((bl) => bl.asset.assetHash);
       const myCurrentPools: Pool[] = [];
 
       balanceAssets.forEach((ba) => {
@@ -42,7 +42,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
 
       setMyPools(myCurrentPools);
     }
-  }, [payloadData.wallet?.balances, pools, selectedTab]);
+  }, [walletContext?.balances, pools, selectedTab]);
 
   const getPoolData = () => {
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
