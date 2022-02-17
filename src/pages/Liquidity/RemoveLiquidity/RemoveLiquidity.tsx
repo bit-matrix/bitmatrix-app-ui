@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
-import { Button, Content, Loader, Slider } from 'rsuite';
 import Decimal from 'decimal.js';
+import { Button, Content, Slider } from 'rsuite';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
@@ -11,7 +11,7 @@ import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -63,7 +63,8 @@ const RemoveLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await walletContext.marina.sendTransaction([
+          setLoading(true);
+          const fundingTx = await walletContext.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -76,7 +77,7 @@ const RemoveLiquidity = (): JSX.Element => {
             },
           ]);
 
-          setLoading(true);
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -95,8 +96,6 @@ const RemoveLiquidity = (): JSX.Element => {
             primaryPoolConfig,
             pool,
           );
-
-          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
@@ -157,7 +156,7 @@ const RemoveLiquidity = (): JSX.Element => {
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
-        {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />}
+        {/* {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />} */}
         <BackButton />
         <div>
           <div className="remove-liquidity-main">
@@ -226,6 +225,7 @@ const RemoveLiquidity = (): JSX.Element => {
         <div className="remove-liquidity-button-content">
           <WalletButton
             text="Remove Liquidity"
+            loading={loading}
             onClick={() => {
               removeLiquidityClick();
             }}

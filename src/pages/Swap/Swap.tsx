@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Content, Loader } from 'rsuite';
+import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
@@ -19,14 +19,7 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { sleep } from '../../helper';
-import {
-  usePoolChartDataContext,
-  usePoolConfigContext,
-  usePoolContext,
-  useWalletContext,
-  useSettingsContext,
-} from '../../context';
+import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import './Swap.scss';
 
 export const Swap = (): JSX.Element => {
@@ -286,7 +279,8 @@ export const Swap = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await walletContext.marina.sendTransaction([
+          setLoading(true);
+          const fundingTx = await walletContext.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -299,7 +293,7 @@ export const Swap = (): JSX.Element => {
             },
           ]);
 
-          setLoading(true);
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -307,7 +301,6 @@ export const Swap = (): JSX.Element => {
         }
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
-        console.log('31', fundingTxId);
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
           setInputFromAmount('');
@@ -336,7 +329,6 @@ export const Swap = (): JSX.Element => {
             );
           }
 
-          await sleep(10000);
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
           if (commitmentTxId && commitmentTxId !== '') {
@@ -413,7 +405,7 @@ export const Swap = (): JSX.Element => {
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            {loading && <Loader className="swap-page-loading" size="md" inverse center />}
+            {/* {loading && <Loader className="swap-page-loading" size="md" inverse center />} */}
             <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
@@ -463,6 +455,7 @@ export const Swap = (): JSX.Element => {
               onClick={() => {
                 swapClick();
               }}
+              loading={loading}
               disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
             />
           </div>

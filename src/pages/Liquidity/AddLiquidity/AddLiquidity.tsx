@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
-import { Content, Loader } from 'rsuite';
+import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
-import { SettingsStore } from '../../../model/SettingsStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -37,11 +36,6 @@ const AddLiquidity = (): JSX.Element => {
   const { settings } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const getPreferredUnitData = (): SettingsStore | undefined => {
-    const value = localStorage.getItem('BmSettings');
-    return value !== null ? JSON.parse(value) : undefined;
-  };
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
@@ -194,7 +188,8 @@ const AddLiquidity = (): JSX.Element => {
         let fundingTxId;
 
         try {
-          fundingTxId = await walletContext.marina.sendTransaction([
+          setLoading(true);
+          const fundingTx = await walletContext.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -207,7 +202,7 @@ const AddLiquidity = (): JSX.Element => {
             },
           ]);
 
-          setLoading(true);
+          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -234,8 +229,6 @@ const AddLiquidity = (): JSX.Element => {
             primaryPoolConfig,
             pool,
           );
-
-          await sleep(10000);
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
 
@@ -295,7 +288,7 @@ const AddLiquidity = (): JSX.Element => {
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
-        {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />}
+        {/* {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />} */}
         <BackButton />
         <div>
           <div className="add-liquidity-main">
@@ -313,7 +306,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">tL-{getPreferredUnitData()?.preferred_unit.text} Liquidity</div>
+                    <div className="add-liquidity-text">tL-{settings.preferred_unit.text} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
                   <NumericalInput
@@ -380,6 +373,7 @@ const AddLiquidity = (): JSX.Element => {
           <div className="add-liquidity-button-content">
             <WalletButton
               text="Add Liquidity"
+              loading={loading}
               onClick={() => {
                 addLiquidityClick();
               }}

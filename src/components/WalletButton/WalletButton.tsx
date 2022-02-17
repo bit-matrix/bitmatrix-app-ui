@@ -6,12 +6,19 @@ import './WalletButton.scss';
 
 type Props = {
   text: string;
-  disabled?: boolean;
   onClick: () => void;
+  disabled?: boolean;
   className?: string;
+  loading?: boolean;
 };
 
-export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className = 'wallet-button' }) => {
+export const WalletButton: React.FC<Props> = ({
+  text,
+  onClick,
+  disabled = false,
+  className = 'wallet-button',
+  loading,
+}) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const { walletContext } = useWalletContext();
 
@@ -20,6 +27,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
       <WalletListModal show={showWalletList} wallet={walletContext?.marina} close={() => setShowWalletList(false)} />
       <Button
         appearance="default"
+        loading={loading}
         className={className}
         onClick={() => {
           if (walletContext?.isEnabled) {
