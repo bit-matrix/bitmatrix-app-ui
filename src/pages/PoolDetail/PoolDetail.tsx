@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { usePoolChartDataContext, usePoolContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -10,7 +11,6 @@ import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import SettingsContext from '../../context/SettingsContext';
 import BackIcon from '../../components/base/Svg/Icons/Back';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
@@ -22,18 +22,19 @@ export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [pool, setPool] = useState<Pool>();
 
-  const { payloadData } = useContext(SettingsContext);
+  const { pools } = usePoolContext();
+  const { poolChartData } = usePoolChartDataContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0) {
-      const currentPool = payloadData.pools.find((pl) => pl.id === id);
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
     }
-  }, [payloadData.pools]);
+  }, [pools]);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -66,10 +67,10 @@ export const PoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || payloadData.pool_chart_data === undefined) {
+  if (pool === undefined || poolChartData === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(payloadData.pool_chart_data, pool);
+    const data = calculateChartData(poolChartData, pool);
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
