@@ -9,7 +9,7 @@ const WalletContext = createContext<IWalletContext>({} as IWalletContext);
 
 export const useWalletContext = (): IWalletContext => useContext(WalletContext);
 
-export const WalletContextProvider: React.FC = ({ children }: ComponentProps<FC>): JSX.Element => {
+export const WalletContextProvider = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [walletContext, dispatch] = useReducer(walletReducer, undefined);
 
   const setWalletContext = (wallet: { marina: IWallet; isEnabled: boolean; balances: Balance[] }): void => {

@@ -8,7 +8,7 @@ const PoolsContext = createContext<IPoolContext>({} as IPoolContext);
 
 export const usePoolContext = (): IPoolContext => useContext(PoolsContext);
 
-export const PoolsContextProvider: React.FC = ({ children }: ComponentProps<FC>): JSX.Element => {
+export const PoolsContextProvider = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [pools, dispatch] = useReducer(poolsReducer, [initialPoolState]);
 
   const setPools = (pools: Pool[]): void => {

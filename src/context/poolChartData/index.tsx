@@ -8,7 +8,7 @@ const PoolChartDataContext = createContext<IPoolChartDataContext>({} as IPoolCha
 
 export const usePoolChartDataContext = (): IPoolChartDataContext => useContext(PoolChartDataContext);
 
-export const PoolChartDataContextProvider: React.FC = ({ children }: ComponentProps<FC>): JSX.Element => {
+export const PoolChartDataContextProvider = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [poolChartData, dispatch] = useReducer(poolChartDataReducer, [initialPoolChartDataState]);
 
   const setPoolChartData = (chart_data: BmChart[]): void => {

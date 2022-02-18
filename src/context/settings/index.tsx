@@ -9,7 +9,7 @@ const SettingsContext = createContext<ISettingsContext>({} as ISettingsContext);
 
 export const useSettingsContext = (): ISettingsContext => useContext(SettingsContext);
 
-export const SettingsContextProvider: React.FC = ({ children }: ComponentProps<FC>): JSX.Element => {
+export const SettingsContextProvider = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [settings, dispatch] = useReducer(settingsReducer, initialSettingsState);
 
   const setSlippage = (slippage: number): void => {
