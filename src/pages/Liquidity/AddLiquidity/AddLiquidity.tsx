@@ -171,6 +171,7 @@ const AddLiquidity = (): JSX.Element => {
         return { tokenIsValid, quoteIsValid };
       }
     }
+    return { tokenIsValid: true, quoteIsValid: true };
   };
 
   const addLiquidityClick = async () => {
