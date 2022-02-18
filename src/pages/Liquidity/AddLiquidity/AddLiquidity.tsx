@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
@@ -32,6 +34,8 @@ const AddLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const history = useHistory();
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
@@ -286,7 +290,22 @@ const AddLiquidity = (): JSX.Element => {
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
         {/* {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />} */}
-        <BackButton />
+        <BackButton
+          buttonText="Add Liquidity"
+          onClick={() => {
+            const prevPageLocation = history.location.state;
+            if (prevPageLocation) {
+              history.goBack();
+            } else {
+              history.push({
+                pathname: ROUTE_PATH.POOL,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            }
+          }}
+        />
         <div>
           <div className="add-liquidity-main">
             <div

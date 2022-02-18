@@ -11,7 +11,7 @@ import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
-import BackIcon from '../../components/base/Svg/Icons/Back';
+import { BackButton } from '../../components/base/BackButton/BackButton';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
 import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
@@ -75,12 +75,22 @@ export const PoolDetail: React.FC = () => {
         <div className="pool-detail-main">
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">
-              <Button className="pool-detail-button" onClick={() => history.goBack()}>
-                <BackIcon />
-                <div className="pool-detail-page-text">
-                  {pool.quote.ticker} / {pool.token.ticker}
-                </div>
-              </Button>
+              <BackButton
+                buttonText={`${pool.quote.ticker} / ${pool.token.ticker}`}
+                onClick={() => {
+                  const prevPageLocation = history.location.state;
+                  if (prevPageLocation) {
+                    history.goBack();
+                  } else {
+                    history.push({
+                      pathname: ROUTE_PATH.POOL,
+                      state: {
+                        from: history.location.pathname,
+                      },
+                    });
+                  }
+                }}
+              />
             </div>
             <div className="pool-detail-header-right">
               <TabMenu
@@ -187,7 +197,12 @@ export const PoolDetail: React.FC = () => {
                 appearance="default"
                 className="primary-button pool-detail-add-button mobile-hidden"
                 onClick={() => {
-                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity');
+                  history.push({
+                    pathname: ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity',
+                    state: {
+                      from: history.location.pathname,
+                    },
+                  });
                 }}
               >
                 Add Liquidity
