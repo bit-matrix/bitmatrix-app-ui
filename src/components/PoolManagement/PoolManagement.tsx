@@ -64,7 +64,14 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
             <PoolCard
               pool={pool}
               rank={index + 1}
-              onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/my-pool/' + poolId)}
+              onClick={(poolId: string) => {
+                history.push({
+                  pathname: ROUTE_PATH.POOL + '/my-pool/' + poolId,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              }}
             />
           </div>
         );
@@ -120,7 +127,14 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
                   <PoolCard
                     pool={pool}
                     rank={index + 1}
-                    onClick={() => history.push('pool/' + pool.id + '/add-liquidity')}
+                    onClick={() => {
+                      history.push({
+                        pathname: 'pool/' + pool.id + '/add-liquidity',
+                        state: {
+                          from: history.location.pathname,
+                        },
+                      });
+                    }}
                     showDetail={false}
                   />
                 </div>
