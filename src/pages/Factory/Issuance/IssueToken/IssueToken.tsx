@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Content, Dropdown, Input, Uploader } from 'rsuite';
 import { FileType } from 'rsuite/esm/Uploader/Uploader';
-import { BackButton } from '../../../../components/base/BackButton/BackButton';
+// import { BackButton } from '../../../../components/base/BackButton/BackButton';
 import './IssueToken.scss';
 
 export const IssueToken = (): JSX.Element => {
@@ -18,7 +18,7 @@ export const IssueToken = (): JSX.Element => {
   return (
     <div className="issue-token-page-main">
       <Content className="issue-token-page-content">
-        <BackButton />
+        {/* <BackButton /> */}
         <div>
           <div className="issue-token-page-line-1">
             <div>
