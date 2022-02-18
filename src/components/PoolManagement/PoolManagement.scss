@@ -9,6 +9,20 @@
   background-color: $bmBlack;
 }
 
+.pool-shrink {
+  animation: shrink 0.3s linear;
+  animation-delay: -0.1s;
+
+  @keyframes shrink {
+    from {
+      width: 60rem;
+    }
+    to {
+      width: 45rem;
+    }
+  }
+}
+
 .pool-page-header {
   display: flex;
   align-items: center;
