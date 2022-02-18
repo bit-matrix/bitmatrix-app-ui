@@ -296,7 +296,12 @@ const AddLiquidity = (): JSX.Element => {
           onClick={() => {
             const prevPageLocation = history.location.state;
             if (prevPageLocation) {
-              history.goBack();
+              history.push({
+                pathname: (prevPageLocation as { from: string }).from,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
             } else {
               history.push({
                 pathname: ROUTE_PATH.POOL,

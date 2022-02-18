@@ -110,17 +110,12 @@ export const MyPoolDetail: React.FC = () => {
               <BackButton
                 buttonText={`${pool.quote.ticker} / ${pool.token.ticker}`}
                 onClick={() => {
-                  const prevPageLocation = history.location.state;
-                  if (prevPageLocation) {
-                    history.goBack();
-                  } else {
-                    history.push({
-                      pathname: ROUTE_PATH.POOL,
-                      state: {
-                        from: history.location.pathname,
-                      },
-                    });
-                  }
+                  history.push({
+                    pathname: ROUTE_PATH.POOL,
+                    state: {
+                      from: history.location.pathname,
+                    },
+                  });
                 }}
               />
             </div>
