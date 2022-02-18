@@ -4,15 +4,15 @@ import { SettingsStore } from '../../model/SettingsStore';
 export const SET_SLIPPAGE = 'SET_SLIPPAGE';
 export const SET_PREFERRED_UNIT = 'SET_PREFERRED_UNIT';
 
-export interface SetSlippageAction {
+export type SetSlippageAction = {
   type: typeof SET_SLIPPAGE;
   payload: number;
-}
+};
 
-export interface SetPreferredUnitAction {
+export type SetPreferredUnitAction = {
   type: typeof SET_PREFERRED_UNIT;
   payload: { text: PREFERRED_UNIT; value: number };
-}
+};
 
 export interface ISettingsContext {
   settings: SettingsStore;
