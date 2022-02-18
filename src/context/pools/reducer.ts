@@ -41,7 +41,7 @@ export const initialPoolState: Pool = {
 export const poolsReducer = (state: Pool[], action: SetPoolsAction): Pool[] => {
   switch (action.type) {
     case SET_POOLS:
-      return [...state, ...action.payload];
+      return { ...state, ...action.payload };
 
     default:
       return state;
