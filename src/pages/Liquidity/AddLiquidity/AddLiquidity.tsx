@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -328,7 +328,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">tL-{payloadData.preferred_unit.text} Liquidity</div>
+                    <div className="add-liquidity-text">{setQuoteText(payloadData.preferred_unit.text)} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
                   <NumericalInput
