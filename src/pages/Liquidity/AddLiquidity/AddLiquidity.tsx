@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
 import SettingsContext from '../../../context/SettingsContext';
@@ -9,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -32,6 +34,8 @@ const AddLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const history = useHistory();
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
@@ -167,6 +171,7 @@ const AddLiquidity = (): JSX.Element => {
         return { tokenIsValid, quoteIsValid };
       }
     }
+    return { tokenIsValid: true, quoteIsValid: true };
   };
 
   const addLiquidityClick = async () => {
@@ -286,7 +291,27 @@ const AddLiquidity = (): JSX.Element => {
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
         {/* {loading && <Loader className="add-liquidity-page-loading" size="md" inverse center />} */}
-        <BackButton />
+        <BackButton
+          buttonText="Add Liquidity"
+          onClick={() => {
+            const prevPageLocation = history.location.state;
+            if (prevPageLocation) {
+              history.push({
+                pathname: (prevPageLocation as { from: string }).from,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            } else {
+              history.push({
+                pathname: ROUTE_PATH.POOL,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            }
+          }}
+        />
         <div>
           <div className="add-liquidity-main">
             <div
@@ -303,7 +328,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">tL-{payloadData.preferred_unit.text} Liquidity</div>
+                    <div className="add-liquidity-text">{setQuoteText(payloadData.preferred_unit.text)} Liquidity</div>
                     <img className="liquidity-btc-icon" src={btc} alt="" />
                   </div>
                   <NumericalInput
@@ -369,7 +394,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text="Add Liquidity"
+              text={`Add ${setQuoteText(payloadData.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();

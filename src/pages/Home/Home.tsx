@@ -36,7 +36,12 @@ export const Home = (): JSX.Element => {
             className="home-page-start-button mobile-hidden"
             appearance="default"
             onClick={() => {
-              history.push(ROUTE_PATH.SWAP);
+              history.push({
+                pathname: ROUTE_PATH.SWAP,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
             }}
           >
             Start Swapping

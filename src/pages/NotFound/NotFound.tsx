@@ -7,7 +7,12 @@ export const NotFound = (): JSX.Element => {
 
   useEffect(() => {
     setTimeout(() => {
-      history.push('/');
+      history.push({
+        pathname: '/',
+        state: {
+          from: history.location.pathname,
+        },
+      });
     }, 5000);
   }, []);
 
