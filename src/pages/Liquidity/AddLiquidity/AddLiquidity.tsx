@@ -394,7 +394,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text="Add Liquidity"
+              text={`Add ${setQuoteText(payloadData.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();
