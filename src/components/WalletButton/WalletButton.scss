@@ -11,6 +11,20 @@
   margin-top: 1rem;
   opacity: 0.9;
 
+  .rs-btn-spin {
+    &::before {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      border: 3px solid #818489;
+    }
+
+    &::after {
+      width: 1.5rem !important;
+      height: 1.5rem !important;
+      border-top: 3px solid #010403 !important;
+    }
+  }
+
   &:hover {
     opacity: 1;
   }
