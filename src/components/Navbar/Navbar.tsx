@@ -101,7 +101,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-home-button ${selectedTab === ROUTE_PATH.HOME && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.HOME);
+            history.push({
+              pathname: ROUTE_PATH.HOME,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           <Svg
@@ -115,7 +120,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab === ROUTE_PATH.SWAP && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.SWAP);
+            history.push({
+              pathname: ROUTE_PATH.SWAP,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Swap
@@ -126,7 +136,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.POOL) && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.POOL);
+            history.push({
+              pathname: ROUTE_PATH.POOL,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Pool
@@ -137,7 +152,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.FACTORY) && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.FACTORY);
+            history.push({
+              pathname: ROUTE_PATH.FACTORY,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Factory
@@ -148,7 +168,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button navbar-settings-button ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.SETTINGS);
+            history.push({
+              pathname: ROUTE_PATH.SETTINGS,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Settings

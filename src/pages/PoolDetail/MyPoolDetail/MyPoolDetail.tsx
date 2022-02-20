@@ -107,7 +107,17 @@ export const MyPoolDetail: React.FC = () => {
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
-              <BackButton />
+              <BackButton
+                buttonText={`${pool.quote.ticker} / ${pool.token.ticker}`}
+                onClick={() => {
+                  history.push({
+                    pathname: ROUTE_PATH.POOL,
+                    state: {
+                      from: history.location.pathname,
+                    },
+                  });
+                }}
+              />
             </div>
             <div className="my-pool-detail-header-right">
               <TabMenu
@@ -169,7 +179,12 @@ export const MyPoolDetail: React.FC = () => {
                 appearance="default"
                 className="primary-button my-pool-detail-button mt3 mobile-hidden"
                 onClick={() => {
-                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity');
+                  history.push({
+                    pathname: ROUTE_PATH.POOL + '/' + pool.id + '/add-liquidity',
+                    state: {
+                      from: history.location.pathname,
+                    },
+                  });
                 }}
               >
                 Add Liquidity
@@ -179,7 +194,12 @@ export const MyPoolDetail: React.FC = () => {
                 appearance="default"
                 className="primary-button my-pool-detail-button mt3 mobile-hidden"
                 onClick={() => {
-                  history.push(ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity');
+                  history.push({
+                    pathname: ROUTE_PATH.POOL + '/' + pool.id + '/remove-liquidity',
+                    state: {
+                      from: history.location.pathname,
+                    },
+                  });
                 }}
               >
                 Remove Liquidity

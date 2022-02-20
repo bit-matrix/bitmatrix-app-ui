@@ -2,16 +2,19 @@ import React, { useContext, useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
 import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
+import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -24,6 +27,8 @@ const RemoveLiquidity = (): JSX.Element => {
   const { payloadData } = useContext(SettingsContext);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const history = useHistory();
 
   useEffect(() => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
@@ -153,7 +158,27 @@ const RemoveLiquidity = (): JSX.Element => {
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
         {/* {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />} */}
-        <BackButton />
+        <BackButton
+          buttonText="Remove Liquidity"
+          onClick={() => {
+            const prevPageLocation = history.location.state;
+            if (prevPageLocation) {
+              history.push({
+                pathname: (prevPageLocation as { from: string }).from,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            } else {
+              history.push({
+                pathname: ROUTE_PATH.POOL,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            }
+          }}
+        />
         <div>
           <div className="remove-liquidity-main">
             <div className="remove-liquidity-text">
@@ -220,7 +245,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text="Remove Liquidity"
+            text={`Remove ${setQuoteText(payloadData.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();

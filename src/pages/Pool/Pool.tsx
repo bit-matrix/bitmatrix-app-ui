@@ -17,7 +17,14 @@ export const Pool = (): JSX.Element => {
       <div className="pool-main-div">
         <PoolManagement
           pools={payloadData.pools}
-          onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/' + poolId)}
+          onClick={(poolId: string) => {
+            history.push({
+              pathname: ROUTE_PATH.POOL + '/' + poolId,
+              state: {
+                from: history.location.pathname,
+              },
+            });
+          }}
         />
       </div>
     );
