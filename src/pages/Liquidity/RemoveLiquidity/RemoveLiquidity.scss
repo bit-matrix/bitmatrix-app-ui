@@ -180,18 +180,8 @@
     }
 
     .remove-liquidity-button {
-      width: 100%;
-      height: 2.75rem;
-      border-radius: 1rem !important;
-      font-weight: 600 !important;
-      color: $bmDeepFir !important;
-      background: $bmPaleGreen !important;
-      border-width: 0 !important;
-      opacity: 0.9;
-
-      &:hover {
-        opacity: 1;
-      }
+      height: 2.75rem !important;
+      margin-top: 0 !important;
     }
   }
 }
