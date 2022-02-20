@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { convertion } from '@bitmatrix/lib';
 import { Pool } from '@bitmatrix/models';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
-import { calculateChartData } from '../../../components/utils/utils';
+// import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
@@ -73,8 +73,8 @@ export const MyPoolDetail: React.FC = () => {
     return { pooledQuote: '0', pooledToken: '0', pooledLp: '0', poolRate: '0' };
   };
 
-  const renderChart = (allData: any) => {
-    let data: ChartData[] = [
+  const renderChart = (/*allData: any*/) => {
+    const data: ChartData[] = [
       {
         date: '',
         close: 0,
@@ -85,10 +85,12 @@ export const MyPoolDetail: React.FC = () => {
 
     if (selectedTab === MY_POOL_DETAIL_TABS.EARNINGS) {
       key = 'earnings';
-      data = allData.allPriceData;
+      data;
+      // data = allData.allPriceData;
     } else if (selectedTab === MY_POOL_DETAIL_TABS.SHARE) {
       key = 'share';
-      data = allData.allVolumeData;
+      data;
+      // data = allData.allVolumeData;
     }
 
     return (
@@ -101,7 +103,7 @@ export const MyPoolDetail: React.FC = () => {
   if (pool === undefined || payloadData.pool_chart_data === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(payloadData.pool_chart_data, pool);
+    // const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="my-pool-detail-container">
         <div className="my-pool-detail-main">
@@ -128,7 +130,7 @@ export const MyPoolDetail: React.FC = () => {
             </div>
           </div>
           <div className="my-pool-detail-content">
-            <div className="my-pool-detail-content-right desktop-hidden">{renderChart(data)}</div>
+            <div className="my-pool-detail-content-right desktop-hidden">{renderChart()}</div>
             <div className="my-pool-detail-content-left">
               <div className="my-pool-detail-content-left-header">My pooled assets</div>
               <div className="my-pooled-assets-content">
@@ -205,7 +207,7 @@ export const MyPoolDetail: React.FC = () => {
                 Remove Liquidity
               </Button>
             </div>
-            <div className="my-pool-detail-content-right mobile-hidden">{renderChart(data)}</div>
+            <div className="my-pool-detail-content-right mobile-hidden">{renderChart()}</div>
           </div>
         </div>
       </div>
