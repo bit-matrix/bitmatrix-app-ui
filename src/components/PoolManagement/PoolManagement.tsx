@@ -33,7 +33,11 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
     if (prevPage) {
       const fromLocation = (prevPage as { from: string }).from;
 
-      if (fromLocation.startsWith('/pool')) {
+      if (
+        fromLocation.startsWith('/pool') &&
+        !fromLocation.includes('add-liquidity') &&
+        !fromLocation.includes('remove-liquidity')
+      ) {
         const currentPoolContainerClass = [...poolContainerClasses];
         currentPoolContainerClass.push('pool-shrink');
         setPoolContainerClasses(currentPoolContainerClass);
