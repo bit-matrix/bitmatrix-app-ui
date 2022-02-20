@@ -11,8 +11,8 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import lp from '../../../images/lp.png';
-import usdt from '../../../images/usdt.png';
-import lbtc from '../../../images/liquid_btc.png';
+import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
@@ -219,21 +219,21 @@ const RemoveLiquidity = (): JSX.Element => {
 
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">L-BTC You Get</span>
-                <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
+                <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">USDT You Get</span>
-                <img className="remove-liquidity-page-icons" src={usdt} alt="" />
+                <TetherIcon className="liquidity-usdt-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-third">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
                 <img className="remove-liquidity-page-icons" src={lp} alt="" />
               </div>

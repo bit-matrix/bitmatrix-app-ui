@@ -15,8 +15,8 @@ import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
-import btc from '../../../images/liquid_btc.png';
-import usdt from '../../../images/usdt.png';
+import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import lp from '../../../images/lp.png';
 import pct from '../../../images/pct.png';
 import rew from '../../../images/rew.png';
@@ -329,7 +329,7 @@ const AddLiquidity = (): JSX.Element => {
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
                     <div className="add-liquidity-text">{setQuoteText(payloadData.preferred_unit.text)} Liquidity</div>
-                    <img className="liquidity-btc-icon" src={btc} alt="" />
+                    <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
@@ -358,7 +358,7 @@ const AddLiquidity = (): JSX.Element => {
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
                     <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
-                    <img className="liquidity-usdt-icon" src={usdt} alt="" />
+                    <TetherIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
