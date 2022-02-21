@@ -362,7 +362,7 @@ export const Swap = (): JSX.Element => {
 
             await sleep(1000);
 
-            payloadData.wallet.marina.reloadCoins();
+            walletContext.marina.reloadCoins();
 
             setLoading(false);
           } else {
