@@ -18,6 +18,7 @@ export class Wallet implements IWallet {
     // TODO default wallet
     else this.wallet = new Marina();
   }
+
   public off = (listenerId: EventListenerID): void => this.wallet.off(listenerId);
 
   public on = (type: MarinaEventType, callback: (payload: any) => void): string => this.wallet.on(type, callback);
@@ -40,4 +41,6 @@ export class Wallet implements IWallet {
   public getBalances = (): Promise<Balance[]> => this.wallet.getBalances();
 
   public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
+
+  public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
 }
