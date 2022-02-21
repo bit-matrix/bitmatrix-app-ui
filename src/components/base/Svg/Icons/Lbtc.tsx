@@ -3,7 +3,7 @@ import Svg from '../Svg';
 import { IconSvg } from './IconSvg';
 
 const LbtcIcon: React.FC<IconSvg> = ({ fill = '#46beae', bgColor, width, height, className }) => (
-  <Svg className={className} fill={fill} bgColor={bgColor} width={width} height={height} path="" viewBox="0 0 44 44">
+  <Svg className={className} fill={fill} bgColor={bgColor} width={width} height={height} viewBox="0 0 44 44">
     <path
       d="m20.7936 43.5016c-7.2026-.3034-13.87898-5.1776-15.92221-11.8063-1.58538-5.1248-.73119-10.0518 1.82456-14.7348 1.86556-3.4099 4.55115-6.1933 7.35295-8.87774 2.4464-2.34147 5.009-4.57741 7.2572-7.103556.3622-.402337.6629-.857439 1.2505-.184679 2.8428 3.271455 6.2459 6.021865 9.28 9.121835 2.8223 2.88894 5.3097 5.98224 6.7652 9.74844 3.2665 8.4754.5126 17.6434-8.4462 22.0955-2.8906 1.4247-5.5489 1.9655-9.362 1.7413z"
       fill="#46beae"

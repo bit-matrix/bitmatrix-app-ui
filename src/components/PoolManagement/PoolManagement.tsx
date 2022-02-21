@@ -42,6 +42,9 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
         currentPoolContainerClass.push('pool-shrink');
         setPoolContainerClasses(currentPoolContainerClass);
         //  poolContainerClasses.push('pool-shrink');
+        if (fromLocation.startsWith('/pool/my-pool')) {
+          setSelectedTab(POOL_MANAGEMENT_TABS.MY_POOLS);
+        }
       }
     }
   }, []);

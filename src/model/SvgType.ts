@@ -1,5 +1,5 @@
 export type SvgType = {
-  path: string;
+  path?: string;
   fill?: string;
   bgColor?: string;
   color?: string;
