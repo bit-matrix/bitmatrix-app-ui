@@ -44,13 +44,13 @@ export const Swap = (): JSX.Element => {
 
   const { payloadData } = useContext(SettingsContext);
 
-  const [swapWay, setSwapWay] = useState<SWAP_WAY>(SWAP_WAY.FROM);
+  const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
-      if (swapWay === 'from') {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && swapWay) {
+      if (swapWay === SWAP_WAY.FROM) {
         onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
       } else {
         onChangeToInput(inputToAmount);
@@ -309,6 +309,7 @@ export const Swap = (): JSX.Element => {
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          setSwapWay(undefined);
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
