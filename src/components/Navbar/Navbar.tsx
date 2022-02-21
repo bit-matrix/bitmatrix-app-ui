@@ -7,8 +7,8 @@ import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
-import success from '../../images/tick.png';
-import failed from '../../images/txrevert.png';
+import TickIcon from '../base/Svg/Icons/Tick';
+import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import './Navbar.scss';
 
 export const Navbar: React.FC = (): JSX.Element => {
@@ -45,9 +45,9 @@ export const Navbar: React.FC = (): JSX.Element => {
     } else {
       if (txHistory && txHistory.length > 0) {
         if (txHistory[txHistory.length - 1].success) {
-          return <img className="navbar-item-icon" src={success} alt="" />;
+          return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
-          <img className="navbar-item-icon" src={failed} alt="" />;
+          return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         }
       }
     }
@@ -85,7 +85,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                   speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
                   enterable
                 >
-                  {txInfo()}
+                  <div>{txInfo()}</div>
                 </Whisper>
               </ButtonToolbar>
             </div>
