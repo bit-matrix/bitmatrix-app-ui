@@ -14,7 +14,7 @@ import lp from '../../../images/lp.png';
 import usdt from '../../../images/usdt.png';
 import lbtc from '../../../images/liquid_btc.png';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -132,6 +132,11 @@ const RemoveLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
+
+          await sleep(1000);
+
+          payloadData.wallet.marina.reloadCoins();
+
           setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');

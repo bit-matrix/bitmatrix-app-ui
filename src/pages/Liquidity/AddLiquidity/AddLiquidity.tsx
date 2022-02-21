@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, setQuoteText } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -264,6 +264,10 @@ const AddLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
+          await sleep(1000);
+
+          payloadData.wallet.marina.reloadCoins();
+
           setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
