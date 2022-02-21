@@ -264,11 +264,11 @@ const AddLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
+          setLoading(false);
+
           await sleep(3000);
 
           payloadData.wallet.marina.reloadCoins();
-
-          setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);

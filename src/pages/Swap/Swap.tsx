@@ -365,11 +365,11 @@ export const Swap = (): JSX.Element => {
 
             setLocalData(newStoreData);
 
+            setLoading(false);
+
             await sleep(3000);
 
             payloadData.wallet.marina.reloadCoins();
-
-            setLoading(false);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
             setLoading(false);
