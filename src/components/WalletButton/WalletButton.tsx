@@ -12,13 +12,7 @@ type Props = {
   loading?: boolean;
 };
 
-export const WalletButton: React.FC<Props> = ({
-  text,
-  onClick,
-  disabled = false,
-  className = 'wallet-button',
-  loading,
-}) => {
+export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const { walletContext } = useWalletContext();
 
@@ -28,7 +22,7 @@ export const WalletButton: React.FC<Props> = ({
       <Button
         appearance="default"
         loading={loading}
-        className={className}
+        className={`wallet-button ${className}`}
         onClick={() => {
           if (walletContext?.isEnabled) {
             onClick();
@@ -38,7 +32,7 @@ export const WalletButton: React.FC<Props> = ({
         }}
         disabled={walletContext?.isEnabled && disabled}
       >
-        {walletContext?.isEnabled ? text : 'Connect Wallet'}
+        {loading ? '' : walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>
     </>
   );

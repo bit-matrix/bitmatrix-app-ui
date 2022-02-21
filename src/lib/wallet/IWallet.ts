@@ -29,4 +29,6 @@ export interface IWallet {
   getBalances(): Promise<Balance[]>;
 
   getNextChangeAddress(): Promise<AddressInterface>;
+
+  reloadCoins(): Promise<void>;
 }

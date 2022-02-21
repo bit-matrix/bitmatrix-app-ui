@@ -24,8 +24,30 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
   const { walletContext } = useWalletContext();
-
+  const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
   const history = useHistory();
+
+  useEffect(() => {
+    const prevPage = history.location.state;
+
+    if (prevPage) {
+      const fromLocation = (prevPage as { from: string }).from;
+
+      if (
+        fromLocation.startsWith('/pool') &&
+        !fromLocation.includes('add-liquidity') &&
+        !fromLocation.includes('remove-liquidity')
+      ) {
+        const currentPoolContainerClass = [...poolContainerClasses];
+        currentPoolContainerClass.push('pool-shrink');
+        setPoolContainerClasses(currentPoolContainerClass);
+        //  poolContainerClasses.push('pool-shrink');
+        if (fromLocation.startsWith('/pool/my-pool')) {
+          setSelectedTab(POOL_MANAGEMENT_TABS.MY_POOLS);
+        }
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (pools && pools.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
@@ -64,7 +86,14 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
             <PoolCard
               pool={pool}
               rank={index + 1}
-              onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/my-pool/' + poolId)}
+              onClick={(poolId: string) => {
+                history.push({
+                  pathname: ROUTE_PATH.POOL + '/my-pool/' + poolId,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              }}
             />
           </div>
         );
@@ -120,7 +149,14 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
                   <PoolCard
                     pool={pool}
                     rank={index + 1}
-                    onClick={() => history.push('pool/' + pool.id + '/add-liquidity')}
+                    onClick={() => {
+                      history.push({
+                        pathname: 'pool/' + pool.id + '/add-liquidity',
+                        state: {
+                          from: history.location.pathname,
+                        },
+                      });
+                    }}
                     showDetail={false}
                   />
                 </div>
@@ -133,7 +169,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   };
 
   return (
-    <div className="pool-page-main">
+    <div className={poolContainerClasses.join(' ')}>
       <div className="pool-page-header">
         <div className="pool-page-button pool-page-icon">
           <SliderIcon width="1.25rem" height="1.5rem" />

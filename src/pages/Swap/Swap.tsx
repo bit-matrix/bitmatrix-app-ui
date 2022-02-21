@@ -21,6 +21,7 @@ import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import './Swap.scss';
+import { sleep } from '../../helper';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -358,6 +359,10 @@ export const Swap = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setLocalData(newStoreData);
+
+            await sleep(1000);
+
+            payloadData.wallet.marina.reloadCoins();
 
             setLoading(false);
           } else {

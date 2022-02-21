@@ -16,7 +16,17 @@ export const Pool = (): JSX.Element => {
   if (pools && pools.length > 0) {
     return (
       <div className="pool-main-div">
-        <PoolManagement pools={pools} onClick={(poolId: string) => history.push(ROUTE_PATH.POOL + '/' + poolId)} />
+        <PoolManagement
+          pools={pools}
+          onClick={(poolId: string) => {
+            history.push({
+              pathname: ROUTE_PATH.POOL + '/' + poolId,
+              state: {
+                from: history.location.pathname,
+              },
+            });
+          }}
+        />
       </div>
     );
   }

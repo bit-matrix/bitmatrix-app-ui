@@ -26,9 +26,6 @@ export default class Marina implements MarinaProvider {
   constructor() {
     this.marina = window.marina;
   }
-  reloadCoins(): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
 
   on = (type: MarinaEventType, callback: (payload: any) => void): string => {
     if (this.exist() && marina) return marina.on(type, callback);
@@ -88,6 +85,12 @@ export default class Marina implements MarinaProvider {
     if (this.exist() && this.marina) return this.marina.getBalances();
     // else throw "Install Marina first";
     throw new Error('Marina wallet disabled.');
+  }
+
+  reloadCoins(): Promise<void> {
+    if (this.exist() && marina) return marina.reloadCoins();
+
+    return Promise.reject('Marina wallet disabled.');
   }
 
   setAccount(/*account: number*/): Promise<void> {

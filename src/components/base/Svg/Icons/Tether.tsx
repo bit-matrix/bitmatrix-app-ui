@@ -3,7 +3,7 @@ import Svg from '../Svg';
 import { IconSvg } from './IconSvg';
 
 const TetherIcon: React.FC<IconSvg> = ({ fill = 'none', bgColor, width, height, className }) => (
-  <Svg className={className} fill={fill} bgColor={bgColor} width={width} height={height} path="" viewBox="0 0 47 48">
+  <Svg className={className} fill={fill} bgColor={bgColor} width={width} height={height} viewBox="0 0 47 48">
     <g fill="#00A478">
       <path
         d="M18.08 47.57C10.296 47.232 3.075 41.85.865 34.523-.848 28.86.074 23.42 2.84 18.243c2.015-3.77 4.92-6.844 7.949-9.81 2.647-2.59 5.416-5.057 7.853-7.85.389-.444.718-.947 1.353-.204 3.074 3.618 6.754 6.651 10.033 10.077 3.05 3.19 5.743 6.612 7.315 10.768 3.535 9.368.556 19.496-9.133 24.414-3.13 1.587-6.005 2.178-10.128 1.931z"

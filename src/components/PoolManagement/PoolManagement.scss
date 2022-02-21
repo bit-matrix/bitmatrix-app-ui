@@ -9,6 +9,20 @@
   background-color: $bmBlack;
 }
 
+.pool-shrink {
+  animation: shrink 0.3s linear;
+  animation-delay: -0.1s;
+
+  @keyframes shrink {
+    from {
+      width: 60rem;
+    }
+    to {
+      width: 45rem;
+    }
+  }
+}
+
 .pool-page-header {
   display: flex;
   align-items: center;
@@ -129,7 +143,7 @@
   background-color: $bmEbony;
   border-radius: 1.25rem;
   padding: 0.35rem;
-  animation: fadein 1s ease;
+  animation: fadein 0.3s ease;
 
   @keyframes fadein {
     from {

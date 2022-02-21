@@ -22,8 +22,8 @@ const Svg: React.FC<SvgType> = ({
   };
 
   return (
-    <svg className={`${className} svg-main`} style={style} viewBox={viewBox} width={width} height={height}>
-      <path d={path} />
+    <svg className={`svg-main ${className}`} style={style} viewBox={viewBox} width={width} height={height}>
+      {path && <path d={path} />}
       {children}
     </svg>
   );

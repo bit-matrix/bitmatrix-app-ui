@@ -3,15 +3,18 @@ import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import Decimal from 'decimal.js';
+import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
+import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import lp from '../../../images/lp.png';
-import usdt from '../../../images/usdt.png';
-import lbtc from '../../../images/liquid_btc.png';
+import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -28,6 +31,8 @@ const RemoveLiquidity = (): JSX.Element => {
   const { settings } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const history = useHistory();
 
   useEffect(() => {
     if (pools && pools.length > 0 && walletContext) {
@@ -131,6 +136,11 @@ const RemoveLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
+
+          await sleep(1000);
+
+          walletContext.marina.reloadCoins();
+
           setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
@@ -157,7 +167,27 @@ const RemoveLiquidity = (): JSX.Element => {
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
         {/* {loading && <Loader className="remove-liquidity-page-loading" size="md" inverse center />} */}
-        <BackButton />
+        <BackButton
+          buttonText="Remove Liquidity"
+          onClick={() => {
+            const prevPageLocation = history.location.state;
+            if (prevPageLocation) {
+              history.push({
+                pathname: (prevPageLocation as { from: string }).from,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            } else {
+              history.push({
+                pathname: ROUTE_PATH.POOL,
+                state: {
+                  from: history.location.pathname,
+                },
+              });
+            }
+          }}
+        />
         <div>
           <div className="remove-liquidity-main">
             <div className="remove-liquidity-text">
@@ -198,21 +228,21 @@ const RemoveLiquidity = (): JSX.Element => {
 
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">L-BTC You Get</span>
-                <img className="remove-liquidity-page-icons" src={lbtc} alt="" />
+                <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">USDT You Get</span>
-                <img className="remove-liquidity-page-icons" src={usdt} alt="" />
+                <TetherIcon className="liquidity-usdt-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-third">
-              <div>
+              <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
                 <img className="remove-liquidity-page-icons" src={lp} alt="" />
               </div>
@@ -224,7 +254,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text="Remove Liquidity"
+            text={`Remove ${setQuoteText(settings.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();

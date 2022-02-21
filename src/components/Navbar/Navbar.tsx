@@ -7,8 +7,8 @@ import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
 import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
-import success from '../../images/tick.png';
-import failed from '../../images/txrevert.png';
+import TickIcon from '../base/Svg/Icons/Tick';
+import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import './Navbar.scss';
 
 export const Navbar: React.FC = (): JSX.Element => {
@@ -45,9 +45,9 @@ export const Navbar: React.FC = (): JSX.Element => {
     } else {
       if (txHistory && txHistory.length > 0) {
         if (txHistory[txHistory.length - 1].success) {
-          return <img className="navbar-item-icon" src={success} alt="" />;
+          return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
-          <img className="navbar-item-icon" src={failed} alt="" />;
+          return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         }
       }
     }
@@ -85,7 +85,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                   speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
                   enterable
                 >
-                  {txInfo()}
+                  <div>{txInfo()}</div>
                 </Whisper>
               </ButtonToolbar>
             </div>
@@ -101,7 +101,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-home-button ${selectedTab === ROUTE_PATH.HOME && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.HOME);
+            history.push({
+              pathname: ROUTE_PATH.HOME,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           <Svg
@@ -115,7 +120,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab === ROUTE_PATH.SWAP && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.SWAP);
+            history.push({
+              pathname: ROUTE_PATH.SWAP,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Swap
@@ -126,7 +136,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.POOL) && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.POOL);
+            history.push({
+              pathname: ROUTE_PATH.POOL,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Pool
@@ -137,7 +152,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.FACTORY) && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.FACTORY);
+            history.push({
+              pathname: ROUTE_PATH.FACTORY,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Factory
@@ -148,7 +168,12 @@ export const Navbar: React.FC = (): JSX.Element => {
         <Button
           className={`navbar-item-button navbar-settings-button ${selectedTab === ROUTE_PATH.SETTINGS && 'active'}`}
           onClick={() => {
-            history.push(ROUTE_PATH.SETTINGS);
+            history.push({
+              pathname: ROUTE_PATH.SETTINGS,
+              state: {
+                from: history.location.pathname,
+              },
+            });
           }}
         >
           Settings
