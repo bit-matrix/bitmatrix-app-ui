@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
+import { getPrimaryPoolConfig, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -332,7 +332,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{setQuoteText(payloadData.preferred_unit.text)} Liquidity</div>
+                    <div className="add-liquidity-text">{`tL-${payloadData.preferred_unit.text}`} Liquidity</div>
                     <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
@@ -398,7 +398,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add ${setQuoteText(payloadData.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
+              text={`Add tL-${payloadData.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();
