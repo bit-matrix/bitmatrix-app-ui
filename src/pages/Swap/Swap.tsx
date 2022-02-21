@@ -365,7 +365,7 @@ export const Swap = (): JSX.Element => {
 
             setLocalData(newStoreData);
 
-            await sleep(1000);
+            await sleep(3000);
 
             payloadData.wallet.marina.reloadCoins();
 
