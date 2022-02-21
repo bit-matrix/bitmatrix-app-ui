@@ -7,8 +7,8 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
-import liqadd from '../../images/liqadd.png';
-import liqremove from '../../images/liqremove.png';
+import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
+import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
@@ -64,7 +64,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="info-card-item-icon info-card-img" src={liqadd} alt="" />
+          <LiquidityAddIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -82,7 +82,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
       messageBody = (
         <>
-          <img className="info-card-item-icon info-card-img" src={liqremove} alt="" />
+          <LiquidityRemoveIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
           <div
             className="info-card-item-text"
             unselectable="on"

@@ -15,11 +15,11 @@ import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
-import btc from '../../../images/liquid_btc.png';
-import usdt from '../../../images/usdt.png';
-import lp from '../../../images/lp.png';
-import pct from '../../../images/pct.png';
-import rew from '../../../images/rew.png';
+import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
+import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import LpIcon from '../../../components/base/Svg/Icons/Lp';
+import PercentIcon from '../../../components/base/Svg/Icons/Percent';
+import RewardIcon from '../../../components/base/Svg/Icons/Reward';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
@@ -333,7 +333,7 @@ const AddLiquidity = (): JSX.Element => {
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
                     <div className="add-liquidity-text">{setQuoteText(payloadData.preferred_unit.text)} Liquidity</div>
-                    <img className="liquidity-btc-icon" src={btc} alt="" />
+                    <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
@@ -362,7 +362,7 @@ const AddLiquidity = (): JSX.Element => {
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
                     <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
-                    <img className="liquidity-usdt-icon" src={usdt} alt="" />
+                    <TetherIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
@@ -375,23 +375,23 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-page-footer">
             <div className="add-liquidity-page-footer-line-item-first">
-              <div>
+              <div className="add-liquidity-text-icon-content">
                 <span className="add-liquidity-page-footer-line-item-texts">LP you will get</span>
-                <img className="add-liquidity-page-icons" src={lp} alt="" />
+                <LpIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="add-liquidity-page-footer-line-item-values">{calcLpValues().lpReceived}</div>
             </div>
             <div className="add-liquidity-page-footer-line-item-second mobile-hidden">
-              <div>
+              <div className="add-liquidity-text-icon-content">
                 <span className="add-liquidity-page-footer-line-item-texts">LP rewards</span>
-                <img className="add-liquidity-page-icons" src={rew} alt="" />
+                <RewardIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="add-liquidity-page-footer-line-item-values">% 0.2</div>
             </div>
             <div className="add-liquidity-page-footer-line-item-third">
-              <div>
+              <div className="add-liquidity-text-icon-content">
                 <span className="add-liquidity-page-footer-line-item-texts">Pool Share</span>
-                <img className="add-liquidity-page-icons" src={pct} alt="" />
+                <PercentIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="add-liquidity-page-footer-line-item-values">% {calcLpValues().poolRate}</div>
             </div>
