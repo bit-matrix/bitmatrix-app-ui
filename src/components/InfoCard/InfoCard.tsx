@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 // import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import SettingsContext from '../../context/SettingsContext';
 import { timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -15,6 +16,8 @@ import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const { payloadData } = useContext(SettingsContext);
 
   const data = getLocalData();
 
@@ -34,7 +37,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC} {cs.quoteAsset} for {cs.tokenAsset} (min{' '}
+            Swap {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')}{' '}
+            {payloadData.preferred_unit.text} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -55,7 +59,8 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {cs.quoteAsset} (min {cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC})
+            {payloadData.preferred_unit.text} (min{' '}
+            {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')})
           </div>
         </>
       );
