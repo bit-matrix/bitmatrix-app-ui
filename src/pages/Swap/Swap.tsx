@@ -73,7 +73,8 @@ export const Swap = (): JSX.Element => {
       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     }
 
-    const output = convertion.convertForCtx(inputNum, settings.slippage, currentPool, pool_config, methodCall);
+    const output = convertion.convertForCtx(inputNum, settings.slippage, currentPool, poolConfig, methodCall);
+
     if (output.amount > 0) {
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
@@ -105,13 +106,14 @@ export const Swap = (): JSX.Element => {
       }
 
       const output = convertion.convertForCtx2(inputNum, settings.slippage, pools[0], poolConfig, methodCall);
+
       if (output.amount > 0) {
         if (selectedAsset.to === SWAP_ASSET.LBTC) {
           setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+          setAmountWithSlippage(output.amountWithSlipapge / settings.preferred_unit.value);
         } else {
           setInputFromAmount((output.amount / settings.preferred_unit.value).toString());
-          setAmountWithSlippage(output.amountWithSlipapge / settings.preferred_unit.value);
+          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
         }
       } else {
         setInputFromAmount('');
