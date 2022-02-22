@@ -10,11 +10,11 @@ import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
-import lp from '../../../images/lp.png';
+import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
+import { getPrimaryPoolConfig, sleep } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -224,7 +224,7 @@ const RemoveLiquidity = (): JSX.Element => {
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">L-BTC You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">BTC You Get</span>
                 <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
@@ -239,7 +239,7 @@ const RemoveLiquidity = (): JSX.Element => {
             <div className="remove-liquidity-page-footer-line-item-third">
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
-                <img className="remove-liquidity-page-icons" src={lp} alt="" />
+                <LpIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">
                 {(Number(calcLpTokenAmount) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8)}
@@ -249,7 +249,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove ${setQuoteText(payloadData.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
+            text={`Remove tL-${payloadData.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();
