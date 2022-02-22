@@ -2,7 +2,6 @@ import React from 'react';
 import { Dropdown } from 'rsuite';
 import { useSettingsContext } from '../../context';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { setQuoteText } from '../../helper';
 import LbtcIcon from '../base/Svg/Icons/Lbtc';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import './SwapAssetList.scss';
@@ -35,7 +34,7 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
   const assesText = () => {
     switch (selectedAsset) {
       case SWAP_ASSET.LBTC:
-        return setQuoteText(settings.preferred_unit.text);
+        return `tL-${settings.preferred_unit.text}`;
       default:
         return SWAP_ASSET.USDT;
     }
@@ -54,7 +53,7 @@ export const SwapAssetList: React.FC<Props> = ({ selectedAsset, setSelectedAsset
       >
         <Dropdown.Item className="swap-dropdown-item" eventKey={SWAP_ASSET.LBTC} onSelect={onSelectAsset}>
           <LbtcIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />
-          {setQuoteText(settings.preferred_unit.text)}
+          {`tL-${settings.preferred_unit.text}`}
         </Dropdown.Item>
         <Dropdown.Item className="swap-dropdown-item" eventKey={SWAP_ASSET.USDT} onSelect={onSelectAsset}>
           <TetherIcon className="swap-dropdown-item-img" width="1.5rem" height="1.5rem" />

@@ -15,13 +15,13 @@ import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
+import { sleep } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import './Swap.scss';
-import { sleep } from '../../helper';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -46,13 +46,13 @@ export const Swap = (): JSX.Element => {
   const { poolConfig } = usePoolConfigContext();
   const { settings } = useSettingsContext();
 
-  const [swapWay, setSwapWay] = useState<SWAP_WAY>(SWAP_WAY.FROM);
+  const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (pools && pools.length > 0 && poolConfig) {
-      if (swapWay === 'from') {
+    if (pools && pools.length > 0 && poolConfig && swapWay) {
+      if (swapWay === SWAP_WAY.FROM) {
         onChangeFromInput(pools[0], poolConfig, inputFromAmount);
       } else {
         onChangeToInput(inputToAmount);
@@ -304,6 +304,7 @@ export const Swap = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          setSwapWay(undefined);
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
@@ -360,11 +361,11 @@ export const Swap = (): JSX.Element => {
 
             setLocalData(newStoreData);
 
-            await sleep(1000);
+            setLoading(false);
+
+            await sleep(3000);
 
             walletContext.marina.reloadCoins();
-
-            setLoading(false);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
             setLoading(false);

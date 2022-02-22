@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, setQuoteText, sleep } from '../../../helper';
+import { getPrimaryPoolConfig, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -267,11 +267,11 @@ const AddLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
-          await sleep(1000);
+          setLoading(false);
+
+          await sleep(3000);
 
           walletContext.marina.reloadCoins();
-
-          setLoading(false);
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);
@@ -335,7 +335,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{setQuoteText(settings.preferred_unit.text)} Liquidity</div>
+                    <div className="add-liquidity-text">{`tL-${settings.preferred_unit.text}`} Liquidity</div>
                     <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
@@ -401,7 +401,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add ${setQuoteText(settings.preferred_unit.text)} and ${SWAP_ASSET.USDT}`}
+              text={`Add tL-${settings.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();

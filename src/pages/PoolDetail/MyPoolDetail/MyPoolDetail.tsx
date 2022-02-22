@@ -23,6 +23,7 @@ import './MyPoolDetail.scss';
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
   const [pool, setPool] = useState<Pool>();
+  const [loading, setLoading] = useState(true);
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
@@ -40,6 +41,12 @@ export const MyPoolDetail: React.FC = () => {
       setPool(currentPool);
     }
   }, [pools]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  }, []);
 
   const calcPooledAssets = () => {
     if (pools && pools.length > 0 && walletContext) {
@@ -133,7 +140,8 @@ export const MyPoolDetail: React.FC = () => {
             </div>
           </div>
           <div className="my-pool-detail-content">
-            <div className="my-pool-detail-content-right desktop-hidden">{renderChart()}</div>
+            <div className="my-pool-detail-content-right desktop-hidden">{!loading && renderChart()}</div>
+
             <div className="my-pool-detail-content-left">
               <div className="my-pool-detail-content-left-header">My pooled assets</div>
               <div className="my-pooled-assets-content">
@@ -210,7 +218,8 @@ export const MyPoolDetail: React.FC = () => {
                 Remove Liquidity
               </Button>
             </div>
-            <div className="my-pool-detail-content-right mobile-hidden">{renderChart()}</div>
+
+            <div className="my-pool-detail-content-right mobile-hidden">{!loading && renderChart()}</div>
           </div>
         </div>
       </div>
