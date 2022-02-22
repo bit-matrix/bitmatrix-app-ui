@@ -72,6 +72,7 @@ export const Swap = (): JSX.Element => {
     }
 
     const output = convertion.convertForCtx(inputNum, payloadData.slippage, currentPool, pool_config, methodCall);
+
     if (output.amount > 0) {
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
@@ -109,13 +110,14 @@ export const Swap = (): JSX.Element => {
         payloadData.pool_config,
         methodCall,
       );
+
       if (output.amount > 0) {
         if (selectedAsset.to === SWAP_ASSET.LBTC) {
           setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+          setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
         } else {
           setInputFromAmount((output.amount / payloadData.preferred_unit.value).toString());
-          setAmountWithSlippage(output.amountWithSlipapge / payloadData.preferred_unit.value);
+          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
         }
       } else {
         setInputFromAmount('');
