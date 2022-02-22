@@ -1,6 +1,6 @@
 export enum PREFERRED_UNIT {
-  LBTC = 'L-BTC',
+  LBTC = 'BTC',
   mBTC = 'mBTC',
-  uBTC = 'µBTC',
-  SAT = 'SAT',
+  uBTC = 'Bits',
+  SAT = 'Sats',
 }

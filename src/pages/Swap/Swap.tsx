@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Content, Loader } from 'rsuite';
+import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
@@ -17,12 +17,12 @@ import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
+import { sleep } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import './Swap.scss';
-import { sleep } from '../../helper';
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -44,13 +44,13 @@ export const Swap = (): JSX.Element => {
 
   const { payloadData } = useContext(SettingsContext);
 
-  const [swapWay, setSwapWay] = useState<SWAP_WAY>(SWAP_WAY.FROM);
+  const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config) {
-      if (swapWay === 'from') {
+    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && swapWay) {
+      if (swapWay === SWAP_WAY.FROM) {
         onChangeFromInput(payloadData.pools[0], payloadData.pool_config, inputFromAmount);
       } else {
         onChangeToInput(inputToAmount);
@@ -309,6 +309,7 @@ export const Swap = (): JSX.Element => {
         const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          setSwapWay(undefined);
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);

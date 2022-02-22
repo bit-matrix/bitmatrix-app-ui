@@ -21,6 +21,7 @@ import './PoolDetail.scss';
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [pool, setPool] = useState<Pool>();
+  const [loading, setLoading] = useState(true);
 
   const { payloadData } = useContext(SettingsContext);
 
@@ -34,6 +35,12 @@ export const PoolDetail: React.FC = () => {
       setPool(currentPool);
     }
   }, [payloadData.pools]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  }, []);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -101,7 +108,7 @@ export const PoolDetail: React.FC = () => {
             </div>
           </div>
           <div className="pool-detail-content">
-            <div className="pool-detail-content-right desktop-hidden">{renderChart(data)}</div>
+            <div className="pool-detail-content-right desktop-hidden">{!loading && renderChart(data)}</div>
             <div className="pool-detail-content-left">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
@@ -203,7 +210,7 @@ export const PoolDetail: React.FC = () => {
                 Add Liquidity
               </Button>
             </div>
-            <div className="pool-detail-content-right mobile-hidden">{renderChart(data)}</div>
+            <div className="pool-detail-content-right mobile-hidden">{!loading && renderChart(data)}</div>
           </div>
         </div>
       </div>
