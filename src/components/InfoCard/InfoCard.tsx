@@ -38,7 +38,7 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')}{' '}
-            {payloadData.preferred_unit.text} for {cs.tokenAsset} (min{' '}
+            {`tL-${payloadData.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -58,8 +58,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {payloadData.preferred_unit.text} (min{' '}
+            Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for
+            {`tL-${payloadData.preferred_unit.text}`} (min{' '}
             {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')})
           </div>
         </>
@@ -77,7 +77,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            Add {Numeral(cs.quoteAmount).format('(0.00a)')} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -95,7 +95,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            Remove {Numeral(cs.quoteAmount).format('(0.00a)')} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
