@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getAssetPrecession, getPrimaryPoolConfig, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -339,7 +339,7 @@ const AddLiquidity = (): JSX.Element => {
                     className="add-liquidity-input"
                     inputValue={quoteAmount}
                     onChange={(inputValue) => onChangeQuoteAmount(inputValue)}
-                    decimalLength={8}
+                    decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, payloadData.preferred_unit.text)}
                   />
                 </div>
               </div>
