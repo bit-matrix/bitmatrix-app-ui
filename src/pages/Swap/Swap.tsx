@@ -305,6 +305,7 @@ export const Swap = (): JSX.Element => {
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
+          payloadData.wallet.marina.reloadCoins();
           return Promise.reject();
         }
 
@@ -380,6 +381,7 @@ export const Swap = (): JSX.Element => {
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);
+          payloadData.wallet.marina.reloadCoins();
         }
       } else {
         notify('Pool Error', 'Error : ', 'error');

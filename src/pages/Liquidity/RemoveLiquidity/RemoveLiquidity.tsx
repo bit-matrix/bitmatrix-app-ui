@@ -82,6 +82,7 @@ const RemoveLiquidity = (): JSX.Element => {
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
+          payloadData.wallet.marina.reloadCoins();
           return Promise.reject();
         }
 
@@ -138,7 +139,9 @@ const RemoveLiquidity = (): JSX.Element => {
 
           payloadData.wallet.marina.reloadCoins();
         } else {
-          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
+
+          payloadData.wallet.marina.reloadCoins();
           setLoading(false);
         }
       }
