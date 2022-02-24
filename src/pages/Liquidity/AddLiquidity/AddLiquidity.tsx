@@ -127,6 +127,11 @@ const AddLiquidity = (): JSX.Element => {
         setLbtcPercent(undefined);
         setUsdtPercent(usdtPercent);
       }
+      if (!usdtPercent && !lbctPercent) {
+        onChangeTokenAmount('0');
+        setLbtcPercent(undefined);
+        setUsdtPercent(undefined);
+      }
     }
   };
 
@@ -339,7 +344,10 @@ const AddLiquidity = (): JSX.Element => {
                   <NumericalInput
                     className="add-liquidity-input"
                     inputValue={quoteAmount}
-                    onChange={(inputValue) => onChangeQuoteAmount(inputValue)}
+                    onChange={(inputValue) => {
+                      onChangeQuoteAmount(inputValue);
+                      setLbtcPercent(undefined);
+                    }}
                     decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, payloadData.preferred_unit.text)}
                   />
                 </div>
@@ -368,7 +376,10 @@ const AddLiquidity = (): JSX.Element => {
                   <NumericalInput
                     className="add-liquidity-input"
                     inputValue={tokenAmount}
-                    onChange={(inputValue) => onChangeTokenAmount(inputValue)}
+                    onChange={(inputValue) => {
+                      onChangeTokenAmount(inputValue);
+                      setUsdtPercent(undefined);
+                    }}
                   />
                 </div>
               </div>
