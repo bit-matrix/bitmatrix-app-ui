@@ -1,4 +1,5 @@
 import { BmConfig } from '@bitmatrix/models';
+import Numeral from 'numeral';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
 
@@ -57,4 +58,11 @@ export const getAssetPrecession = (asset: SWAP_ASSET, preferred_unit: PREFERRED_
   } else {
     return 2;
   }
+};
+
+export const quoteAmountRound = (quoteAmount: number): string => {
+  if (quoteAmount > 1) {
+    return Numeral(quoteAmount).format('(0.00a)');
+  }
+  return quoteAmount.toString();
 };
