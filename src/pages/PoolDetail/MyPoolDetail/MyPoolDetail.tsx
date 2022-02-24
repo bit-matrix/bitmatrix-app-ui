@@ -18,6 +18,7 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import { quoteAmountRound } from '../../../helper';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -61,9 +62,8 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = Numeral(quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value).format(
-        '(0.00a)',
-      );
+      const pooledQuote = quoteAmountRound(quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value);
+
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
         '(0.00a)',
       );
