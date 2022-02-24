@@ -17,7 +17,7 @@ import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
-import { sleep } from '../../helper';
+import { getAssetPrecession, sleep } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
@@ -435,7 +435,7 @@ export const Swap = (): JSX.Element => {
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
+                    decimalLength={getAssetPrecession(selectedAsset.from, payloadData.preferred_unit.text)}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -455,7 +455,7 @@ export const Swap = (): JSX.Element => {
                     setSelectedFromAmountPercent(undefined);
                     setSwapWay(SWAP_WAY.TO);
                   }}
-                  decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
+                  decimalLength={getAssetPrecession(selectedAsset.to, payloadData.preferred_unit.text)}
                 />
               </div>
               <SwapAssetList

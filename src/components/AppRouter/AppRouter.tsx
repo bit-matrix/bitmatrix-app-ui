@@ -106,7 +106,7 @@ export const AppRouter = (): JSX.Element => {
     const pools: ModelPool[] = await api.getPools();
 
     const filteredPool = pools.filter(
-      (p) => p.id === '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
+      (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
     );
 
     const poolId: string = filteredPool[0].id;

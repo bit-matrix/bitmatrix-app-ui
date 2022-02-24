@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SettingsContext from '../../context/SettingsContext';
-import { timeDifference } from '../../helper';
+import { quoteAmountRound, timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Numeral from 'numeral';
@@ -37,8 +37,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')}{' '}
-            {payloadData.preferred_unit.text} for {cs.tokenAsset} (min{' '}
+            Swap {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
+            {`tL-${payloadData.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -59,8 +59,8 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {payloadData.preferred_unit.text} (min{' '}
-            {Numeral(cs.quoteAmount / payloadData.preferred_unit.value).format('(0.00a)')})
+            {`tL-${payloadData.preferred_unit.text}`} (min{' '}
+            {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)})
           </div>
         </>
       );
@@ -77,7 +77,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            Add {quoteAmountRound(cs.quoteAmount)} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -95,7 +95,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
+            Remove {quoteAmountRound(cs.quoteAmount)} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>

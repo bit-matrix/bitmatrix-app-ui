@@ -5,6 +5,7 @@ import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
+import { quoteAmountRound } from '../../helper';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
@@ -124,7 +125,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                    {quoteAmountRound(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC)}
                   </div>
                 </div>
 
