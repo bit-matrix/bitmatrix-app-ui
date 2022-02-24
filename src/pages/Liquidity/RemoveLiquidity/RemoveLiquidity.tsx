@@ -224,14 +224,16 @@ const RemoveLiquidity = (): JSX.Element => {
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">BTC You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">
+                  tL-{payloadData.preferred_unit.text} You Get
+                </span>
                 <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">USDT You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">tL-USDT You Get</span>
                 <TetherIcon className="liquidity-usdt-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
