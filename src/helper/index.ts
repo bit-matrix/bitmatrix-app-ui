@@ -76,3 +76,29 @@ export const quoteAmountRound = (quoteAmount: number): string => {
   }
   return quoteAmount.toString();
 };
+
+export const poolShareRound = (amount: number): string => {
+  if (amount < 1) {
+    const res = amount.toFixed(5);
+
+    const first = res.split('.');
+
+    const second = first[1].split('');
+
+    let i = second.length - 1;
+
+    while (i > 0) {
+      if (second[i] === '0') {
+        second.pop();
+
+        i--;
+      } else {
+        break;
+      }
+    }
+
+    return '0.' + second.join('');
+  }
+
+  return amount.toFixed(2);
+};

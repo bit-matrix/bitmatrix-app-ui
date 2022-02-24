@@ -18,7 +18,7 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
-import { quoteAmountRound } from '../../../helper';
+import { poolShareRound, quoteAmountRound } from '../../../helper';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -68,7 +68,7 @@ export const MyPoolDetail: React.FC = () => {
         '(0.00a)',
       );
       const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
-      const poolRate = (Number(recipientValue.poolRate) * 100).toFixed(2);
+      const poolRate = poolShareRound(Number(recipientValue.poolRate) * 100);
 
       return {
         pooledQuote,

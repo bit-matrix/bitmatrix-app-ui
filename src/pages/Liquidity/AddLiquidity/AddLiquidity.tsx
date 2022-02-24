@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetPrecession, getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getAssetPrecession, getPrimaryPoolConfig, poolShareRound, sleep } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -283,9 +283,10 @@ const AddLiquidity = (): JSX.Element => {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(payloadData.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
       const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+
       return {
         lpReceived: (Number(recipientValue.lpReceived) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
-        poolRate: (Number(recipientValue.poolRate) * 100).toFixed(2),
+        poolRate: poolShareRound(Number(recipientValue.poolRate) * 100),
       };
     }
     return { lpReceived: '0', poolRate: '0' };
