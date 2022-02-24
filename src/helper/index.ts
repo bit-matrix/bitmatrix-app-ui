@@ -1,4 +1,6 @@
 import { BmConfig } from '@bitmatrix/models';
+import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
+import SWAP_ASSET from '../enum/SWAP_ASSET';
 
 export const timeDifference = (time: number): string => {
   const now = new Date().valueOf();
@@ -37,3 +39,22 @@ export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
 };
 
 export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+export const getAssetPrecession = (asset: SWAP_ASSET, preferred_unit: PREFERRED_UNIT): number => {
+  if (asset === SWAP_ASSET.LBTC) {
+    switch (preferred_unit) {
+      case PREFERRED_UNIT.LBTC:
+        return 8;
+      case PREFERRED_UNIT.uBTC:
+        return 2;
+      case PREFERRED_UNIT.SAT:
+        return 0;
+      case PREFERRED_UNIT.mBTC:
+        return 5;
+      default:
+        return 2;
+    }
+  } else {
+    return 2;
+  }
+};
