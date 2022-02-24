@@ -125,7 +125,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {quoteAmountRound(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC)}
+                    {quoteAmountRound(Number(pool.quote.value) / payloadData.preferred_unit.value)}
                   </div>
                 </div>
 

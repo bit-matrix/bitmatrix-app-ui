@@ -72,8 +72,9 @@ export const quoteAmountRound = (quoteAmount: number): string => {
       }
     }
   } else {
-    Numeral(quoteAmount).format('(0.000a)');
+    return Numeral(quoteAmount).format('(0.00a)');
   }
+
   return quoteAmount.toString();
 };
 
