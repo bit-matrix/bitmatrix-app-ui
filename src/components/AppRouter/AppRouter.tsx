@@ -80,7 +80,7 @@ export const AppRouter = (): JSX.Element => {
       if (payloadData.wallet) {
         fetchBalances(payloadData.wallet?.marina);
       }
-    }, 10000);
+    }, 60000);
   }, [payloadData.wallet?.marina]);
 
   const fetchBalances = async (wall: IWallet) => {
