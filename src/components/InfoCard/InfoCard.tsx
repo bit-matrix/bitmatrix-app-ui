@@ -77,8 +77,9 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {quoteAmountRound(cs.quoteAmount)} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
-            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
+            Add {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
+            {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
+            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
@@ -95,8 +96,9 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {quoteAmountRound(cs.quoteAmount)} {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
-            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
+            Remove {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
+            {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
+            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
