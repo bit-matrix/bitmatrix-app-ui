@@ -61,8 +61,18 @@ export const getAssetPrecession = (asset: SWAP_ASSET, preferred_unit: PREFERRED_
 };
 
 export const quoteAmountRound = (quoteAmount: number): string => {
-  if (quoteAmount > 1) {
-    return Numeral(quoteAmount).format('(0.00a)');
+  if (quoteAmount < 1) {
+    const quoteAmountStr = String(quoteAmount);
+    if (quoteAmountStr.includes('.')) {
+      const quoteAmountStrLength = quoteAmountStr.split('.')[1].length;
+      if (quoteAmountStrLength > 5) {
+        return quoteAmount.toFixed(5);
+      } else {
+        return quoteAmount.toString();
+      }
+    }
+  } else {
+    Numeral(quoteAmount).format('(0.000a)');
   }
   return quoteAmount.toString();
 };
