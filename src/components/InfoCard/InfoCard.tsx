@@ -28,7 +28,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.5rem" />
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -49,7 +49,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.5rem" />
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -69,7 +69,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
       messageBody = (
         <>
-          <LiquidityAddIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
+          <LiquidityAddIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -88,7 +88,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
       messageBody = (
         <>
-          <LiquidityRemoveIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
+          <LiquidityRemoveIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
           <div
             className="info-card-item-text"
             unselectable="on"
