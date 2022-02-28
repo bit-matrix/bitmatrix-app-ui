@@ -251,7 +251,7 @@ const AddLiquidity = (): JSX.Element => {
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: pool.lp.ticker,
               timestamp: new Date().valueOf(),
-              success: false,
+              isOutOfSlippage: false,
               completed: false,
               seen: false,
               method: CALL_METHOD.ADD_LIQUIDITY,
