@@ -357,7 +357,7 @@ export const Swap = (): JSX.Element => {
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
               tokenAsset: payloadData.pools[0].token.ticker,
               timestamp: new Date().valueOf(),
-              success: false,
+              isOutOfSlippage: false,
               completed: false,
               seen: false,
               method: methodCall,

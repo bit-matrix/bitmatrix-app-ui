@@ -113,7 +113,7 @@ const RemoveLiquidity = (): JSX.Element => {
               lpAmount: calcLpTokenAmount,
               lpAsset: pool.lp.ticker,
               timestamp: new Date().valueOf(),
-              success: false,
+              isOutOfSlippage: false,
               completed: false,
               seen: false,
               method: CALL_METHOD.REMOVE_LIQUIDITY,

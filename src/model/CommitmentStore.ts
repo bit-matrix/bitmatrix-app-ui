@@ -9,9 +9,9 @@ export type CommitmentStore = {
   lpAmount?: number;
   lpAsset?: string;
   timestamp: number;
-  success: boolean;
   completed: boolean;
   seen: boolean;
   method: CALL_METHOD;
   poolTxId?: string;
+  isOutOfSlippage: boolean;
 };
