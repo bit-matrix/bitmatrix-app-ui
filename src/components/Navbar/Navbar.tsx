@@ -44,10 +44,10 @@ export const Navbar: React.FC = (): JSX.Element => {
       );
     } else {
       if (txHistory && txHistory.length > 0) {
-        if (txHistory[txHistory.length - 1].success) {
-          return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
-        } else {
+        if (txHistory[txHistory.length - 1].isOutOfSlippage) {
           return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
+        } else {
+          return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         }
       }
     }
