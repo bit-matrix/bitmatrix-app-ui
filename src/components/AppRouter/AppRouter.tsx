@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig, BmChart } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
@@ -157,7 +157,7 @@ export const AppRouter = (): JSX.Element => {
       if (unconfirmedTxs.length > 0) {
         unconfirmedTxs.forEach((transaction) => {
           if (transaction.txId) {
-            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
+            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
               if (ctxResponse) {
                 const newTxHistory = [...txHistory];
                 const willChangedTx = newTxHistory.findIndex((ntx) => {
@@ -177,7 +177,7 @@ export const AppRouter = (): JSX.Element => {
                     });
 
                     newTxHistory[willChangedTx].completed = true;
-                    newTxHistory[willChangedTx].success = true;
+                    newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
 
                     setLocalData(newTxHistory);
                   }
