@@ -12,6 +12,7 @@ import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import ExportIcon from '../base/Svg/Icons/Export';
+import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -104,6 +105,18 @@ export const InfoCard: React.FC = () => {
       );
     }
 
+    const txStatus = (cs: CommitmentStore): JSX.Element => {
+      if (cs.completed) {
+        if (cs.isOutOfSlippage) {
+          return <ExclamationIcon width="1.5rem" height="1.5rem" />;
+        } else {
+          return <div>{timeDifference(cs.timestamp)}</div>;
+        }
+      } else {
+        return <Loading width="1.5rem" height="1.5rem" />;
+      }
+    };
+
     return (
       <div key={cs.txId} className="info-card-item">
         {messageBody}
@@ -119,11 +132,7 @@ export const InfoCard: React.FC = () => {
             </div>
           </>
         )}
-        {cs.completed === false ? (
-          <Loading width="1.5rem" height="1.5rem" />
-        ) : (
-          <div>{timeDifference(cs.timestamp)}</div>
-        )}
+        {txStatus(cs)}
       </div>
     );
   };
