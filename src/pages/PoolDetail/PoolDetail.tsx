@@ -113,13 +113,13 @@ export const PoolDetail: React.FC = () => {
             <div className="pool-detail-content-left">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
-                <CustomPopover
+                {/* <CustomPopover
                   placement="autoHorizontal"
                   title="Total Pooled Assets"
                   content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
                 >
                   <img className="general-icon" src={info} alt="info" />
-                </CustomPopover>
+                </CustomPopover> */}
               </div>
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
@@ -139,13 +139,13 @@ export const PoolDetail: React.FC = () => {
 
               <div className="pool-detail-content-left-header">
                 <span>Pool Metrics</span>
-                <CustomPopover
+                {/* <CustomPopover
                   placement="autoHorizontal"
                   title="Pool Metrics"
                   content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
                 >
                   <img className="general-icon" src={info} alt="info" />
-                </CustomPopover>
+                </CustomPopover> */}
               </div>
 
               <div className="pool-metrics">
