@@ -128,7 +128,13 @@ export const Swap = (): JSX.Element => {
   };
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+    if (
+      payloadData.pools &&
+      payloadData.pools.length > 0 &&
+      payloadData.pool_config &&
+      payloadData.wallet &&
+      payloadData.wallet.balances.length > 0
+    ) {
       setSwapWay(SWAP_WAY.FROM);
 
       const currentPool = payloadData.pools[0];
