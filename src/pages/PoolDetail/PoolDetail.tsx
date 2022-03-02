@@ -15,8 +15,8 @@ import SettingsContext from '../../context/SettingsContext';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
-import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
-import info from '../../images/info2.png';
+// import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
+// import info from '../../images/info2.png';
 import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
