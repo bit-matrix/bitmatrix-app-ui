@@ -166,7 +166,7 @@ export const MyPoolDetail: React.FC = () => {
                 <CustomPopover
                   placement="autoHorizontal"
                   title="LP"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                  content="LP tokens represent the Liquid Network assets the user deposited into the liquidity pool along with a proportional scale of the trading fees collected over time in the particular liquidity pool into which the user deposited assets."
                 >
                   <img className="general-icon" src={info} alt="info" />
                 </CustomPopover>
@@ -177,11 +177,7 @@ export const MyPoolDetail: React.FC = () => {
                   {calcPooledAssets().poolRate}
                 </div>
 
-                <CustomPopover
-                  placement="autoHorizontal"
-                  title="%"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                >
+                <CustomPopover placement="autoHorizontal" title="%" content="Your liquidity proportion in percentage.">
                   <img className="general-icon" src={info} alt="info" />
                 </CustomPopover>
               </div>

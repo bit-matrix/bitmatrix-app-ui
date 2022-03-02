@@ -76,7 +76,13 @@ const AddLiquidity = (): JSX.Element => {
     lbctPercent: FROM_AMOUNT_PERCENT | undefined,
     usdtPercent: FROM_AMOUNT_PERCENT | undefined,
   ) => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+    if (
+      payloadData.pools &&
+      payloadData.pools.length > 0 &&
+      payloadData.pool_config &&
+      payloadData.wallet &&
+      payloadData.wallet.balances.length > 0
+    ) {
       const currentPool = payloadData.pools[0];
       const poolConfig = payloadData.pool_config;
 

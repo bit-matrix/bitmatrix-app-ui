@@ -15,12 +15,6 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
   const { payloadData, dispatch } = useContext(SettingsContext);
 
   const onChangeSelectedFromTab = (value: any) => {
-    if (value === selectedFromAmountPercent) {
-      setselectedFromAmountPercent(undefined);
-    } else {
-      setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
-    }
-
     if (payloadData.wallet && payloadData.wallet.isEnabled) {
       payloadData.wallet.marina.getBalances().then((balances) => {
         dispatch({
@@ -32,6 +26,12 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
           },
         });
       });
+    }
+
+    if (value === selectedFromAmountPercent) {
+      setselectedFromAmountPercent(undefined);
+    } else {
+      setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
     }
   };
 
