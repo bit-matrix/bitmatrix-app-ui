@@ -81,6 +81,10 @@
   justify-content: center;
 }
 
+.pool-card-tag {
+  padding: 0.125rem 0.25rem !important;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-card-column {
     width: 50%;

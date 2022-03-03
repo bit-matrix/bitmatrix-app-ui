@@ -23,6 +23,7 @@ import RewardIcon from '../../../components/base/Svg/Icons/Reward';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
+import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
 
 const AddLiquidity = (): JSX.Element => {
@@ -75,18 +76,25 @@ const AddLiquidity = (): JSX.Element => {
   const calcAmountPercent = (
     lbctPercent: FROM_AMOUNT_PERCENT | undefined,
     usdtPercent: FROM_AMOUNT_PERCENT | undefined,
+    balances: Balance[],
   ) => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
+    if (
+      payloadData.pools &&
+      payloadData.pools.length > 0 &&
+      payloadData.pool_config &&
+      payloadData.wallet &&
+      balances.length > 0
+    ) {
       const currentPool = payloadData.pools[0];
       const poolConfig = payloadData.pool_config;
 
       let inputAmount = '';
 
       const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
       const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
@@ -335,8 +343,8 @@ const AddLiquidity = (): JSX.Element => {
             >
               <SwapFromTab
                 selectedFromAmountPercent={lbctPercent}
-                setselectedFromAmountPercent={(lbtcPercent: FROM_AMOUNT_PERCENT | undefined) =>
-                  calcAmountPercent(lbtcPercent, undefined)
+                setselectedFromAmountPercent={(lbtcPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
+                  calcAmountPercent(lbtcPercent, undefined, balances)
                 }
               />
               <div className="add-liquidity-item-content">
@@ -367,8 +375,8 @@ const AddLiquidity = (): JSX.Element => {
             >
               <SwapFromTab
                 selectedFromAmountPercent={usdtPercent}
-                setselectedFromAmountPercent={(usdtPercent: FROM_AMOUNT_PERCENT | undefined) =>
-                  calcAmountPercent(undefined, usdtPercent)
+                setselectedFromAmountPercent={(usdtPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
+                  calcAmountPercent(undefined, usdtPercent, balances)
                 }
               />
               <div className="add-liquidity-item-content">
