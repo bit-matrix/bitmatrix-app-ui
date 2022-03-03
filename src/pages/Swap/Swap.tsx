@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { Balance } from 'marina-provider';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -42,7 +43,7 @@ export const Swap = (): JSX.Element => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { payloadData } = useContext(SettingsContext);
+  const { payloadData, dispatch } = useContext(SettingsContext);
 
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
@@ -127,13 +128,13 @@ export const Swap = (): JSX.Element => {
     }
   };
 
-  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
+  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     if (
       payloadData.pools &&
       payloadData.pools.length > 0 &&
       payloadData.pool_config &&
       payloadData.wallet &&
-      payloadData.wallet.balances.length > 0
+      balances.length > 0
     ) {
       setSwapWay(SWAP_WAY.FROM);
 
@@ -143,10 +144,10 @@ export const Swap = (): JSX.Element => {
       let inputAmount = '';
 
       const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
       const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
         poolConfig.baseFee.number +

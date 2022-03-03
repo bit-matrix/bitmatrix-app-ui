@@ -4,18 +4,19 @@ import { ValueType } from 'rsuite/esm/Checkbox';
 import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { Balance } from 'marina-provider';
 import './SwapFromTab.scss';
 
 type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT | undefined;
-  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => void;
+  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => void;
 };
 
 export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
   const { payloadData, dispatch } = useContext(SettingsContext);
 
   const onChangeSelectedFromTab = (value: any) => {
-    if (payloadData.wallet && payloadData.wallet.isEnabled) {
+    if (payloadData.wallet) {
       payloadData.wallet.marina.getBalances().then((balances) => {
         dispatch({
           type: SETTINGS_ACTION_TYPES.SET_WALLET,
@@ -25,13 +26,13 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
             wallet: { marina: payloadData.wallet!.marina, isEnabled: true, balances },
           },
         });
-      });
-    }
 
-    if (value === selectedFromAmountPercent) {
-      setselectedFromAmountPercent(undefined);
-    } else {
-      setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
+        if (value === selectedFromAmountPercent) {
+          setselectedFromAmountPercent(undefined, balances);
+        } else {
+          setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT, balances);
+        }
+      });
     }
   };
 
