@@ -83,7 +83,7 @@ export const MyPoolDetail: React.FC = () => {
   const renderChart = (/*allData: any*/) => {
     const data: ChartData[] = [
       {
-        date: '',
+        date: new Date().toLocaleDateString(),
         close: 0,
       },
     ];
@@ -166,7 +166,7 @@ export const MyPoolDetail: React.FC = () => {
                 <CustomPopover
                   placement="autoHorizontal"
                   title="LP"
-                  content="LP tokens represent the Liquid Network assets the user deposited into the liquidity pool along with a proportional scale of the trading fees collected over time in the particular liquidity pool into which the user deposited assets."
+                  content="LP tokens represent the assets you deposited into the liquidity pool along with a proportional scale of the trading fees collected over time."
                 >
                   <img className="general-icon" src={info} alt="info" />
                 </CustomPopover>
