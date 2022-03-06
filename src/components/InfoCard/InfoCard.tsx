@@ -11,8 +11,9 @@ import { Loading } from '../Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
-import ExportIcon from '../base/Svg/Icons/Export';
+// import ExportIcon from '../base/Svg/Icons/Export';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
+import MempoolIcon from '../base/Svg/Icons/Mempool';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -125,10 +126,13 @@ export const InfoCard: React.FC = () => {
             <div
               className="explorer-div"
               onClick={() =>
-                window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
+                // window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
+                window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
               }
             >
-              View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" />
+              {/* View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
+              View in &nbsp; <MempoolIcon width="5.5rem" height="1rem" />
+              {/* <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
             </div>
           </>
         )}
