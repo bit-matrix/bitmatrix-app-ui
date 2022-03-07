@@ -131,7 +131,10 @@ export const InfoCard: React.FC = () => {
               }
             >
               {/* View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
-              View in &nbsp; <MempoolIcon width="5.5rem" height="1rem" />
+              <span className="info-mempool-text">
+                View in &nbsp; <MempoolIcon width="6.5rem" height="1.25rem" />
+              </span>
+
               {/* <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
             </div>
           </>

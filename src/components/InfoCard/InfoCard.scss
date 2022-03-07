@@ -87,6 +87,12 @@
   &:hover {
     opacity: 1;
   }
+
+  .info-mempool-text {
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+  }
 }
 
 .info-card-item-text {
