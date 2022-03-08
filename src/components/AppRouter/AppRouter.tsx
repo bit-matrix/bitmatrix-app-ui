@@ -74,7 +74,7 @@ export const AppRouter = (): JSX.Element => {
   useEffect(() => {
     if (payloadData.wallet?.marina) {
       fetchBalances(payloadData.wallet.marina);
-      payloadData.wallet.marina.reloadCoins();
+      // payloadData.wallet.marina.reloadCoins();
     }
 
     setInterval(() => {
