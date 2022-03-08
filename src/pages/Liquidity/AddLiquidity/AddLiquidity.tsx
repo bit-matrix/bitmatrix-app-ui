@@ -222,7 +222,7 @@ const AddLiquidity = (): JSX.Element => {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
 
-          payloadData.wallet.marina.reloadCoins();
+          // payloadData.wallet.marina.reloadCoins();
           return Promise.reject();
         }
 
@@ -283,11 +283,11 @@ const AddLiquidity = (): JSX.Element => {
 
           await sleep(3000);
 
-          payloadData.wallet.marina.reloadCoins();
+          // payloadData.wallet.marina.reloadCoins();
         } else {
           notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
 
-          payloadData.wallet.marina.reloadCoins();
+          // payloadData.wallet.marina.reloadCoins();
           setLoading(false);
         }
       }
