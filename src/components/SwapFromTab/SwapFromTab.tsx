@@ -5,6 +5,7 @@ import SettingsContext from '../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
+import { notify } from '../utils/utils';
 import './SwapFromTab.scss';
 
 type Props = {
@@ -16,7 +17,7 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
   const { payloadData, dispatch } = useContext(SettingsContext);
 
   const onChangeSelectedFromTab = (value: any) => {
-    if (payloadData.wallet) {
+    if (payloadData.wallet && payloadData.wallet.isEnabled) {
       payloadData.wallet.marina.getBalances().then((balances) => {
         dispatch({
           type: SETTINGS_ACTION_TYPES.SET_WALLET,
@@ -33,6 +34,8 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
           setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT, balances);
         }
       });
+    } else {
+      notify('Wallet is disabled, connect to wallet.', 'Wallet : ', 'error');
     }
   };
 
