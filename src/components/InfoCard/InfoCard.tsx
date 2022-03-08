@@ -12,6 +12,7 @@ import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
 // import ExportIcon from '../base/Svg/Icons/Export';
+import { CustomPopover } from '../CustomPopover/CustomPopover';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import MempoolIcon from '../base/Svg/Icons/Mempool';
 import './InfoCard.scss';
@@ -109,7 +110,13 @@ export const InfoCard: React.FC = () => {
     const txStatus = (cs: CommitmentStore): JSX.Element => {
       if (cs.completed) {
         if (cs.isOutOfSlippage) {
-          return <ExclamationIcon width="1.5rem" height="1.5rem" />;
+          return (
+            <CustomPopover placement="rightEnd" title="" content="Out of slippage">
+              <div>
+                <ExclamationIcon width="1.5rem" height="1.5rem" />
+              </div>
+            </CustomPopover>
+          );
         } else {
           return <div>{timeDifference(cs.timestamp)}</div>;
         }
