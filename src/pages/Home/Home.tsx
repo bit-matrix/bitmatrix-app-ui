@@ -9,9 +9,12 @@ import homeMobileBase64 from '../../images/homeMobileBase64';
 import mobileHomeIcon from '../../images/mobilehome.png';
 import ImgLazy from '../../components/ImgLazy/ImgLazy';
 import './Home.scss';
+import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 
 export const Home = (): JSX.Element => {
   const history = useHistory();
+
+  document.title = ROUTE_PATH_TITLE.HOME;
 
   return (
     <div className="home-page-container">
