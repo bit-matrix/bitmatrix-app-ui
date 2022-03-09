@@ -26,7 +26,7 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
     }
   };
 
-  const onClick = () => {
+  const onFocus = () => {
     if (payloadData.wallet && payloadData.wallet.isEnabled) {
       payloadData.wallet.marina.getBalances().then((balances) => {
         dispatch({
@@ -56,7 +56,7 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
         enforcer(event.target.value.replace(/,/g, '.'));
       }}
-      onClick={onClick}
+      onFocus={onFocus}
     />
   );
 };
