@@ -14,7 +14,7 @@ import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -133,9 +133,9 @@ const RemoveLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
-          setLoading(false);
 
-          await sleep(3000);
+          setLoading(false);
+          // await sleep(3000);
 
           // payloadData.wallet.marina.reloadCoins();
         } else {

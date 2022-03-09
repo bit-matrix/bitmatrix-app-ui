@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetPrecession, getPrimaryPoolConfig, poolShareRound, sleep } from '../../../helper';
+import { getAssetPrecession, getPrimaryPoolConfig, poolShareRound } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -281,7 +281,7 @@ const AddLiquidity = (): JSX.Element => {
           // );
           setLoading(false);
 
-          await sleep(3000);
+          // await sleep(3000);
 
           // payloadData.wallet.marina.reloadCoins();
         } else {
