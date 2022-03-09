@@ -171,7 +171,11 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      if (quoteAmountInWallet && tokenAmountInWallet && Number(quoteAmount) > 0 && Number(tokenAmount)) {
+      if (
+        quoteAmountInWallet !== undefined &&
+        tokenAmountInWallet !== undefined &&
+        (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0)
+      ) {
         const quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
         const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
@@ -189,7 +193,6 @@ const AddLiquidity = (): JSX.Element => {
 
         return { tokenIsValid, quoteIsValid };
       }
-      return { tokenIsValid: true, quoteIsValid: true };
     }
     return { tokenIsValid: true, quoteIsValid: true };
   };
