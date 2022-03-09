@@ -127,7 +127,6 @@ export const Swap = (): JSX.Element => {
       setInputToAmount(input);
     }
   };
-
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     if (
       payloadData.pools &&
@@ -144,10 +143,10 @@ export const Swap = (): JSX.Element => {
       let inputAmount = '';
 
       const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
       const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
         poolConfig.baseFee.number +
@@ -156,32 +155,36 @@ export const Swap = (): JSX.Element => {
         poolConfig.serviceFee.number +
         1000;
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = ((quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
-          inputAmount = (quoteAmountInWalletHalf / payloadData.preferred_unit.value).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfig.minRemainingSupply / payloadData.preferred_unit.value).toString();
-        }
-      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const tokenAmountInWalletHalf = tokenAmountInWallet / 2;
-          inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+      if (quoteTotalAmountInWallet) {
+        const quoteAmount = (quoteTotalAmountInWallet - totalFee) / payloadData.preferred_unit.value;
+        if (quoteAmount > 0) {
+          if (selectedAsset.from === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+              inputAmount = quoteAmount.toString();
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+              inputAmount = (quoteAmount / 2).toString();
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+              inputAmount = (poolConfig.minRemainingSupply / payloadData.preferred_unit.value).toString();
+            }
+          } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+              inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+              const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
+              inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+              inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+          }
+          setInputFromAmount(inputAmount);
+          setSelectedFromAmountPercent(newFromAmountPercent);
         }
       }
-      setInputFromAmount(inputAmount);
     }
-    setSelectedFromAmountPercent(newFromAmountPercent);
   };
 
   const inputIsValid = () => {
@@ -197,28 +200,34 @@ export const Swap = (): JSX.Element => {
 
       const inputValue = Number(inputFromAmount);
       let isValid = false;
+      if (inputValue > 0) {
+        const currentPool = payloadData.pools[0];
 
-      const currentPool = payloadData.pools[0];
+        const quoteAssetId = currentPool.quote.asset;
+        const quoteAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === quoteAssetId,
+        )?.amount;
 
-      const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const tokenAssetId = currentPool.token.asset;
+        const tokenAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === tokenAssetId,
+        )?.amount;
 
-      const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
+          inputAmount = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
+        } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet && tokenAmountInWallet > 0) {
+          inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+        } else {
+          return true;
+        }
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
-        inputAmount = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
-      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
-        inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+        if (inputValue <= inputAmount && inputAmount > 0) {
+          isValid = true;
+        } else {
+          isValid = false;
+        }
+        return isValid;
       }
-
-      if (inputValue <= inputAmount) {
-        isValid = true;
-      } else {
-        isValid = false;
-      }
-
-      return isValid;
     }
     return true;
   };
