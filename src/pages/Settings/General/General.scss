@@ -20,6 +20,7 @@
 
 .general-title {
   color: $bmVeryLightGray;
+  user-select: none;
 }
 
 .general-icon {
@@ -27,6 +28,7 @@
   height: 1rem;
   margin-left: 0.5rem;
   margin-right: 0.5rem;
+  user-select: none;
 }
 
 .general-item {

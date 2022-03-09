@@ -20,6 +20,7 @@
 
 .theme-title {
   color: $bmVeryLightGray;
+  user-select: none;
 }
 
 .theme-icon {
@@ -43,6 +44,7 @@
   align-items: center;
   justify-content: space-between;
   width: 19rem;
+  user-select: none;
 }
 
 .theme-tag {
