@@ -217,8 +217,6 @@ export const Swap = (): JSX.Element => {
           inputAmount = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
         } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet && tokenAmountInWallet > 0) {
           inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-        } else {
-          return true;
         }
 
         if (inputValue <= inputAmount && inputAmount > 0) {
