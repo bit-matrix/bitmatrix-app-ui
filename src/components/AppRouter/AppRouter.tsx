@@ -74,14 +74,21 @@ export const AppRouter = (): JSX.Element => {
   useEffect(() => {
     if (payloadData.wallet?.marina) {
       fetchBalances(payloadData.wallet.marina);
+
+      payloadData.wallet.marina.on('NEW_UTXO', () => {
+        if (payloadData.wallet?.marina) {
+          fetchBalances(payloadData.wallet.marina);
+        }
+      });
+
       // payloadData.wallet.marina.reloadCoins();
     }
 
-    setInterval(() => {
-      if (payloadData.wallet) {
-        fetchBalances(payloadData.wallet?.marina);
-      }
-    }, 60000);
+    // setInterval(() => {
+    //   if (payloadData.wallet) {
+    //     fetchBalances(payloadData.wallet?.marina);
+    //   }
+    // }, 60000);
   }, [payloadData.wallet?.marina]);
 
   const fetchBalances = async (wall: IWallet) => {
