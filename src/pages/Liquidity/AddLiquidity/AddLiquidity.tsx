@@ -52,6 +52,7 @@ const AddLiquidity = (): JSX.Element => {
 
       setQuoteAmount(input);
       setTokenAmount((output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+      setUsdtPercent(undefined);
     }
   };
 
@@ -70,6 +71,7 @@ const AddLiquidity = (): JSX.Element => {
 
       setQuoteAmount((output / payloadData.preferred_unit.value).toString());
       setTokenAmount(input);
+      setLbtcPercent(undefined);
     }
   };
 
@@ -165,7 +167,7 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      if (quoteAmountInWallet && tokenAmountInWallet) {
+      if (quoteAmountInWallet && tokenAmountInWallet && Number(quoteAmount) > 0 && Number(tokenAmount)) {
         const quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
         const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
 
