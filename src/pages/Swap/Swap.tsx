@@ -447,6 +447,7 @@ export const Swap = (): JSX.Element => {
                     className="from-input"
                     inputValue={inputFromAmount}
                     onChange={(inputValue) => {
+                      if (inputValue === '.') return;
                       setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
@@ -467,6 +468,7 @@ export const Swap = (): JSX.Element => {
                   className="from-input"
                   inputValue={inputToAmount}
                   onChange={(inputValue) => {
+                    if (inputValue === '.') return;
                     setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
                     setSwapWay(SWAP_WAY.TO);
