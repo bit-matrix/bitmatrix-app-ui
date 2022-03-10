@@ -191,16 +191,16 @@ export const Swap = (): JSX.Element => {
     if (payloadData.pools && payloadData.pools.length > 0 && payloadData.pool_config && payloadData.wallet) {
       let inputAmount = 0;
 
-      const totalFee =
-        payloadData.pool_config.baseFee.number +
-        payloadData.pool_config.commitmentTxFee.number +
-        payloadData.pool_config.defaultOrderingFee.number +
-        payloadData.pool_config.serviceFee.number +
-        1000;
-
       const inputValue = Number(inputFromAmount);
       let isValid = false;
       if (inputValue > 0) {
+        const totalFee =
+          payloadData.pool_config.baseFee.number +
+          payloadData.pool_config.commitmentTxFee.number +
+          payloadData.pool_config.defaultOrderingFee.number +
+          payloadData.pool_config.serviceFee.number +
+          1000;
+
         const currentPool = payloadData.pools[0];
 
         const quoteAssetId = currentPool.quote.asset;
