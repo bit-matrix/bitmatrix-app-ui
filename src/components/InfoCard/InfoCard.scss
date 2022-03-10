@@ -36,6 +36,7 @@
       align-items: center;
       justify-content: space-between;
       position: relative;
+      user-select: none;
 
       &:first-child {
         border-top-left-radius: 1rem;
@@ -62,6 +63,7 @@
     font-weight: 500;
     color: $bmAluminium;
     width: 100%;
+    user-select: none;
   }
 }
 
