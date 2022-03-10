@@ -41,7 +41,7 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (payloadData.pools && payloadData.pool_config) {
+    if (payloadData.pools && payloadData.pool_config && input !== '.') {
       const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
       const output = convertion.convertForLiquidityCtx(
@@ -59,7 +59,7 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeTokenAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (payloadData.pools && payloadData.pool_config) {
+    if (payloadData.pools && payloadData.pool_config && input !== '.') {
       const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
       const output = convertion.convertForLiquidityCtx(
