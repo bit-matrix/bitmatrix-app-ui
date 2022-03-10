@@ -124,26 +124,26 @@ const AddLiquidity = (): JSX.Element => {
             setUsdtPercent(undefined);
             setLbtcPercent(lbctPercent);
           }
-          if (usdtPercent && tokenTotalAmountInWallet) {
-            if (usdtPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-            if (usdtPercent === FROM_AMOUNT_PERCENT.HALF) {
-              const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
-              inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-            if (usdtPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-            onChangeTokenAmount(inputAmount);
-            setLbtcPercent(undefined);
-            setUsdtPercent(usdtPercent);
+        }
+        if (usdtPercent && tokenTotalAmountInWallet) {
+          if (usdtPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
-          if (!usdtPercent && !lbctPercent) {
-            onChangeTokenAmount('0');
-            setLbtcPercent(undefined);
-            setUsdtPercent(undefined);
+          if (usdtPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
+            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
+          if (usdtPercent === FROM_AMOUNT_PERCENT.MIN) {
+            inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+          onChangeTokenAmount(inputAmount);
+          setLbtcPercent(undefined);
+          setUsdtPercent(usdtPercent);
+        }
+        if (!usdtPercent && !lbctPercent) {
+          onChangeTokenAmount('0');
+          setLbtcPercent(undefined);
+          setUsdtPercent(undefined);
         }
       }
     }
@@ -156,28 +156,35 @@ const AddLiquidity = (): JSX.Element => {
 
       const currentPool = payloadData.pools[0];
 
-      const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+      if (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0) {
+        const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
 
-      const totalFee =
-        primaryPoolConfig.baseFee.number +
-        primaryPoolConfig.commitmentTxFee.number +
-        primaryPoolConfig.defaultOrderingFee.number +
-        primaryPoolConfig.serviceFee.number +
-        1000;
+        const totalFee =
+          primaryPoolConfig.baseFee.number +
+          primaryPoolConfig.commitmentTxFee.number +
+          primaryPoolConfig.defaultOrderingFee.number +
+          primaryPoolConfig.serviceFee.number +
+          1000;
 
-      const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const quoteAssetId = currentPool.quote.asset;
+        const quoteAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === quoteAssetId,
+        )?.amount;
 
-      const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        const tokenAssetId = currentPool.token.asset;
+        const tokenAmountInWallet = payloadData.wallet.balances.find(
+          (bl) => bl.asset.assetHash === tokenAssetId,
+        )?.amount;
 
-      if (
-        quoteAmountInWallet !== undefined &&
-        tokenAmountInWallet !== undefined &&
-        (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0)
-      ) {
-        const quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
-        const tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        let quoteAmountWallet = 0;
+        if (quoteAmountInWallet && quoteAmountInWallet > 0) {
+          quoteAmountWallet = (quoteAmountInWallet - totalFee) / payloadData.preferred_unit.value;
+        }
+
+        let tokenAmountWallet = '';
+        if (tokenAmountInWallet && tokenAmountInWallet > 0) {
+          tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
 
         if (Number(quoteAmount) <= quoteAmountWallet && quoteAmountWallet > 0) {
           quoteIsValid = true;
