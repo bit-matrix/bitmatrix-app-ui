@@ -20,7 +20,9 @@ export const Home = (): JSX.Element => {
     <div className="home-page-container">
       <div className="home-page-main">
         <div className="home-page-desc">
-          <h3 className="home-page-desc-header">Automated Liquidity Provision on Liquid is Here!</h3>
+          <h3 className="home-page-desc-header">
+            <span>Automated Liquidity</span> <br /> <span>Provision on Liquid is Here!</span>{' '}
+          </h3>
           <div className="home-page-img-content desktop-hidden">
             <ImgLazy src={mobileHomeIcon} alt="" x={288} y={221} minifyImg={homeMobileBase64} />
           </div>
