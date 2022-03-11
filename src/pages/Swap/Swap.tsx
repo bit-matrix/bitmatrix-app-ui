@@ -163,7 +163,7 @@ export const Swap = (): JSX.Element => {
               inputAmount = (quoteAmount / payloadData.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-              const quoteAmountHalf = quoteAmount / 2;
+              const quoteAmountHalf = Math.ceil(quoteAmount / 2);
               inputAmount = (quoteAmountHalf / payloadData.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
