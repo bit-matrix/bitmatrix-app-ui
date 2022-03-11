@@ -156,14 +156,15 @@ export const Swap = (): JSX.Element => {
         1000;
 
       if (quoteTotalAmountInWallet) {
-        const quoteAmount = (quoteTotalAmountInWallet - totalFee) / payloadData.preferred_unit.value;
+        const quoteAmount = quoteTotalAmountInWallet - totalFee;
         if (quoteAmount > 0) {
           if (selectedAsset.from === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = quoteAmount.toString();
+              inputAmount = (quoteAmount / payloadData.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-              inputAmount = (quoteAmount / 2).toString();
+              const quoteAmountHalf = quoteAmount / 2;
+              inputAmount = (quoteAmountHalf / payloadData.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
               inputAmount = (poolConfig.minRemainingSupply / payloadData.preferred_unit.value).toString();
