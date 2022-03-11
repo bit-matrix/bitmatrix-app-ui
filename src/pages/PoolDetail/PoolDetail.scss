@@ -1,7 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-detail-container {
-  width: 95%;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -13,6 +13,7 @@
   height: 31rem;
   animation: grow 0.3s ease-in-out;
   animation-delay: -0.1s;
+  width: 100%;
 
   @keyframes grow {
     from {
@@ -39,7 +40,7 @@
 }
 
 .pool-detail-content {
-  height: calc(100% - 0.5rem);
+  height: calc(100% - 6.5rem);
   padding: 0.75rem;
 }
 
@@ -99,7 +100,7 @@
 
 .pool-detail-content-right {
   margin-bottom: 0.5rem;
-  height: calc(100% - 21rem);
+  height: 100%;
 }
 
 .pool-detail-content-left-header {
@@ -130,6 +131,11 @@
   align-items: center;
   justify-content: center;
   margin-top: 0.75rem;
+}
+
+.pool-detail-header-right {
+  display: flex;
+  justify-content: center;
 }
 
 .pool-metrics {
