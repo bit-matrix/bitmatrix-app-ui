@@ -2,7 +2,7 @@
 
 .my-pool-detail-container {
   // height: 33rem;
-  width: 95%;
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -37,7 +37,7 @@
 }
 
 .my-pool-detail-content {
-  height: calc(100% - 0.5rem);
+  height: calc(100% - 6.5rem);
   padding: 0.75rem;
 }
 
@@ -73,7 +73,7 @@
 
 .my-pool-detail-content-right {
   margin-bottom: 0.5rem;
-  height: calc(100% - 21rem);
+  height: 100%;
 }
 
 .my-pool-detail-content-left-header {
@@ -98,6 +98,12 @@
   &:hover {
     opacity: 1;
   }
+}
+
+.my-pool-detail-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .my-pooled-assets-content {

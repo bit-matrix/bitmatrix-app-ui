@@ -139,7 +139,7 @@ export const MyPoolDetail: React.FC = () => {
           <div className="my-pool-detail-content">
             <div className="my-pool-detail-content-right desktop-hidden">{!loading && renderChart()}</div>
 
-            <div className="my-pool-detail-content-left">
+            <div className="my-pool-detail-content-left mobile-hidden">
               <div className="my-pool-detail-content-left-header">My pooled assets</div>
               <div className="my-pooled-assets-content">
                 <div className="my-pooled-assets-item">

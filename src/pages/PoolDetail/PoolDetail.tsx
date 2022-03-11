@@ -110,7 +110,7 @@ export const PoolDetail: React.FC = () => {
           </div>
           <div className="pool-detail-content">
             <div className="pool-detail-content-right desktop-hidden">{!loading && renderChart(data)}</div>
-            <div className="pool-detail-content-left">
+            <div className="pool-detail-content-left mobile-hidden">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
                 {/* <CustomPopover
