@@ -93,7 +93,7 @@ export const General = (): JSX.Element => {
               notify('This feature is not supported yet.', 'Push Notifications : ', 'info');
               setTimeout(() => {
                 setPushNotificationsSwitch(false);
-              }, 500);
+              }, 350);
             }}
             checked={pushNotificationsSwitch}
           />
@@ -115,7 +115,7 @@ export const General = (): JSX.Element => {
               notify('This feature is not supported yet.', 'Liquid Taxi : ', 'info');
               setTimeout(() => {
                 setLiquidTaxiSwitch(false);
-              }, 500);
+              }, 350);
             }}
             checked={liquidTaxiSwitch}
           />

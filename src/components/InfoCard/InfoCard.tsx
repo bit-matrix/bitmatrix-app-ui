@@ -111,7 +111,7 @@ export const InfoCard: React.FC = () => {
       if (cs.completed) {
         if (cs.isOutOfSlippage) {
           return (
-            <CustomPopover placement="rightEnd" title="" content="Out of slippage">
+            <CustomPopover placement="right" title="" content="Out of slippage">
               <div>
                 <ExclamationIcon width="1.5rem" height="1.5rem" />
               </div>
