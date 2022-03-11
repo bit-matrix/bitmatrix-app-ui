@@ -7,6 +7,13 @@
   transition-timing-function: linear;
   margin: 0 auto;
   width: 100%;
+
+  .no-pool-text {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 90px;
+    font-size: 1.5rem;
+  }
 }
 
 .pool-detail-transition {
