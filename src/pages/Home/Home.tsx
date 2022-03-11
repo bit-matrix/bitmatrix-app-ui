@@ -26,12 +26,12 @@ export const Home = (): JSX.Element => {
           </div>
           <div className="home-page-desc-content">
             <p>
-              Bitmatrix is a trustless exchange protocol on Liquid Network that allows direct asset swaps without giving
-              up the custody of funds. The protocol consists of a collection of covenant-based liquidity pools where
-              each immutably lives on the network and enforces the trustless execution of trades.
+              Bitmatrix is a trustless exchange protocol on the Liquid Network that allows direct asset swaps without
+              giving up the custody of funds. The protocol consists of a collection of covenant-based liquidity pools
+              where each immutably lives on the network and enforces the trustless execution of trades.
             </p>
             <p>
-              Liquidity pools have custody of pooled assets, sets prices according to a mathematical formula, and are
+              Liquidity pools have custody of pooled assets, set prices according to a mathematical formula, and are
               always willing to trade those assets at those prices.
             </p>
           </div>
