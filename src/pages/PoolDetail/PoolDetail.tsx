@@ -153,7 +153,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>{pool.quote.ticker} Price</div>
                     <div className="pool-detail-table-text">${data.todayPrice.toLocaleString()}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.priceRate.icon}
                       <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                         {data.priceRate.value}%
@@ -165,7 +165,7 @@ export const PoolDetail: React.FC = () => {
                     <div className="pool-detail-table-text">
                       ${Numeral(data.todayVolumeData.close).format('(0.00a)')}
                     </div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.volumeRate.icon}
                       <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                         {data.volumeRate.value}%
@@ -177,7 +177,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>TVL</div>
                     <div className="pool-detail-table-text">${Numeral(data.todayTvlData).format('(0.00a)')}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.tvlRate.icon}
                       <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                         {data.tvlRate.value}%
@@ -187,7 +187,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>Fees 24h</div>
                     <div className="pool-detail-table-text">${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.feeRate.icon}
                       <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                         {data.feeRate.value}%
