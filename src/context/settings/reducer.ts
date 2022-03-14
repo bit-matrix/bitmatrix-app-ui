@@ -1,3 +1,4 @@
+import { Reducer } from 'react';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -12,7 +13,7 @@ export const initialSettingsState: SettingsStore = {
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
 };
 
-export const settingsReducer = (
+export const settingsReducer: Reducer<SettingsStore, SetPreferredUnitAction | SetSlippageAction> = (
   state: SettingsStore = initialSettingsState,
   action: SetPreferredUnitAction | SetSlippageAction,
 ): SettingsStore => {

@@ -1,4 +1,5 @@
 import { BmConfig } from '@bitmatrix/models';
+import { Reducer } from 'react';
 import { SetPoolConfigAction, SET_POOL_CONFIG } from './types';
 
 export const initialPoolConfigState: BmConfig = {
@@ -28,7 +29,10 @@ export const initialPoolConfigState: BmConfig = {
   maxLeaf: 0,
 };
 
-export const poolConfigReducer = (state: BmConfig, action: SetPoolConfigAction): BmConfig => {
+export const poolConfigReducer: Reducer<BmConfig, SetPoolConfigAction> = (
+  state: BmConfig,
+  action: SetPoolConfigAction,
+): BmConfig => {
   switch (action.type) {
     case SET_POOL_CONFIG:
       return {

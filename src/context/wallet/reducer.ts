@@ -1,13 +1,13 @@
-import { Balance } from 'marina-provider';
-import { IWallet } from '../../lib/wallet/IWallet';
+import { Reducer } from 'react';
+import { Wallet } from './types';
 import { SetWalletAction, SET_WALLET } from './types';
 
 export const initialWalletState = { marina: undefined, isEnabled: false, balances: [] };
 
-export const walletReducer = (
-  state: { marina: IWallet; isEnabled: boolean; balances: Balance[] } | undefined,
+export const walletReducer: Reducer<Wallet | undefined, SetWalletAction> = (
+  state: Wallet | undefined,
   action: SetWalletAction,
-): { marina: IWallet; isEnabled: boolean; balances: Balance[] } | undefined => {
+): Wallet | undefined => {
   switch (action.type) {
     case SET_WALLET:
       return {
