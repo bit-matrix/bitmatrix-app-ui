@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePoolChartDataContext, usePoolContext } from '../../context';
+import { usePoolChartDataContext, usePoolContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -26,6 +26,7 @@ export const PoolDetail: React.FC = () => {
 
   const { pools } = usePoolContext();
   const { poolChartData } = usePoolChartDataContext();
+  const { settings } = useSettingsContext();
 
   const history = useHistory();
 
@@ -126,7 +127,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {quoteAmountRound(Number(pool.quote.value) / payloadData.preferred_unit.value)}
+                    {quoteAmountRound(Number(pool.quote.value) / settings.preferred_unit.value)}
                   </div>
                 </div>
 
