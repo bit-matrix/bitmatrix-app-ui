@@ -25,7 +25,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { pools } = usePoolContext();
+  const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
@@ -35,15 +35,15 @@ const RemoveLiquidity = (): JSX.Element => {
   const history = useHistory();
 
   useEffect(() => {
-    if (pools && pools.length > 0 && walletContext) {
-      const currentPool = pools[0];
+    if (poolsContext && poolsContext.length > 0 && walletContext) {
+      const currentPool = poolsContext[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
       const lpTokenInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
       setLpTokenAmount(lpTokenInWallet?.amount || 0);
     }
-  }, [pools, walletContext?.balances]);
+  }, [poolsContext, walletContext?.balances]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)
@@ -59,8 +59,8 @@ const RemoveLiquidity = (): JSX.Element => {
     if (walletContext?.marina) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      if (pools && poolConfigContext) {
-        const pool = pools[0];
+      if (poolsContext && poolConfigContext) {
+        const pool = poolsContext[0];
         const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
@@ -153,7 +153,7 @@ const RemoveLiquidity = (): JSX.Element => {
   };
 
   const calcLpValues = () => {
-    const currentPool = pools;
+    const currentPool = poolsContext;
     if (currentPool && currentPool.length > 0) {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);

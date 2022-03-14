@@ -26,7 +26,7 @@ export const MyPoolDetail: React.FC = () => {
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
 
-  const { pools } = usePoolContext();
+  const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolChartDataContext } = usePoolChartDataContext();
@@ -36,12 +36,12 @@ export const MyPoolDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (pools && pools.length > 0) {
-      const currentPool = pools.find((pl) => pl.id === id);
+    if (poolsContext && poolsContext.length > 0) {
+      const currentPool = poolsContext.find((pl) => pl.id === id);
 
       setPool(currentPool);
     }
-  }, [pools]);
+  }, [poolsContext]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -50,8 +50,8 @@ export const MyPoolDetail: React.FC = () => {
   }, []);
 
   const calcPooledAssets = () => {
-    if (pools && pools.length > 0 && walletContext) {
-      const currentPool = pools[0];
+    if (poolsContext && poolsContext.length > 0 && walletContext) {
+      const currentPool = poolsContext[0];
 
       const lpAssetId = currentPool.lp.asset;
       const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;

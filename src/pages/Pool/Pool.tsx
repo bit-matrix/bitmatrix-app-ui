@@ -7,17 +7,17 @@ import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './Pool.scss';
 
 export const Pool = (): JSX.Element => {
-  const { pools } = usePoolContext();
+  const { poolsContext } = usePoolContext();
 
   const history = useHistory();
 
   document.title = ROUTE_PATH_TITLE.POOL;
 
-  if (pools && pools.length > 0) {
+  if (poolsContext && poolsContext.length > 0) {
     return (
       <div className="pool-main-div">
         <PoolManagement
-          pools={pools}
+          pools={poolsContext}
           onClick={(poolId: string) => {
             history.push({
               pathname: ROUTE_PATH.POOL + '/' + poolId,

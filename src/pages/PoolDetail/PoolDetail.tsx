@@ -24,7 +24,7 @@ export const PoolDetail: React.FC = () => {
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
 
-  const { pools } = usePoolContext();
+  const { poolsContext } = usePoolContext();
   const { poolChartDataContext } = usePoolChartDataContext();
   const { settingsContext } = useSettingsContext();
 
@@ -33,11 +33,11 @@ export const PoolDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (pools && pools.length > 0) {
-      const currentPool = pools.find((pl) => pl.id === id);
+    if (poolsContext && poolsContext.length > 0) {
+      const currentPool = poolsContext.find((pl) => pl.id === id);
       setPool(currentPool);
     }
-  }, [pools]);
+  }, [poolsContext]);
 
   useEffect(() => {
     setTimeout(() => {
