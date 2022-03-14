@@ -45,7 +45,7 @@ export const Swap = (): JSX.Element => {
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { poolConfig } = usePoolConfigContext();
-  const { settings } = useSettingsContext();
+  const { settingsContext } = useSettingsContext();
 
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
@@ -67,22 +67,22 @@ export const Swap = (): JSX.Element => {
     let methodCall;
 
     if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      inputNum = inputNum * settings.preferred_unit.value;
+      inputNum = inputNum * settingsContext.preferred_unit.value;
       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
     } else {
       inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     }
 
-    const output = convertion.convertForCtx(inputNum, settings.slippage, currentPool, poolConfig, methodCall);
+    const output = convertion.convertForCtx(inputNum, settingsContext.slippage, currentPool, poolConfig, methodCall);
 
     if (output.amount > 0) {
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
         setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
       } else {
-        setInputToAmount((output.amount / settings.preferred_unit.value).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / settings.preferred_unit.value);
+        setInputToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+        setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
       }
     } else {
       setInputToAmount('');
@@ -99,21 +99,21 @@ export const Swap = (): JSX.Element => {
       let methodCall;
 
       if (selectedAsset.to === SWAP_ASSET.LBTC) {
-        inputNum = inputNum * settings.preferred_unit.value;
+        inputNum = inputNum * settingsContext.preferred_unit.value;
         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
       } else {
         inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
       }
 
-      const output = convertion.convertForCtx2(inputNum, settings.slippage, pools[0], poolConfig, methodCall);
+      const output = convertion.convertForCtx2(inputNum, settingsContext.slippage, pools[0], poolConfig, methodCall);
 
       if (output.amount > 0) {
         if (selectedAsset.to === SWAP_ASSET.LBTC) {
           setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          setAmountWithSlippage(output.amountWithSlipapge / settings.preferred_unit.value);
+          setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
         } else {
-          setInputFromAmount((output.amount / settings.preferred_unit.value).toString());
+          setInputFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
           setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
         }
       } else {
@@ -149,14 +149,14 @@ export const Swap = (): JSX.Element => {
         if (quoteAmount > 0) {
           if (selectedAsset.from === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = (quoteAmount / settings.preferred_unit.value).toString();
+              inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
               const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-              inputAmount = (quoteAmountHalf / settings.preferred_unit.value).toString();
+              inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minRemainingSupply / settings.preferred_unit.value).toString();
+              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
           } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -200,7 +200,7 @@ export const Swap = (): JSX.Element => {
         const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
         if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
-          inputAmount = (quoteAmountInWallet - totalFee) / settings.preferred_unit.value;
+          inputAmount = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
         } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet && tokenAmountInWallet > 0) {
           inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
         }
@@ -274,12 +274,12 @@ export const Swap = (): JSX.Element => {
 
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(settings.preferred_unit.value).toNumber();
+        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
         numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
       } else {
         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
         numberFromAmount = new Decimal(Number(inputFromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-        numberToAmount = new Decimal(amountWithSlippage).mul(settings.preferred_unit.value).toNumber();
+        numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
       }
 
       if (pools && poolConfig) {
@@ -438,7 +438,7 @@ export const Swap = (): JSX.Element => {
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={getAssetPrecession(selectedAsset.from, settings.preferred_unit.text)}
+                    decimalLength={getAssetPrecession(selectedAsset.from, settingsContext.preferred_unit.text)}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -459,7 +459,7 @@ export const Swap = (): JSX.Element => {
                     setSelectedFromAmountPercent(undefined);
                     setSwapWay(SWAP_WAY.TO);
                   }}
-                  decimalLength={getAssetPrecession(selectedAsset.to, settings.preferred_unit.text)}
+                  decimalLength={getAssetPrecession(selectedAsset.to, settingsContext.preferred_unit.text)}
                 />
               </div>
               <SwapAssetList

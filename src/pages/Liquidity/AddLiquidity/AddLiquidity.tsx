@@ -36,7 +36,7 @@ const AddLiquidity = (): JSX.Element => {
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { poolConfig } = usePoolConfigContext();
-  const { settings } = useSettingsContext();
+  const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -49,7 +49,7 @@ const AddLiquidity = (): JSX.Element => {
       const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
       const output = convertion.convertForLiquidityCtx(
-        inputNum * settings.preferred_unit.value,
+        inputNum * settingsContext.preferred_unit.value,
         pools[0],
         primaryPoolConfig,
       );
@@ -73,7 +73,7 @@ const AddLiquidity = (): JSX.Element => {
         true,
       );
 
-      setQuoteAmount((output / settings.preferred_unit.value).toString());
+      setQuoteAmount((output / settingsContext.preferred_unit.value).toString());
       setTokenAmount(input);
       setLbtcPercent(undefined);
     }
@@ -109,14 +109,14 @@ const AddLiquidity = (): JSX.Element => {
         if (quoteAmount > 0) {
           if (lbctPercent && quoteTotalAmountInWallet) {
             if (lbctPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = (quoteAmount / settings.preferred_unit.value).toString();
+              inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
             }
             if (lbctPercent === FROM_AMOUNT_PERCENT.HALF) {
               const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-              inputAmount = (quoteAmountHalf / settings.preferred_unit.value).toString();
+              inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (lbctPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minRemainingSupply / settings.preferred_unit.value).toString();
+              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
             onChangeQuoteAmount(inputAmount);
             setUsdtPercent(undefined);
@@ -172,7 +172,7 @@ const AddLiquidity = (): JSX.Element => {
 
         let quoteAmountWallet = 0;
         if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-          quoteAmountWallet = (quoteAmountInWallet - totalFee) / settings.preferred_unit.value;
+          quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
         }
 
         let tokenAmountWallet = '';
@@ -202,7 +202,7 @@ const AddLiquidity = (): JSX.Element => {
     if (walletContext?.marina) {
       const methodCall = CALL_METHOD.ADD_LIQUIDITY;
 
-      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settings.preferred_unit.value).toNumber();
+      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
       if (pools && poolConfig) {
@@ -308,7 +308,7 @@ const AddLiquidity = (): JSX.Element => {
   const calcLpValues = () => {
     const currentPool = pools;
     if (currentPool && currentPool.length > 0 && quoteAmount !== '' && tokenAmount !== '') {
-      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settings.preferred_unit.value).toNumber();
+      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
       const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
 
@@ -361,7 +361,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{`tL-${settings.preferred_unit.text}`} Liquidity</div>
+                    <div className="add-liquidity-text">{`tL-${settingsContext.preferred_unit.text}`} Liquidity</div>
                     <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
                   </div>
                   <NumericalInput
@@ -371,7 +371,7 @@ const AddLiquidity = (): JSX.Element => {
                       onChangeQuoteAmount(inputValue);
                       setLbtcPercent(undefined);
                     }}
-                    decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, settings.preferred_unit.text)}
+                    decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, settingsContext.preferred_unit.text)}
                   />
                 </div>
               </div>
@@ -433,7 +433,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add tL-${settings.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
+              text={`Add tL-${settingsContext.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();

@@ -26,7 +26,7 @@ export const PoolDetail: React.FC = () => {
 
   const { pools } = usePoolContext();
   const { poolChartData } = usePoolChartDataContext();
-  const { settings } = useSettingsContext();
+  const { settingsContext } = useSettingsContext();
 
   const history = useHistory();
 
@@ -127,7 +127,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {quoteAmountRound(Number(pool.quote.value) / settings.preferred_unit.value)}
+                    {quoteAmountRound(Number(pool.quote.value) / settingsContext.preferred_unit.value)}
                   </div>
                 </div>
 

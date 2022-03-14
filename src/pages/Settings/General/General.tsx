@@ -13,7 +13,7 @@ import './General.scss';
 export const General = (): JSX.Element => {
   const [pushNotificationsSwitch, setPushNotificationsSwitch] = useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
-  const { settings, setSlippage, setPreferredUnit } = useSettingsContext();
+  const { settingsContext, setSlippage, setPreferredUnit } = useSettingsContext();
 
   return (
     <div className="general-main">
@@ -30,7 +30,7 @@ export const General = (): JSX.Element => {
         </div>
         <StripedRadioButton
           options={slippageFeeOptions}
-          selectedOption={SlippageFeeList.find((sf) => sf.value === settings.slippage)?.text || ''}
+          selectedOption={SlippageFeeList.find((sf) => sf.value === settingsContext.slippage)?.text || ''}
           onChange={(option) => {
             const selectedOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
@@ -60,7 +60,7 @@ export const General = (): JSX.Element => {
               setPreferredUnit(preferredUnit);
             }
           }}
-          checkedValue={settings.preferred_unit.text}
+          checkedValue={settingsContext.preferred_unit.text}
         />
       </div>
       <div className="general-item">

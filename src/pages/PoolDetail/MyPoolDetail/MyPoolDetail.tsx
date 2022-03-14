@@ -28,7 +28,7 @@ export const MyPoolDetail: React.FC = () => {
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { settings } = useSettingsContext();
+  const { settingsContext } = useSettingsContext();
   const { poolChartData } = usePoolChartDataContext();
 
   const history = useHistory();
@@ -65,7 +65,9 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = quoteAmountRound(quoteTokenRecipients.user_lbtc_received / settings.preferred_unit.value);
+      const pooledQuote = quoteAmountRound(
+        quoteTokenRecipients.user_lbtc_received / settingsContext.preferred_unit.value,
+      );
 
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
         '(0.00a)',

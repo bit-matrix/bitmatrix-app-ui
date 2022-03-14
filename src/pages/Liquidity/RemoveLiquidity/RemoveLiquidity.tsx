@@ -28,7 +28,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { poolConfig } = usePoolConfigContext();
-  const { settings } = useSettingsContext();
+  const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -110,7 +110,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settings.preferred_unit.value,
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settingsContext.preferred_unit.value,
               quoteAsset: pool.quote.ticker,
               tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
               tokenAsset: pool.token.ticker,
@@ -158,7 +158,7 @@ const RemoveLiquidity = (): JSX.Element => {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
       return {
-        quoteReceived: (Number(recipientValue.user_lbtc_received) / settings.preferred_unit.value).toString(),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / settingsContext.preferred_unit.value).toString(),
         tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
@@ -232,7 +232,7 @@ const RemoveLiquidity = (): JSX.Element => {
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">
-                  tL-{settings.preferred_unit.text} You Get
+                  tL-{settingsContext.preferred_unit.text} You Get
                 </span>
                 <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
@@ -258,7 +258,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove tL-${settings.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
+            text={`Remove tL-${settingsContext.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();
