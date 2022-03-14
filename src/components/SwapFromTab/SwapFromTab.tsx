@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Checkbox, CheckboxGroup } from 'rsuite';
 import { ValueType } from 'rsuite/esm/Checkbox';
-import SettingsContext from '../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
+import { useWalletContext } from '../../context';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
 import { notify } from '../utils/utils';
@@ -14,19 +13,12 @@ type Props = {
 };
 
 export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
-  const { payloadData, dispatch } = useContext(SettingsContext);
+  const { walletContext, setWalletContext } = useWalletContext();
 
   const onChangeSelectedFromTab = (value: any) => {
-    if (payloadData.wallet && payloadData.wallet.isEnabled) {
-      payloadData.wallet.marina.getBalances().then((balances) => {
-        dispatch({
-          type: SETTINGS_ACTION_TYPES.SET_WALLET,
-          payload: {
-            ...payloadData,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            wallet: { marina: payloadData.wallet!.marina, isEnabled: true, balances },
-          },
-        });
+    if (walletContext && walletContext.isEnabled) {
+      walletContext.marina.getBalances().then((balances) => {
+        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances });
 
         if (value === selectedFromAmountPercent) {
           setselectedFromAmountPercent(undefined, balances);
