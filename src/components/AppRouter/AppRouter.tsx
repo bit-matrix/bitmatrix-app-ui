@@ -29,10 +29,10 @@ import './AppRouter.scss';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { setPools } = usePoolContext();
+  const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
-  const { setPoolConfig } = usePoolConfigContext();
-  const { setPoolChartData } = usePoolChartDataContext();
+  const { setPoolConfigContext } = usePoolConfigContext();
+  const { setPoolChartDataContext } = usePoolChartDataContext();
 
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -104,20 +104,20 @@ export const AppRouter = (): JSX.Element => {
 
     const poolId: string = filteredPool[0].id;
 
-    setPools(filteredPool);
+    setPoolsContext(filteredPool);
 
     checkLastTxStatus(poolId);
 
     if (isInitialize) {
       const pool_config: BmConfig = await api.getBmConfigs(poolId);
 
-      setPoolConfig(pool_config);
+      setPoolConfigContext(pool_config);
     }
 
     if (location.pathname.startsWith('/pool') || isInitialize) {
       const pool_chart_data: BmChart[] = await api.getPoolChartData(poolId);
 
-      setPoolChartData(pool_chart_data);
+      setPoolChartDataContext(pool_chart_data);
     }
     setLoading(false);
   };

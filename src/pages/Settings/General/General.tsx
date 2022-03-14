@@ -13,7 +13,7 @@ import './General.scss';
 export const General = (): JSX.Element => {
   const [pushNotificationsSwitch, setPushNotificationsSwitch] = useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
-  const { settingsContext, setSlippage, setPreferredUnit } = useSettingsContext();
+  const { settingsContext, setSlippageContext, setPreferredUnitContext } = useSettingsContext();
 
   return (
     <div className="general-main">
@@ -34,7 +34,7 @@ export const General = (): JSX.Element => {
           onChange={(option) => {
             const selectedOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
-            setSlippage(selectedOption || 200);
+            setSlippageContext(selectedOption || 200);
           }}
         />
       </div>
@@ -57,7 +57,7 @@ export const General = (): JSX.Element => {
             const preferredUnit = preferredUnitList.find((unit) => unit.text === checkedValue);
 
             if (preferredUnit) {
-              setPreferredUnit(preferredUnit);
+              setPreferredUnitContext(preferredUnit);
             }
           }}
           checkedValue={settingsContext.preferred_unit.text}

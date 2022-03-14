@@ -16,16 +16,16 @@ export const useSettingsContext = (): ISettingsContext => useContext(SettingsCon
 export const SettingsContextProvider: React.FC<Props> = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [settingsContext, dispatch] = useReducer(settingsReducer, initialSettingsState);
 
-  const setSlippage = (slippage: number): void => {
+  const setSlippageContext = (slippage: number): void => {
     setSlippageAction(slippage, dispatch);
   };
 
-  const setPreferredUnit = (preferred_unit: { text: PREFERRED_UNIT; value: PREFERRED_UNIT_VALUE }): void => {
+  const setPreferredUnitContext = (preferred_unit: { text: PREFERRED_UNIT; value: PREFERRED_UNIT_VALUE }): void => {
     setPreferredUnitAction(preferred_unit, dispatch);
   };
 
   return (
-    <SettingsContext.Provider value={{ settingsContext, setSlippage, setPreferredUnit }}>
+    <SettingsContext.Provider value={{ settingsContext, setSlippageContext, setPreferredUnitContext }}>
       {children}
     </SettingsContext.Provider>
   );

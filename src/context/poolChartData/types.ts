@@ -9,5 +9,5 @@ export type SetPoolChartDataAction = {
 
 export interface IPoolChartDataContext {
   poolChartDataContext: BmChart[];
-  setPoolChartData: (chart_data: BmChart[]) => void;
+  setPoolChartDataContext: (chart_data: BmChart[]) => void;
 }

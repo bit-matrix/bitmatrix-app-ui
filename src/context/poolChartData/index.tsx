@@ -15,12 +15,12 @@ export const usePoolChartDataContext = (): IPoolChartDataContext => useContext(P
 export const PoolChartDataContextProvider: React.FC<Props> = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [poolChartDataContext, dispatch] = useReducer(poolChartDataReducer, []);
 
-  const setPoolChartData = (chart_data: BmChart[]): void => {
+  const setPoolChartDataContext = (chart_data: BmChart[]): void => {
     setPoolChartDataAction(chart_data, dispatch);
   };
 
   return (
-    <PoolChartDataContext.Provider value={{ poolChartDataContext, setPoolChartData }}>
+    <PoolChartDataContext.Provider value={{ poolChartDataContext, setPoolChartDataContext }}>
       {children}
     </PoolChartDataContext.Provider>
   );

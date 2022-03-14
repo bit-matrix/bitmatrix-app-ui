@@ -16,6 +16,6 @@ export type SetPreferredUnitAction = {
 
 export interface ISettingsContext {
   settingsContext: SettingsStore;
-  setSlippage: (slippage: number) => void;
-  setPreferredUnit: (preferred_unit: { text: PREFERRED_UNIT; value: number }) => void;
+  setSlippageContext: (slippage: number) => void;
+  setPreferredUnitContext: (preferred_unit: { text: PREFERRED_UNIT; value: number }) => void;
 }

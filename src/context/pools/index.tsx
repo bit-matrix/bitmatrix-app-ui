@@ -15,9 +15,9 @@ export const usePoolContext = (): IPoolContext => useContext(PoolsContext);
 export const PoolsContextProvider: React.FC<Props> = ({ children }: ComponentProps<FC>): JSX.Element => {
   const [poolsContext, dispatch] = useReducer(poolsReducer, []);
 
-  const setPools = (pools: Pool[]): void => {
+  const setPoolsContext = (pools: Pool[]): void => {
     setPoolsAction(pools, dispatch);
   };
 
-  return <PoolsContext.Provider value={{ poolsContext, setPools }}>{children}</PoolsContext.Provider>;
+  return <PoolsContext.Provider value={{ poolsContext, setPoolsContext }}>{children}</PoolsContext.Provider>;
 };

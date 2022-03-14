@@ -9,5 +9,5 @@ export type SetPoolsAction = {
 
 export interface IPoolContext {
   poolsContext: Pool[];
-  setPools: (pools: Pool[]) => void;
+  setPoolsContext: (pools: Pool[]) => void;
 }

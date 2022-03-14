@@ -9,5 +9,5 @@ export type SetPoolConfigAction = {
 
 export interface IPoolConfigContext {
   poolConfigContext: BmConfig;
-  setPoolConfig: (config: BmConfig) => void;
+  setPoolConfigContext: (config: BmConfig) => void;
 }
