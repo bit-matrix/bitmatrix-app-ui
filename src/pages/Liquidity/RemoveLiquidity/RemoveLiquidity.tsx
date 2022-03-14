@@ -27,7 +27,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfig } = usePoolConfigContext();
+  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -59,9 +59,9 @@ const RemoveLiquidity = (): JSX.Element => {
     if (walletContext?.marina) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      if (pools && poolConfig) {
+      if (pools && poolConfigContext) {
         const pool = pools[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
 
@@ -93,7 +93,7 @@ const RemoveLiquidity = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
             calcLpTokenAmount,

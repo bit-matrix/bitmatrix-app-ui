@@ -13,11 +13,13 @@ const PoolConfigContext = createContext<IPoolConfigContext>({} as IPoolConfigCon
 export const usePoolConfigContext = (): IPoolConfigContext => useContext(PoolConfigContext);
 
 export const PoolConfigContextProvider: React.FC<Props> = ({ children }: ComponentProps<FC>): JSX.Element => {
-  const [poolConfig, dispatch] = useReducer(poolConfigReducer, initialPoolConfigState);
+  const [poolConfigContext, dispatch] = useReducer(poolConfigReducer, initialPoolConfigState);
 
   const setPoolConfig = (config: BmConfig): void => {
     setPoolConfigAction(config, dispatch);
   };
 
-  return <PoolConfigContext.Provider value={{ poolConfig, setPoolConfig }}>{children}</PoolConfigContext.Provider>;
+  return (
+    <PoolConfigContext.Provider value={{ poolConfigContext, setPoolConfig }}>{children}</PoolConfigContext.Provider>
+  );
 };

@@ -44,7 +44,7 @@ export const Swap = (): JSX.Element => {
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfig } = usePoolConfigContext();
+  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
 
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
@@ -52,14 +52,14 @@ export const Swap = (): JSX.Element => {
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (pools && pools.length > 0 && poolConfig && swapWay) {
+    if (pools && pools.length > 0 && poolConfigContext && swapWay) {
       if (swapWay === SWAP_WAY.FROM) {
-        onChangeFromInput(pools[0], poolConfig, inputFromAmount);
+        onChangeFromInput(pools[0], poolConfigContext, inputFromAmount);
       } else {
         onChangeToInput(inputToAmount);
       }
     }
-  }, [pools, poolConfig, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
+  }, [pools, poolConfigContext, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
 
   const onChangeFromInput = (currentPool: Pool, pool_config: BmConfig, input: string) => {
     let inputNum = Number(input);
@@ -74,7 +74,13 @@ export const Swap = (): JSX.Element => {
       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     }
 
-    const output = convertion.convertForCtx(inputNum, settingsContext.slippage, currentPool, poolConfig, methodCall);
+    const output = convertion.convertForCtx(
+      inputNum,
+      settingsContext.slippage,
+      currentPool,
+      poolConfigContext,
+      methodCall,
+    );
 
     if (output.amount > 0) {
       if (selectedAsset.from === SWAP_ASSET.LBTC) {
@@ -95,7 +101,7 @@ export const Swap = (): JSX.Element => {
   const onChangeToInput = (input: string) => {
     let inputNum = Number(input);
 
-    if (pools && poolConfig) {
+    if (pools && poolConfigContext) {
       let methodCall;
 
       if (selectedAsset.to === SWAP_ASSET.LBTC) {
@@ -106,7 +112,13 @@ export const Swap = (): JSX.Element => {
         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
       }
 
-      const output = convertion.convertForCtx2(inputNum, settingsContext.slippage, pools[0], poolConfig, methodCall);
+      const output = convertion.convertForCtx2(
+        inputNum,
+        settingsContext.slippage,
+        pools[0],
+        poolConfigContext,
+        methodCall,
+      );
 
       if (output.amount > 0) {
         if (selectedAsset.to === SWAP_ASSET.LBTC) {
@@ -124,7 +136,7 @@ export const Swap = (): JSX.Element => {
     }
   };
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
-    if (pools && pools.length > 0 && poolConfig && walletContext && balances.length > 0) {
+    if (pools && pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       setSwapWay(SWAP_WAY.FROM);
 
       const currentPool = pools[0];
@@ -138,10 +150,10 @@ export const Swap = (): JSX.Element => {
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
-        poolConfig.baseFee.number +
-        poolConfig.commitmentTxFee.number +
-        poolConfig.defaultOrderingFee.number +
-        poolConfig.serviceFee.number +
+        poolConfigContext.baseFee.number +
+        poolConfigContext.commitmentTxFee.number +
+        poolConfigContext.defaultOrderingFee.number +
+        poolConfigContext.serviceFee.number +
         1000;
 
       if (quoteTotalAmountInWallet) {
@@ -156,7 +168,7 @@ export const Swap = (): JSX.Element => {
               inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
           } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -167,7 +179,7 @@ export const Swap = (): JSX.Element => {
               inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
             }
           }
           setInputFromAmount(inputAmount);
@@ -178,17 +190,17 @@ export const Swap = (): JSX.Element => {
   };
 
   const inputIsValid = () => {
-    if (pools && pools.length > 0 && poolConfig && walletContext) {
+    if (pools && pools.length > 0 && poolConfigContext && walletContext) {
       let inputAmount = 0;
 
       const inputValue = Number(inputFromAmount);
       let isValid = false;
       if (inputValue > 0) {
         const totalFee =
-          poolConfig.baseFee.number +
-          poolConfig.commitmentTxFee.number +
-          poolConfig.defaultOrderingFee.number +
-          poolConfig.serviceFee.number +
+          poolConfigContext.baseFee.number +
+          poolConfigContext.commitmentTxFee.number +
+          poolConfigContext.defaultOrderingFee.number +
+          poolConfigContext.serviceFee.number +
           1000;
 
         const currentPool = pools[0];
@@ -282,8 +294,8 @@ export const Swap = (): JSX.Element => {
         numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
       }
 
-      if (pools && poolConfig) {
-        const fundingTxInputs = fundingTx(numberFromAmount, pools[0], poolConfig, methodCall);
+      if (pools && poolConfigContext) {
+        const fundingTxInputs = fundingTx(numberFromAmount, pools[0], poolConfigContext, methodCall);
         let fundingTxId;
 
         try {
@@ -325,7 +337,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               addressInformation.publicKey,
               numberToAmount,
-              poolConfig,
+              poolConfigContext,
               pools[0],
             );
           } else {
@@ -334,7 +346,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               addressInformation.publicKey,
               numberToAmount,
-              poolConfig,
+              poolConfigContext,
               pools[0],
             );
           }
@@ -394,8 +406,8 @@ export const Swap = (): JSX.Element => {
   };
 
   const infoMessage = (): string => {
-    if (poolConfig && pools && pools.length > 0) {
-      const config = poolConfig;
+    if (poolConfigContext && pools && pools.length > 0) {
+      const config = poolConfigContext;
       const currentPool = pools[0];
       const totalFee =
         config.baseFee.number +

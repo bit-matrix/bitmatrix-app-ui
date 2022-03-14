@@ -35,7 +35,7 @@ const AddLiquidity = (): JSX.Element => {
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfig } = usePoolConfigContext();
+  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -45,8 +45,8 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (pools && poolConfig && input !== '.') {
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+    if (pools && poolConfigContext && input !== '.') {
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
       const output = convertion.convertForLiquidityCtx(
         inputNum * settingsContext.preferred_unit.value,
@@ -63,8 +63,8 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeTokenAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (pools && poolConfig && input !== '.') {
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+    if (pools && poolConfigContext && input !== '.') {
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
       const output = convertion.convertForLiquidityCtx(
         inputNum * PREFERRED_UNIT_VALUE.LBTC,
@@ -84,7 +84,7 @@ const AddLiquidity = (): JSX.Element => {
     usdtPercent: FROM_AMOUNT_PERCENT | undefined,
     balances: Balance[],
   ) => {
-    if (pools && pools.length > 0 && poolConfig && walletContext && balances.length > 0) {
+    if (pools && pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       const currentPool = pools[0];
 
       let inputAmount = '';
@@ -95,7 +95,7 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
       const totalFee =
         primaryPoolConfig.baseFee.number +
@@ -116,7 +116,7 @@ const AddLiquidity = (): JSX.Element => {
               inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (lbctPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
             onChangeQuoteAmount(inputAmount);
             setUsdtPercent(undefined);
@@ -132,7 +132,7 @@ const AddLiquidity = (): JSX.Element => {
             inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           if (usdtPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           onChangeTokenAmount(inputAmount);
           setLbtcPercent(undefined);
@@ -148,14 +148,14 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   const inputsIsValid = () => {
-    if (pools && pools.length > 0 && poolConfig && walletContext) {
+    if (pools && pools.length > 0 && poolConfigContext && walletContext) {
       let tokenIsValid = false;
       let quoteIsValid = false;
 
       const currentPool = pools[0];
 
       if (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0) {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -205,9 +205,9 @@ const AddLiquidity = (): JSX.Element => {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
-      if (pools && poolConfig) {
+      if (pools && poolConfigContext) {
         const pool = pools[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
 
@@ -247,7 +247,7 @@ const AddLiquidity = (): JSX.Element => {
           setLbtcPercent(undefined);
           setUsdtPercent(undefined);
 
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
             quoteAmountN,
