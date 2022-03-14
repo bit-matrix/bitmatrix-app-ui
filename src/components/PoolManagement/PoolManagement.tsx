@@ -51,7 +51,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
 
   useEffect(() => {
     if (pools && pools.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
-      const balanceAssets = walletContext?.balances.map((bl) => bl.asset.assetHash);
+      const balanceAssets = walletContext?.balances.filter((bl) => bl.amount > 0).map((bl) => bl.asset.assetHash);
       const myCurrentPools: Pool[] = [];
 
       balanceAssets.forEach((ba) => {

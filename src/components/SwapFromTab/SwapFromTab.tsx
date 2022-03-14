@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Checkbox, CheckboxGroup } from 'rsuite';
 import { ValueType } from 'rsuite/esm/Checkbox';
+import SettingsContext from '../../context/SettingsContext';
+import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { Balance } from 'marina-provider';
+import { notify } from '../utils/utils';
 import './SwapFromTab.scss';
 
 type Props = {
   selectedFromAmountPercent: FROM_AMOUNT_PERCENT | undefined;
-  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => void;
+  setselectedFromAmountPercent: (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => void;
 };
 
 export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setselectedFromAmountPercent }) => {
+  const { payloadData, dispatch } = useContext(SettingsContext);
+
   const onChangeSelectedFromTab = (value: any) => {
-    if (value === selectedFromAmountPercent) {
-      setselectedFromAmountPercent(undefined);
-      console.log(value);
+    if (payloadData.wallet && payloadData.wallet.isEnabled) {
+      payloadData.wallet.marina.getBalances().then((balances) => {
+        dispatch({
+          type: SETTINGS_ACTION_TYPES.SET_WALLET,
+          payload: {
+            ...payloadData,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            wallet: { marina: payloadData.wallet!.marina, isEnabled: true, balances },
+          },
+        });
+
+        if (value === selectedFromAmountPercent) {
+          setselectedFromAmountPercent(undefined, balances);
+        } else {
+          setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT, balances);
+        }
+      });
     } else {
-      setselectedFromAmountPercent(value as FROM_AMOUNT_PERCENT);
+      notify('Wallet is disabled, connect to wallet.', 'Wallet : ', 'error');
     }
   };
 

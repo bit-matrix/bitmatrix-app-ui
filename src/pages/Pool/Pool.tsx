@@ -31,5 +31,9 @@ export const Pool = (): JSX.Element => {
     );
   }
 
-  return <div className="no-pool-text">There are no pools</div>;
+  return (
+    <div className="pool-main-div">
+      <div className="no-pool-text">There are no pools</div>
+    </div>
+  );
 };

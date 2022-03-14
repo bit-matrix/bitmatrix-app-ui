@@ -18,6 +18,7 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import { poolShareRound, quoteAmountRound } from '../../../helper';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -64,14 +65,13 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = Numeral(quoteTokenRecipients.user_lbtc_received / settings.preferred_unit.value).format(
-        '(0.00a)',
-      );
+      const pooledQuote = quoteAmountRound(quoteTokenRecipients.user_lbtc_received / settings.preferred_unit.value);
+
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
         '(0.00a)',
       );
       const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
-      const poolRate = (Number(recipientValue.poolRate) * 100).toFixed(2);
+      const poolRate = poolShareRound(Number(recipientValue.poolRate) * 100);
 
       return {
         pooledQuote,
@@ -86,7 +86,7 @@ export const MyPoolDetail: React.FC = () => {
   const renderChart = (/*allData: any*/) => {
     const data: ChartData[] = [
       {
-        date: '',
+        date: new Date().toLocaleDateString(),
         close: 0,
       },
     ];
@@ -142,7 +142,7 @@ export const MyPoolDetail: React.FC = () => {
           <div className="my-pool-detail-content">
             <div className="my-pool-detail-content-right desktop-hidden">{!loading && renderChart()}</div>
 
-            <div className="my-pool-detail-content-left">
+            <div className="my-pool-detail-content-left mobile-hidden">
               <div className="my-pool-detail-content-left-header">My pooled assets</div>
               <div className="my-pooled-assets-content">
                 <div className="my-pooled-assets-item">
@@ -169,7 +169,7 @@ export const MyPoolDetail: React.FC = () => {
                 <CustomPopover
                   placement="autoHorizontal"
                   title="LP"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                  content="LP tokens represent the assets you deposited into the liquidity pool along with a proportional scale of the trading fees collected over time."
                 >
                   <img className="general-icon" src={info} alt="info" />
                 </CustomPopover>
@@ -180,11 +180,7 @@ export const MyPoolDetail: React.FC = () => {
                   {calcPooledAssets().poolRate}
                 </div>
 
-                <CustomPopover
-                  placement="autoHorizontal"
-                  title="%"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                >
+                <CustomPopover placement="autoHorizontal" title="%" content="Your liquidity proportion in percentage.">
                   <img className="general-icon" src={info} alt="info" />
                 </CustomPopover>
               </div>

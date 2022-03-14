@@ -5,6 +5,7 @@ import {
   MarinaEventType,
   Recipient,
   SentTransaction,
+  Utxo,
 } from 'marina-provider';
 import { IWallet } from './IWallet';
 import Marina from './marina/marina';
@@ -43,4 +44,6 @@ export class Wallet implements IWallet {
   public getNextChangeAddress = (): Promise<AddressInterface> => this.wallet.getNextChangeAddress();
 
   public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
+
+  public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
 }

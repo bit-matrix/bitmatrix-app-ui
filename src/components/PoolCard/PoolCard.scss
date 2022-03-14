@@ -18,6 +18,10 @@
   justify-content: space-around;
   list-style: none;
   margin: 0;
+
+  li {
+    user-select: none;
+  }
 }
 
 .pool-card-modal-content {
@@ -79,6 +83,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.pool-card-tag {
+  padding: 0.125rem 0.25rem !important;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {

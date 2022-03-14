@@ -7,6 +7,7 @@ import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
 import { preferredUnitList, preferredUnitOptions, SlippageFeeList, slippageFeeOptions } from './utils';
 import info from '../../../images/info2.png';
+import { notify } from '../../../components/utils/utils';
 import './General.scss';
 
 export const General = (): JSX.Element => {
@@ -72,7 +73,16 @@ export const General = (): JSX.Element => {
           >
             <img className="general-icon" src={info} alt="info" />
           </CustomPopover>
-          <ToggleSwitch onChange={(checked) => setPushNotificationsSwitch(checked)} checked={pushNotificationsSwitch} />
+          <ToggleSwitch
+            onChange={(checked) => {
+              setPushNotificationsSwitch(checked);
+              notify('This feature is not supported yet.', 'Push Notifications : ', 'info');
+              setTimeout(() => {
+                setPushNotificationsSwitch(false);
+              }, 350);
+            }}
+            checked={pushNotificationsSwitch}
+          />
         </div>
       </div>
       <div className="general-item">
@@ -85,7 +95,16 @@ export const General = (): JSX.Element => {
           >
             <img className="general-icon" src={info} alt="info" />
           </CustomPopover>
-          <ToggleSwitch onChange={(checked) => setLiquidTaxiSwitch(checked)} checked={liquidTaxiSwitch} />
+          <ToggleSwitch
+            onChange={(checked) => {
+              setLiquidTaxiSwitch(checked);
+              notify('This feature is not supported yet.', 'Liquid Taxi : ', 'info');
+              setTimeout(() => {
+                setLiquidTaxiSwitch(false);
+              }, 350);
+            }}
+            checked={liquidTaxiSwitch}
+          />
         </div>
       </div>
     </div>

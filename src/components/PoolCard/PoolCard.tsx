@@ -52,7 +52,9 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
             <li>
               <div>
                 <span>TVL</span>&nbsp;
-                <Tag color={`${data.tvlRate.direction === 'up' ? 'green' : 'red'}`}>{data.tvlRate.value}%</Tag>
+                <Tag className="pool-card-tag" color={`${data.tvlRate.direction === 'up' ? 'green' : 'red'}`}>
+                  {Number(data.tvlRate.value)}%
+                </Tag>
               </div>
               <div>${Numeral(data.todayTvlData).format('(0.00a)')}</div>
             </li>
@@ -61,8 +63,8 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
                 <li>
                   <div>
                     <span>Volume</span>&nbsp;
-                    <Tag color={`${data.volumeRate.direction === 'up' ? 'green' : 'red'}`}>
-                      {data.volumeRate.value}%
+                    <Tag className="pool-card-tag" color={`${data.volumeRate.direction === 'up' ? 'green' : 'red'}`}>
+                      {Number(data.volumeRate.value)}%
                     </Tag>
                   </div>
                   <div>${Numeral(data.todayVolumeData.close).format('(0.00a)')}</div>
@@ -70,7 +72,9 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
                 <li>
                   <div>
                     <span>Fees</span>&nbsp;
-                    <Tag color={`${data.feeRate.direction === 'up' ? 'green' : 'red'}`}>{data.feeRate.value}%</Tag>
+                    <Tag className="pool-card-tag" color={`${data.feeRate.direction === 'up' ? 'green' : 'red'}`}>
+                      {Number(data.feeRate.value)}%
+                    </Tag>
                   </div>
                   <div>${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
                 </li>

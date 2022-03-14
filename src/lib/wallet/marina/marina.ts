@@ -93,6 +93,11 @@ export default class Marina implements MarinaProvider {
     return Promise.reject('Marina wallet disabled.');
   }
 
+  getCoins(): Promise<Utxo[]> {
+    if (this.exist() && marina) return marina.getCoins();
+    return Promise.reject('Marina wallet disabled.');
+  }
+
   setAccount(/*account: number*/): Promise<void> {
     throw new Error('Method not implemented.');
   }
@@ -109,9 +114,7 @@ export default class Marina implements MarinaProvider {
   signMessage(/*message: string*/): Promise<SignedMessage> {
     throw new Error('Method not implemented.');
   }
-  getCoins(): Promise<Utxo[]> {
-    throw new Error('Method not implemented.');
-  }
+
   getTransactions(): Promise<Transaction[]> {
     throw new Error('Method not implemented.');
   }

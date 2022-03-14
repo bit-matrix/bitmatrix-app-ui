@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig, BmChart } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useWalletContext, usePoolChartDataContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
@@ -63,16 +63,24 @@ export const AppRouter = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (walletContext) {
+    if (walletContext?.marina) {
       fetchBalances(walletContext.marina);
+
+      walletContext.marina.on('NEW_UTXO', () => {
+        if (walletContext?.marina) {
+          fetchBalances(walletContext.marina);
+        }
+      });
+
+      // payloadData.wallet.marina.reloadCoins();
     }
 
-    setInterval(() => {
-      if (walletContext && walletContext.marina) {
-        fetchBalances(walletContext.marina);
-      }
-    }, 10000);
-  }, [walletContext]);
+    // setInterval(() => {
+    //   if (payloadData.wallet) {
+    //     fetchBalances(payloadData.wallet?.marina);
+    //   }
+    // }, 60000);
+  }, [walletContext?.marina]);
 
   const fetchBalances = async (wall: IWallet) => {
     if (walletContext && walletContext.isEnabled) {
@@ -91,7 +99,7 @@ export const AppRouter = (): JSX.Element => {
     const pools: ModelPool[] = await api.getPools();
 
     const filteredPool = pools.filter(
-      (p) => p.id === '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
+      (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
     );
 
     const poolId: string = filteredPool[0].id;
@@ -123,7 +131,7 @@ export const AppRouter = (): JSX.Element => {
       if (unconfirmedTxs.length > 0) {
         unconfirmedTxs.forEach((transaction) => {
           if (transaction.txId) {
-            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse) => {
+            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
               if (ctxResponse) {
                 const newTxHistory = [...txHistory];
                 const willChangedTx = newTxHistory.findIndex((ntx) => {
@@ -143,7 +151,7 @@ export const AppRouter = (): JSX.Element => {
                     });
 
                     newTxHistory[willChangedTx].completed = true;
-                    newTxHistory[willChangedTx].success = true;
+                    newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
 
                     setLocalData(newTxHistory);
                   }

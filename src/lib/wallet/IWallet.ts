@@ -5,6 +5,7 @@ import {
   MarinaEventType,
   Recipient,
   SentTransaction,
+  Utxo,
 } from 'marina-provider';
 
 export interface IWallet {
@@ -31,4 +32,6 @@ export interface IWallet {
   getNextChangeAddress(): Promise<AddressInterface>;
 
   reloadCoins(): Promise<void>;
+
+  getCoins(): Promise<Utxo[]>;
 }

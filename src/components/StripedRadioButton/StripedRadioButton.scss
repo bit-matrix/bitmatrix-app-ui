@@ -113,6 +113,8 @@
 .slider-option-title {
   position: absolute;
   top: 2rem;
+  color: $bmVeryLightGray;
+  user-select: none;
 }
 .short-title {
   left: 0.275rem;

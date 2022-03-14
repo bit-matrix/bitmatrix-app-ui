@@ -2,7 +2,7 @@ import React from 'react';
 // import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import { timeDifference } from '../../helper';
+import { quoteAmountRound, timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useSettingsContext } from '../../context';
@@ -11,7 +11,10 @@ import { Loading } from '../Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
-import ExportIcon from '../base/Svg/Icons/Export';
+// import ExportIcon from '../base/Svg/Icons/Export';
+import { CustomPopover } from '../CustomPopover/CustomPopover';
+import ExclamationIcon from '../base/Svg/Icons/Exclamation';
+import MempoolIcon from '../base/Svg/Icons/Mempool';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -28,7 +31,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.5rem" />
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -37,8 +40,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {Numeral(cs.quoteAmount / settings.preferred_unit.value).format('(0.00a)')}{' '}
-            {settings.preferred_unit.text} for {cs.tokenAsset} (min{' '}
+            Swap {quoteAmountRound(cs.quoteAmount / settings.preferred_unit.value)}{' '}
+            {`tL-${settings.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -49,7 +52,7 @@ export const InfoCard: React.FC = () => {
       messageBody = (
         <>
           <div className="info-card-item-icon">
-            <ExchangeIcon width="1.25rem" height="1.5rem" />
+            <ExchangeIcon width="1.25rem" height="1.25rem" />
           </div>
           <div
             className="info-card-item-text"
@@ -59,8 +62,8 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {settings.preferred_unit.text} (min{' '}
-            {Numeral(cs.quoteAmount / settings.preferred_unit.value).format('(0.00a)')})
+            {`tL-${settings.preferred_unit.text}`} (min{' '}
+            {quoteAmountRound(cs.quoteAmount / settings.preferred_unit.value)})
           </div>
         </>
       );
@@ -69,7 +72,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.ADD_LIQUIDITY) {
       messageBody = (
         <>
-          <LiquidityAddIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
+          <LiquidityAddIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -77,8 +80,9 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
+            Add {quoteAmountRound(cs.quoteAmount / settings.preferred_unit.value)}{' '}
+            {`tL-${settings.preferred_unit.text}`} and&nbsp;
+            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
@@ -87,7 +91,7 @@ export const InfoCard: React.FC = () => {
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
       messageBody = (
         <>
-          <LiquidityRemoveIcon className="info-card-item-icon" width="1.5rem" height="1.5rem" />
+          <LiquidityRemoveIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
           <div
             className="info-card-item-text"
             unselectable="on"
@@ -95,12 +99,31 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {cs.quoteAmount} {cs.quoteAsset} and&nbsp;
-            {Numeral(cs.tokenAmount).format('(0.00a)')} {cs.tokenAsset}
+            Remove {quoteAmountRound(cs.quoteAmount / settings.preferred_unit.value)}{' '}
+            {`tL-${settings.preferred_unit.text}`} and&nbsp;
+            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
       );
     }
+
+    const txStatus = (cs: CommitmentStore): JSX.Element => {
+      if (cs.completed) {
+        if (cs.isOutOfSlippage) {
+          return (
+            <CustomPopover placement="right" title="" content="Out of slippage">
+              <div>
+                <ExclamationIcon width="1.5rem" height="1.5rem" />
+              </div>
+            </CustomPopover>
+          );
+        } else {
+          return <div>{timeDifference(cs.timestamp)}</div>;
+        }
+      } else {
+        return <Loading width="1.5rem" height="1.5rem" />;
+      }
+    };
 
     return (
       <div key={cs.txId} className="info-card-item">
@@ -110,18 +133,20 @@ export const InfoCard: React.FC = () => {
             <div
               className="explorer-div"
               onClick={() =>
-                window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
+                // window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
+                window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
               }
             >
-              View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" />
+              {/* View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
+              <span className="info-mempool-text">
+                View in &nbsp; <MempoolIcon width="6.5rem" height="1.25rem" />
+              </span>
+
+              {/* <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
             </div>
           </>
         )}
-        {cs.completed === false ? (
-          <Loading width="1.5rem" height="1.5rem" />
-        ) : (
-          <div>{timeDifference(cs.timestamp)}</div>
-        )}
+        {txStatus(cs)}
       </div>
     );
   };

@@ -14,7 +14,7 @@ import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig, sleep } from '../../../helper';
+import { getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -86,6 +86,7 @@ const RemoveLiquidity = (): JSX.Element => {
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
+          // payloadData.wallet.marina.reloadCoins();
           return Promise.reject();
         }
 
@@ -109,14 +110,14 @@ const RemoveLiquidity = (): JSX.Element => {
 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber(),
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settings.preferred_unit.value,
               quoteAsset: pool.quote.ticker,
-              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber(),
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
               tokenAsset: pool.token.ticker,
               lpAmount: calcLpTokenAmount,
               lpAsset: pool.lp.ticker,
               timestamp: new Date().valueOf(),
-              success: false,
+              isOutOfSlippage: false,
               completed: false,
               seen: false,
               method: CALL_METHOD.REMOVE_LIQUIDITY,
@@ -136,13 +137,15 @@ const RemoveLiquidity = (): JSX.Element => {
           //   'Commitment Tx created successfully!',
           //   'success',
           // );
+
           setLoading(false);
+          // await sleep(3000);
 
-          await sleep(3000);
-
-          walletContext.marina.reloadCoins();
+          // payloadData.wallet.marina.reloadCoins();
         } else {
-          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
+
+          // payloadData.wallet.marina.reloadCoins();
           setLoading(false);
         }
       }
@@ -228,14 +231,16 @@ const RemoveLiquidity = (): JSX.Element => {
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">BTC You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">
+                  tL-{settings.preferred_unit.text} You Get
+                </span>
                 <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">USDT You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">tL-USDT You Get</span>
                 <TetherIcon className="liquidity-usdt-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>

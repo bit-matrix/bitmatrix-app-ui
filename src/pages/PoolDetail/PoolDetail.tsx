@@ -6,6 +6,7 @@ import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
+import { quoteAmountRound } from '../../helper';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
@@ -14,8 +15,8 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
-import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
-import info from '../../images/info2.png';
+// import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
+// import info from '../../images/info2.png';
 import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
@@ -110,22 +111,22 @@ export const PoolDetail: React.FC = () => {
           </div>
           <div className="pool-detail-content">
             <div className="pool-detail-content-right desktop-hidden">{!loading && renderChart(data)}</div>
-            <div className="pool-detail-content-left">
+            <div className="pool-detail-content-left mobile-hidden">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
-                <CustomPopover
+                {/* <CustomPopover
                   placement="autoHorizontal"
                   title="Total Pooled Assets"
                   content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
                 >
                   <img className="general-icon" src={info} alt="info" />
-                </CustomPopover>
+                </CustomPopover> */}
               </div>
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {Numeral(Number(pool.quote.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                    {quoteAmountRound(Number(pool.quote.value) / payloadData.preferred_unit.value)}
                   </div>
                 </div>
 
@@ -139,13 +140,13 @@ export const PoolDetail: React.FC = () => {
 
               <div className="pool-detail-content-left-header">
                 <span>Pool Metrics</span>
-                <CustomPopover
+                {/* <CustomPopover
                   placement="autoHorizontal"
                   title="Pool Metrics"
                   content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
                 >
                   <img className="general-icon" src={info} alt="info" />
-                </CustomPopover>
+                </CustomPopover> */}
               </div>
 
               <div className="pool-metrics">
@@ -153,7 +154,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>{pool.quote.ticker} Price</div>
                     <div className="pool-detail-table-text">${data.todayPrice.toLocaleString()}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.priceRate.icon}
                       <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
                         {data.priceRate.value}%
@@ -165,7 +166,7 @@ export const PoolDetail: React.FC = () => {
                     <div className="pool-detail-table-text">
                       ${Numeral(data.todayVolumeData.close).format('(0.00a)')}
                     </div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.volumeRate.icon}
                       <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
                         {data.volumeRate.value}%
@@ -177,7 +178,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>TVL</div>
                     <div className="pool-detail-table-text">${Numeral(data.todayTvlData).format('(0.00a)')}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.tvlRate.icon}
                       <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
                         {data.tvlRate.value}%
@@ -187,7 +188,7 @@ export const PoolDetail: React.FC = () => {
                   <div className="pool-metrics-item">
                     <div>Fees 24h</div>
                     <div className="pool-detail-table-text">${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
-                    <div>
+                    <div className="pool-detail-icon-content">
                       {data.feeRate.icon}
                       <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
                         {data.feeRate.value}%

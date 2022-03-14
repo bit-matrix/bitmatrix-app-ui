@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
+import { Balance } from 'marina-provider';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
@@ -15,7 +16,7 @@ import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
-import { sleep } from '../../helper';
+import { getAssetPrecession, sleep } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
@@ -122,9 +123,8 @@ export const Swap = (): JSX.Element => {
       setInputToAmount(input);
     }
   };
-
-  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined) => {
-    if (pools && pools.length > 0 && poolConfig && walletContext) {
+  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
+    if (pools && pools.length > 0 && poolConfig && walletContext && balances.length > 0) {
       setSwapWay(SWAP_WAY.FROM);
 
       const currentPool = pools[0];
@@ -132,10 +132,10 @@ export const Swap = (): JSX.Element => {
       let inputAmount = '';
 
       const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
       const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+      const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
         poolConfig.baseFee.number +
@@ -144,69 +144,74 @@ export const Swap = (): JSX.Element => {
         poolConfig.serviceFee.number +
         1000;
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = ((quoteAmountInWallet - totalFee) / settings.preferred_unit.value).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const quoteAmountInWalletHalf = quoteAmountInWallet / 2;
-          inputAmount = (quoteAmountInWalletHalf / settings.preferred_unit.value).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfig.minRemainingSupply / settings.preferred_unit.value).toString();
-        }
-      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const tokenAmountInWalletHalf = tokenAmountInWallet / 2;
-          inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+      if (quoteTotalAmountInWallet) {
+        const quoteAmount = quoteTotalAmountInWallet - totalFee;
+        if (quoteAmount > 0) {
+          if (selectedAsset.from === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+              inputAmount = (quoteAmount / settings.preferred_unit.value).toString();
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+              const quoteAmountHalf = Math.ceil(quoteAmount / 2);
+              inputAmount = (quoteAmountHalf / settings.preferred_unit.value).toString();
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+              inputAmount = (poolConfig.minRemainingSupply / settings.preferred_unit.value).toString();
+            }
+          } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+              inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+              const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
+              inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+              inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            }
+          }
+          setInputFromAmount(inputAmount);
+          setSelectedFromAmountPercent(newFromAmountPercent);
         }
       }
-      setInputFromAmount(inputAmount);
     }
-    setSelectedFromAmountPercent(newFromAmountPercent);
   };
 
   const inputIsValid = () => {
     if (pools && pools.length > 0 && poolConfig && walletContext) {
       let inputAmount = 0;
 
-      const totalFee =
-        poolConfig.baseFee.number +
-        poolConfig.commitmentTxFee.number +
-        poolConfig.defaultOrderingFee.number +
-        poolConfig.serviceFee.number +
-        1000;
-
       const inputValue = Number(inputFromAmount);
       let isValid = false;
+      if (inputValue > 0) {
+        const totalFee =
+          poolConfig.baseFee.number +
+          poolConfig.commitmentTxFee.number +
+          poolConfig.defaultOrderingFee.number +
+          poolConfig.serviceFee.number +
+          1000;
 
-      const currentPool = pools[0];
+        const currentPool = pools[0];
 
-      const quoteAssetId = currentPool.quote.asset;
-      const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const quoteAssetId = currentPool.quote.asset;
+        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-      const tokenAssetId = currentPool.token.asset;
-      const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        const tokenAssetId = currentPool.token.asset;
+        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet) {
-        inputAmount = (quoteAmountInWallet - totalFee) / settings.preferred_unit.value;
-      } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet) {
-        inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+        if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
+          inputAmount = (quoteAmountInWallet - totalFee) / settings.preferred_unit.value;
+        } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet && tokenAmountInWallet > 0) {
+          inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+        }
+
+        if (inputValue <= inputAmount && inputAmount > 0) {
+          isValid = true;
+        } else {
+          isValid = false;
+        }
+        return isValid;
       }
-
-      if (inputValue <= inputAmount) {
-        isValid = true;
-      } else {
-        isValid = false;
-      }
-
-      return isValid;
     }
     return true;
   };
@@ -300,6 +305,7 @@ export const Swap = (): JSX.Element => {
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
+          // payloadData.wallet.marina.reloadCoins();
           return Promise.reject();
         }
 
@@ -351,7 +357,7 @@ export const Swap = (): JSX.Element => {
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
               tokenAsset: pools[0].token.ticker,
               timestamp: new Date().valueOf(),
-              success: false,
+              isOutOfSlippage: false,
               completed: false,
               seen: false,
               method: methodCall,
@@ -365,9 +371,9 @@ export const Swap = (): JSX.Element => {
 
             setLoading(false);
 
-            await sleep(3000);
+            // await sleep(3000);
 
-            walletContext.marina.reloadCoins();
+            // payloadData.wallet.marina.reloadCoins();
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
             setLoading(false);
@@ -375,6 +381,7 @@ export const Swap = (): JSX.Element => {
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);
+          // payloadData.wallet.marina.reloadCoins();
         }
       } else {
         notify('Pool Error', 'Error : ', 'error');
@@ -426,11 +433,12 @@ export const Swap = (): JSX.Element => {
                     className="from-input"
                     inputValue={inputFromAmount}
                     onChange={(inputValue) => {
+                      if (inputValue === '.') return;
                       setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={selectedAsset.from === SWAP_ASSET.LBTC ? 8 : 2}
+                    decimalLength={getAssetPrecession(selectedAsset.from, settings.preferred_unit.text)}
                   />
                 </div>
                 <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
@@ -446,11 +454,12 @@ export const Swap = (): JSX.Element => {
                   className="from-input"
                   inputValue={inputToAmount}
                   onChange={(inputValue) => {
+                    if (inputValue === '.') return;
                     setInputToAmount(inputValue);
                     setSelectedFromAmountPercent(undefined);
                     setSwapWay(SWAP_WAY.TO);
                   }}
-                  decimalLength={selectedAsset.to === SWAP_ASSET.LBTC ? 8 : 2}
+                  decimalLength={getAssetPrecession(selectedAsset.to, settings.preferred_unit.text)}
                 />
               </div>
               <SwapAssetList
