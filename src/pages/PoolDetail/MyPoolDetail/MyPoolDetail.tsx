@@ -29,7 +29,7 @@ export const MyPoolDetail: React.FC = () => {
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolChartData } = usePoolChartDataContext();
+  const { poolChartDataContext } = usePoolChartDataContext();
 
   const history = useHistory();
 
@@ -112,7 +112,7 @@ export const MyPoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || poolChartData === undefined) {
+  if (pool === undefined || poolChartDataContext === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);

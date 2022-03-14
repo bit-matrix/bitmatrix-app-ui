@@ -17,12 +17,12 @@ type Props = {
 };
 
 export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = true }) => {
-  const { poolChartData } = usePoolChartDataContext();
+  const { poolChartDataContext } = usePoolChartDataContext();
 
-  if (poolChartData === undefined) {
+  if (poolChartDataContext === undefined) {
     return <span>Something went wrong.</span>;
   } else {
-    const data = calculateChartData(poolChartData, pool);
+    const data = calculateChartData(poolChartDataContext, pool);
     const chartColor = data.priceRate.direction === 'up' ? '#78B98C' : '#de5b4c';
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
