@@ -1,7 +1,5 @@
 import React from 'react';
-import { useContext } from 'react';
-import SettingsContext from '../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
+import { useWalletContext } from '../../context';
 import { notify } from '../utils/utils';
 
 type Props = {
@@ -12,7 +10,7 @@ type Props = {
 };
 
 export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, className, decimalLength = 2 }) => {
-  const { payloadData, dispatch } = useContext(SettingsContext);
+  const { walletContext, setWalletContext } = useWalletContext();
 
   const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d{0,${decimalLength}}$`);
 
@@ -27,16 +25,9 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
   };
 
   const onFocus = () => {
-    if (payloadData.wallet && payloadData.wallet.isEnabled) {
-      payloadData.wallet.marina.getBalances().then((balances) => {
-        dispatch({
-          type: SETTINGS_ACTION_TYPES.SET_WALLET,
-          payload: {
-            ...payloadData,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            wallet: { marina: payloadData.wallet!.marina, isEnabled: true, balances },
-          },
-        });
+    if (walletContext && walletContext.isEnabled) {
+      walletContext.marina.getBalances().then((balances) => {
+        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances });
       });
     } else {
       notify('Wallet is disabled, connect to wallet.', 'Wallet : ', 'error');
