@@ -24,7 +24,8 @@ export const initialPoolConfigState: BmConfig = {
       lp: '',
     },
   },
-  mainCovenantScript: '',
+  mainCovenantScript: [],
+  maxLeaf: 0,
 };
 
 export const poolConfigReducer = (state: BmConfig, action: SetPoolConfigAction): BmConfig => {
