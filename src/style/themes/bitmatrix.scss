@@ -23,12 +23,12 @@ $bmBlack: #000000;
 $bmWhite: #ffffff;
 $bmGray: #808080;
 $bmRed: #ff0000;
-$bmGreen: #00FF00;
+$bmGreen: #00ff00;
 $LightGray: #d4d4d4;
 $bmBlackRussian: #171718;
 $bmMortar: #555555;
 $bmBalticSea: #3c3f43;
-$bmEbony: #2C2F36;
+$bmEbony: #2c2f36;
 $bmFrenchGray: #cbc9cd;
 $bmAlizarin: #ef2a31;
 $bmVeryVeryDarkGray: #23242a;
@@ -38,3 +38,66 @@ $bmCardinGreen: #121f18;
 $bmGreySuit: #8e8e93;
 $bmDenim: #1675e0;
 $bmWhiteSmoke: #f3f3f3;
+
+:root {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #adfbc4;
+}
+
+[data-theme='gray'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #575757;
+}
+
+[data-theme='white'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #f3f3f3;
+}
+
+[data-theme='yellow'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #f29e4b;
+}
+
+[data-theme='red'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #ff0000;
+}
+
+[data-theme='blue'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #5297f7;
+}
+
+[data-theme='turquoise'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #92fbfd;
+}
+
+[data-theme='pink'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #eb48f7;
+}
+
+[data-theme='neon'] {
+  --background: black;
+  --text-primary: white;
+  --text-secondary: grey;
+  --theme-color: #adfbc4;
+}
