@@ -218,7 +218,15 @@ const RemoveLiquidity = (): JSX.Element => {
               <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(75)}>
                 % 75
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(100)}>
+              <Button
+                className={
+                  removalPercentage === 100
+                    ? 'first-active-button remove-liquidity-buttons'
+                    : 'remove-liquidity-buttons'
+                }
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(100)}
+              >
                 % 100
               </Button>
             </div>
