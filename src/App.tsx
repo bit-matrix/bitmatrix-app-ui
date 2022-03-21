@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AppRouter } from './components/AppRouter/AppRouter';
 import SettingsProvider from './context/SettingsProvider';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { SELECTED_THEME } from './enum/SELECTED_THEME';
+import SettingsContext from './context/SettingsContext';
 import './App.scss';
 
 const App = (): JSX.Element => {
-  const { getLocalData } = useLocalStorage<SELECTED_THEME>('theme');
+  const { payloadData } = useContext(SettingsContext);
 
   useEffect(() => {
-    const storedTheme = getLocalData();
-    if (storedTheme) {
-      document.documentElement.setAttribute('theme', storedTheme);
-    }
+    document.documentElement.setAttribute('theme', payloadData.theme);
   }, []);
 
   return (
