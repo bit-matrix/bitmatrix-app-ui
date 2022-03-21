@@ -50,7 +50,7 @@ input {
   &:focus {
     + {
       .slider {
-        box-shadow: 0 0 1px $bmPaleGreen;
+        box-shadow: 0 0 1px var(--theme-color);
       }
     }
   }

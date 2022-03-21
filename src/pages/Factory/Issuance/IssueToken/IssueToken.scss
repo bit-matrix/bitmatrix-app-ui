@@ -28,7 +28,7 @@
   .issue-token-page-content {
     position: relative;
     margin: 0 auto;
-    border: 2px solid $bmPaleGreen;
+    border: 2px solid var(--theme-color);
     border-radius: 1.5rem;
     padding: 0.75rem;
     min-height: 20.8125rem;
@@ -58,7 +58,7 @@
 
       .issue-token-back-text {
         margin-left: 0.5rem;
-        color: $bmPaleGreen;
+        color: var(--theme-color);
       }
     }
 

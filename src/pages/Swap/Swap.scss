@@ -105,12 +105,12 @@
 
 .swap-page-tab-left {
   border-left: 1px solid $bmWhite;
-  border-color: $bmPaleGreen !important;
+  border-color: var(--theme-color) !important;
   border-top: 1px solid $bmWhite;
   width: 38%;
-  border-color: $bmPaleGreen !important;
+  border-color: var(--theme-color) !important;
   background: $bmCardinGreen;
-  color: $bmPaleGreen;
+  color: var(--theme-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,9 +151,9 @@
   width: 38%;
   border-right: 1px solid $bmWhite;
   border-top: 1px solid $bmWhite;
-  border-color: $bmPaleGreen !important;
+  border-color: var(--theme-color) !important;
   background: $bmCardinGreen;
-  color: $bmPaleGreen;
+  color: var(--theme-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -163,13 +163,13 @@
 }
 
 .selected {
-  background: $bmPaleGreen !important;
+  background: var(--theme-color) !important;
   color: $bmBlack !important;
 }
 
 .selected span:after {
-  border-left-color: $bmPaleGreen !important;
-  border-right-color: $bmPaleGreen !important;
+  border-left-color: var(--theme-color) !important;
+  border-right-color: var(--theme-color) !important;
   z-index: 6 !important;
 }
 

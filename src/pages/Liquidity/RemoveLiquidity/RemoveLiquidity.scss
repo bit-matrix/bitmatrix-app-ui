@@ -11,7 +11,7 @@
   .remove-liquidity-page-content {
     position: relative;
     margin: 0 auto;
-    border: 2px solid $bmPaleGreen;
+    border: 2px solid var(--theme-color);
     border-radius: 1.5rem;
     padding: 0.75rem;
     min-height: 20.8125rem;
@@ -63,7 +63,7 @@
           top: -0.5rem !important;
 
           &::before {
-            border: 6px solid $bmPaleGreen !important;
+            border: 6px solid var(--theme-color) !important;
             width: 1.25rem !important;
             height: 1.25rem !important;
           }
@@ -79,14 +79,14 @@
 
         .remove-liquidity-buttons {
           width: 4.5rem !important;
-          color: $bmPaleGreen !important;
-          border-color: $bmPaleGreen !important;
+          color: var(--theme-color) !important;
+          border-color: var(--theme-color) !important;
           border-radius: 0.875rem !important;
           font-weight: 600;
 
           &:hover {
             color: $bmBlack !important;
-            background-color: $bmPaleGreen !important;
+            background-color: var(--theme-color) !important;
           }
         }
       }
@@ -175,7 +175,7 @@
 
       .remove-liquidity-back-text {
         margin-left: 0.5rem;
-        color: $bmPaleGreen;
+        color: var(--theme-color);
       }
     }
 

@@ -88,11 +88,11 @@
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:active {
-  color: $bmPaleGreen !important;
+  color: var(--theme-color) !important;
 }
 
 .pool-page-tabs .rs-nav-item-content::before {
-  background-color: $bmPaleGreen !important;
+  background-color: var(--theme-color) !important;
 }
 
 .pool-page-shadow {
