@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import info from '../../../images/info2.png';
@@ -15,12 +15,27 @@ export const Theme = (): JSX.Element => {
       setSelected(storedTheme as SELECTED_THEME);
       document.documentElement.setAttribute('data-theme', storedTheme);
     }
-  });
+  }, []);
+
+  const doSomethingBeforeUnload = () => {
+    localStorage.setItem('theme', selected as SELECTED_THEME);
+  };
+
+  const setupBeforeUnloadListener = useCallback(() => {
+    window.addEventListener('beforeunload', (ev) => {
+      ev.preventDefault();
+      return doSomethingBeforeUnload();
+    });
+  }, [doSomethingBeforeUnload]);
+
+  useEffect(() => {
+    // Activate the event listener
+    setupBeforeUnloadListener();
+  }, [setupBeforeUnloadListener]);
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
     setSelected(selectedTheme);
     document.documentElement.setAttribute('data-theme', selectedTheme);
-    localStorage.setItem('theme', selectedTheme);
   };
 
   return (
@@ -40,10 +55,6 @@ export const Theme = (): JSX.Element => {
           <div
             className={`theme-tag neon-theme ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
             onClick={() => themeOnClick(SELECTED_THEME.NEON)}
-          />
-          <div
-            className={`theme-tag gray-theme ${selected === SELECTED_THEME.GRAY && 'theme-selected'}`}
-            onClick={() => themeOnClick(SELECTED_THEME.GRAY)}
           />
           <div
             className={`theme-tag white-theme ${selected === SELECTED_THEME.WHITE && 'theme-selected'}`}
