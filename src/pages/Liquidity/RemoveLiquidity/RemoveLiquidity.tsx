@@ -244,7 +244,7 @@ const RemoveLiquidity = (): JSX.Element => {
             <div className="remove-liquidity-page-footer-line-item-third">
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
-                <LpIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
+                <LpIcon className="lp-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">
                 {(Number(calcLpTokenAmount) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8)}

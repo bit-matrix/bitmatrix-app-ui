@@ -145,6 +145,10 @@
       .add-liquidity-text-icon-content {
         display: flex;
         align-items: center;
+
+        .add-liquidity-input-icons path {
+          fill: var(--theme-color);
+        }
       }
 
       .add-liquidity-page-footer-line-item-texts {

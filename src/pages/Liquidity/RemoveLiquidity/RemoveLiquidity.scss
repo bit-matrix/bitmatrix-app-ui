@@ -134,6 +134,10 @@
       .remove-liquidity-page-icon-content {
         display: flex;
         align-items: center;
+
+        .lp-icon path {
+          fill: var(--theme-color);
+        }
       }
 
       .remove-liquidity-page-icons {
