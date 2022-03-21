@@ -40,64 +40,37 @@ $bmDenim: #1675e0;
 $bmWhiteSmoke: #f3f3f3;
 
 :root {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
   --theme-color: #adfbc4;
 }
 
-[data-theme='gray'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='gray'] {
   --theme-color: #575757;
 }
 
-[data-theme='white'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='white'] {
   --theme-color: #f3f3f3;
 }
 
-[data-theme='yellow'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='yellow'] {
   --theme-color: #f29e4b;
 }
 
-[data-theme='red'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='red'] {
   --theme-color: #ff0000;
 }
 
-[data-theme='blue'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='blue'] {
   --theme-color: #5297f7;
 }
 
-[data-theme='turquoise'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='turquoise'] {
   --theme-color: #92fbfd;
 }
 
-[data-theme='pink'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='pink'] {
   --theme-color: #eb48f7;
 }
 
-[data-theme='neon'] {
-  --background: black;
-  --text-primary: white;
-  --text-secondary: grey;
+[theme='neon'] {
   --theme-color: #adfbc4;
 }
