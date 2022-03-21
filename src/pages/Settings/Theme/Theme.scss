@@ -56,7 +56,7 @@
 }
 
 .theme-selected {
-  outline: 4px solid $bmPaleGreen !important;
+  outline: 4px solid var(--theme-color) !important;
 }
 
 .gray-theme {

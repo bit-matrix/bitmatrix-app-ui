@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import info from '../../../images/info2.png';
@@ -6,7 +6,22 @@ import info from '../../../images/info2.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
-  const [selected, setSelected] = useState<SELECTED_THEME>(SELECTED_THEME.GRAY);
+  const [selected, setSelected] = useState<SELECTED_THEME>();
+
+  const storedTheme = localStorage.getItem('theme');
+
+  useEffect(() => {
+    if (storedTheme) {
+      setSelected(storedTheme as SELECTED_THEME);
+      document.documentElement.setAttribute('data-theme', storedTheme);
+    }
+  });
+
+  const themeOnClick = (selectedTheme: SELECTED_THEME) => {
+    setSelected(selectedTheme);
+    document.documentElement.setAttribute('data-theme', selectedTheme);
+    localStorage.setItem('theme', selectedTheme);
+  };
 
   return (
     <div className="theme-main">
@@ -23,53 +38,36 @@ export const Theme = (): JSX.Element => {
         </div>
         <div className="theme-item-content">
           <div
+            className={`theme-tag neon-theme ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
+            onClick={() => themeOnClick(SELECTED_THEME.NEON)}
+          />
+          <div
             className={`theme-tag gray-theme ${selected === SELECTED_THEME.GRAY && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.GRAY);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.GRAY);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.GRAY)}
           />
           <div
             className={`theme-tag white-theme ${selected === SELECTED_THEME.WHITE && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.WHITE);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.WHITE);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.WHITE)}
           />
           <div
             className={`theme-tag yellow-theme ${selected === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.YELLOW);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.YELLOW);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
           />
           <div
             className={`theme-tag red-theme ${selected === SELECTED_THEME.RED && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.RED);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.RED);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.RED)}
           />
           <div
             className={`theme-tag blue-theme ${selected === SELECTED_THEME.BLUE && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.BLUE);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.BLUE);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.BLUE)}
           />
           <div
             className={`theme-tag pink-theme ${selected === SELECTED_THEME.PINK && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.PINK);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.PINK);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.PINK)}
           />
           <div
             className={`theme-tag turquoise-theme ${selected === SELECTED_THEME.TURQUOISE && 'theme-selected'}`}
-            onClick={() => {
-              setSelected(SELECTED_THEME.TURQUOISE);
-              document.documentElement.setAttribute('data-theme', SELECTED_THEME.TURQUOISE);
-            }}
+            onClick={() => themeOnClick(SELECTED_THEME.TURQUOISE)}
           />
         </div>
       </div>
