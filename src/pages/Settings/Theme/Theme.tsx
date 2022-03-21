@@ -11,9 +11,11 @@ export const Theme = (): JSX.Element => {
   const { getLocalData, setLocalData } = useLocalStorage<SELECTED_THEME>('theme');
 
   useEffect(() => {
-    const storedTheme = getLocalData();
+    const storedTheme: SELECTED_THEME | undefined = getLocalData();
     if (storedTheme) {
-      setSelected(storedTheme as SELECTED_THEME);
+      setSelected(storedTheme);
+    } else {
+      setSelected(SELECTED_THEME.NEON);
     }
   }, []);
 
