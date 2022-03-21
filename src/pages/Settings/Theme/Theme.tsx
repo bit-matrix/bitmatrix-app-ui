@@ -1,32 +1,32 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
+import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import info from '../../../images/info2.png';
 // import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
   const [selected, setSelected] = useState<SELECTED_THEME>();
-
-  const storedTheme = localStorage.getItem('theme');
+  const { getLocalData, setLocalData } = useLocalStorage<SELECTED_THEME>('theme');
 
   useEffect(() => {
+    const storedTheme = getLocalData();
     if (storedTheme) {
       setSelected(storedTheme as SELECTED_THEME);
-      document.documentElement.setAttribute('data-theme', storedTheme);
     }
   }, []);
 
-  const doSomethingBeforeUnload = () => {
-    localStorage.setItem('theme', selected as SELECTED_THEME);
+  const setThemeBeforeUnload = () => {
+    if (selected) setLocalData(selected);
   };
 
   const setupBeforeUnloadListener = useCallback(() => {
     window.addEventListener('beforeunload', (ev) => {
       ev.preventDefault();
-      return doSomethingBeforeUnload();
+      return setThemeBeforeUnload();
     });
-  }, [doSomethingBeforeUnload]);
+  }, [setThemeBeforeUnload]);
 
   useEffect(() => {
     // Activate the event listener
@@ -35,7 +35,7 @@ export const Theme = (): JSX.Element => {
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
     setSelected(selectedTheme);
-    document.documentElement.setAttribute('data-theme', selectedTheme);
+    document.documentElement.setAttribute('theme', selectedTheme);
   };
 
   return (
