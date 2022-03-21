@@ -88,6 +88,11 @@
             color: $bmBlack !important;
             background-color: var(--theme-color) !important;
           }
+
+          &:focus {
+            color: $bmBlack !important;
+            background-color: var(--theme-color) !important;
+          }
         }
       }
     }
