@@ -15,7 +15,7 @@
   margin: 0 !important;
   .active {
     background: $bmDeepFir !important;
-    color: $bmPaleGreen !important;
+    color: var(--theme-color) !important;
   }
 }
 
@@ -32,7 +32,7 @@
 
   &:hover {
     background: $bmNero !important;
-    color: $bmPaleGreen !important;
+    color: var(--theme-color) !important;
     box-shadow: 0px 0px 6px 0px $bmBlack;
     opacity: 0.75;
   }

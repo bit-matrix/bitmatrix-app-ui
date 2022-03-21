@@ -29,7 +29,7 @@
   }
 
   input:checked ~ .checkmark {
-    background-color: $bmPaleGreen;
+    background-color: var(--theme-color);
     border: none;
   }
 
@@ -69,7 +69,7 @@
 }
 
 .custom-checkbox-checked {
-  color: $bmPaleGreen;
+  color: var(--theme-color);
   min-width: 3rem;
 }
 

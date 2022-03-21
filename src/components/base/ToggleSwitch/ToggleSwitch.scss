@@ -38,7 +38,7 @@ input {
   &:checked {
     + {
       .slider {
-        background-color: $bmPaleGreen;
+        background-color: var(--theme-color);
         &:before {
           -webkit-transform: translateX(15px);
           -ms-transform: translateX(15px);

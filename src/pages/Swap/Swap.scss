@@ -22,7 +22,7 @@
   position: relative;
   margin: 0 auto;
   display: flex;
-  border: 2px solid $bmPaleGreen;
+  border: 2px solid var(--theme-color);
   border-radius: 1.5rem;
   justify-content: center;
   flex-direction: column;

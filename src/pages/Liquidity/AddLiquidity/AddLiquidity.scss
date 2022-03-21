@@ -11,7 +11,7 @@
   .add-liquidity-page-content {
     position: relative;
     margin: 0 auto;
-    border: 2px solid $bmPaleGreen;
+    border: 2px solid var(--theme-color);
     border-radius: 1.5rem;
     padding: 0.75rem;
     min-height: 20.8125rem;
@@ -183,7 +183,7 @@
       border-radius: 1rem !important;
       font-weight: 600 !important;
       color: $bmDeepFir !important;
-      background: $bmPaleGreen !important;
+      background: var(--theme-color) !important;
       border-width: 0 !important;
       opacity: 0.9;
 
