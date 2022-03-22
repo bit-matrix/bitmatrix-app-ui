@@ -75,7 +75,7 @@
 
         .rs-btn-default {
           background: transparent !important;
-          border: 2px solid #393939 !important;
+          border: 2px solid $bmBoltgunMetal !important;
           width: 5rem;
         }
       }
@@ -84,7 +84,7 @@
     .issue-token-input {
       border: none;
       background: transparent;
-      border-bottom: 2px solid #393939;
+      border-bottom: 2px solid $bmBoltgunMetal;
       border-radius: 0;
     }
 
@@ -100,8 +100,8 @@
         .rs-uploader-trigger-btn {
           width: 100% !important;
           height: 2.5rem !important;
-          background: #393939;
-          color: #989797;
+          background: $bmBoltgunMetal;
+          color: $bmSpanishGrey;
         }
       }
     }

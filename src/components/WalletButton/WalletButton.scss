@@ -15,13 +15,13 @@
     &::before {
       width: 1.5rem !important;
       height: 1.5rem !important;
-      border: 3px solid #818489;
+      border: 3px solid $bmAluminium;
     }
 
     &::after {
       width: 1.5rem !important;
       height: 1.5rem !important;
-      border-top: 3px solid #010403 !important;
+      border-top: 3px solid $bmDeepFir !important;
     }
   }
 

@@ -82,13 +82,13 @@
 
 .pool-detail-table-arrow-down-text {
   margin-left: 0.25rem;
-  color: #f44336;
+  color: $bmVermilionBird;
   font-size: 0.75rem;
 }
 
 .pool-detail-table-arrow-up-text {
   margin-left: 0.25rem;
-  color: #4caf50;
+  color: $bmMidGreen;
   font-size: 0.75rem;
 }
 
@@ -156,7 +156,7 @@
     justify-content: space-between;
 
     .pool-metrics-item {
-      background: #000000;
+      background: $bmBlack;
       border-radius: 1rem;
       width: 48%;
       height: 4.75rem;
