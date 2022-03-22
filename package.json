@@ -1,6 +1,7 @@
 {
   "name": "bitmatrix-app",
   "version": "0.1.0",
+  "homepage": "https://beta.bitmatrix.app/",
   "private": true,
   "dependencies": {
     "@bitmatrix/lib": "^0.0.29",
@@ -41,7 +42,7 @@
   },
   "scripts": {
     "start": "PUBLIC_URL=http://localhost:3000 react-scripts start",
-    "build": "PUBLIC_URL=https://demo.bitmatrix.app react-scripts build",
+    "build": "PUBLIC_URL=https://beta.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -74,6 +75,5 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "prettier": "^2.3.1"
-  },
-  "homepage": "https://beta.bitmatrix.app/"
+  }
 }
