@@ -1,7 +1,5 @@
 import React from 'react';
 import { useWalletContext } from '../../context';
-import { notify } from '../utils/utils';
-import './NumericalInput.scss';
 
 type Props = {
   onChange: (inputValue: string) => void;
@@ -30,21 +28,6 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
       walletContext.marina.getBalances().then((balances) => {
         setWalletContext({ marina: walletContext.marina, isEnabled: true, balances });
       });
-    } else {
-      notify(
-        <div className="notify-main-content">
-          <div>Wallet is disabled, connect to wallet.</div>
-          <a
-            className="notify-link"
-            href="https://medium.com/bit-matrix/the-public-testnet-beta-is-now-live-40c7ebfa6b50"
-            target="_blank"
-          >
-            Learn More
-          </a>
-        </div>,
-        'Wallet : ',
-        'error',
-      );
     }
   };
 
