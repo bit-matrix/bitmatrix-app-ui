@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "PUBLIC_URL=http://localhost:3000 react-scripts start",
-    "build": "PUBLIC_URL=https://beta.bitmatrix.app react-scripts build",
+    "build": "PUBLIC_URL=https://demo.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
