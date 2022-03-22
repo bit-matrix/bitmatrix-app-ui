@@ -88,14 +88,9 @@
             color: $bmBlack !important;
             background-color: var(--theme-color) !important;
           }
-
-          &:focus {
-            color: $bmBlack !important;
-            background-color: var(--theme-color) !important;
-          }
         }
 
-        .first-active-button {
+        .selected-percentage {
           color: $bmBlack !important;
           background-color: var(--theme-color) !important;
         }
