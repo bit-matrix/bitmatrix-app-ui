@@ -1,22 +1,32 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import domtoimage from 'dom-to-image';
 
-export const PreviewLink: React.FC = () => {
-  const myNode = document.getElementById('my-node');
+// type Props = {
+//   refCallback: (ref: HTMLDivElement | null) => void;
+// };
 
-  if (myNode !== null) {
-    domtoimage.toJpeg(myNode, { quality: 0.95 }).then((dataUrl) => {
-      const link = document.createElement('a');
-      link.download = 'my-image-name.jpeg';
-      link.href = dataUrl;
-      link.click();
-      console.log(link);
-    });
+export const PreviewLink: React.FC = () => {
+  const divRef = useRef<HTMLDivElement>(null);
+  // refCallback(divRef.current);
+
+  // useEffect(() => {
+  //   refCallback(divRef.current);
+  // }, [divRef]);
+
+  if (divRef !== null && divRef.current !== null) {
+    domtoimage
+      .toPng(divRef.current)
+      .then((dataUrl) => {
+        console.log(dataUrl);
+      })
+      .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+      });
   }
 
   return (
-    <div id="my-node" style={{ width: '15rem', height: '15rem', background: 'red' }}>
-      <span style={{ color: 'white' }}>I am red</span>
+    <div ref={divRef} style={{ width: '15rem', height: '15rem', background: 'red' }}>
+      <span style={{ color: 'white' }}>I am yellow</span>
     </div>
   );
 };
