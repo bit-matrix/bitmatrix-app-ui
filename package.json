@@ -25,6 +25,7 @@
     "@visx/tooltip": "^2.8.0",
     "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
+    "dom-to-image": "^2.6.0",
     "ldk": "0.4.4",
     "marina-provider": "^1.4.8",
     "numeral": "^2.0.6",
@@ -67,6 +68,7 @@
   "devDependencies": {
     "@types/d3-array": "^3.0.1",
     "@types/d3-time-format": "^4.0.0",
+    "@types/dom-to-image": "^2.6.4",
     "@types/numeral": "^2.0.1",
     "@types/react-router-dom": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
