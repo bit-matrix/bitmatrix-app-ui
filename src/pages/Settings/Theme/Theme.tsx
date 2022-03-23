@@ -64,6 +64,10 @@ export const Theme = (): JSX.Element => {
             }`}
             onClick={() => themeOnClick(SELECTED_THEME.TURQUOISE)}
           />
+          <div
+            className={`theme-tag yellow-theme ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
+            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
+          />
         </div>
       </div>
       <div className="theme-item">

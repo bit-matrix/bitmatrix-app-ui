@@ -42,6 +42,7 @@ $bmMidGreen: #4caf50;
 $bmVermilionBird: #f44336;
 $bmBoltgunMetal: #393939;
 $bmSpanishGrey: #989797;
+$bmYellow: #ffff00;
 
 :root {
   --theme-color: #adfbc4;
@@ -97,4 +98,11 @@ $bmSpanishGrey: #989797;
   --text-color: #575757;
   --chart-accentColorDark: #75daad;
   --chart-background2: #455747;
+}
+
+[theme='yellow'] {
+  --theme-color: #ffff00;
+  --text-color: #454545;
+  --chart-accentColorDark: #f8f991;
+  --chart-background2: #4b4c04;
 }
