@@ -20,6 +20,8 @@ import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidi
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
+import { PreviewImage } from '../../pages/PreviewImage/PreviewImage';
+import { PreviewHtml } from '../../pages/PreviewHtml/PreviewHtml';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
@@ -218,6 +220,9 @@ export const AppRouter = (): JSX.Element => {
                 <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
                 <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
                 <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+
+                <Route exact path="/pimage" component={PreviewImage} />
+                <Route exact path="/phtml" component={PreviewHtml} />
                 {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
                 <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
