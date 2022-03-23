@@ -1,6 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { Button } from 'rsuite';
 import SettingsContext from '../../context/SettingsContext';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import BananaGif from '../../images/banana.gif';
+import { Loading } from '../Loading/Loading';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
 
@@ -16,6 +19,22 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const { payloadData } = useContext(SettingsContext);
 
+  const swapLoading = (): React.ReactElement => {
+    if (payloadData.theme === SELECTED_THEME.YELLOW) {
+      return (
+        <div>
+          <img src={BananaGif} alt="loading..." className="wallet-button-banana-gif" />
+        </div>
+      );
+    } else {
+      return (
+        <div className="wallet-button-loading">
+          <Loading width="1.5rem" height="1.5rem" />
+        </div>
+      );
+    }
+  };
+
   return (
     <>
       <WalletListModal
@@ -25,7 +44,6 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
       />
       <Button
         appearance="default"
-        loading={loading}
         className={`wallet-button ${className}`}
         onClick={() => {
           if (payloadData.wallet?.isEnabled) {
@@ -36,7 +54,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
         }}
         disabled={payloadData.wallet?.isEnabled && disabled}
       >
-        {loading ? '' : payloadData.wallet?.isEnabled ? text : 'Connect Wallet'}
+        {loading ? swapLoading() : payloadData.wallet?.isEnabled ? text : 'Connect Wallet'}
       </Button>
     </>
   );

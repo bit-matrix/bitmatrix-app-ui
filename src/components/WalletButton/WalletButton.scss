@@ -30,6 +30,15 @@
   }
 }
 
+.wallet-button-banana-gif {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.wallet-button-loading {
+  text-align: -webkit-center;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .wallet-button {
     height: 2.75rem;
