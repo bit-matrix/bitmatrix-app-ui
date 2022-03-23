@@ -4,7 +4,8 @@ import SettingsContext from '../../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import info from '../../../images/info2.png';
-// import exclusiveIcon from '../../../images/mtx.png';
+import BananaIcon from '../../../images/banana.png';
+//import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
@@ -18,6 +19,21 @@ export const Theme = (): JSX.Element => {
         theme: selectedTheme,
       },
     });
+  };
+
+  const exclusiveThemes = () => {
+    if (payloadData.wallet?.balances) {
+      return (
+        <div
+          className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
+          onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
+        >
+          <img src={BananaIcon} className="banana-icon-theme" />
+        </div>
+      );
+    } else {
+      return 'No exclusive theme found.';
+    }
   };
 
   return (
@@ -64,10 +80,6 @@ export const Theme = (): JSX.Element => {
             }`}
             onClick={() => themeOnClick(SELECTED_THEME.TURQUOISE)}
           />
-          <div
-            className={`theme-tag yellow-theme ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
-          />
         </div>
       </div>
       <div className="theme-item">
@@ -81,15 +93,7 @@ export const Theme = (): JSX.Element => {
             <img className="general-icon" src={info} alt="info" />
           </CustomPopover>
         </div>
-        <div className="theme-item-content">
-          {/* <div
-            className={`theme-tag ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.NEON)}
-          >
-            <img className="exclusive-icon" src={exclusiveIcon} alt="" />
-          </div> */}
-          No exclusive theme found.
-        </div>
+        <div className="theme-item-content">{exclusiveThemes()}</div>
       </div>
     </div>
   );
