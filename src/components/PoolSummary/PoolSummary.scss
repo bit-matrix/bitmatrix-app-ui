@@ -7,16 +7,17 @@
 
 .second-div {
   position: absolute;
-  width: 75%;
-  height: 9.3rem;
-  border-top: 1.5rem $bmBlack solid;
-  border-left: 1.5rem $bmBlack solid;
-  border-right: 1.5rem $bmBlack solid;
+  width: 66%;
+  height: 10.3rem;
+  border-top: 0.5rem $bmBlack solid;
+  border-left: 0.5rem $bmBlack solid;
+  border-right: 0.5rem $bmBlack solid;
   border-top-left-radius: 4.3rem;
   border-top-right-radius: 4.3rem;
   bottom: 20.5rem;
   margin-left: 1.8rem;
   padding: 1.2rem;
+  background: black;
 }
 
 .third-div {
@@ -28,9 +29,18 @@
   margin-left: 1.8rem;
 }
 
+.fourth-div {
+  border-radius: 3.3rem;
+  background: #adfbc4;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .box-icon {
   position: absolute;
-  left: 2.5rem;
+  left: 3.5rem;
   width: 5rem;
   height: 5rem;
   fill: $bmBlack;
@@ -40,7 +50,6 @@
   position: absolute;
   background: $bmBlack;
   left: 11rem;
-  top: 1.5rem;
   width: 10rem;
   height: 4.5rem;
   border-radius: 2rem;
@@ -63,8 +72,7 @@
 .tether-box {
   position: absolute;
   background: $bmBlack;
-  top: 1.5rem;
-  left: 25rem;
+  left: 24rem;
   width: 10rem;
   height: 4.5rem;
   border-radius: 2rem;
