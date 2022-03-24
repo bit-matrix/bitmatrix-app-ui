@@ -7,9 +7,9 @@
   position: absolute;
   width: 75%;
   height: 9.3rem;
-  border-top: 1.5rem #323232 solid;
-  border-left: 1.5rem #323232 solid;
-  border-right: 1.5rem #323232 solid;
+  border-top: 1.5rem black solid;
+  border-left: 1.5rem black solid;
+  border-right: 1.5rem black solid;
   border-top-left-radius: 4.3rem;
   border-top-right-radius: 4.3rem;
   bottom: 20.5rem;
@@ -31,11 +31,12 @@
   left: 2.5rem;
   width: 5rem;
   height: 5rem;
+  fill: black;
 }
 
 .lbtc-box {
   position: absolute;
-  background: #323232;
+  background: black;
   left: 11rem;
   top: 1.5rem;
   width: 10rem;
@@ -59,7 +60,7 @@
 
 .tether-box {
   position: absolute;
-  background: #323232;
+  background: black;
   top: 1.5rem;
   left: 25rem;
   width: 10rem;
