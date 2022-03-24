@@ -22,17 +22,25 @@ export const Theme = (): JSX.Element => {
   };
 
   const exclusiveThemes = () => {
-    if (payloadData.wallet?.balances) {
-      return (
-        <div
-          className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-          onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
-        >
-          <img src={BananaIcon} className="banana-icon-theme" />
-        </div>
-      );
-    } else {
-      return 'No exclusive theme found.';
+    const specificAssetId = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
+
+    const assetHash = payloadData.wallet?.balances.find((asset) => {
+      return asset.asset.assetHash === specificAssetId;
+    });
+
+    if (payloadData.wallet?.balances && payloadData.wallet?.balances.length > 0) {
+      if (assetHash) {
+        return (
+          <div
+            className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
+            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
+          >
+            <img src={BananaIcon} className="banana-icon-theme" />
+          </div>
+        );
+      } else {
+        return 'No exclusive theme found.';
+      }
     }
   };
 
