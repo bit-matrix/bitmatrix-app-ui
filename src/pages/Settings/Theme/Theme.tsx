@@ -29,7 +29,7 @@ export const Theme = (): JSX.Element => {
     });
 
     if (payloadData.wallet?.balances && payloadData.wallet?.balances.length > 0) {
-      if (bananaAsset && bananaAsset.amount > 1) {
+      if (bananaAsset && bananaAsset.amount > 0) {
         return (
           <div
             className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
