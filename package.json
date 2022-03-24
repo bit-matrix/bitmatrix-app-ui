@@ -1,6 +1,7 @@
 {
   "name": "bitmatrix-app",
   "version": "0.1.0",
+  "homepage": "https://beta.bitmatrix.app/",
   "private": true,
   "dependencies": {
     "@bitmatrix/lib": "^0.0.29",
@@ -40,8 +41,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "PUBLIC_URL=http://localhost:3000 react-scripts start",
+    "build": "PUBLIC_URL=https://beta.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
