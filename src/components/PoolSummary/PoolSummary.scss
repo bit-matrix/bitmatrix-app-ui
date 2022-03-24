@@ -1,0 +1,34 @@
+.first {
+  background: #adfbc4;
+  height: 500px;
+}
+.second {
+  position: absolute;
+  width: 75%;
+  height: 150px;
+  border-top: 25px #323232 solid;
+  border-left: 25px #323232 solid;
+  border-right: 25px #323232 solid;
+  border-top-left-radius: 70px;
+  border-top-right-radius: 70px;
+  bottom: 335px;
+  margin-left: 30px;
+  padding: 20px;
+}
+.third {
+  background: #323232;
+  position: absolute;
+  height: 250px;
+  width: 100%;
+  bottom: 85px;
+  margin-left: 30px;
+}
+.box-icon {
+  width: 5rem;
+  height: 5rem;
+}
+.lbtc-icon {
+  position: absolute;
+  left: 130px;
+  top: 2rem;
+}
