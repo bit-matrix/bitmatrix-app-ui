@@ -29,6 +29,7 @@ import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import './AppRouter.scss';
+import { PoolSummary } from '../PoolSummary/PoolSummary';
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -231,6 +232,7 @@ export const AppRouter = (): JSX.Element => {
                         <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
                         <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
                         <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+                        <Route exact path={ROUTE_PATH.POOL_SUMMARY} component={PoolSummary} />
 
                         {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
                     <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
