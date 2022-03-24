@@ -80,6 +80,15 @@ export const PoolSummary = (): JSX.Element => {
               <span className={`arrow-${data.tvlRate.direction}-text`}>{data.tvlRate.value}%</span>
             </div>
           </div>
+
+          <div className="fees-div">
+            <div className="title">Fees 24h</div>
+            <div className="value">${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
+            <div className="icon-content">
+              <span className="arrow">{data.feeRate.icon}</span>
+              <span className={`arrow-${data.feeRate.direction}-text`}>{data.feeRate.value}%</span>
+            </div>
+          </div>
         </div>
       </div>
     );
