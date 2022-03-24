@@ -1,3 +1,5 @@
+@import '../../style/themes/bitmatrix.scss';
+
 .first-div {
   background: #adfbc4;
   height: 31.2rem;
@@ -80,4 +82,46 @@
   color: white;
   font-size: 1.7rem;
   font-weight: bold;
+}
+
+.price-div {
+  position: absolute;
+  left: 4rem;
+  top: 1.5rem;
+}
+
+.price-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  font-size: 1.5rem;
+}
+
+.price-value {
+  color: $LightGray;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.price-icon-content {
+  display: flex;
+  align-items: center;
+  margin-top: 0.125rem;
+  font-size: 1.5rem;
+}
+
+.price-arrow {
+  height: 2rem;
+  width: 1.2rem;
+}
+
+.price-arrow-up-text {
+  margin-left: 0.25rem;
+  color: $bmGreen;
+}
+
+.price-arrow-down-text {
+  margin-left: 0.25rem;
+  color: $bmRed;
 }

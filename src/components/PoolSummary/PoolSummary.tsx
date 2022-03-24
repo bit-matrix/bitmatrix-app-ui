@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import { calculateChartData } from '../utils/utils';
 
 export const PoolSummary = (): JSX.Element => {
   const [pool, setPool] = useState<Pool>();
@@ -24,9 +25,10 @@ export const PoolSummary = (): JSX.Element => {
     }
   }, [payloadData.pools]);
 
-  if (pool === undefined) {
+  if (pool === undefined || payloadData.pool_chart_data === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
+    const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="first-div">
         <div className="second-div">
@@ -51,7 +53,16 @@ export const PoolSummary = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="third-div"></div>
+        <div className="third-div">
+          <div className="price-div">
+            <div className="price-title">{pool.quote.ticker} Price</div>
+            <div className="price-value">${data.todayPrice.toLocaleString()}</div>
+            <div className="price-icon-content">
+              <span className="price-arrow">{data.priceRate.icon}</span>
+              <span className={`price-arrow-${data.priceRate.direction}-text`}>{data.priceRate.value}%</span>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
