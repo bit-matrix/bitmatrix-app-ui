@@ -1,34 +1,59 @@
-.first {
+.first-div {
   background: #adfbc4;
-  height: 500px;
+  height: 31.2rem;
 }
-.second {
+
+.second-div {
   position: absolute;
   width: 75%;
-  height: 150px;
-  border-top: 25px #323232 solid;
-  border-left: 25px #323232 solid;
-  border-right: 25px #323232 solid;
-  border-top-left-radius: 70px;
-  border-top-right-radius: 70px;
-  bottom: 335px;
-  margin-left: 30px;
-  padding: 20px;
+  height: 9.3rem;
+  border-top: 1.5rem #323232 solid;
+  border-left: 1.5rem #323232 solid;
+  border-right: 1.5rem #323232 solid;
+  border-top-left-radius: 4.3rem;
+  border-top-right-radius: 4.3rem;
+  bottom: 20.5rem;
+  margin-left: 1.8rem;
+  padding: 1.2rem;
 }
-.third {
-  background: #323232;
+
+.third-div {
   position: absolute;
-  height: 250px;
+  background: #323232;
+  height: 15.6rem;
   width: 100%;
-  bottom: 85px;
-  margin-left: 30px;
+  bottom: 5.3rem;
+  margin-left: 1.8rem;
 }
+
 .box-icon {
+  position: absolute;
+  left: 2.5rem;
   width: 5rem;
   height: 5rem;
 }
+
+.lbtc-box {
+  position: absolute;
+  background: #323232;
+  top: 1.5rem;
+  width: 10rem;
+  height: 4.5rem;
+  left: 11rem;
+  border-radius: 2rem;
+}
+
 .lbtc-icon {
   position: absolute;
-  left: 130px;
-  top: 2rem;
+  top: 1rem;
+  height: 2.5rem;
+}
+
+.lbtc-value {
+  position: absolute;
+  left: 4rem;
+  top: 1rem;
+  color: white;
+  font-size: 1.7rem;
+  font-weight: bold;
 }
