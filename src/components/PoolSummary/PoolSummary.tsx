@@ -55,11 +55,29 @@ export const PoolSummary = (): JSX.Element => {
 
         <div className="third-div">
           <div className="price-div">
-            <div className="price-title">{pool.quote.ticker} Price</div>
-            <div className="price-value">${data.todayPrice.toLocaleString()}</div>
-            <div className="price-icon-content">
-              <span className="price-arrow">{data.priceRate.icon}</span>
-              <span className={`price-arrow-${data.priceRate.direction}-text`}>{data.priceRate.value}%</span>
+            <div className="title">{pool.quote.ticker} Price</div>
+            <div className="value">${data.todayPrice.toLocaleString()}</div>
+            <div className="icon-content">
+              <span className="arrow">{data.priceRate.icon}</span>
+              <span className={`arrow-${data.priceRate.direction}-text`}>{data.priceRate.value}%</span>
+            </div>
+          </div>
+
+          <div className="volume-div">
+            <div className="title">Volume 24h</div>
+            <div className="value">${Numeral(data.todayVolumeData.close).format('(0.00a)')}</div>
+            <div className="icon-content">
+              <span className="arrow">{data.volumeRate.icon}</span>
+              <span className={`arrow-${data.volumeRate.direction}-text`}>{data.volumeRate.value}%</span>
+            </div>
+          </div>
+
+          <div className="tvl-div">
+            <div className="title">TVL</div>
+            <div className="value">${Numeral(data.todayTvlData).format('(0.00a)')}</div>
+            <div className="icon-content">
+              <span className="arrow">{data.tvlRate.icon}</span>
+              <span className={`arrow-${data.tvlRate.direction}-text`}>{data.tvlRate.value}%</span>
             </div>
           </div>
         </div>

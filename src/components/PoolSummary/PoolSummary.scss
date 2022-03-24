@@ -90,38 +90,52 @@
   top: 1.5rem;
 }
 
-.price-title {
+.title {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   font-size: 1.5rem;
 }
 
-.price-value {
+.value {
   color: $LightGray;
   font-size: 0.875rem;
   font-weight: 600;
   font-size: 1.5rem;
 }
 
-.price-icon-content {
+.icon-content {
   display: flex;
   align-items: center;
   margin-top: 0.125rem;
   font-size: 1.5rem;
+
+  .arrow {
+    svg {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+  }
+
+  .arrow-up-text {
+    margin-left: 0.25rem;
+    color: $bmGreen;
+  }
+
+  .arrow-down-text {
+    margin-left: 0.25rem;
+    color: $bmRed;
+  }
 }
 
-.price-arrow {
-  height: 2rem;
-  width: 1.2rem;
+.volume-div {
+  position: absolute;
+  left: 16rem;
+  top: 1.5rem;
 }
 
-.price-arrow-up-text {
-  margin-left: 0.25rem;
-  color: $bmGreen;
-}
-
-.price-arrow-down-text {
-  margin-left: 0.25rem;
-  color: $bmRed;
+.tvl-div {
+  position: absolute;
+  right: 20rem;
+  top: 1.5rem;
 }
