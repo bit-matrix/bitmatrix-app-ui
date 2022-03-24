@@ -18,6 +18,7 @@ import TetherIcon from '../../components/base/Svg/Icons/Tether';
 // import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
 // import info from '../../images/info2.png';
 import './PoolDetail.scss';
+import { Helmet } from 'react-helmet';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -80,6 +81,13 @@ export const PoolDetail: React.FC = () => {
     const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="pool-detail-container">
+        <Helmet>
+          <meta property="og:url" content={`https://dev.bitmatrix.app/pool/${pool.id}`} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="Pool" />
+          <meta property="og:description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
+          <meta property="og:image" content="https://dev.bitmatrix.app/static/media/homeweb.d5f8d217.png" />
+        </Helmet>
         <div className="pool-detail-main">
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">

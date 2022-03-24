@@ -20,6 +20,7 @@ import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { poolShareRound, quoteAmountRound } from '../../../helper';
 import './MyPoolDetail.scss';
+import { Helmet } from 'react-helmet';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
@@ -113,6 +114,13 @@ export const MyPoolDetail: React.FC = () => {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);
     return (
       <div className="my-pool-detail-container">
+        <Helmet>
+          <meta property="og:url" content={`https://dev.bitmatrix.app/pool/my-pool/${pool.id}`} />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="MyPool" />
+          <meta property="og:description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
+          <meta property="og:image" content="https://dev.bitmatrix.app/static/media/bitmatrix_icon.png" />
+        </Helmet>
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
             <div className="my-pool-detail-header-left">
