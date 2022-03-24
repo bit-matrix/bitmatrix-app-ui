@@ -201,38 +201,51 @@ export const AppRouter = (): JSX.Element => {
 
   return (
     <Router>
-      <Content className="app-router-main">
-        <div className="secret-top-div" />
-        <Navbar />
-        <div className="app-container">
-          {loading ? (
-            <div id="loaderInverseWrapper" style={{ height: 200 }}>
-              <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
-            </div>
-          ) : (
-            <div className="app-content">
-              <Switch component={Fader}>
-                <Route exact path={ROUTE_PATH.HOME} component={Home} />
-                <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-                <Route exact path={ROUTE_PATH.POOL} component={Pool} />
-                <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
-                <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-                <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-                <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-                <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
-
-                <Route exact path="/pimage" component={PreviewImage} />
+      <Route
+        render={({ location }) => {
+          if (location.pathname === '/phtml' || location.pathname === '/pimage') {
+            return (
+              <Switch>
                 <Route exact path="/phtml" component={PreviewHtml} />
-                {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
-              <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
-                <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
+                <Route exact path="/pimage" component={PreviewImage} />
               </Switch>
-            </div>
-          )}
-        </div>
-        <Footer />
-        <div className="secret-footer-div" />
-      </Content>
+            );
+          } else {
+            return (
+              <Content className="app-router-main">
+                <div className="secret-top-div" />
+                <Navbar />
+                <div className="app-container">
+                  {loading ? (
+                    <div id="loaderInverseWrapper" style={{ height: 200 }}>
+                      <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
+                    </div>
+                  ) : (
+                    <div className="app-content">
+                      <Switch component={Fader}>
+                        <Route exact path={ROUTE_PATH.HOME} component={Home} />
+                        <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+                        <Route exact path={ROUTE_PATH.POOL} component={Pool} />
+                        <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
+                        <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
+                        <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
+                        <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
+                        <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+
+                        {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
+                    <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
+                        <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
+                      </Switch>
+                    </div>
+                  )}
+                </div>
+                <Footer />
+                <div className="secret-footer-div" />
+              </Content>
+            );
+          }
+        }}
+      />
     </Router>
   );
 };
