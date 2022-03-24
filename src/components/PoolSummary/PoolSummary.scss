@@ -36,20 +36,43 @@
 .lbtc-box {
   position: absolute;
   background: #323232;
+  left: 11rem;
   top: 1.5rem;
   width: 10rem;
   height: 4.5rem;
-  left: 11rem;
   border-radius: 2rem;
 }
 
 .lbtc-icon {
   position: absolute;
   top: 1rem;
-  height: 2.5rem;
 }
 
 .lbtc-value {
+  position: absolute;
+  left: 4rem;
+  top: 1rem;
+  color: white;
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.tether-box {
+  position: absolute;
+  background: #323232;
+  top: 1.5rem;
+  left: 25rem;
+  width: 10rem;
+  height: 4.5rem;
+  border-radius: 2rem;
+}
+
+.tether-icon {
+  position: absolute;
+  top: 1rem;
+}
+
+.tether-value {
   position: absolute;
   left: 4rem;
   top: 1rem;
