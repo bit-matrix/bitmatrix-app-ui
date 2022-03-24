@@ -1,7 +1,7 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .first-div {
-  background: #adfbc4;
+  background: $bmPaleGreen;
   height: 31.2rem;
 }
 
@@ -9,9 +9,9 @@
   position: absolute;
   width: 75%;
   height: 9.3rem;
-  border-top: 1.5rem black solid;
-  border-left: 1.5rem black solid;
-  border-right: 1.5rem black solid;
+  border-top: 1.5rem $bmBlack solid;
+  border-left: 1.5rem $bmBlack solid;
+  border-right: 1.5rem $bmBlack solid;
   border-top-left-radius: 4.3rem;
   border-top-right-radius: 4.3rem;
   bottom: 20.5rem;
@@ -21,7 +21,7 @@
 
 .third-div {
   position: absolute;
-  background: #323232;
+  background: $bmBlack;
   height: 15.6rem;
   width: 100%;
   bottom: 5.3rem;
@@ -33,12 +33,12 @@
   left: 2.5rem;
   width: 5rem;
   height: 5rem;
-  fill: black;
+  fill: $bmBlack;
 }
 
 .lbtc-box {
   position: absolute;
-  background: black;
+  background: $bmBlack;
   left: 11rem;
   top: 1.5rem;
   width: 10rem;
@@ -55,14 +55,14 @@
   position: absolute;
   left: 4rem;
   top: 1rem;
-  color: white;
+  color: $bmWhite;
   font-size: 1.7rem;
   font-weight: bold;
 }
 
 .tether-box {
   position: absolute;
-  background: black;
+  background: $bmBlack;
   top: 1.5rem;
   left: 25rem;
   width: 10rem;
@@ -79,7 +79,7 @@
   position: absolute;
   left: 4rem;
   top: 1rem;
-  color: white;
+  color: $bmWhite;
   font-size: 1.7rem;
   font-weight: bold;
 }
