@@ -22,14 +22,14 @@ export const Theme = (): JSX.Element => {
   };
 
   const exclusiveThemes = () => {
-    const specificAssetId = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
+    const bananaAssetHash = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
 
-    const assetHash = payloadData.wallet?.balances.find((asset) => {
-      return asset.asset.assetHash === specificAssetId;
+    const bananaAsset = payloadData.wallet?.balances.find((asset) => {
+      return asset.asset.assetHash === bananaAssetHash;
     });
 
     if (payloadData.wallet?.balances && payloadData.wallet?.balances.length > 0) {
-      if (assetHash) {
+      if (bananaAsset) {
         return (
           <div
             className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
@@ -42,6 +42,13 @@ export const Theme = (): JSX.Element => {
         return 'No exclusive theme found.';
       }
     }
+  };
+
+  const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
+    if (payloadData.theme === selectedTheme) {
+      return 'theme-selected';
+    }
+    return '';
   };
 
   return (
@@ -59,33 +66,31 @@ export const Theme = (): JSX.Element => {
         </div>
         <div className="theme-item-content">
           <div
-            className={`theme-tag neon-theme ${payloadData.theme === SELECTED_THEME.NEON && 'theme-selected'}`}
+            className={`theme-tag neon-theme ${themeIsSelected(SELECTED_THEME.NEON)}`}
             onClick={() => themeOnClick(SELECTED_THEME.NEON)}
           />
           <div
-            className={`theme-tag white-theme ${payloadData.theme === SELECTED_THEME.WHITE && 'theme-selected'}`}
+            className={`theme-tag white-theme ${themeIsSelected(SELECTED_THEME.WHITE)}`}
             onClick={() => themeOnClick(SELECTED_THEME.WHITE)}
           />
           <div
-            className={`theme-tag orange-theme ${payloadData.theme === SELECTED_THEME.ORANGE && 'theme-selected'}`}
+            className={`theme-tag orange-theme ${themeIsSelected(SELECTED_THEME.ORANGE)}`}
             onClick={() => themeOnClick(SELECTED_THEME.ORANGE)}
           />
           <div
-            className={`theme-tag red-theme ${payloadData.theme === SELECTED_THEME.RED && 'theme-selected'}`}
+            className={`theme-tag red-theme ${themeIsSelected(SELECTED_THEME.RED)}`}
             onClick={() => themeOnClick(SELECTED_THEME.RED)}
           />
           <div
-            className={`theme-tag blue-theme ${payloadData.theme === SELECTED_THEME.BLUE && 'theme-selected'}`}
+            className={`theme-tag blue-theme ${themeIsSelected(SELECTED_THEME.BLUE)}`}
             onClick={() => themeOnClick(SELECTED_THEME.BLUE)}
           />
           <div
-            className={`theme-tag pink-theme ${payloadData.theme === SELECTED_THEME.PINK && 'theme-selected'}`}
+            className={`theme-tag pink-theme ${themeIsSelected(SELECTED_THEME.PINK)}`}
             onClick={() => themeOnClick(SELECTED_THEME.PINK)}
           />
           <div
-            className={`theme-tag turquoise-theme ${
-              payloadData.theme === SELECTED_THEME.TURQUOISE && 'theme-selected'
-            }`}
+            className={`theme-tag turquoise-theme ${themeIsSelected(SELECTED_THEME.TURQUOISE)}`}
             onClick={() => themeOnClick(SELECTED_THEME.TURQUOISE)}
           />
         </div>
