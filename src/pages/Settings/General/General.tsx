@@ -39,6 +39,7 @@ export const General = (): JSX.Element => {
             dispatch({
               type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
               payload: {
+                ...payloadData,
                 slippage: selectedOption || 200,
                 preferred_unit: payloadData.preferred_unit,
               },
@@ -68,6 +69,7 @@ export const General = (): JSX.Element => {
               dispatch({
                 type: SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT,
                 payload: {
+                  ...payloadData,
                   slippage: payloadData.slippage,
                   preferred_unit: preferredUnit,
                 },

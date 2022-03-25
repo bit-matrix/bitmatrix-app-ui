@@ -5,7 +5,7 @@
   width: 20rem;
   border: 1px solid $bmBlack;
   border-radius: 1.5rem;
-  background-color: $bmPaleGreen;
+  background-color: var(--theme-color);
   margin-top: 6rem;
   margin: 0 auto;
 }
@@ -34,6 +34,7 @@
   display: none;
   margin: 1rem 0;
   font-weight: 500;
+  color: var(--text-color);
 }
 
 .home-page-start-button {
@@ -41,7 +42,7 @@
   width: 100%;
   height: 3rem;
   border-radius: 1rem !important;
-  color: $bmPaleGreen !important;
+  color: var(--theme-color) !important;
   display: flex !important;
   justify-content: center;
   align-items: center;
@@ -57,7 +58,7 @@
     width: 47.5rem;
     border: 1px solid $bmBlack;
     border-radius: 1.5rem;
-    background-color: $bmPaleGreen;
+    background-color: var(--theme-color);
   }
 
   .home-page-desc {
@@ -75,10 +76,6 @@
     width: 40%;
     padding-bottom: 0;
     padding-top: 0;
-  }
-
-  .home-page-start-button {
-    height: 2.75rem;
   }
 }
 

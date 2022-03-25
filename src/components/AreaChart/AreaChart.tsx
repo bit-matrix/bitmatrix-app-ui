@@ -18,9 +18,9 @@ export type ChartData = {
 };
 
 export const background = '#000';
-export const background2 = '#455747';
-export const accentColor = '#adfbc4';
-export const accentColorDark = '#75daad';
+export const background2 = 'var(--chart-background2)';
+export const accentColor = 'var(--theme-color)';
+export const accentColorDark = 'var(--chart-accentColorDark)';
 const tooltipStyles = {
   ...defaultStyles,
   background,

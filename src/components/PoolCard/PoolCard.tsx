@@ -23,7 +23,7 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
     return <span>Something went wrong.</span>;
   } else {
     const data = calculateChartData(payloadData.pool_chart_data, pool);
-    const chartColor = data.priceRate.direction === 'up' ? '#78B98C' : '#de5b4c';
+    const chartColor = data.priceRate.direction === 'up' ? '#4caf50' : '#f44336';
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
         <div className={`pool-card-column ${!showDetail && 'pool-card-modal-column-1'}`}>
