@@ -1,155 +1,155 @@
 @import '../../style/themes/bitmatrix.scss';
 
-.first-div {
+.pool-summary-container {
   background: $bmPaleGreen;
   height: 31.2rem;
+
+  .pool-summary-black-container {
+    position: absolute;
+    width: 66%;
+    height: 10.3rem;
+    border-top: 0.5rem $bmBlack solid;
+    border-left: 0.5rem $bmBlack solid;
+    border-right: 0.5rem $bmBlack solid;
+    border-top-left-radius: 4.3rem;
+    border-top-right-radius: 4.3rem;
+    bottom: 20.5rem;
+    margin-left: 1.8rem;
+    padding: 1.2rem;
+    background: $bmBlack;
+
+    .pool-summary-palegreen-container {
+      border-radius: 3.3rem;
+      background: $bmPaleGreen;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .pool-summary-box-icon {
+        position: absolute;
+        left: 3.5rem;
+        width: 5rem;
+        height: 5rem;
+        fill: $bmBlack;
+      }
+
+      .pool-summary-lbtc-container {
+        position: absolute;
+        background: $bmBlack;
+        left: 11rem;
+        width: 10rem;
+        height: 4.5rem;
+        border-radius: 2rem;
+
+        .pool-summary-lbtc-icon {
+          position: absolute;
+          top: 1rem;
+        }
+
+        .pool-summary-lbtc-value {
+          position: absolute;
+          left: 4rem;
+          top: 1rem;
+          color: $bmWhite;
+          font-size: 1.7rem;
+          font-weight: bold;
+        }
+      }
+
+      .pool-summary-tether-container {
+        position: absolute;
+        background: $bmBlack;
+        left: 24rem;
+        width: 10rem;
+        height: 4.5rem;
+        border-radius: 2rem;
+
+        .pool-summary-tether-icon {
+          position: absolute;
+          top: 1rem;
+        }
+
+        .pool-summary-tether-value {
+          position: absolute;
+          left: 4rem;
+          top: 1rem;
+          color: $bmWhite;
+          font-size: 1.7rem;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
+  .pool-summary-pool-metrics-container {
+    position: absolute;
+    background: $bmBlack;
+    height: 15.6rem;
+    width: 100%;
+    bottom: 5.3rem;
+    margin-left: 1.8rem;
+
+    .pool-summary-price-container {
+      position: absolute;
+      left: 4rem;
+      top: 1.5rem;
+    }
+
+    .pool-summary-volume-container {
+      position: absolute;
+      left: 16rem;
+      top: 1.5rem;
+    }
+
+    .pool-summary-tvl-container {
+      position: absolute;
+      left: 28rem;
+      top: 1.5rem;
+    }
+
+    .pool-summary-fees-container {
+      position: absolute;
+      top: 1.5rem;
+      left: 37rem;
+    }
+  }
 }
 
-.second-div {
-  position: absolute;
-  width: 66%;
-  height: 10.3rem;
-  border-top: 0.5rem $bmBlack solid;
-  border-left: 0.5rem $bmBlack solid;
-  border-right: 0.5rem $bmBlack solid;
-  border-top-left-radius: 4.3rem;
-  border-top-right-radius: 4.3rem;
-  bottom: 20.5rem;
-  margin-left: 1.8rem;
-  padding: 1.2rem;
-  background: black;
-}
-
-.third-div {
-  position: absolute;
-  background: $bmBlack;
-  height: 15.6rem;
-  width: 100%;
-  bottom: 5.3rem;
-  margin-left: 1.8rem;
-}
-
-.fourth-div {
-  border-radius: 3.3rem;
-  background: #adfbc4;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.box-icon {
-  position: absolute;
-  left: 3.5rem;
-  width: 5rem;
-  height: 5rem;
-  fill: $bmBlack;
-}
-
-.lbtc-box {
-  position: absolute;
-  background: $bmBlack;
-  left: 11rem;
-  width: 10rem;
-  height: 4.5rem;
-  border-radius: 2rem;
-}
-
-.lbtc-icon {
-  position: absolute;
-  top: 1rem;
-}
-
-.lbtc-value {
-  position: absolute;
-  left: 4rem;
-  top: 1rem;
-  color: $bmWhite;
-  font-size: 1.7rem;
-  font-weight: bold;
-}
-
-.tether-box {
-  position: absolute;
-  background: $bmBlack;
-  left: 24rem;
-  width: 10rem;
-  height: 4.5rem;
-  border-radius: 2rem;
-}
-
-.tether-icon {
-  position: absolute;
-  top: 1rem;
-}
-
-.tether-value {
-  position: absolute;
-  left: 4rem;
-  top: 1rem;
-  color: $bmWhite;
-  font-size: 1.7rem;
-  font-weight: bold;
-}
-
-.price-div {
-  position: absolute;
-  left: 4rem;
-  top: 1.5rem;
-}
-
-.title {
+.pool-summary-title {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   font-size: 1.5rem;
 }
 
-.value {
+.pool-summary-value {
   color: $LightGray;
   font-size: 0.875rem;
   font-weight: 600;
   font-size: 1.5rem;
 }
 
-.icon-content {
+.pool-summary-icon-content {
   display: flex;
   align-items: center;
   margin-top: 0.125rem;
   font-size: 1.5rem;
 
-  .arrow {
+  .pool-summary-arrow {
     svg {
       height: 1.5rem;
       width: 1.5rem;
     }
   }
 
-  .arrow-up-text {
+  .pool-summary-arrow-up-text {
     margin-left: 0.25rem;
     color: $bmGreen;
   }
 
-  .arrow-down-text {
+  .pool-summary-arrow-down-text {
     margin-left: 0.25rem;
     color: $bmRed;
   }
-}
-
-.volume-div {
-  position: absolute;
-  left: 16rem;
-  top: 1.5rem;
-}
-
-.tvl-div {
-  position: absolute;
-  left: 28rem;
-  top: 1.5rem;
-}
-
-.fees-div {
-  position: absolute;
-  top: 1.5rem;
-  left: 37rem;
 }
