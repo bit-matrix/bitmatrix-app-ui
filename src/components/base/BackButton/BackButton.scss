@@ -16,8 +16,12 @@
 
   .back-button-text {
     margin-left: 0.5rem;
-    color: $bmPaleGreen;
+    color: var(--theme-color);
   }
+}
+
+.fill-theme-color {
+  fill: var(--theme-color);
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {

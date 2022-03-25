@@ -39,8 +39,8 @@
 }
 
 .tab-menu-item-selected {
-  border-bottom: 2px solid $bmPaleGreen;
-  color: $bmPaleGreen;
+  border-bottom: 2px solid var(--theme-color);
+  color: var(--theme-color);
   height: 100%;
   width: 70%;
   margin: 0 auto;

@@ -140,16 +140,16 @@ export const groupBydailyVolume = (chartData: BmChart[]): ChartData[] => {
 const chartDataDiff = (currentData: number, previousData: number) => {
   let currentValue = 0;
   let direction = '';
-  let icon = <ArrowDownIcon fill="#ff0000" />;
+  let icon = <ArrowDownIcon fill="#f44336" />;
 
   if (currentData > previousData) {
     currentValue = ((currentData - previousData) / previousData) * 100;
     direction = 'up';
-    icon = <ArrowUpIcon fill="#00FF00" />;
+    icon = <ArrowUpIcon fill="#4caf50" />;
   } else {
     currentValue = ((currentData - previousData) / currentData) * 100;
     direction = 'down';
-    icon = <ArrowDownIcon fill="#ff0000" />;
+    icon = <ArrowDownIcon fill="#f44336" />;
   }
 
   return { value: Math.abs(currentValue).toFixed(2), direction, icon };
@@ -176,22 +176,22 @@ export const calculateChartData = (chartData: BmChart[], pool: Pool): any => {
   let volumeRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon fill="#00FF00" />,
+    icon: <ArrowUpIcon fill="#4caf50" />,
   };
   let feeRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon fill="#00FF00" />,
+    icon: <ArrowUpIcon fill="#4caf50" />,
   };
   let tvlRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon fill="#00FF00" />,
+    icon: <ArrowUpIcon fill="#4caf50" />,
   };
   let priceRate = {
     value: '0',
     direction: 'up',
-    icon: <ArrowUpIcon fill="#00FF00" />,
+    icon: <ArrowUpIcon fill="#4caf50" />,
   };
 
   if (allPriceData.length > 2) {
