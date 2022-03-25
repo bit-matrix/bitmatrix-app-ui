@@ -119,7 +119,7 @@ export const MyPoolDetail: React.FC = () => {
           <meta property="og:type" content="website" />
           <meta property="og:title" content="MyPool" />
           <meta property="og:description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
-          <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
+          <meta property="og:image" content="https://picsum.photos/200" />
 
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="twitter:domain" content={`https://dev.bitmatrix.app/pool/my-pool/${pool.id}`} />
@@ -129,7 +129,7 @@ export const MyPoolDetail: React.FC = () => {
             name="twitter:description"
             content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics."
           />
-          <meta name="twitter:image" content="%PUBLIC_URL%/logo512.png" />
+          <meta name="twitter:image" content="https://picsum.photos/200" />
         </Helmet>
         <div className="my-pool-detail-main">
           <div className="my-pool-detail-header">
