@@ -1,38 +1,32 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
-import SettingsContext from '../../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
+import { useThemeContext, useWalletContext } from '../../../context';
 import info from '../../../images/info2.png';
 import BananaIcon from '../../../images/banana.png';
 //import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { walletContext } = useWalletContext();
+  const { themeContext, setThemeContext } = useThemeContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
-    dispatch({
-      type: SETTINGS_ACTION_TYPES.SET_THEME,
-      payload: {
-        ...payloadData,
-        theme: selectedTheme,
-      },
-    });
+    setThemeContext(selectedTheme);
   };
 
   const exclusiveThemes = () => {
     const bananaAssetHash = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
 
-    const bananaAsset = payloadData.wallet?.balances.find((asset) => {
+    const bananaAsset = walletContext?.balances.find((asset) => {
       return asset.asset.assetHash === bananaAssetHash;
     });
 
-    if (payloadData.wallet?.balances && payloadData.wallet?.balances.length > 0) {
+    if (walletContext?.balances && walletContext?.balances.length > 0) {
       if (bananaAsset && bananaAsset.amount > 0) {
         return (
           <div
-            className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
+            className={`theme-tag ${themeContext === SELECTED_THEME.YELLOW && 'theme-selected'}`}
             onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
           >
             <img src={BananaIcon} className="banana-icon-theme" />
@@ -45,7 +39,7 @@ export const Theme = (): JSX.Element => {
   };
 
   const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
-    if (payloadData.theme === selectedTheme) {
+    if (themeContext === selectedTheme) {
       return 'theme-selected';
     }
     return '';

@@ -5,7 +5,7 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { quoteAmountRound, timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import { useSettingsContext } from '../../context';
+import { useSettingsContext, useThemeContext } from '../../context';
 import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
@@ -23,6 +23,7 @@ export const InfoCard: React.FC = () => {
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const { settingsContext } = useSettingsContext();
+  const { themeContext } = useThemeContext();
 
   const data = getLocalData();
 
@@ -123,7 +124,7 @@ export const InfoCard: React.FC = () => {
           return <div>{timeDifference(cs.timestamp)}</div>;
         }
       } else {
-        if (payloadData.theme === SELECTED_THEME.YELLOW) {
+        if (themeContext === SELECTED_THEME.YELLOW) {
           return (
             <div>
               <img src={BananaGif} alt="loading..." className="info-card-banana-gif" />
