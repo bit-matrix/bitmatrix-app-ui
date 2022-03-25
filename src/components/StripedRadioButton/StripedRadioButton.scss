@@ -14,7 +14,7 @@
     position: absolute;
     height: 2px;
     width: 100%;
-    background: $bmPaleGreen;
+    background: var(--theme-color);
     top: 14px;
     left: -15%;
     right: 0;
@@ -34,7 +34,7 @@
         padding-top: 30px;
         cursor: pointer;
         display: inline-block;
-        color: $bmPaleGreen;
+        color: var(--theme-color);
         left: 3px;
         &:before {
           content: '';
@@ -43,7 +43,7 @@
           top: 0;
           width: 30px;
           height: 30px;
-          border: 3px solid $bmPaleGreen;
+          border: 3px solid var(--theme-color);
           border-radius: 100%;
           background: $bmBlack;
         }
@@ -51,7 +51,7 @@
           content: '';
           width: 18px;
           height: 18px;
-          background: $bmPaleGreen;
+          background: var(--theme-color);
           position: absolute;
           top: 6px;
           left: 6px;
@@ -73,7 +73,7 @@
         padding-top: 30px;
         cursor: pointer;
         display: inline-block;
-        color: $bmPaleGreen;
+        color: var(--theme-color);
         left: 3px;
         &:before {
           content: '';
@@ -82,7 +82,7 @@
           top: 0;
           width: 30px;
           height: 30px;
-          border: 3px solid $bmPaleGreen;
+          border: 3px solid var(--theme-color);
           border-radius: 100%;
           background: $bmBlack;
         }
@@ -90,7 +90,7 @@
           content: '';
           width: 18px;
           height: 18px;
-          background: $bmPaleGreen;
+          background: var(--theme-color);
           position: absolute;
           top: 6px;
           left: 6px;
@@ -105,7 +105,7 @@
   }
 }
 .selected-title {
-  color: $bmPaleGreen;
+  color: var(--theme-color);
 }
 .unselected-title {
   color: $bmVeryLightGray;
@@ -141,7 +141,7 @@
       position: absolute;
       height: 2px;
       width: 100%;
-      background: $bmPaleGreen;
+      background: var(--theme-color);
       top: 8px;
       left: -34%;
       right: 0;
@@ -162,7 +162,7 @@
             top: 0;
             width: 20px;
             height: 20px;
-            border: 3px solid $bmPaleGreen;
+            border: 3px solid var(--theme-color);
             border-radius: 100%;
             background: $bmBlack;
           }
@@ -170,7 +170,7 @@
             content: '';
             width: 10px;
             height: 10px;
-            background: $bmPaleGreen;
+            background: var(--theme-color);
             position: absolute;
             top: 5px;
             left: 5px;
@@ -191,7 +191,7 @@
             top: 0;
             width: 20px;
             height: 20px;
-            border: 3px solid $bmPaleGreen;
+            border: 3px solid var(--theme-color);
             border-radius: 100%;
             background: $bmBlack;
           }
@@ -199,7 +199,7 @@
             content: '';
             width: 10px;
             height: 10px;
-            background: $bmPaleGreen;
+            background: var(--theme-color);
             position: absolute;
             top: 5px;
             left: 5px;

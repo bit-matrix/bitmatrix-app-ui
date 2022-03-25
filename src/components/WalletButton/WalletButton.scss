@@ -6,7 +6,7 @@
   border-radius: 1rem !important;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
-  background: $bmPaleGreen !important;
+  background: var(--theme-color) !important;
   border-width: 0 !important;
   margin-top: 1rem;
   opacity: 0.9;
@@ -15,19 +15,28 @@
     &::before {
       width: 1.5rem !important;
       height: 1.5rem !important;
-      border: 3px solid #818489;
+      border: 3px solid $bmAluminium;
     }
 
     &::after {
       width: 1.5rem !important;
       height: 1.5rem !important;
-      border-top: 3px solid #010403 !important;
+      border-top: 3px solid $bmDeepFir !important;
     }
   }
 
   &:hover {
     opacity: 1;
   }
+}
+
+.wallet-button-banana-gif {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.wallet-button-loading {
+  text-align: -webkit-center;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {

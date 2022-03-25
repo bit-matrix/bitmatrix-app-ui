@@ -41,7 +41,7 @@
 
 .left-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
-  background-color: $bmPaleGreen;
+  background-color: var(--theme-color);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -50,7 +50,7 @@
 
 .middle-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
-  background-color: $bmPaleGreen;
+  background-color: var(--theme-color);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
@@ -59,7 +59,7 @@
 
 .right-radio-item.rs-radio-item-prefix-checked .rs-radio-item-prefix-checker {
   color: $bmNero !important;
-  background-color: $bmPaleGreen;
+  background-color: var(--theme-color);
   border-top-left-radius: 0;
   border-top-right-radius: 0;
   border-bottom-left-radius: 0;

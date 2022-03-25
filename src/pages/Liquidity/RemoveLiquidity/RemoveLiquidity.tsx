@@ -19,9 +19,17 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
+enum SELECTED_PERCENTAGE {
+  TEN = 10,
+  TWENTY_FIVE = 25,
+  FIFTY = 50,
+  SEVENTY_FIVE = 75,
+  HUNDRED = 100,
+}
+
 const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
-  const [removalPercentage, setRemovalPercentage] = useState<number>(100);
+  const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -207,23 +215,49 @@ const RemoveLiquidity = (): JSX.Element => {
             </div>
             <div className="remove-liquidity-button-toolbar">
               <Button
-                className="remove-liquidity-buttons mobile-hidden"
+                className={`remove-liquidity-buttons mobile-hidden ${
+                  removalPercentage === SELECTED_PERCENTAGE.TEN && 'selected-percentage'
+                }`}
                 appearance="ghost"
-                onClick={() => setRemovalPercentage(10)}
+                onClick={() => setRemovalPercentage(SELECTED_PERCENTAGE.TEN)}
               >
-                % 10
+                % {SELECTED_PERCENTAGE.TEN}
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(25)}>
-                % 25
+              <Button
+                className={`remove-liquidity-buttons ${
+                  removalPercentage === SELECTED_PERCENTAGE.TWENTY_FIVE && 'selected-percentage'
+                }`}
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(SELECTED_PERCENTAGE.TWENTY_FIVE)}
+              >
+                % {SELECTED_PERCENTAGE.TWENTY_FIVE}
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(50)}>
-                % 50
+              <Button
+                className={`remove-liquidity-buttons ${
+                  removalPercentage === SELECTED_PERCENTAGE.FIFTY && 'selected-percentage'
+                }`}
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(SELECTED_PERCENTAGE.FIFTY)}
+              >
+                % {SELECTED_PERCENTAGE.FIFTY}
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(75)}>
-                % 75
+              <Button
+                className={`remove-liquidity-buttons ${
+                  removalPercentage === SELECTED_PERCENTAGE.SEVENTY_FIVE && 'selected-percentage'
+                }`}
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(SELECTED_PERCENTAGE.SEVENTY_FIVE)}
+              >
+                % {SELECTED_PERCENTAGE.SEVENTY_FIVE}
               </Button>
-              <Button className="remove-liquidity-buttons" appearance="ghost" onClick={() => setRemovalPercentage(100)}>
-                % 100
+              <Button
+                className={`remove-liquidity-buttons ${
+                  removalPercentage === SELECTED_PERCENTAGE.HUNDRED && 'selected-percentage'
+                }`}
+                appearance="ghost"
+                onClick={() => setRemovalPercentage(SELECTED_PERCENTAGE.HUNDRED)}
+              >
+                % {SELECTED_PERCENTAGE.HUNDRED}
               </Button>
             </div>
           </div>
@@ -248,7 +282,7 @@ const RemoveLiquidity = (): JSX.Element => {
             <div className="remove-liquidity-page-footer-line-item-third">
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">LP You Redeem</span>
-                <LpIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
+                <LpIcon className="lp-icon" width="1.5rem" height="1.5rem" />
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">
                 {(Number(calcLpTokenAmount) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8)}

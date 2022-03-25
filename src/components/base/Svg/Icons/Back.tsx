@@ -2,9 +2,10 @@ import React from 'react';
 import Svg from '../Svg';
 import { IconSvg } from './IconSvg';
 
-const BackIcon: React.FC<IconSvg> = ({ fill, bgColor, width, height }) => (
+const BackIcon: React.FC<IconSvg> = ({ fill, className, bgColor, width, height }) => (
   <Svg
     fill={fill}
+    className={className}
     bgColor={bgColor}
     width={width}
     height={height}

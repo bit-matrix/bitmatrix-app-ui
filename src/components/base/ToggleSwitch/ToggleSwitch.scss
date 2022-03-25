@@ -38,7 +38,7 @@ input {
   &:checked {
     + {
       .slider {
-        background-color: $bmPaleGreen;
+        background-color: var(--theme-color);
         &:before {
           -webkit-transform: translateX(15px);
           -ms-transform: translateX(15px);
@@ -50,7 +50,7 @@ input {
   &:focus {
     + {
       .slider {
-        box-shadow: 0 0 1px $bmPaleGreen;
+        box-shadow: 0 0 1px var(--theme-color);
       }
     }
   }

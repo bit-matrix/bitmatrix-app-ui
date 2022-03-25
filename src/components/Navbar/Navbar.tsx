@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -9,6 +9,9 @@ import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
 import TickIcon from '../base/Svg/Icons/Tick';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
+import SettingsContext from '../../context/SettingsContext';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import BananaGif from '../../images/banana.gif';
 import './Navbar.scss';
 
 export const Navbar: React.FC = (): JSX.Element => {
@@ -18,6 +21,8 @@ export const Navbar: React.FC = (): JSX.Element => {
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
   const txHistory = getLocalData();
   const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+
+  const { payloadData } = useContext(SettingsContext);
 
   useEffect(() => {
     let unmounted = false;
@@ -37,11 +42,19 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-      return (
-        <div>
-          <Loading width="1.5rem" height="1.5rem" />
-        </div>
-      );
+      if (payloadData.theme === SELECTED_THEME.YELLOW) {
+        return (
+          <div>
+            <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Loading width="1.5rem" height="1.5rem" />
+          </div>
+        );
+      }
     } else {
       if (txHistory && txHistory.length > 0) {
         if (txHistory[txHistory.length - 1].isOutOfSlippage) {
