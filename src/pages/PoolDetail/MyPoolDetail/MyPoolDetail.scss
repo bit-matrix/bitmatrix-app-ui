@@ -8,7 +8,7 @@
 }
 
 .my-pool-detail-main {
-  border: 2px solid $bmPaleGreen;
+  border: 2px solid var(--theme-color);
   position: relative;
   border-radius: 1.5rem;
   height: 31rem;
@@ -125,7 +125,7 @@
 }
 
 .portion-item {
-  color: $bmPaleGreen;
+  color: var(--theme-color);
   font-size: 0.875rem;
   font-weight: 600;
   margin-right: 0.25rem;

@@ -15,6 +15,8 @@ import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import { CustomPopover } from '../CustomPopover/CustomPopover';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import MempoolIcon from '../base/Svg/Icons/Mempool';
+import BananaGif from '../../images/banana.gif';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -121,7 +123,15 @@ export const InfoCard: React.FC = () => {
           return <div>{timeDifference(cs.timestamp)}</div>;
         }
       } else {
-        return <Loading width="1.5rem" height="1.5rem" />;
+        if (payloadData.theme === SELECTED_THEME.YELLOW) {
+          return (
+            <div>
+              <img src={BananaGif} alt="loading..." className="info-card-banana-gif" />
+            </div>
+          );
+        } else {
+          return <Loading width="1.5rem" height="1.5rem" />;
+        }
       }
     };
 

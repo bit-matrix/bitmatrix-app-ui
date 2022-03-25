@@ -56,7 +56,7 @@
 }
 
 .theme-selected {
-  outline: 4px solid $bmPaleGreen !important;
+  outline: 4px solid var(--theme-color) !important;
 }
 
 .gray-theme {
@@ -67,8 +67,8 @@
   background: $bmVeryLightGray;
 }
 
-.yellow-theme {
-  background: $bmYellow;
+.orange-theme {
+  background: $bmOrange;
 }
 
 .red-theme {
@@ -91,6 +91,11 @@
   background: $bmPaleGreen;
 }
 
+.banana-icon-theme {
+  width: 2rem;
+  height: 2rem;
+}
+
 .exclusive-icon {
   width: 2rem;
   height: 2rem;
@@ -108,5 +113,6 @@
   .theme-tag {
     width: 2.5rem;
     height: 2.5rem;
+    cursor: pointer;
   }
 }

@@ -3,8 +3,10 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SettingsStore } from '../model/SettingsStore';
 import SETTINGS_ACTION_TYPES from './SETTINGS_ACTION_TYPES';
 import PayloadData from './PayloadData';
+import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 
-const { setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
+const { setLocalData: setSettings } = useLocalStorage<SettingsStore>('BmSettings');
+const { setLocalData: setTheme } = useLocalStorage<SELECTED_THEME>('theme');
 
 const reducer = (
   state: PayloadData,
@@ -15,7 +17,7 @@ const reducer = (
 ) => {
   switch (action.type) {
     case SETTINGS_ACTION_TYPES.SET_SLIPPAGE:
-      setLocalData({
+      setSettings({
         slippage: action.payload.slippage,
         preferred_unit: state.preferred_unit,
       });
@@ -25,7 +27,7 @@ const reducer = (
       };
 
     case SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT:
-      setLocalData({
+      setSettings({
         slippage: state.slippage,
         preferred_unit: action.payload.preferred_unit,
       });
@@ -56,6 +58,14 @@ const reducer = (
       return {
         ...state,
         pool_chart_data: action.payload.pool_chart_data,
+      };
+
+    case SETTINGS_ACTION_TYPES.SET_THEME:
+      setTheme(action.payload.theme);
+      document.documentElement.setAttribute('theme', action.payload.theme);
+      return {
+        ...state,
+        theme: action.payload.theme,
       };
 
     default:

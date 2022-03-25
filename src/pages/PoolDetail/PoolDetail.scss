@@ -7,7 +7,7 @@
 }
 
 .pool-detail-main {
-  border: 2px solid $bmPaleGreen;
+  border: 2px solid var(--theme-color);
   position: relative;
   border-radius: 1.5rem;
   height: 31rem;
@@ -36,7 +36,7 @@
 
 .pool-detail-page-text {
   margin-left: 0.5rem;
-  color: $bmPaleGreen;
+  color: var(--theme-color);
 }
 
 .pool-detail-content {
@@ -82,13 +82,13 @@
 
 .pool-detail-table-arrow-down-text {
   margin-left: 0.25rem;
-  color: $bmRed;
+  color: $bmVermilionBird;
   font-size: 0.75rem;
 }
 
 .pool-detail-table-arrow-up-text {
   margin-left: 0.25rem;
-  color: $bmGreen;
+  color: $bmMidGreen;
   font-size: 0.75rem;
 }
 
@@ -156,7 +156,7 @@
     justify-content: space-between;
 
     .pool-metrics-item {
-      background: #000000;
+      background: $bmBlack;
       border-radius: 1rem;
       width: 48%;
       height: 4.75rem;
