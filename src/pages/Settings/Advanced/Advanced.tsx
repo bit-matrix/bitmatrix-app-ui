@@ -3,6 +3,7 @@ import { Button, Modal } from 'rsuite';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import SettingsContext from '../../../context/SettingsContext';
 import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
+import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import './Advanced.scss';
 
 export const Advanced = (): JSX.Element => {
@@ -23,6 +24,16 @@ export const Advanced = (): JSX.Element => {
           wallet: { marina: currentWallet.marina, isEnabled: false, balances: [] },
         },
       });
+
+      if (payloadData.theme === SELECTED_THEME.YELLOW) {
+        dispatch({
+          type: SETTINGS_ACTION_TYPES.SET_THEME,
+          payload: {
+            ...payloadData,
+            theme: SELECTED_THEME.NEON,
+          },
+        });
+      }
 
       setShowConfirmModal(false);
     }
