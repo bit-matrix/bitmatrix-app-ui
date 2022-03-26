@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Modal } from 'rsuite';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { useWalletContext } from '../../../context/wallet';
+import { useWalletContext, useThemeContext } from '../../../context';
+import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import './Advanced.scss';
 
 export const Advanced = (): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const { walletContext, setWalletContext } = useWalletContext();
+  const { themeContext, setThemeContext } = useThemeContext();
 
   const disconnectWallet = () => {
     const currentWallet = walletContext;
@@ -16,6 +18,10 @@ export const Advanced = (): JSX.Element => {
       currentWallet.marina.disable();
 
       setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [] });
+
+      if (themeContext === SELECTED_THEME.YELLOW) {
+        setThemeContext(SELECTED_THEME.NEON);
+      }
 
       setShowConfirmModal(false);
     }
