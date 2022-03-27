@@ -55,6 +55,10 @@ export const PoolSummary = (): JSX.Element => {
           </div>
         </div>
 
+        <div className="pool-summary-right-border-radius-black">
+          <div className="pool-summary-right-border-radius-palegreen"></div>
+        </div>
+
         <div className="pool-summary-pool-metrics-container">
           <div className="pool-summary-price-container">
             <div className="pool-summary-title">{pool.quote.ticker} Price</div>
