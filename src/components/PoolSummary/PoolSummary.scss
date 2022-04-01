@@ -1,8 +1,9 @@
 @import '../../style/themes/bitmatrix.scss';
 
 .pool-summary-container {
+  position: relative;
   background: $bmPaleGreen;
-  height: 31.2rem;
+  height: 28rem;
   width: 100%;
 
   .pool-summary-black-container {
@@ -14,7 +15,7 @@
     border-right: 0.5rem $bmBlack solid;
     border-top-left-radius: 4.3rem;
     border-top-right-radius: 4.3rem;
-    bottom: 20.5rem;
+    bottom: 14.5rem;
     margin-left: 1.8rem;
     padding: 1.2rem;
     background: $bmBlack;
@@ -39,7 +40,7 @@
         position: absolute;
         background: $bmBlack;
         left: 11rem;
-        width: 10rem;
+        min-width: 10rem;
         height: 4.5rem;
         border-radius: 2rem;
 
@@ -62,7 +63,7 @@
         position: absolute;
         background: $bmBlack;
         left: 24rem;
-        width: 10rem;
+        min-width: 10rem;
         height: 4.5rem;
         border-radius: 2rem;
 
@@ -86,9 +87,9 @@
   .pool-summary-pool-metrics-container {
     position: absolute;
     background: $bmBlack;
-    height: 15.6rem;
+    height: 14.5rem;
     width: 96%;
-    bottom: 5.3rem;
+    bottom: 0;
     margin-left: 1.8rem;
     display: flex;
     justify-content: space-between;
