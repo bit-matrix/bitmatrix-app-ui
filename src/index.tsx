@@ -12,7 +12,6 @@ import {
   PoolsContextProvider,
   SettingsContextProvider,
   WalletContextProvider,
-  ThemeContextProvider,
 } from './context';
 
 ReactDOM.render(
@@ -23,7 +22,6 @@ ReactDOM.render(
       PoolConfigContextProvider,
       SettingsContextProvider,
       WalletContextProvider,
-      ThemeContextProvider,
     ]}
   >
     <CustomProvider theme="dark">

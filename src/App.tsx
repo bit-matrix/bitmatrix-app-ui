@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { AppRouter } from './components/AppRouter/AppRouter';
-import { useThemeContext } from './context/theme';
+import { useSettingsContext } from './context';
 import './App.scss';
 
 const App = (): JSX.Element => {
-  const { themeContext } = useThemeContext();
+  const { settingsContext } = useSettingsContext();
 
   useEffect(() => {
-    document.documentElement.setAttribute('theme', themeContext);
+    document.documentElement.setAttribute('theme', settingsContext.theme);
   }, []);
 
   return <AppRouter />;

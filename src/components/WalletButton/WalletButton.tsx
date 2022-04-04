@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'rsuite';
 import { useWalletContext } from '../../context';
-import { useThemeContext } from '../../context/theme';
+import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import BananaGif from '../../images/banana.gif';
 import { Loading } from '../Loading/Loading';
@@ -19,10 +19,10 @@ type Props = {
 export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const { walletContext } = useWalletContext();
-  const { themeContext } = useThemeContext();
+  const { settingsContext } = useSettingsContext();
 
   const swapLoading = (): React.ReactElement => {
-    if (themeContext === SELECTED_THEME.YELLOW) {
+    if (settingsContext.theme === SELECTED_THEME.YELLOW) {
       return (
         <div>
           <img src={BananaGif} alt="loading..." className="wallet-button-banana-gif" />

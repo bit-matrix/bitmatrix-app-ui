@@ -1,7 +1,7 @@
 import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
-import { useThemeContext, useWalletContext } from '../../../context';
+import { useSettingsContext, useWalletContext } from '../../../context';
 import info from '../../../images/info2.png';
 import BananaIcon from '../../../images/banana.png';
 //import exclusiveIcon from '../../../images/mtx.png';
@@ -9,7 +9,7 @@ import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
   const { walletContext } = useWalletContext();
-  const { themeContext, setThemeContext } = useThemeContext();
+  const { settingsContext, setThemeContext } = useSettingsContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
     setThemeContext(selectedTheme);
@@ -26,7 +26,7 @@ export const Theme = (): JSX.Element => {
       if (bananaAsset && bananaAsset.amount > 0) {
         return (
           <div
-            className={`theme-tag ${themeContext === SELECTED_THEME.YELLOW && 'theme-selected'}`}
+            className={`theme-tag ${settingsContext.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
             onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
           >
             <img src={BananaIcon} className="banana-icon-theme" />
@@ -39,7 +39,7 @@ export const Theme = (): JSX.Element => {
   };
 
   const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
-    if (themeContext === selectedTheme) {
+    if (settingsContext.theme === selectedTheme) {
       return 'theme-selected';
     }
     return '';

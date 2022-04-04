@@ -9,7 +9,7 @@ import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
 import TickIcon from '../base/Svg/Icons/Tick';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
-import { useThemeContext } from '../../context';
+import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import BananaGif from '../../images/banana.gif';
 import './Navbar.scss';
@@ -22,7 +22,7 @@ export const Navbar: React.FC = (): JSX.Element => {
   const txHistory = getLocalData();
   const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
-  const { themeContext } = useThemeContext();
+  const { settingsContext } = useSettingsContext();
 
   useEffect(() => {
     let unmounted = false;
@@ -42,7 +42,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-      if (themeContext === SELECTED_THEME.YELLOW) {
+      if (settingsContext.theme === SELECTED_THEME.YELLOW) {
         return (
           <div>
             <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />

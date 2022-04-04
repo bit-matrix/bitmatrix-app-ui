@@ -1,5 +1,14 @@
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
-import { SetPreferredUnitAction, SetSlippageAction, SET_PREFERRED_UNIT, SET_SLIPPAGE } from './types';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+
+import {
+  SetPreferredUnitAction,
+  SetSlippageAction,
+  SetThemeAction,
+  SET_PREFERRED_UNIT,
+  SET_SLIPPAGE,
+  SET_THEME,
+} from './types';
 
 export const setSlippageAction = (slippage: number, dispatch: (action: SetSlippageAction) => void): void => {
   dispatch({
@@ -15,5 +24,12 @@ export const setPreferredUnitAction = (
   dispatch({
     type: SET_PREFERRED_UNIT,
     payload: preferred_unit,
+  });
+};
+
+export const setThemeAction = (theme: SELECTED_THEME, dispatch: (action: SetThemeAction) => void): void => {
+  dispatch({
+    type: SET_THEME,
+    payload: theme,
   });
 };
