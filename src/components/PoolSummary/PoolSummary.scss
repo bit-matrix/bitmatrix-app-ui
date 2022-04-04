@@ -7,7 +7,7 @@
   width: 100%;
 
   .pool-summary-black-container {
-    position: absolute;
+    position: relative;
     width: 39rem;
     height: 10.3rem;
     border-top: 0.5rem $bmBlack solid;
@@ -15,7 +15,7 @@
     border-right: 0.5rem $bmBlack solid;
     border-top-left-radius: 4.3rem;
     border-top-right-radius: 4.3rem;
-    bottom: 14.5rem;
+    top: 3.2rem;
     margin-left: 1.8rem;
     padding: 1.2rem;
     background: $bmBlack;
@@ -29,20 +29,19 @@
       justify-content: center;
 
       .pool-summary-box-icon {
-        position: absolute;
-        left: 3.5rem;
         width: 5rem;
         height: 5rem;
         fill: $bmBlack;
+        margin-right: 3rem;
       }
 
       .pool-summary-lbtc-container {
-        position: absolute;
+        position: relative;
         background: $bmBlack;
-        left: 11rem;
         min-width: 10rem;
         height: 4.5rem;
         border-radius: 2rem;
+        margin-right: 3rem;
 
         .pool-summary-lbtc-icon {
           position: absolute;
@@ -60,9 +59,8 @@
       }
 
       .pool-summary-tether-container {
-        position: absolute;
+        position: relative;
         background: $bmBlack;
-        left: 24rem;
         min-width: 10rem;
         height: 4.5rem;
         border-radius: 2rem;
