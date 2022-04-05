@@ -7,7 +7,7 @@ const App = (): JSX.Element => {
   const { settingsContext } = useSettingsContext();
 
   useEffect(() => {
-    document.documentElement.setAttribute('theme', settingsContext.theme);
+    document.documentElement.setAttribute('theme', settingsContext.theme.selectedTheme);
   }, []);
 
   return <AppRouter />;

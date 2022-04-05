@@ -1,45 +1,43 @@
 import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
-import { useSettingsContext, useWalletContext } from '../../../context';
+import { useSettingsContext } from '../../../context';
 import info from '../../../images/info2.png';
 import BananaIcon from '../../../images/banana.png';
 //import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
-  const { walletContext } = useWalletContext();
   const { settingsContext, setThemeContext } = useSettingsContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
-    setThemeContext(selectedTheme);
+    setThemeContext({ selectedTheme, exclusiveThemes: [...settingsContext.theme.exclusiveThemes] });
   };
 
   const exclusiveThemes = () => {
-    const bananaAssetHash = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
-
-    const bananaAsset = walletContext?.balances.find((asset) => {
-      return asset.asset.assetHash === bananaAssetHash;
-    });
-
-    if (walletContext?.balances && walletContext?.balances.length > 0) {
-      if (bananaAsset && bananaAsset.amount > 0) {
-        return (
-          <div
-            className={`theme-tag ${settingsContext.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
-          >
-            <img src={BananaIcon} className="banana-icon-theme" />
-          </div>
-        );
-      } else {
-        return 'No exclusive theme found.';
-      }
+    if (settingsContext.theme.exclusiveThemes.length > 0) {
+      return settingsContext.theme.exclusiveThemes.map((exc, i) => {
+        if (exc === SELECTED_THEME.BANANA) {
+          return (
+            <div
+              key={i}
+              className={`theme-tag ${
+                settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA && 'theme-selected'
+              }`}
+              onClick={() => themeOnClick(SELECTED_THEME.BANANA)}
+            >
+              <img src={BananaIcon} className="banana-icon-theme" />
+            </div>
+          );
+        }
+      });
+    } else {
+      return <span>No exclusive theme found.</span>;
     }
   };
 
   const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
-    if (settingsContext.theme === selectedTheme) {
+    if (settingsContext.theme.selectedTheme === selectedTheme) {
       return 'theme-selected';
     }
     return '';

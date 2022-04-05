@@ -11,7 +11,10 @@ const settings = getLocalData();
 export const initialSettingsState: SettingsStore = {
   slippage: settings?.slippage || 200,
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
-  theme: settings?.theme || SELECTED_THEME.NEON,
+  theme: settings?.theme || {
+    selectedTheme: SELECTED_THEME.NEON,
+    exclusiveThemes: [],
+  },
 };
 
 export const settingsReducer: Reducer<SettingsStore, SetPreferredUnitAction | SetSlippageAction | SetThemeAction> = (
@@ -48,7 +51,7 @@ export const settingsReducer: Reducer<SettingsStore, SetPreferredUnitAction | Se
         preferred_unit: state.preferred_unit,
         theme: action.payload,
       });
-      document.documentElement.setAttribute('theme', action.payload);
+      document.documentElement.setAttribute('theme', action.payload.selectedTheme);
       return {
         ...state,
         theme: action.payload,

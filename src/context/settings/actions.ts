@@ -27,7 +27,10 @@ export const setPreferredUnitAction = (
   });
 };
 
-export const setThemeAction = (theme: SELECTED_THEME, dispatch: (action: SetThemeAction) => void): void => {
+export const setThemeAction = (
+  theme: { selectedTheme: SELECTED_THEME; exclusiveThemes: string[] },
+  dispatch: (action: SetThemeAction) => void,
+): void => {
   dispatch({
     type: SET_THEME,
     payload: theme,

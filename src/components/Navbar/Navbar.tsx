@@ -42,7 +42,10 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-      if (settingsContext.theme === SELECTED_THEME.YELLOW) {
+      if (
+        settingsContext.theme.exclusiveThemes.length > 0 &&
+        settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+      ) {
         return (
           <div>
             <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />

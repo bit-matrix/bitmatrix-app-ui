@@ -25,7 +25,7 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
     setPreferredUnitAction(preferred_unit, dispatch);
   };
 
-  const setThemeContext = (theme: SELECTED_THEME): void => {
+  const setThemeContext = (theme: { selectedTheme: SELECTED_THEME; exclusiveThemes: string[] }): void => {
     setThemeAction(theme, dispatch);
   };
 

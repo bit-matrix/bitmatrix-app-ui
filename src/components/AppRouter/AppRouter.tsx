@@ -2,7 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
-import { usePoolConfigContext, usePoolContext, useWalletContext, usePoolChartDataContext } from '../../context';
+import {
+  usePoolConfigContext,
+  usePoolContext,
+  useWalletContext,
+  usePoolChartDataContext,
+  useSettingsContext,
+} from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
@@ -25,12 +31,16 @@ import { IWallet } from '../../lib/wallet/IWallet';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
 import { NotFound } from '../../pages/NotFound/NotFound';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import './AppRouter.scss';
+
+const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
+  const { settingsContext, setThemeContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { setPoolChartDataContext } = usePoolChartDataContext();
 
@@ -87,6 +97,22 @@ export const AppRouter = (): JSX.Element => {
       wall
         .getBalances()
         .then((balances) => {
+          const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
+            balances.some(({ asset }) => value === asset.assetHash),
+          );
+          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme.selectedTheme);
+          const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+          if (selectedExclusive && exclusiveAmount && exclusiveAmount > 0) {
+            setThemeContext({
+              selectedTheme: settingsContext.theme.selectedTheme,
+              exclusiveThemes: existExclusiveThemes,
+            });
+          } else {
+            setThemeContext({
+              selectedTheme: SELECTED_THEME.NEON,
+              exclusiveThemes: existExclusiveThemes,
+            });
+          }
           setWalletContext({ marina: wall, isEnabled: true, balances });
         })
         .catch((err) => {

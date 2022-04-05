@@ -19,8 +19,14 @@ export const Advanced = (): JSX.Element => {
 
       setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [] });
 
-      if (settingsContext.theme === SELECTED_THEME.YELLOW) {
-        setThemeContext(SELECTED_THEME.NEON);
+      if (
+        settingsContext.theme.exclusiveThemes.length > 0 &&
+        settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+      ) {
+        setThemeContext({
+          selectedTheme: SELECTED_THEME.NEON,
+          exclusiveThemes: [],
+        });
       }
 
       setShowConfirmModal(false);

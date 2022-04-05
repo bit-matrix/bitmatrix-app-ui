@@ -22,7 +22,10 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
   const { settingsContext } = useSettingsContext();
 
   const swapLoading = (): React.ReactElement => {
-    if (settingsContext.theme === SELECTED_THEME.YELLOW) {
+    if (
+      settingsContext.theme.exclusiveThemes.length > 0 &&
+      settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+    ) {
       return (
         <div>
           <img src={BananaGif} alt="loading..." className="wallet-button-banana-gif" />
