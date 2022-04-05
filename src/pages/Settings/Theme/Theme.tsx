@@ -1,7 +1,7 @@
 import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
-import { useSettingsContext } from '../../../context';
+import { useSettingsContext, useWalletContext } from '../../../context';
 import info from '../../../images/info2.png';
 import BananaIcon from '../../../images/banana.png';
 //import exclusiveIcon from '../../../images/mtx.png';
@@ -9,6 +9,7 @@ import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
   const { settingsContext, setThemeContext } = useSettingsContext();
+  const { walletContext } = useWalletContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
     setThemeContext({ selectedTheme, exclusiveThemes: [...settingsContext.theme.exclusiveThemes] });
@@ -17,7 +18,8 @@ export const Theme = (): JSX.Element => {
   const exclusiveThemes = () => {
     if (settingsContext.theme.exclusiveThemes.length > 0) {
       return settingsContext.theme.exclusiveThemes.map((exc, i) => {
-        if (exc === SELECTED_THEME.BANANA) {
+        const excAssetAmount = walletContext?.balances.find((bl) => bl.asset.assetHash === exc)?.amount;
+        if (exc === SELECTED_THEME.BANANA && excAssetAmount && excAssetAmount > 0) {
           return (
             <div
               key={i}
@@ -29,6 +31,8 @@ export const Theme = (): JSX.Element => {
               <img src={BananaIcon} className="banana-icon-theme" />
             </div>
           );
+        } else {
+          return <span>No exclusive theme found.</span>;
         }
       });
     } else {
