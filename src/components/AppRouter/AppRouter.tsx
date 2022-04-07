@@ -102,17 +102,20 @@ export const AppRouter = (): JSX.Element => {
           );
           const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme.selectedTheme);
           const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
-          if (selectedExclusive && exclusiveAmount && exclusiveAmount > 0) {
-            setThemeContext({
-              selectedTheme: settingsContext.theme.selectedTheme,
-              exclusiveThemes: existExclusiveThemes,
-            });
-          } else {
-            setThemeContext({
-              selectedTheme: SELECTED_THEME.NEON,
-              exclusiveThemes: existExclusiveThemes,
-            });
+          if (selectedExclusive) {
+            if (exclusiveAmount && exclusiveAmount > 0) {
+              setThemeContext({
+                selectedTheme: settingsContext.theme.selectedTheme,
+                exclusiveThemes: existExclusiveThemes,
+              });
+            } else {
+              setThemeContext({
+                selectedTheme: SELECTED_THEME.NEON,
+                exclusiveThemes: existExclusiveThemes,
+              });
+            }
           }
+
           setWalletContext({ marina: wall, isEnabled: true, balances });
         })
         .catch((err) => {
