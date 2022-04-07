@@ -1,6 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'rsuite';
-import SettingsContext from '../../context/SettingsContext';
+import { useWalletContext } from '../../context';
+import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import BananaGif from '../../images/banana.gif';
 import { Loading } from '../Loading/Loading';
@@ -17,10 +18,14 @@ type Props = {
 
 export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
-  const { payloadData } = useContext(SettingsContext);
+  const { walletContext } = useWalletContext();
+  const { settingsContext } = useSettingsContext();
 
   const swapLoading = (): React.ReactElement => {
-    if (payloadData.theme === SELECTED_THEME.YELLOW) {
+    if (
+      settingsContext.theme.exclusiveThemes.length > 0 &&
+      settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+    ) {
       return (
         <div>
           <img src={BananaGif} alt="loading..." className="wallet-button-banana-gif" />
@@ -37,24 +42,20 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
 
   return (
     <>
-      <WalletListModal
-        show={showWalletList}
-        wallet={payloadData.wallet?.marina}
-        close={() => setShowWalletList(false)}
-      />
+      <WalletListModal show={showWalletList} wallet={walletContext?.marina} close={() => setShowWalletList(false)} />
       <Button
         appearance="default"
         className={`wallet-button ${className}`}
         onClick={() => {
-          if (payloadData.wallet?.isEnabled) {
+          if (walletContext?.isEnabled) {
             onClick();
           } else {
             setShowWalletList(true);
           }
         }}
-        disabled={payloadData.wallet?.isEnabled && disabled}
+        disabled={walletContext?.isEnabled && disabled}
       >
-        {loading ? swapLoading() : payloadData.wallet?.isEnabled ? text : 'Connect Wallet'}
+        {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>
     </>
   );

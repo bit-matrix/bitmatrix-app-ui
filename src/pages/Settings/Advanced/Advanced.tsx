@@ -1,37 +1,31 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'rsuite';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import SettingsContext from '../../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
+import { useWalletContext, useSettingsContext } from '../../../context';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
 import './Advanced.scss';
 
 export const Advanced = (): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
-  const { payloadData, dispatch } = useContext(SettingsContext);
+  const { walletContext, setWalletContext } = useWalletContext();
+  const { settingsContext, setThemeContext } = useSettingsContext();
 
   const disconnectWallet = () => {
-    const currentWallet = payloadData.wallet;
+    const currentWallet = walletContext;
 
-    if (currentWallet) {
+    if (currentWallet && currentWallet.marina) {
       currentWallet.marina.disable();
 
-      dispatch({
-        type: SETTINGS_ACTION_TYPES.SET_WALLET,
-        payload: {
-          ...payloadData,
-          wallet: { marina: currentWallet.marina, isEnabled: false, balances: [] },
-        },
-      });
+      setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [] });
 
-      if (payloadData.theme === SELECTED_THEME.YELLOW) {
-        dispatch({
-          type: SETTINGS_ACTION_TYPES.SET_THEME,
-          payload: {
-            ...payloadData,
-            theme: SELECTED_THEME.NEON,
-          },
+      if (
+        settingsContext.theme.exclusiveThemes.length > 0 &&
+        settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+      ) {
+        setThemeContext({
+          selectedTheme: SELECTED_THEME.NEON,
+          exclusiveThemes: [],
         });
       }
 

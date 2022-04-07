@@ -7,5 +7,5 @@ export enum SELECTED_THEME {
   PINK = 'pink',
   TURQUOISE = 'turquoise',
   NEON = 'neon',
-  YELLOW = 'yellow',
+  BANANA = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56',
 }
