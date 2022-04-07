@@ -2,7 +2,7 @@
 
 .pool-page-main {
   width: 100%;
-  border: 2px solid $bmPaleGreen;
+  border: 2px solid var(--theme-color);
   position: relative;
   border-radius: 1.5rem;
   height: 100%;
@@ -74,7 +74,7 @@
 
 .pool-page-button {
   background-color: transparent !important;
-  color: $bmPaleGreen;
+  color: var(--theme-color);
   cursor: pointer;
   margin-top: 1rem;
   line-height: 0;
@@ -88,11 +88,11 @@
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:focus,
 .pool-page-tabs .rs-dropdown .rs-dropdown-menu-active ~ .rs-dropdown-toggle:active,
 .pool-page-tabs .rs-nav-item-active > .rs-nav-item-content:active {
-  color: $bmPaleGreen !important;
+  color: var(--theme-color) !important;
 }
 
 .pool-page-tabs .rs-nav-item-content::before {
-  background-color: $bmPaleGreen !important;
+  background-color: var(--theme-color) !important;
 }
 
 .pool-page-shadow {
@@ -160,7 +160,7 @@
   height: 3rem;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
-  background: $bmPaleGreen !important;
+  background: var(--theme-color) !important;
   border-width: 0 !important;
   opacity: 0.9;
 

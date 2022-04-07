@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { convertion } from '@bitmatrix/lib';
 import { Pool } from '@bitmatrix/models';
+import { usePoolChartDataContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -10,7 +11,6 @@ import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
 import { TabMenu } from '../../../components/TabMenu/TabMenu';
 import { MY_POOL_DETAIL_TABS } from '../../../enum/MY_POOL_DETAIL_TABS';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import SettingsContext from '../../../context/SettingsContext';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import info from '../../../images/info2.png';
 import Decimal from 'decimal.js';
@@ -27,19 +27,22 @@ export const MyPoolDetail: React.FC = () => {
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
 
-  const { payloadData } = useContext(SettingsContext);
+  const { poolsContext } = usePoolContext();
+  const { walletContext } = useWalletContext();
+  const { settingsContext } = useSettingsContext();
+  const { poolChartDataContext } = usePoolChartDataContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0) {
-      const currentPool = payloadData.pools.find((pl) => pl.id === id);
+    if (poolsContext && poolsContext.length > 0) {
+      const currentPool = poolsContext.find((pl) => pl.id === id);
 
       setPool(currentPool);
     }
-  }, [payloadData.pools]);
+  }, [poolsContext]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -48,11 +51,11 @@ export const MyPoolDetail: React.FC = () => {
   }, []);
 
   const calcPooledAssets = () => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
-      const currentPool = payloadData.pools[0];
+    if (poolsContext && poolsContext.length > 0 && walletContext) {
+      const currentPool = poolsContext[0];
 
       const lpAssetId = currentPool.lp.asset;
-      const lpAmountInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
+      const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
       const lpAmountInWalletN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
       const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountInWalletN);
@@ -63,7 +66,9 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = quoteAmountRound(quoteTokenRecipients.user_lbtc_received / payloadData.preferred_unit.value);
+      const pooledQuote = quoteAmountRound(
+        quoteTokenRecipients.user_lbtc_received / settingsContext.preferred_unit.value,
+      );
 
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
         '(0.00a)',
@@ -108,7 +113,7 @@ export const MyPoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || payloadData.pool_chart_data === undefined) {
+  if (pool === undefined || poolChartDataContext === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);

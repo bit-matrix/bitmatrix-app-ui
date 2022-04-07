@@ -1,16 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
+import { useWalletContext } from '../../context';
 import { UnblindedOutput } from 'ldk';
-import importSeed from '../../images/key_1.png';
-import marinaWallet from '../../images/marina.png';
-import ledgerNano from '../../images/ledger.png';
-import generateSeed from '../../images/key_2.png';
 import { IWallet } from '../../lib/wallet/IWallet';
-import SettingsContext from '../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { Wallet } from '../../lib/wallet';
-import './WalletListModal.scss';
 import { AddressInterface } from 'marina-provider';
+import MarinaIcon from '../base/Svg/Icons/Marina';
+import AquaIcon from '../base/Svg/Icons/Aqua';
+import JadeIcon from '../base/Svg/Icons/Jade';
+import LedgerIcon from '../base/Svg/Icons/Ledger';
+import './WalletListModal.scss';
 
 type Props = {
   show: boolean;
@@ -23,7 +22,7 @@ type Props = {
 
 export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { setWalletContext } = useWalletContext();
 
   const connectWalletOnClick = (): void => {
     wallet?.exist()
@@ -37,13 +36,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
             setLoading(false);
             close();
 
-            dispatch({
-              type: SETTINGS_ACTION_TYPES.SET_WALLET,
-              payload: {
-                ...payloadData,
-                wallet: { marina: marinaWallet, isEnabled: true, balances: [] },
-              },
-            });
+            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [] });
 
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);
@@ -78,7 +71,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
             connectWalletOnClick();
           }}
         >
-          <img className="wallet-list-item-icon" src={marinaWallet} alt="Generate Seed" />
+          <MarinaIcon className="wallet-list-item-icon" />
           <div>
             <div className="wallet-text-header">{wallet?.exist() ? 'Marina Wallet' : 'Install Marina Wallet'} </div>
             <div className="wallet-list-item-description">
@@ -89,31 +82,31 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img className="wallet-list-item-icon" src={ledgerNano} alt="Import Seed" />
+          <AquaIcon className="wallet-list-item-icon" />
           <div>
-            <div className="wallet-text-header">Ledger Nano</div>
+            <div className="wallet-text-header">Aqua (Soon)</div>
             <div className="wallet-list-item-description">
-              Connect to your Ledger Nano device to access to Bitmatrix.
+              Connect to Aqua wallet to access Bitmatrix from your mobile phone.
             </div>
           </div>
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img className="wallet-list-item-icon" src={importSeed} alt="Import Seed" />
+          <JadeIcon className="wallet-list-item-icon" />
           <div>
-            <div className="wallet-text-header">Import Seed</div>
+            <div className="wallet-text-header">Jade (Soon)</div>
             <div className="wallet-list-item-description">
-              Import your 12-word mnemonic phrases to unlock your coins and start swapping.
+              Connect to your Jade wallet to access Bitmatrix from secure hardware.
             </div>
           </div>
         </div>
 
         <div className="wallet-list-item rs-panel rs-panel-default rs-panel-body disabled">
-          <img className="wallet-list-item-icon" src={generateSeed} alt="Generate Seed" />
+          <LedgerIcon className="wallet-list-item-icon" />
           <div>
-            <div className="wallet-text-header">Generate Seed</div>
+            <div className="wallet-text-header">Ledger (Soon)</div>
             <div className="wallet-list-item-description">
-              Generate new 12-word mnemonic phrases and get strated with Bitmatrix
+              Connect to your Ledger wallet to safely access Bitmatrix.
             </div>
           </div>
         </div>

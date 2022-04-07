@@ -9,6 +9,9 @@ import { Loading } from '../Loading/Loading';
 import Svg from '../base/Svg/Svg';
 import TickIcon from '../base/Svg/Icons/Tick';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
+import { useSettingsContext } from '../../context';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import BananaGif from '../../images/banana.gif';
 import './Navbar.scss';
 
 export const Navbar: React.FC = (): JSX.Element => {
@@ -18,6 +21,8 @@ export const Navbar: React.FC = (): JSX.Element => {
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
   const txHistory = getLocalData();
   const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+
+  const { settingsContext } = useSettingsContext();
 
   useEffect(() => {
     let unmounted = false;
@@ -37,11 +42,22 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const txInfo = (): React.ReactElement => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-      return (
-        <div>
-          <Loading width="1.5rem" height="1.5rem" />
-        </div>
-      );
+      if (
+        settingsContext.theme.exclusiveThemes.length > 0 &&
+        settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+      ) {
+        return (
+          <div>
+            <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <Loading width="1.5rem" height="1.5rem" />
+          </div>
+        );
+      }
     } else {
       if (txHistory && txHistory.length > 0) {
         if (txHistory[txHistory.length - 1].isOutOfSlippage) {

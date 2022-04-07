@@ -1,9 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api } from '@bitmatrix/lib';
 import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
-import SettingsContext from '../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
+import {
+  usePoolConfigContext,
+  usePoolContext,
+  useWalletContext,
+  usePoolChartDataContext,
+  useSettingsContext,
+} from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
@@ -26,11 +31,19 @@ import { IWallet } from '../../lib/wallet/IWallet';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
 import { NotFound } from '../../pages/NotFound/NotFound';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import './AppRouter.scss';
+
+const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { setPoolsContext } = usePoolContext();
+  const { walletContext, setWalletContext } = useWalletContext();
+  const { settingsContext, setThemeContext } = useSettingsContext();
+  const { setPoolConfigContext } = usePoolConfigContext();
+  const { setPoolChartDataContext } = usePoolChartDataContext();
+
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
@@ -49,35 +62,23 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet();
 
         marina.isEnabled().then((enabled) => {
-          dispatch({
-            type: SETTINGS_ACTION_TYPES.SET_WALLET,
-            payload: {
-              ...payloadData,
-              wallet: { marina: marinaWallet, isEnabled: enabled, balances: [] },
-            },
-          });
+          setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [] });
         });
       })
       .catch(() => {
         const marinaWallet = new Wallet();
 
-        dispatch({
-          type: SETTINGS_ACTION_TYPES.SET_WALLET,
-          payload: {
-            ...payloadData,
-            wallet: { marina: marinaWallet, isEnabled: false, balances: [] },
-          },
-        });
+        setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [] });
       });
   }, []);
 
   useEffect(() => {
-    if (payloadData.wallet?.marina) {
-      fetchBalances(payloadData.wallet.marina);
+    if (walletContext?.marina) {
+      fetchBalances(walletContext.marina);
 
-      payloadData.wallet.marina.on('NEW_UTXO', () => {
-        if (payloadData.wallet?.marina) {
-          fetchBalances(payloadData.wallet.marina);
+      walletContext.marina.on('NEW_UTXO', () => {
+        if (walletContext?.marina) {
+          fetchBalances(walletContext.marina);
         }
       });
 
@@ -89,20 +90,30 @@ export const AppRouter = (): JSX.Element => {
     //     fetchBalances(payloadData.wallet?.marina);
     //   }
     // }, 60000);
-  }, [payloadData.wallet?.marina]);
+  }, [walletContext?.marina]);
 
   const fetchBalances = async (wall: IWallet) => {
-    if (payloadData.wallet?.isEnabled) {
+    if (walletContext && walletContext.isEnabled) {
       wall
         .getBalances()
         .then((balances) => {
-          dispatch({
-            type: SETTINGS_ACTION_TYPES.SET_WALLET,
-            payload: {
-              ...payloadData,
-              wallet: { marina: wall, isEnabled: true, balances },
-            },
-          });
+          const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
+            balances.some(({ asset }) => value === asset.assetHash),
+          );
+          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme.selectedTheme);
+          const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+          if (selectedExclusive && exclusiveAmount && exclusiveAmount > 0) {
+            setThemeContext({
+              selectedTheme: settingsContext.theme.selectedTheme,
+              exclusiveThemes: existExclusiveThemes,
+            });
+          } else {
+            setThemeContext({
+              selectedTheme: SELECTED_THEME.NEON,
+              exclusiveThemes: existExclusiveThemes,
+            });
+          }
+          setWalletContext({ marina: wall, isEnabled: true, balances });
         })
         .catch((err) => {
           console.log(err);
@@ -119,38 +130,20 @@ export const AppRouter = (): JSX.Element => {
 
     const poolId: string = filteredPool[0].id;
 
-    dispatch({
-      type: SETTINGS_ACTION_TYPES.SET_POOLS,
-      payload: {
-        ...payloadData,
-        pools: filteredPool,
-      },
-    });
+    setPoolsContext(filteredPool);
 
     checkLastTxStatus(poolId);
 
     if (isInitialize) {
       const pool_config: BmConfig = await api.getBmConfigs(poolId);
 
-      dispatch({
-        type: SETTINGS_ACTION_TYPES.SET_POOL_CONFIG,
-        payload: {
-          ...payloadData,
-          pool_config,
-        },
-      });
+      setPoolConfigContext(pool_config);
     }
 
     if (location.pathname.startsWith('/pool') || isInitialize) {
       const pool_chart_data: BmChart[] = await api.getPoolChartData(poolId);
 
-      dispatch({
-        type: SETTINGS_ACTION_TYPES.SET_POOL_CHART_DATA,
-        payload: {
-          ...payloadData,
-          pool_chart_data,
-        },
-      });
+      setPoolChartDataContext(pool_chart_data);
     }
     setLoading(false);
   };

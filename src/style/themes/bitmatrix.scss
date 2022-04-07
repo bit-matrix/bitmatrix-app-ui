@@ -11,10 +11,10 @@ $bmPaleGreen: #adfbc4;
 $bmDeepFir: #010403;
 $bmShadyLady: #999999;
 $bmVeryLightGray: #cccccc;
-$bmYellow: #f29e4b;
+$bmOrange: #f7941d;
 $bmDarkPink: #eb4869;
 $bmBlue: #5297f7;
-$bmPink: #eb48f7;
+$bmPink: #e765ef;
 $bmTurquoise: #92fbfd;
 $bmBastille: #333334;
 $bmAluminium: #818489;
@@ -23,12 +23,12 @@ $bmBlack: #000000;
 $bmWhite: #ffffff;
 $bmGray: #808080;
 $bmRed: #ff0000;
-$bmGreen: #00FF00;
+$bmGreen: #00ff00;
 $LightGray: #d4d4d4;
 $bmBlackRussian: #171718;
 $bmMortar: #555555;
 $bmBalticSea: #3c3f43;
-$bmEbony: #2C2F36;
+$bmEbony: #2c2f36;
 $bmFrenchGray: #cbc9cd;
 $bmAlizarin: #ef2a31;
 $bmVeryVeryDarkGray: #23242a;
@@ -38,3 +38,71 @@ $bmCardinGreen: #121f18;
 $bmGreySuit: #8e8e93;
 $bmDenim: #1675e0;
 $bmWhiteSmoke: #f3f3f3;
+$bmMidGreen: #4caf50;
+$bmVermilionBird: #f44336;
+$bmBoltgunMetal: #393939;
+$bmSpanishGrey: #989797;
+$bmYellow: #ffff00;
+
+// :root {
+//   --theme-color: #adfbc4;
+//   --text-color: #575757;
+//   --chart-accentColorDark: #75daad;
+//   --chart-background2: #455747;
+// }
+
+[theme='white'] {
+  --theme-color: #f3f3f3;
+  --text-color: #575757;
+  --chart-accentColorDark: #919191;
+  --chart-background2: #565656;
+}
+
+[theme='orange'] {
+  --theme-color: #f7941d;
+  --text-color: #454545;
+  --chart-accentColorDark: #f8cea5;
+  --chart-background2: #482f16;
+}
+
+[theme='red'] {
+  --theme-color: #eb4869;
+  --text-color: #000000;
+  --chart-accentColorDark: #ef6c87;
+  --chart-background2: #2f0e15;
+}
+
+[theme='blue'] {
+  --theme-color: #5297f7;
+  --text-color: #3c3c3c;
+  --chart-accentColorDark: #97c0fa;
+  --chart-background2: #182d4a;
+}
+
+[theme='turquoise'] {
+  --theme-color: #92fbfd;
+  --text-color: #575757;
+  --chart-accentColorDark: #92fbfd;
+  --chart-background2: #2b4b4b;
+}
+
+[theme='pink'] {
+  --theme-color: #e765ef;
+  --text-color: #000000;
+  --chart-accentColorDark: #f391fa;
+  --chart-background2: #46154a;
+}
+
+[theme='neon'] {
+  --theme-color: #adfbc4;
+  --text-color: #575757;
+  --chart-accentColorDark: #75daad;
+  --chart-background2: #455747;
+}
+
+[theme='657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'] {
+  --theme-color: #ffff00;
+  --text-color: #454545;
+  --chart-accentColorDark: #f8f991;
+  --chart-background2: #4b4c04;
+}

@@ -8,11 +8,11 @@
   background-color: $bmEbony;
   cursor: pointer;
   font-size: 1rem;
-  border: 2px solid $bmPaleGreen !important;
+  border: 2px solid var(--theme-color) !important;
   border-radius: 1rem !important;
 
   .wallet-text-header {
-    color: $bmPaleGreen;
+    color: var(--theme-color);
     margin-bottom: 0.25rem;
   }
 }
@@ -43,6 +43,7 @@
 .wallet-list-item-icon {
   width: 3rem;
   margin-right: 1rem;
+  fill: var(--theme-color);
 }
 
 .wallet-list-item-description {

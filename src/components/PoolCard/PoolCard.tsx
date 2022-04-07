@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Pool } from '@bitmatrix/models';
 import { calculateChartData } from '../utils/utils';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
@@ -6,7 +6,7 @@ import Numeral from 'numeral';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
 import { XyChart } from '../XyChart/XyChart';
-import SettingsContext from '../../context/SettingsContext';
+import { usePoolChartDataContext } from '../../context';
 import './PoolCard.scss';
 
 type Props = {
@@ -17,13 +17,13 @@ type Props = {
 };
 
 export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = true }) => {
-  const { payloadData } = useContext(SettingsContext);
+  const { poolChartDataContext } = usePoolChartDataContext();
 
-  if (payloadData.pool_chart_data === undefined) {
+  if (poolChartDataContext === undefined) {
     return <span>Something went wrong.</span>;
   } else {
-    const data = calculateChartData(payloadData.pool_chart_data, pool);
-    const chartColor = data.priceRate.direction === 'up' ? '#78B98C' : '#de5b4c';
+    const data = calculateChartData(poolChartDataContext, pool);
+    const chartColor = data.priceRate.direction === 'up' ? '#4caf50' : '#f44336';
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
         <div className={`pool-card-column ${!showDetail && 'pool-card-modal-column-1'}`}>

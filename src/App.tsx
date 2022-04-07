@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppRouter } from './components/AppRouter/AppRouter';
-import SettingsProvider from './context/SettingsProvider';
+import { useSettingsContext } from './context';
 import './App.scss';
 
 const App = (): JSX.Element => {
-  return (
-    <SettingsProvider>
-      <AppRouter />
-    </SettingsProvider>
-  );
+  const { settingsContext } = useSettingsContext();
+
+  useEffect(() => {
+    document.documentElement.setAttribute('theme', settingsContext.theme.selectedTheme);
+  }, []);
+
+  return <AppRouter />;
 };
 
 export default App;

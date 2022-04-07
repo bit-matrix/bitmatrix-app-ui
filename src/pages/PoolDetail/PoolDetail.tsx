@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { usePoolChartDataContext, usePoolContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -11,7 +12,6 @@ import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import SettingsContext from '../../context/SettingsContext';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
@@ -25,18 +25,20 @@ export const PoolDetail: React.FC = () => {
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
 
-  const { payloadData } = useContext(SettingsContext);
+  const { poolsContext } = usePoolContext();
+  const { poolChartDataContext } = usePoolChartDataContext();
+  const { settingsContext } = useSettingsContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0) {
-      const currentPool = payloadData.pools.find((pl) => pl.id === id);
+    if (poolsContext && poolsContext.length > 0) {
+      const currentPool = poolsContext.find((pl) => pl.id === id);
       setPool(currentPool);
     }
-  }, [payloadData.pools]);
+  }, [poolsContext]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -75,10 +77,10 @@ export const PoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || payloadData.pool_chart_data === undefined) {
+  if (pool === undefined || poolChartDataContext === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(payloadData.pool_chart_data, pool);
+    const data = calculateChartData(poolChartDataContext, pool);
     return (
       <div className="pool-detail-container">
         <Helmet>
@@ -143,7 +145,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
                     <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
-                    {quoteAmountRound(Number(pool.quote.value) / payloadData.preferred_unit.value)}
+                    {quoteAmountRound(Number(pool.quote.value) / settingsContext.preferred_unit.value)}
                   </div>
                 </div>
 

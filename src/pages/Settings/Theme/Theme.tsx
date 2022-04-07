@@ -1,22 +1,51 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
+import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
+import { useSettingsContext, useWalletContext } from '../../../context';
 import info from '../../../images/info2.png';
-// import exclusiveIcon from '../../../images/mtx.png';
+import BananaIcon from '../../../images/banana.png';
+//import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
-enum SELECTED_THEME {
-  GRAY = 'gray',
-  WHITE = 'white',
-  YELLOW = 'yellow',
-  RED = 'red',
-  BLUE = 'blue',
-  PINK = 'pink',
-  TURQUOISE = 'turquoise',
-  NEON = 'neon',
-}
-
 export const Theme = (): JSX.Element => {
-  const [selected, setSelected] = useState<SELECTED_THEME>(SELECTED_THEME.GRAY);
+  const { settingsContext, setThemeContext } = useSettingsContext();
+  const { walletContext } = useWalletContext();
+
+  const themeOnClick = (selectedTheme: SELECTED_THEME) => {
+    setThemeContext({ selectedTheme, exclusiveThemes: [...settingsContext.theme.exclusiveThemes] });
+  };
+
+  const exclusiveThemes = () => {
+    if (settingsContext.theme.exclusiveThemes.length > 0) {
+      return settingsContext.theme.exclusiveThemes.map((exc, i) => {
+        const excAssetAmount = walletContext?.balances.find((bl) => bl.asset.assetHash === exc)?.amount;
+        if (exc === SELECTED_THEME.BANANA && excAssetAmount && excAssetAmount > 0) {
+          return (
+            <div
+              key={i}
+              className={`theme-tag ${
+                settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA && 'theme-selected'
+              }`}
+              onClick={() => themeOnClick(SELECTED_THEME.BANANA)}
+            >
+              <img src={BananaIcon} className="banana-icon-theme" />
+            </div>
+          );
+        } else {
+          return <span>No exclusive theme found.</span>;
+        }
+      });
+    } else {
+      return <span>No exclusive theme found.</span>;
+    }
+  };
+
+  const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
+    if (settingsContext.theme.selectedTheme === selectedTheme) {
+      return 'theme-selected';
+    }
+    return '';
+  };
 
   return (
     <div className="theme-main">
@@ -33,32 +62,32 @@ export const Theme = (): JSX.Element => {
         </div>
         <div className="theme-item-content">
           <div
-            className={`theme-tag gray-theme ${selected === SELECTED_THEME.GRAY && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.GRAY)}
+            className={`theme-tag neon-theme ${themeIsSelected(SELECTED_THEME.NEON)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.NEON)}
           />
           <div
-            className={`theme-tag white-theme ${selected === SELECTED_THEME.WHITE && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.WHITE)}
+            className={`theme-tag white-theme ${themeIsSelected(SELECTED_THEME.WHITE)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.WHITE)}
           />
           <div
-            className={`theme-tag yellow-theme ${selected === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.YELLOW)}
+            className={`theme-tag orange-theme ${themeIsSelected(SELECTED_THEME.ORANGE)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.ORANGE)}
           />
           <div
-            className={`theme-tag red-theme ${selected === SELECTED_THEME.RED && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.RED)}
+            className={`theme-tag red-theme ${themeIsSelected(SELECTED_THEME.RED)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.RED)}
           />
           <div
-            className={`theme-tag blue-theme ${selected === SELECTED_THEME.BLUE && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.BLUE)}
+            className={`theme-tag blue-theme ${themeIsSelected(SELECTED_THEME.BLUE)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.BLUE)}
           />
           <div
-            className={`theme-tag pink-theme ${selected === SELECTED_THEME.PINK && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.PINK)}
+            className={`theme-tag pink-theme ${themeIsSelected(SELECTED_THEME.PINK)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.PINK)}
           />
           <div
-            className={`theme-tag turquoise-theme ${selected === SELECTED_THEME.TURQUOISE && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.TURQUOISE)}
+            className={`theme-tag turquoise-theme ${themeIsSelected(SELECTED_THEME.TURQUOISE)}`}
+            onClick={() => themeOnClick(SELECTED_THEME.TURQUOISE)}
           />
         </div>
       </div>
@@ -73,15 +102,7 @@ export const Theme = (): JSX.Element => {
             <img className="general-icon" src={info} alt="info" />
           </CustomPopover>
         </div>
-        <div className="theme-item-content">
-          {/* <div
-            className={`theme-tag ${selected === SELECTED_THEME.NEON && 'theme-selected'}`}
-            onClick={() => setSelected(SELECTED_THEME.NEON)}
-          >
-            <img className="exclusive-icon" src={exclusiveIcon} alt="" />
-          </div> */}
-          No exclusive theme found.
-        </div>
+        <div className="theme-item-content">{exclusiveThemes()}</div>
       </div>
     </div>
   );

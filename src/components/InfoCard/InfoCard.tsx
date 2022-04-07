@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 // import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import SettingsContext from '../../context/SettingsContext';
 import { quoteAmountRound, timeDifference } from '../../helper';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
+import { useSettingsContext } from '../../context';
 import Numeral from 'numeral';
 import { Loading } from '../Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
@@ -15,12 +15,14 @@ import ExchangeIcon from '../base/Svg/Icons/Exchange';
 import { CustomPopover } from '../CustomPopover/CustomPopover';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import MempoolIcon from '../base/Svg/Icons/Mempool';
+import BananaGif from '../../images/banana.gif';
+import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
-  const { payloadData } = useContext(SettingsContext);
+  const { settingsContext } = useSettingsContext();
 
   const data = getLocalData();
 
@@ -40,8 +42,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
-            {`tL-${payloadData.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
+            Swap {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
+            {`tL-${settingsContext.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -62,8 +64,8 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {`tL-${payloadData.preferred_unit.text}`} (min{' '}
-            {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)})
+            {`tL-${settingsContext.preferred_unit.text}`} (min{' '}
+            {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)})
           </div>
         </>
       );
@@ -80,8 +82,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
-            {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
+            Add {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
+            {`tL-${settingsContext.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -99,8 +101,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {quoteAmountRound(cs.quoteAmount / payloadData.preferred_unit.value)}{' '}
-            {`tL-${payloadData.preferred_unit.text}`} and&nbsp;
+            Remove {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
+            {`tL-${settingsContext.preferred_unit.text}`} and&nbsp;
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -121,7 +123,18 @@ export const InfoCard: React.FC = () => {
           return <div>{timeDifference(cs.timestamp)}</div>;
         }
       } else {
-        return <Loading width="1.5rem" height="1.5rem" />;
+        if (
+          settingsContext.theme.exclusiveThemes.length > 0 &&
+          settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
+        ) {
+          return (
+            <div>
+              <img src={BananaGif} alt="loading..." className="info-card-banana-gif" />
+            </div>
+          );
+        } else {
+          return <Loading width="1.5rem" height="1.5rem" />;
+        }
       }
     };
 
