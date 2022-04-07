@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { useContext } from 'react';
-import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
-import SettingsContext from '../../../context/SettingsContext';
+import { useSettingsContext } from '../../../context';
 import { CheckBoxGroup } from '../../../components/base/CheckBoxGroup/CheckBoxGroup';
 import { StripedRadioButton } from '../../../components/StripedRadioButton/StripedRadioButton';
 import { ToggleSwitch } from '../../../components/base/ToggleSwitch/ToggleSwitch';
@@ -15,7 +13,7 @@ import './General.scss';
 export const General = (): JSX.Element => {
   const [pushNotificationsSwitch, setPushNotificationsSwitch] = useState<boolean>(false);
   const [liquidTaxiSwitch, setLiquidTaxiSwitch] = useState<boolean>(false);
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { settingsContext, setSlippageContext, setPreferredUnitContext } = useSettingsContext();
 
   return (
     <div className="general-main">
@@ -32,18 +30,11 @@ export const General = (): JSX.Element => {
         </div>
         <StripedRadioButton
           options={slippageFeeOptions}
-          selectedOption={SlippageFeeList.find((sf) => sf.value === payloadData.slippage)?.text || ''}
+          selectedOption={SlippageFeeList.find((sf) => sf.value === settingsContext.slippage)?.text || ''}
           onChange={(option) => {
             const selectedOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
-            dispatch({
-              type: SETTINGS_ACTION_TYPES.SET_SLIPPAGE,
-              payload: {
-                ...payloadData,
-                slippage: selectedOption || 200,
-                preferred_unit: payloadData.preferred_unit,
-              },
-            });
+            setSlippageContext(selectedOption || 200);
           }}
         />
       </div>
@@ -66,17 +57,10 @@ export const General = (): JSX.Element => {
             const preferredUnit = preferredUnitList.find((unit) => unit.text === checkedValue);
 
             if (preferredUnit) {
-              dispatch({
-                type: SETTINGS_ACTION_TYPES.SET_PREFERRED_UNIT,
-                payload: {
-                  ...payloadData,
-                  slippage: payloadData.slippage,
-                  preferred_unit: preferredUnit,
-                },
-              });
+              setPreferredUnitContext(preferredUnit);
             }
           }}
-          checkedValue={payloadData.preferred_unit.text}
+          checkedValue={settingsContext.preferred_unit.text}
         />
       </div>
       <div className="general-item">

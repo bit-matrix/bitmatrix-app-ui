@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
+import { useWalletContext } from '../../context';
 import { UnblindedOutput } from 'ldk';
 import { IWallet } from '../../lib/wallet/IWallet';
-import SettingsContext from '../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../context/SETTINGS_ACTION_TYPES';
 import { Wallet } from '../../lib/wallet';
 import { AddressInterface } from 'marina-provider';
 import MarinaIcon from '../base/Svg/Icons/Marina';
@@ -23,7 +22,7 @@ type Props = {
 
 export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { setWalletContext } = useWalletContext();
 
   const connectWalletOnClick = (): void => {
     wallet?.exist()
@@ -37,13 +36,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
             setLoading(false);
             close();
 
-            dispatch({
-              type: SETTINGS_ACTION_TYPES.SET_WALLET,
-              payload: {
-                ...payloadData,
-                wallet: { marina: marinaWallet, isEnabled: true, balances: [] },
-              },
-            });
+            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [] });
 
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);

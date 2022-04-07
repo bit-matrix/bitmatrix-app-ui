@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
-import Decimal from 'decimal.js';
+import React, { useEffect, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
+import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import Decimal from 'decimal.js';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
-import SettingsContext from '../../../context/SettingsContext';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
@@ -32,22 +32,26 @@ const RemoveLiquidity = (): JSX.Element => {
   const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
-  const { payloadData } = useContext(SettingsContext);
+
+  const { poolsContext } = usePoolContext();
+  const { walletContext } = useWalletContext();
+  const { poolConfigContext } = usePoolConfigContext();
+  const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
 
   useEffect(() => {
-    if (payloadData.pools && payloadData.pools.length > 0 && payloadData.wallet) {
-      const currentPool = payloadData.pools[0];
+    if (poolsContext && poolsContext.length > 0 && walletContext) {
+      const currentPool = poolsContext[0];
       const lpTokenAssetId = currentPool.lp.asset;
 
-      const lpTokenInWallet = payloadData.wallet.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
+      const lpTokenInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
       setLpTokenAmount(lpTokenInWallet?.amount || 0);
     }
-  }, [payloadData.pools, payloadData.wallet?.balances]);
+  }, [poolsContext, walletContext?.balances]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)
@@ -60,12 +64,12 @@ const RemoveLiquidity = (): JSX.Element => {
   }, [removalPercentage, lpTokenAmount]);
 
   const removeLiquidityClick = async () => {
-    if (payloadData.wallet?.marina) {
+    if (walletContext?.marina) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      if (payloadData.pools && payloadData.pool_config) {
-        const pool = payloadData.pools[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+      if (poolsContext && poolConfigContext) {
+        const pool = poolsContext[0];
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
 
@@ -73,7 +77,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
         try {
           setLoading(true);
-          const fundingTx = await payloadData.wallet.marina.sendTransaction([
+          const fundingTx = await walletContext.marina.sendTransaction([
             {
               address: fundingTxInputs.fundingOutput1Address,
               value: fundingTxInputs.fundingOutput1Value,
@@ -94,10 +98,10 @@ const RemoveLiquidity = (): JSX.Element => {
           return Promise.reject();
         }
 
-        const addressInformation = await payloadData.wallet.marina.getNextChangeAddress();
+        const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(payloadData.pool_config);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
             calcLpTokenAmount,
@@ -114,7 +118,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * payloadData.preferred_unit.value,
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settingsContext.preferred_unit.value,
               quoteAsset: pool.quote.ticker,
               tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
               tokenAsset: pool.token.ticker,
@@ -157,12 +161,12 @@ const RemoveLiquidity = (): JSX.Element => {
   };
 
   const calcLpValues = () => {
-    const currentPool = payloadData.pools;
+    const currentPool = poolsContext;
     if (currentPool && currentPool.length > 0) {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
       return {
-        quoteReceived: (Number(recipientValue.user_lbtc_received) / payloadData.preferred_unit.value).toString(),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / settingsContext.preferred_unit.value).toString(),
         tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
@@ -262,7 +266,7 @@ const RemoveLiquidity = (): JSX.Element => {
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">
-                  tL-{payloadData.preferred_unit.text} You Get
+                  tL-{settingsContext.preferred_unit.text} You Get
                 </span>
                 <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
               </div>
@@ -288,7 +292,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove tL-${payloadData.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
+            text={`Remove tL-${settingsContext.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();

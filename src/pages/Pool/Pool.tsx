@@ -1,22 +1,23 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { usePoolContext } from '../../context';
 import { PoolManagement } from '../../components/PoolManagement/PoolManagement';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import SettingsContext from '../../context/SettingsContext';
 import { useHistory } from 'react-router-dom';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './Pool.scss';
 
 export const Pool = (): JSX.Element => {
-  const { payloadData } = useContext(SettingsContext);
+  const { poolsContext } = usePoolContext();
+
   const history = useHistory();
 
   document.title = ROUTE_PATH_TITLE.POOL;
 
-  if (payloadData.pools && payloadData.pools.length > 0) {
+  if (poolsContext && poolsContext.length > 0) {
     return (
       <div className="pool-main-div">
         <PoolManagement
-          pools={payloadData.pools}
+          pools={poolsContext}
           onClick={(poolId: string) => {
             history.push({
               pathname: ROUTE_PATH.POOL + '/' + poolId,

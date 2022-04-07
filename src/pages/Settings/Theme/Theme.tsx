@@ -1,51 +1,47 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
-import SettingsContext from '../../../context/SettingsContext';
-import SETTINGS_ACTION_TYPES from '../../../context/SETTINGS_ACTION_TYPES';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
+import { useSettingsContext, useWalletContext } from '../../../context';
 import info from '../../../images/info2.png';
 import BananaIcon from '../../../images/banana.png';
 //import exclusiveIcon from '../../../images/mtx.png';
 import './Theme.scss';
 
 export const Theme = (): JSX.Element => {
-  const { dispatch, payloadData } = useContext(SettingsContext);
+  const { settingsContext, setThemeContext } = useSettingsContext();
+  const { walletContext } = useWalletContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
-    dispatch({
-      type: SETTINGS_ACTION_TYPES.SET_THEME,
-      payload: {
-        ...payloadData,
-        theme: selectedTheme,
-      },
-    });
+    setThemeContext({ selectedTheme, exclusiveThemes: [...settingsContext.theme.exclusiveThemes] });
   };
 
   const exclusiveThemes = () => {
-    const bananaAssetHash = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
-
-    const bananaAsset = payloadData.wallet?.balances.find((asset) => {
-      return asset.asset.assetHash === bananaAssetHash;
-    });
-
-    if (payloadData.wallet?.balances && payloadData.wallet?.balances.length > 0) {
-      if (bananaAsset && bananaAsset.amount > 0) {
-        return (
-          <div
-            className={`theme-tag ${payloadData.theme === SELECTED_THEME.YELLOW && 'theme-selected'}`}
-            onClick={() => themeOnClick(SELECTED_THEME.YELLOW)}
-          >
-            <img src={BananaIcon} className="banana-icon-theme" />
-          </div>
-        );
-      } else {
-        return 'No exclusive theme found.';
-      }
+    if (settingsContext.theme.exclusiveThemes.length > 0) {
+      return settingsContext.theme.exclusiveThemes.map((exc, i) => {
+        const excAssetAmount = walletContext?.balances.find((bl) => bl.asset.assetHash === exc)?.amount;
+        if (exc === SELECTED_THEME.BANANA && excAssetAmount && excAssetAmount > 0) {
+          return (
+            <div
+              key={i}
+              className={`theme-tag ${
+                settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA && 'theme-selected'
+              }`}
+              onClick={() => themeOnClick(SELECTED_THEME.BANANA)}
+            >
+              <img src={BananaIcon} className="banana-icon-theme" />
+            </div>
+          );
+        } else {
+          return <span>No exclusive theme found.</span>;
+        }
+      });
+    } else {
+      return <span>No exclusive theme found.</span>;
     }
   };
 
   const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
-    if (payloadData.theme === selectedTheme) {
+    if (settingsContext.theme.selectedTheme === selectedTheme) {
       return 'theme-selected';
     }
     return '';
