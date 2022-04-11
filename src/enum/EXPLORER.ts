@@ -1,0 +1,4 @@
+export enum EXPLORER {
+  MEMPOOL = 'MEMPOOL',
+  BLOCK_STREAM = 'BLOCK STREAM',
+}
