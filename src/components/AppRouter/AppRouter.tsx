@@ -40,7 +40,7 @@ export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
-  const { settingsContext, setThemeContext } = useSettingsContext();
+  const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { setPoolChartDataContext } = usePoolChartDataContext();
 
@@ -97,26 +97,20 @@ export const AppRouter = (): JSX.Element => {
       wall
         .getBalances()
         .then((balances) => {
+          setWalletContext({ marina: wall, isEnabled: true, balances });
+
           const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
             balances.some(({ asset }) => value === asset.assetHash),
           );
-          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme.selectedTheme);
+          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme);
           const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+
           if (selectedExclusive) {
-            if (exclusiveAmount && exclusiveAmount > 0) {
-              setThemeContext({
-                selectedTheme: settingsContext.theme.selectedTheme,
-                exclusiveThemes: existExclusiveThemes,
-              });
-            } else {
-              setThemeContext({
-                selectedTheme: SELECTED_THEME.NEON,
-                exclusiveThemes: existExclusiveThemes,
-              });
+            if (!exclusiveAmount || exclusiveAmount === 0) {
+              setThemeContext(SELECTED_THEME.NEON);
             }
           }
-
-          setWalletContext({ marina: wall, isEnabled: true, balances });
+          setExclusiveThemesContext(existExclusiveThemes);
         })
         .catch((err) => {
           console.log(err);

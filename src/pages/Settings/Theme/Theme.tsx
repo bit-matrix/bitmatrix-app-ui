@@ -12,27 +12,25 @@ export const Theme = (): JSX.Element => {
   const { walletContext } = useWalletContext();
 
   const themeOnClick = (selectedTheme: SELECTED_THEME) => {
-    setThemeContext({ selectedTheme, exclusiveThemes: [...settingsContext.theme.exclusiveThemes] });
+    setThemeContext(selectedTheme);
   };
 
   const exclusiveThemes = () => {
-    if (settingsContext.theme.exclusiveThemes.length > 0) {
-      return settingsContext.theme.exclusiveThemes.map((exc, i) => {
+    if (settingsContext.exclusiveThemes.length > 0) {
+      return settingsContext.exclusiveThemes.map((exc, i) => {
         const excAssetAmount = walletContext?.balances.find((bl) => bl.asset.assetHash === exc)?.amount;
         if (exc === SELECTED_THEME.BANANA && excAssetAmount && excAssetAmount > 0) {
           return (
             <div
               key={i}
-              className={`theme-tag ${
-                settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA && 'theme-selected'
-              }`}
+              className={`theme-tag ${settingsContext.theme === SELECTED_THEME.BANANA && 'theme-selected'}`}
               onClick={() => themeOnClick(SELECTED_THEME.BANANA)}
             >
               <img src={BananaIcon} className="banana-icon-theme" />
             </div>
           );
         } else {
-          return <span>No exclusive theme found.</span>;
+          return <span key={i}>No exclusive theme found.</span>;
         }
       });
     } else {
@@ -41,7 +39,7 @@ export const Theme = (): JSX.Element => {
   };
 
   const themeIsSelected = (selectedTheme: SELECTED_THEME) => {
-    if (settingsContext.theme.selectedTheme === selectedTheme) {
+    if (settingsContext.theme === selectedTheme) {
       return 'theme-selected';
     }
     return '';
