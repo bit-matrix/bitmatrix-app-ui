@@ -2,9 +2,11 @@ import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 
 import {
+  SetExclusiveThemesAction,
   SetPreferredUnitAction,
   SetSlippageAction,
   SetThemeAction,
+  SET_EXCLUSIVE_THEMES,
   SET_PREFERRED_UNIT,
   SET_SLIPPAGE,
   SET_THEME,
@@ -27,12 +29,19 @@ export const setPreferredUnitAction = (
   });
 };
 
-export const setThemeAction = (
-  theme: { selectedTheme: SELECTED_THEME; exclusiveThemes: string[] },
-  dispatch: (action: SetThemeAction) => void,
-): void => {
+export const setThemeAction = (theme: SELECTED_THEME, dispatch: (action: SetThemeAction) => void): void => {
   dispatch({
     type: SET_THEME,
     payload: theme,
+  });
+};
+
+export const setExclusiveThemesAction = (
+  exclusiveThemes: string[],
+  dispatch: (action: SetExclusiveThemesAction) => void,
+): void => {
+  dispatch({
+    type: SET_EXCLUSIVE_THEMES,
+    payload: exclusiveThemes,
   });
 };

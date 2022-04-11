@@ -3,24 +3,27 @@ import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { SetPreferredUnitAction, SetSlippageAction, SetThemeAction, SettingsStore } from './types';
+import { SettingsStore } from '../../model/SettingsStore';
+
+import { SetExclusiveThemesAction, SetPreferredUnitAction, SetSlippageAction, SetThemeAction, Settings } from './types';
 
 const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
 const settings = getLocalData();
 
-export const initialSettingsState: SettingsStore = {
+export const initialSettingsState: Settings = {
   slippage: settings?.slippage || 200,
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
-  theme: settings?.theme || {
-    selectedTheme: SELECTED_THEME.NEON,
-    exclusiveThemes: [],
-  },
+  theme: settings?.theme || SELECTED_THEME.NEON,
+  exclusiveThemes: [],
 };
 
-export const settingsReducer: Reducer<SettingsStore, SetPreferredUnitAction | SetSlippageAction | SetThemeAction> = (
-  state: SettingsStore = initialSettingsState,
-  action: SetPreferredUnitAction | SetSlippageAction | SetThemeAction,
-): SettingsStore => {
+export const settingsReducer: Reducer<
+  Settings,
+  SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction
+> = (
+  state: Settings = initialSettingsState,
+  action: SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction,
+): Settings => {
   switch (action.type) {
     case 'SET_SLIPPAGE':
       setLocalData({
@@ -51,10 +54,16 @@ export const settingsReducer: Reducer<SettingsStore, SetPreferredUnitAction | Se
         preferred_unit: state.preferred_unit,
         theme: action.payload,
       });
-      document.documentElement.setAttribute('theme', action.payload.selectedTheme);
+      document.documentElement.setAttribute('theme', action.payload);
       return {
         ...state,
         theme: action.payload,
+      };
+
+    case 'SET_EXCLUSIVE_THEMES':
+      return {
+        ...state,
+        exclusiveThemes: [...action.payload],
       };
 
     default:

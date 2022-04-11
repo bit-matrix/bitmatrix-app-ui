@@ -2,7 +2,7 @@ import { ComponentProps, createContext, FC, useContext, useReducer } from 'react
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
-import { setPreferredUnitAction, setSlippageAction, setThemeAction } from './actions';
+import { setExclusiveThemesAction, setPreferredUnitAction, setSlippageAction, setThemeAction } from './actions';
 import { initialSettingsState, settingsReducer } from './reducer';
 import { ISettingsContext } from './types';
 
@@ -25,12 +25,24 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
     setPreferredUnitAction(preferred_unit, dispatch);
   };
 
-  const setThemeContext = (theme: { selectedTheme: SELECTED_THEME; exclusiveThemes: string[] }): void => {
+  const setThemeContext = (theme: SELECTED_THEME): void => {
     setThemeAction(theme, dispatch);
   };
 
+  const setExclusiveThemesContext = (exclusiveThemes: string[]): void => {
+    setExclusiveThemesAction(exclusiveThemes, dispatch);
+  };
+
   return (
-    <SettingsContext.Provider value={{ settingsContext, setSlippageContext, setPreferredUnitContext, setThemeContext }}>
+    <SettingsContext.Provider
+      value={{
+        settingsContext,
+        setSlippageContext,
+        setPreferredUnitContext,
+        setThemeContext,
+        setExclusiveThemesContext,
+      }}
+    >
       {children}
     </SettingsContext.Provider>
   );
