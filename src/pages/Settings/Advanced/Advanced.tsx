@@ -9,7 +9,7 @@ export const Advanced = (): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const { walletContext, setWalletContext } = useWalletContext();
-  const { settingsContext, setThemeContext } = useSettingsContext();
+  const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
 
   const disconnectWallet = () => {
     const currentWallet = walletContext;
@@ -19,14 +19,9 @@ export const Advanced = (): JSX.Element => {
 
       setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [] });
 
-      if (
-        settingsContext.theme.exclusiveThemes.length > 0 &&
-        settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
-      ) {
-        setThemeContext({
-          selectedTheme: SELECTED_THEME.NEON,
-          exclusiveThemes: [],
-        });
+      if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
+        setThemeContext(SELECTED_THEME.NEON);
+        setExclusiveThemesContext([]);
       }
 
       setShowConfirmModal(false);

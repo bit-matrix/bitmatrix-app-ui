@@ -123,10 +123,7 @@ export const InfoCard: React.FC = () => {
           return <div>{timeDifference(cs.timestamp)}</div>;
         }
       } else {
-        if (
-          settingsContext.theme.exclusiveThemes.length > 0 &&
-          settingsContext.theme.selectedTheme === SELECTED_THEME.BANANA
-        ) {
+        if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
           return (
             <div>
               <img src={BananaGif} alt="loading..." className="info-card-banana-gif" />
