@@ -1,3 +1,4 @@
+import { NetworkString } from 'marina-provider';
 import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
@@ -5,11 +6,13 @@ import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import {
   SetExclusiveThemesAction,
   SetExplorerAction,
+  SetNetworkAction,
   SetPreferredUnitAction,
   SetSlippageAction,
   SetThemeAction,
   SET_EXCLUSIVE_THEMES,
   SET_EXPLORER,
+  SET_NETWORK,
   SET_PREFERRED_UNIT,
   SET_SLIPPAGE,
   SET_THEME,
@@ -53,5 +56,12 @@ export const setExplorerAction = (explorer: EXPLORER, dispatch: (action: SetExpl
   dispatch({
     type: SET_EXPLORER,
     payload: explorer,
+  });
+};
+
+export const setNetworkAction = (network: NetworkString, dispatch: (action: SetNetworkAction) => void): void => {
+  dispatch({
+    type: SET_NETWORK,
+    payload: network,
   });
 };

@@ -1,3 +1,4 @@
+import { NetworkString } from 'marina-provider';
 import { ComponentProps, createContext, FC, useContext, useReducer } from 'react';
 import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
@@ -6,6 +7,7 @@ import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import {
   setExclusiveThemesAction,
   setExplorerAction,
+  setNetworkAction,
   setPreferredUnitAction,
   setSlippageAction,
   setThemeAction,
@@ -44,6 +46,10 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
     setExplorerAction(explorer, dispatch);
   };
 
+  const setNetworkContext = (network: NetworkString): void => {
+    setNetworkAction(network, dispatch);
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -53,6 +59,7 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
         setThemeContext,
         setExclusiveThemesContext,
         setExplorerContext,
+        setNetworkContext,
       }}
     >
       {children}

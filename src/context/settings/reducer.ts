@@ -9,6 +9,7 @@ import { SettingsStore } from '../../model/SettingsStore';
 import {
   SetExclusiveThemesAction,
   SetExplorerAction,
+  SetNetworkAction,
   SetPreferredUnitAction,
   SetSlippageAction,
   SetThemeAction,
@@ -24,14 +25,26 @@ export const initialSettingsState: Settings = {
   theme: settings?.theme || SELECTED_THEME.NEON,
   exclusiveThemes: [],
   explorer: EXPLORER.MEMPOOL,
+  network: 'testnet',
 };
 
 export const settingsReducer: Reducer<
   Settings,
-  SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction | SetExplorerAction
+  | SetPreferredUnitAction
+  | SetSlippageAction
+  | SetThemeAction
+  | SetExclusiveThemesAction
+  | SetExplorerAction
+  | SetNetworkAction
 > = (
   state: Settings = initialSettingsState,
-  action: SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction | SetExplorerAction,
+  action:
+    | SetPreferredUnitAction
+    | SetSlippageAction
+    | SetThemeAction
+    | SetExclusiveThemesAction
+    | SetExplorerAction
+    | SetNetworkAction,
 ): Settings => {
   switch (action.type) {
     case 'SET_SLIPPAGE':
@@ -79,6 +92,12 @@ export const settingsReducer: Reducer<
       return {
         ...state,
         explorer: action.payload,
+      };
+
+    case 'SET_NETWORK':
+      return {
+        ...state,
+        network: action.payload,
       };
 
     default:
