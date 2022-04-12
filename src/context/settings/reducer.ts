@@ -16,7 +16,7 @@ import {
   Settings,
 } from './types';
 
-const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
+const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BMXSettings');
 const settings = getLocalData();
 
 export const initialSettingsState: Settings = {
