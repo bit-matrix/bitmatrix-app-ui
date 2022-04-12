@@ -3,6 +3,7 @@ import {
   Balance,
   EventListenerID,
   MarinaEventType,
+  NetworkString,
   Recipient,
   SentTransaction,
   Utxo,
@@ -34,4 +35,6 @@ export interface IWallet {
   reloadCoins(): Promise<void>;
 
   getCoins(): Promise<Utxo[]>;
+
+  getNetwork(): Promise<NetworkString>;
 }

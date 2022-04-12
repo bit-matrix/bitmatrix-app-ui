@@ -98,10 +98,12 @@ export default class Marina implements MarinaProvider {
     return Promise.reject('Marina wallet disabled.');
   }
 
-  setAccount(/*account: number*/): Promise<void> {
-    throw new Error('Method not implemented.');
-  }
   getNetwork(): Promise<NetworkString> {
+    if (this.exist() && marina) return marina.getNetwork();
+    return Promise.reject('Marina wallet disabled.');
+  }
+
+  setAccount(/*account: number*/): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
