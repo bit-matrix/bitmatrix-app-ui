@@ -82,13 +82,13 @@ export const AppRouter = (): JSX.Element => {
         }
       });
 
-      setInterval(() => {
-        if (walletContext) {
-          walletContext?.marina.getNetwork().then((network: NetworkString) => {
-            setNetworkContext(network);
-          });
-        }
-      }, 1000);
+      // setInterval(() => {
+      //   if (walletContext) {
+      //     walletContext?.marina.getNetwork().then((network: NetworkString) => {
+      //       setNetworkContext(network);
+      //     });
+      //   }
+      // }, 1000);
 
       // payloadData.wallet.marina.reloadCoins();
     }
