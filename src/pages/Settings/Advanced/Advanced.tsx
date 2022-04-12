@@ -14,7 +14,7 @@ export const Advanced = (): JSX.Element => {
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const { walletContext, setWalletContext } = useWalletContext();
-  const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
+  const { settingsContext, setThemeContext, setExclusiveThemesContext, setExplorerContext } = useSettingsContext();
 
   const disconnectWallet = () => {
     const currentWallet = walletContext;
@@ -47,9 +47,9 @@ export const Advanced = (): JSX.Element => {
           className="explorer"
           options={explorerOptions}
           onChange={(checkedValue: EXPLORER | undefined) => {
-            console.log(checkedValue);
+            if (checkedValue) setExplorerContext(checkedValue);
           }}
-          checkedValue={EXPLORER.BLOCK_STREAM}
+          checkedValue={settingsContext.explorer}
         />
       </div>
       <div className="advance-item">
