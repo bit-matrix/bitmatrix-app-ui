@@ -25,7 +25,7 @@ import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidi
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
-import { detectProvider } from 'marina-provider';
+import { detectProvider, NetworkString } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
 import Switch from 'react-router-transition-switch';
@@ -40,7 +40,7 @@ export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
-  const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
+  const { settingsContext, setThemeContext, setExclusiveThemesContext, setNetworkContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { setPoolChartDataContext } = usePoolChartDataContext();
 
@@ -81,6 +81,14 @@ export const AppRouter = (): JSX.Element => {
           fetchBalances(walletContext.marina);
         }
       });
+
+      setInterval(() => {
+        if (walletContext) {
+          walletContext?.marina.getNetwork().then((network: NetworkString) => {
+            setNetworkContext(network);
+          });
+        }
+      }, 1000);
 
       // payloadData.wallet.marina.reloadCoins();
     }
