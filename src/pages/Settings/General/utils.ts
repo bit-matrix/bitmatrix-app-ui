@@ -1,8 +1,13 @@
+import { EXPLORER } from '../../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SLIPPAGE_FEE } from '../../../enum/SLIPPAGE_FEE';
 
 export const preferredUnitOptions = [PREFERRED_UNIT.LBTC, PREFERRED_UNIT.mBTC, PREFERRED_UNIT.uBTC, PREFERRED_UNIT.SAT];
+
+export const explorerOptions = [EXPLORER.BLOCK_STREAM, EXPLORER.MEMPOOL];
+
+export const networkOptions = ['liquid', 'testnet', 'regtest'];
 
 export const slippageFeeOptions = [
   SLIPPAGE_FEE.ZEROPOINTTHREE,

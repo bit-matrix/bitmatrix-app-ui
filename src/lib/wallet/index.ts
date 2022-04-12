@@ -3,6 +3,7 @@ import {
   Balance,
   EventListenerID,
   MarinaEventType,
+  NetworkString,
   Recipient,
   SentTransaction,
   Utxo,
@@ -46,4 +47,6 @@ export class Wallet implements IWallet {
   public reloadCoins = (): Promise<void> => this.wallet.reloadCoins();
 
   public getCoins = (): Promise<Utxo[]> => this.wallet.getCoins();
+
+  public getNetwork = (): Promise<NetworkString> => this.wallet.getNetwork();
 }
