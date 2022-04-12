@@ -1,11 +1,19 @@
 import { Reducer } from 'react';
+import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { SettingsStore } from '../../model/SettingsStore';
 
-import { SetExclusiveThemesAction, SetPreferredUnitAction, SetSlippageAction, SetThemeAction, Settings } from './types';
+import {
+  SetExclusiveThemesAction,
+  SetExplorerAction,
+  SetPreferredUnitAction,
+  SetSlippageAction,
+  SetThemeAction,
+  Settings,
+} from './types';
 
 const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BmSettings');
 const settings = getLocalData();
@@ -15,14 +23,15 @@ export const initialSettingsState: Settings = {
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
   theme: settings?.theme || SELECTED_THEME.NEON,
   exclusiveThemes: [],
+  explorer: EXPLORER.MEMPOOL,
 };
 
 export const settingsReducer: Reducer<
   Settings,
-  SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction
+  SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction | SetExplorerAction
 > = (
   state: Settings = initialSettingsState,
-  action: SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction,
+  action: SetPreferredUnitAction | SetSlippageAction | SetThemeAction | SetExclusiveThemesAction | SetExplorerAction,
 ): Settings => {
   switch (action.type) {
     case 'SET_SLIPPAGE':
@@ -64,6 +73,12 @@ export const settingsReducer: Reducer<
       return {
         ...state,
         exclusiveThemes: [...action.payload],
+      };
+
+    case 'SET_EXPLORER':
+      return {
+        ...state,
+        explorer: action.payload,
       };
 
     default:

@@ -1,8 +1,15 @@
 import { ComponentProps, createContext, FC, useContext, useReducer } from 'react';
+import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
-import { setExclusiveThemesAction, setPreferredUnitAction, setSlippageAction, setThemeAction } from './actions';
+import {
+  setExclusiveThemesAction,
+  setExplorerAction,
+  setPreferredUnitAction,
+  setSlippageAction,
+  setThemeAction,
+} from './actions';
 import { initialSettingsState, settingsReducer } from './reducer';
 import { ISettingsContext } from './types';
 
@@ -33,6 +40,10 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
     setExclusiveThemesAction(exclusiveThemes, dispatch);
   };
 
+  const setExplorerContext = (explorer: EXPLORER): void => {
+    setExplorerAction(explorer, dispatch);
+  };
+
   return (
     <SettingsContext.Provider
       value={{
@@ -41,6 +52,7 @@ export const SettingsContextProvider: React.FC<Props> = ({ children }: Component
         setPreferredUnitContext,
         setThemeContext,
         setExclusiveThemesContext,
+        setExplorerContext,
       }}
     >
       {children}

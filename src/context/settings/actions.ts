@@ -1,12 +1,15 @@
+import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 
 import {
   SetExclusiveThemesAction,
+  SetExplorerAction,
   SetPreferredUnitAction,
   SetSlippageAction,
   SetThemeAction,
   SET_EXCLUSIVE_THEMES,
+  SET_EXPLORER,
   SET_PREFERRED_UNIT,
   SET_SLIPPAGE,
   SET_THEME,
@@ -43,5 +46,12 @@ export const setExclusiveThemesAction = (
   dispatch({
     type: SET_EXCLUSIVE_THEMES,
     payload: exclusiveThemes,
+  });
+};
+
+export const setExplorerAction = (explorer: EXPLORER, dispatch: (action: SetExplorerAction) => void): void => {
+  dispatch({
+    type: SET_EXPLORER,
+    payload: explorer,
   });
 };
