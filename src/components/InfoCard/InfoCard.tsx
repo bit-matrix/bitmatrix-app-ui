@@ -17,6 +17,8 @@ import ExclamationIcon from '../base/Svg/Icons/Exclamation';
 import MempoolIcon from '../base/Svg/Icons/Mempool';
 import BananaGif from '../../images/banana.gif';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import { EXPLORER } from '../../enum/EXPLORER';
+import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
@@ -142,17 +144,23 @@ export const InfoCard: React.FC = () => {
           <>
             <div
               className="explorer-div"
-              onClick={() =>
-                // window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
-                window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank')
-              }
+              onClick={() => {
+                if (settingsContext.explorer === EXPLORER.MEMPOOL) {
+                  window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                } else {
+                  window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                }
+              }}
             >
-              {/* View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
-              <span className="info-mempool-text">
-                View in &nbsp; <MempoolIcon width="6.5rem" height="1.25rem" />
-              </span>
-
-              {/* <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" /> */}
+              {settingsContext.explorer === EXPLORER.MEMPOOL ? (
+                <span className="info-explorer-text">
+                  View in &nbsp; <MempoolIcon width="6.5rem" height="1.25rem" />
+                </span>
+              ) : (
+                <span className="info-explorer-text">
+                  View in Block Explorer <ExportIcon fill="#575757" width="1.5rem" height="1.5rem" />
+                </span>
+              )}
             </div>
           </>
         )}
