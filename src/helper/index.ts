@@ -103,3 +103,7 @@ export const poolShareRound = (amount: number): string => {
 
   return amount.toFixed(2);
 };
+
+export const deepCopy = <T>(oldObject: T): T => {
+  return JSON.parse(JSON.stringify(oldObject)) as T;
+};
