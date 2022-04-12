@@ -24,7 +24,7 @@ export const initialSettingsState: Settings = {
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
   theme: settings?.theme || SELECTED_THEME.NEON,
   exclusiveThemes: [],
-  explorer: EXPLORER.MEMPOOL,
+  explorer: settings?.explorer || EXPLORER.MEMPOOL,
   network: 'testnet',
 };
 
@@ -52,6 +52,7 @@ export const settingsReducer: Reducer<
         slippage: action.payload,
         preferred_unit: state.preferred_unit,
         theme: state.theme,
+        explorer: state.explorer,
       });
       return {
         ...state,
@@ -63,6 +64,7 @@ export const settingsReducer: Reducer<
         slippage: state.slippage,
         preferred_unit: action.payload,
         theme: state.theme,
+        explorer: state.explorer,
       });
 
       return {
@@ -75,8 +77,11 @@ export const settingsReducer: Reducer<
         slippage: state.slippage,
         preferred_unit: state.preferred_unit,
         theme: action.payload,
+        explorer: state.explorer,
       });
+
       document.documentElement.setAttribute('theme', action.payload);
+
       return {
         ...state,
         theme: action.payload,
@@ -89,6 +94,13 @@ export const settingsReducer: Reducer<
       };
 
     case 'SET_EXPLORER':
+      setLocalData({
+        slippage: state.slippage,
+        preferred_unit: state.preferred_unit,
+        theme: state.theme,
+        explorer: action.payload,
+      });
+
       return {
         ...state,
         explorer: action.payload,

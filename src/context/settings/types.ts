@@ -13,7 +13,6 @@ export const SET_NETWORK = 'SET_NETWORK';
 
 export type Settings = SettingsStore & {
   exclusiveThemes: string[];
-  explorer: EXPLORER;
   network: NetworkString;
 };
 
