@@ -7,6 +7,8 @@ export const preferredUnitOptions = [PREFERRED_UNIT.LBTC, PREFERRED_UNIT.mBTC, P
 
 export const explorerOptions = [EXPLORER.BLOCK_STREAM, EXPLORER.MEMPOOL];
 
+export const networkOptions = ['liquid', 'testnet', 'regtest'];
+
 export const slippageFeeOptions = [
   SLIPPAGE_FEE.ZEROPOINTTHREE,
   SLIPPAGE_FEE.ZEROPOINTFIVE,
