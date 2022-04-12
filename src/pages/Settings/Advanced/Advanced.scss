@@ -49,6 +49,7 @@
 
 .advance-item {
   margin-left: 0.5rem;
+  margin-right: 0.5rem;
   margin-bottom: 2.5rem;
 }
 
@@ -58,12 +59,13 @@
 
 .advanced-wallet-button {
   margin-top: 0 !important;
-  width: 50%;
+  width: 100%;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .advance-item {
     margin-left: 1rem;
+    margin-right: 1rem;
   }
 }
 

@@ -6,8 +6,8 @@ import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { useWalletContext, useSettingsContext } from '../../../context';
 import { EXPLORER } from '../../../enum/EXPLORER';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';
+import { explorerOptions, networkOptions } from '../General/utils';
 import info from '../../../images/info2.png';
-import { explorerOptions } from '../General/utils';
 import './Advanced.scss';
 
 export const Advanced = (): JSX.Element => {
@@ -50,6 +50,21 @@ export const Advanced = (): JSX.Element => {
             if (checkedValue) setExplorerContext(checkedValue);
           }}
           checkedValue={settingsContext.explorer}
+        />
+      </div>
+      <div className="advance-item">
+        <div className="advance-item-head">
+          <span className="advance-title">Network</span>
+          <CustomPopover placement="autoHorizontal" title="Explorer" content="Lorem ipsum">
+            <img className="advance-icon" src={info} alt="info" />
+          </CustomPopover>
+        </div>
+
+        <CheckBoxGroup
+          className="explorer"
+          options={networkOptions}
+          onChange={(checkedValue) => console.log(checkedValue)}
+          checkedValue={settingsContext.network}
         />
       </div>
       <div className="advance-item">
