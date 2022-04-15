@@ -147,7 +147,9 @@ export const Navbar: React.FC = (): JSX.Element => {
 
       <li className="navbar-item ">
         <Button
-          className={`navbar-item-button ${selectedTab.startsWith(ROUTE_PATH.POOL) && 'active'}`}
+          className={`navbar-item-button ${
+            (selectedTab.startsWith(ROUTE_PATH.POOL) || selectedTab.startsWith(ROUTE_PATH.CREATE_NEW_POOL)) && 'active'
+          }`}
           onClick={() => {
             history.push({
               pathname: ROUTE_PATH.POOL,
