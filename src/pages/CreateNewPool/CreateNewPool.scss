@@ -1,0 +1,272 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.create-new-pool-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: $bmDeepFir;
+  width: 100%;
+
+  .create-new-pool-page-content {
+    position: relative;
+    margin: 0 auto;
+    border: 2px solid var(--theme-color);
+    border-radius: 1.5rem;
+    padding: 0.75rem;
+    min-height: 20.8125rem;
+    z-index: 6;
+    width: 95%;
+    animation: shrink 0.3s linear;
+    animation-delay: -0.1s;
+
+    @keyframes shrink {
+      from {
+        width: 60rem;
+      }
+      to {
+        width: 45rem;
+      }
+    }
+
+    .create-new-pool-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem 0;
+
+      .create-new-pool-item {
+        padding: 1.5rem;
+        border: 1px solid $bmDimGray;
+        border-radius: 1rem;
+        width: 100%;
+        position: relative;
+
+        .create-new-pool-text {
+          margin-bottom: 0.75rem;
+          text-align: left;
+          font-size: 1rem;
+          font-weight: 500;
+          user-select: none;
+        }
+
+        .create-new-pool-item-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          .create-new-pool-lbtc-icon-content {
+            display: flex;
+            align-items: center;
+            background: #121111;
+            border-radius: 1rem;
+            width: 48%;
+            height: 2.5rem;
+            padding-left: 0.5rem;
+            user-select: none;
+
+            .create-new-pool-img-content {
+              display: flex;
+              align-items: center;
+              color: #f3f3f3;
+
+              .create-new-pool-lbtc-icon {
+                margin-right: 0.5rem;
+              }
+            }
+          }
+
+          .create-new-pool-input {
+            max-width: 5rem;
+            background: $bmBlack;
+            border-width: 0px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            outline: none;
+            color: $bmShadyLady;
+            margin: 0.25rem 0;
+            &::placeholder {
+              color: $bmShadyLady !important;
+              line-height: 2rem;
+              margin-bottom: 2rem;
+            }
+          }
+
+          .create-new-pool-dropdown {
+            .rs-btn {
+              border-radius: 1rem;
+              height: 2.5rem;
+              background-color: var(--theme-color) !important;
+              color: $bmDeepFir !important;
+              font-weight: 600;
+            }
+
+            .rs-dropdown-toggle-caret {
+              top: 12px !important;
+              right: 6px!important;
+              font-size: 20px !important;
+            }
+          }
+        }
+      }
+
+      .create-new-pool-plus-icon {
+        margin: 0.5rem 0;
+
+        .create-new-pool-page-icons {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
+    .create-new-pool-page-footer {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 0.5rem 0;
+
+      .create-new-pool-page-footer-line-item-first {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-right: 2px solid;
+      }
+
+      .create-new-pool-page-footer-line-item-second {
+        width: 36%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-left: 2px solid;
+        border-right: 2px solid;
+      }
+
+      .create-new-pool-page-footer-line-item-third {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .create-new-pool-text-icon-content {
+        display: flex;
+        align-items: center;
+        user-select: none;
+
+        .create-new-pool-input-icons path {
+          fill: var(--theme-color);
+        }
+      }
+
+      .create-new-pool-page-footer-line-item-texts {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+
+      .create-new-pool-page-icons {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .create-new-pool-page-footer-line-item-values {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: $bmShadyLady;
+        max-width: 13.5rem;
+        overflow: hidden;
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .create-new-pool-button-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .create-new-pool-button {
+      width: 100%;
+      height: 2.75rem;
+      border-radius: 1rem !important;
+      font-weight: 600 !important;
+      color: $bmDeepFir !important;
+      background: var(--theme-color) !important;
+      border-width: 0 !important;
+      opacity: 0.9;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .create-new-pool-page-main {
+    .create-new-pool-page-content {
+      width: 40rem;
+      padding: 1.5rem;
+
+      .create-new-pool-main {
+        margin-top: 2rem;
+        padding: 0;
+        flex-direction: row;
+
+        .create-new-pool-item {
+          .create-new-pool-item-content {
+            .create-new-pool-input-div {
+              padding: 0.25rem 0.5rem;
+
+              .create-new-pool-input-content {
+                margin-top: 0.5rem;
+                padding-left: 0.5rem;
+              }
+
+              .create-new-pool-input {
+                margin: 0.5rem 0;
+                padding-left: 0.5rem;
+              }
+            }
+          }
+        }
+
+        .create-new-pool-plus-icon {
+          margin: 0 1rem;
+
+          .create-new-pool-page-icons {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+        }
+      }
+
+      .create-new-pool-page-footer {
+        margin: 2rem 0;
+
+        .create-new-pool-page-footer-line-item-first {
+          width: 32%;
+          border-right: unset;
+        }
+
+        .create-new-pool-page-footer-line-item-third {
+          width: 32%;
+        }
+      }
+
+      .create-new-pool-button {
+        width: 20rem;
+        padding: 0 !important;
+      }
+    }
+  }
+}
