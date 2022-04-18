@@ -1,17 +1,22 @@
+import Decimal from 'decimal.js';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Content, Dropdown } from 'rsuite';
+import { api, poolDeployment } from '@bitmatrix/lib';
+import { Content, Dropdown } from 'rsuite';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
 import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
-import { useSettingsContext, useWalletContext } from '../../context';
+import { WalletButton } from '../../components/WalletButton/WalletButton';
+import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../context';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { getAssetPrecession } from '../../helper';
+import { getAssetPrecession, getPrimaryPoolConfig } from '../../helper';
 import plus from '../../images/plus.png';
+import { notify } from '../../components/utils/utils';
 import './CreateNewPool.scss';
 
 type Asset = {
@@ -22,14 +27,19 @@ type Asset = {
 };
 
 export const CreateNewPool: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [tokenAmount, setTokenAmount] = useState<string>('');
   const [quoteAmount, setQuoteAmount] = useState<string>('');
   const [selectedAsset, setSelectedAsset] = useState<Asset>();
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
+  const { poolsContext } = usePoolContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
-  const assetList: Asset[] | undefined = walletContext?.balances.map((balance) => balance.asset);
+  const assetList: Asset[] | undefined = walletContext?.balances
+    .filter((balance) => balance.asset.ticker !== 'L-BTC')
+    .map((balance) => balance.asset);
 
   const history = useHistory();
 
@@ -39,6 +49,120 @@ export const CreateNewPool: React.FC = () => {
 
   const onChangeTokenAmount = (input: string) => {
     setTokenAmount(input);
+  };
+
+  const inputsIsValid = () => {
+    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext) {
+      let tokenIsValid = false;
+      let quoteIsValid = false;
+
+      const currentPool = poolsContext[0];
+
+      if (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0) {
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+
+        const totalFee =
+          primaryPoolConfig.baseFee.number +
+          primaryPoolConfig.commitmentTxFee.number +
+          primaryPoolConfig.defaultOrderingFee.number +
+          primaryPoolConfig.serviceFee.number +
+          1000;
+
+        const quoteAssetId = currentPool.quote.asset;
+        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+
+        const tokenAssetId = selectedAsset?.assetHash;
+        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+
+        let quoteAmountWallet = 0;
+        if (quoteAmountInWallet && quoteAmountInWallet > 0) {
+          quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
+        }
+
+        let tokenAmountWallet = '';
+        if (tokenAmountInWallet && tokenAmountInWallet > 0) {
+          tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
+
+        if (Number(quoteAmount) <= quoteAmountWallet && quoteAmountWallet > 0) {
+          quoteIsValid = true;
+        } else {
+          quoteIsValid = false;
+        }
+
+        if (Number(tokenAmount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
+          tokenIsValid = true;
+        } else {
+          tokenIsValid = false;
+        }
+
+        return { tokenIsValid, quoteIsValid };
+      }
+    }
+    return { tokenIsValid: true, quoteIsValid: true };
+  };
+
+  const createNewPoolClick = async () => {
+    if (walletContext?.marina) {
+      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
+      const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      let fundingTxId;
+      try {
+        setLoading(true);
+        const fundingTx = await walletContext.marina.sendTransaction([
+          {
+            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            value: 500,
+            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+          },
+          {
+            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            value: 500,
+            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+          },
+          {
+            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            value: quoteAmountN,
+            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+          },
+          {
+            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            value: tokenAmountN,
+            asset: selectedAsset?.assetHash || '',
+          },
+        ]);
+
+        fundingTxId = await api.sendRawTransaction(fundingTx.hex);
+      } catch (err: any) {
+        notify(err.toString(), 'Wallet Error : ', 'error');
+        setLoading(false);
+        return Promise.reject();
+      }
+
+      setLoading(true);
+
+      const addressInformation = await walletContext.marina.getNextChangeAddress();
+
+      if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+        setQuoteAmount('');
+        setTokenAmount('');
+
+        const newPool = poolDeployment.poolDeploy(
+          fundingTxId,
+          selectedAsset?.assetHash || '',
+          quoteAmountN,
+          tokenAmountN,
+          addressInformation.publicKey,
+        );
+
+        await api.sendRawTransaction(newPool);
+
+        setLoading(false);
+      } else {
+        notify('Pool could not be created.', 'Wallet Error : ', 'error');
+        setLoading(false);
+      }
+    }
   };
 
   return (
@@ -153,9 +277,21 @@ export const CreateNewPool: React.FC = () => {
             </div>
           </div>
           <div className="create-new-pool-button-content">
-            <Button onClick={() => console.log('created')} className="create-new-pool-button">
-              Create New Liquidity Pool
-            </Button>
+            <WalletButton
+              text=" Create New Liquidity Pool"
+              loading={loading}
+              onClick={() => {
+                createNewPoolClick();
+              }}
+              disabled={
+                Number(quoteAmount) <= 0 ||
+                Number(tokenAmount) <= 0 ||
+                !inputsIsValid()?.tokenIsValid ||
+                !inputsIsValid()?.quoteIsValid ||
+                !selectedAsset
+              }
+              className="create-new-pool-button"
+            />
           </div>
         </div>
       </Content>
