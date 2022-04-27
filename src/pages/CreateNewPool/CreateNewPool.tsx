@@ -19,11 +19,7 @@ import { notify } from '../../components/utils/utils';
 import './CreateNewPool.scss';
 import { Asset } from '../../model/Asset';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-
-enum MODAL_TYPE {
-  PAIR_1,
-  PAIR_2,
-}
+import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,9 +29,8 @@ export const CreateNewPool: React.FC = () => {
   const [selectedPair2Asset, setSelectedPair2Asset] = useState<Asset>();
   const [pair1AssetList, setPair1AssetList] = useState<Asset[]>([]);
   const [pair2AssetList, setPair2AssetList] = useState<Asset[]>([]);
-  const [showAssetListModal, setShowAssetListModal] = useState<{ show: boolean; modalType?: MODAL_TYPE }>({
-    show: false,
-  });
+  const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
+  const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
@@ -228,10 +223,26 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className="wallet-button"
                     onClick={() => {
-                      setShowAssetListModal({ show: true, modalType: MODAL_TYPE.PAIR_1 });
+                      setShowPair1AssetListModal(true);
                     }}
                   >
-                    {selectedPair1Asset ? selectedPair1Asset.ticker : 'Select an asset'}
+                    {selectedPair1Asset ? (
+                      <>
+                        <div className="create-new-pool-lbtc-icon-content">
+                          <div className="create-new-pool-img-content">
+                            <AssetIcon
+                              asset={selectedPair1Asset}
+                              className="create-new-pool-lbtc-icon"
+                              width="1.5rem"
+                              height="1.5rem"
+                            />
+                            {selectedPair1Asset.ticker}
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      'Select an asset'
+                    )}
                   </Button>
 
                   {/* <Dropdown
@@ -279,7 +290,7 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className="wallet-button"
                     onClick={() => {
-                      setShowAssetListModal({ show: true, modalType: MODAL_TYPE.PAIR_2 });
+                      setShowPair2AssetListModal(true);
                     }}
                   >
                     {selectedPair2Asset ? selectedPair2Asset.ticker : 'Select an asset'}
@@ -329,14 +340,28 @@ export const CreateNewPool: React.FC = () => {
             />
           </div>
           <AssetListModal
-            show={showAssetListModal.show}
+            show={showPair1AssetListModal}
+            selectedAsset={selectedPair1Asset}
             close={() => {
-              setShowAssetListModal({ ...showAssetListModal, show: false });
+              setShowPair1AssetListModal(false);
             }}
-            onSelectAsset={() => {
-              console.log('bas');
+            onSelectAsset={(asset) => {
+              setSelectedPair1Asset(asset);
+              setShowPair1AssetListModal(false);
             }}
-            assetList={showAssetListModal.modalType === MODAL_TYPE.PAIR_1 ? pair1AssetList : pair2AssetList}
+            assetList={pair1AssetList}
+          />
+          <AssetListModal
+            show={showPair2AssetListModal}
+            close={() => {
+              setShowPair2AssetListModal(false);
+            }}
+            selectedAsset={selectedPair2Asset}
+            onSelectAsset={(asset) => {
+              setSelectedPair2Asset(asset);
+              setShowPair2AssetListModal(false);
+            }}
+            assetList={pair2AssetList}
           />
         </div>
       </Content>

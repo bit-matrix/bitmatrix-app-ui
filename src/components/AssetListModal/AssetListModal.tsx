@@ -7,11 +7,12 @@ import './AssetListModal.scss';
 type Props = {
   show: boolean;
   assetList: Asset[];
+  selectedAsset?: Asset;
   close: () => void;
   onSelectAsset: (asset: Asset) => void;
 };
 
-export const AssetListModal: React.FC<Props> = ({ show, assetList, close, onSelectAsset }) => {
+export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
   return (
     <Modal className="asset-list-modal" size="xs" backdrop={true} open={show} onClose={close}>
       <Modal.Header className="asset-list-header">
@@ -21,7 +22,13 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, onSele
         <ul className="asset-list-item-ul">
           {assetList.map((asset) => {
             return (
-              <li key={asset.assetHash} className="asset-list-item">
+              <li
+                key={asset.assetHash}
+                onClick={() => {
+                  onSelectAsset(asset);
+                }}
+                className={`asset-list-item ${selectedAsset?.assetHash === asset.assetHash && 'selected-asset-item'}`}
+              >
                 <div className="asset-list-ticker-div">
                   <AssetIcon asset={asset} width="2rem" height="2rem" />
                   <div className="asset-ticker">{asset.name}</div>

@@ -34,6 +34,15 @@
   margin: 0.75rem 0;
   font-size: 1rem;
   font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    background-color: aqua;
+  }
+}
+
+.selected-asset-item {
+  background-color: red;
 }
 
 .asset-ticker {

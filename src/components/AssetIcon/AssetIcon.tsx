@@ -9,17 +9,18 @@ type Props = {
   asset: Asset;
   width?: string;
   height?: string;
+  className?: string;
 };
 
-export const AssetIcon: React.FC<Props> = ({ asset, width = '1.75rem', height = '1.75rem' }) => {
+export const AssetIcon: React.FC<Props> = ({ asset, className, width = '1.75rem', height = '1.75rem' }) => {
   switch (asset.assetHash) {
     case TESTNET_ASSET_ID.LBTC:
-      return <LbtcIcon width={width} height={height} />;
+      return <LbtcIcon className={className} width={width} height={height} />;
 
     case TESTNET_ASSET_ID.USDT:
-      return <TetherIcon width={width} height={height} />;
+      return <TetherIcon className={className} width={width} height={height} />;
 
     default:
-      return <UnknownIcon width={width} height={height} />;
+      return <UnknownIcon className={className} width={width} height={height} />;
   }
 };
