@@ -56,23 +56,14 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const inputsIsValid = () => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext) {
-      let tokenIsValid = false;
-      let quoteIsValid = false;
-
-      const currentPool = poolsContext[0];
+    if (walletContext) {
+      let pair1IsValid = false;
+      let pair2IsValid = false;
 
       if (parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+        const totalFee = 1000;
 
-        const totalFee =
-          primaryPoolConfig.baseFee.number +
-          primaryPoolConfig.commitmentTxFee.number +
-          primaryPoolConfig.defaultOrderingFee.number +
-          primaryPoolConfig.serviceFee.number +
-          1000;
-
-        const quoteAssetId = currentPool.quote.asset;
+        const quoteAssetId = selectedPair1Asset?.assetHash;
         const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
         const tokenAssetId = selectedPair2Asset?.assetHash;
@@ -89,21 +80,22 @@ export const CreateNewPool: React.FC = () => {
         }
 
         if (Number(pair1Amount) <= quoteAmountWallet && quoteAmountWallet > 0) {
-          quoteIsValid = true;
+          pair1IsValid = true;
         } else {
-          quoteIsValid = false;
+          pair1IsValid = false;
         }
 
         if (Number(pair2Amount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
-          tokenIsValid = true;
+          pair2IsValid = true;
         } else {
-          tokenIsValid = false;
+          pair2IsValid = false;
         }
 
-        return { tokenIsValid, quoteIsValid };
+        return { pair1IsValid, pair2IsValid };
       }
     }
-    return { tokenIsValid: true, quoteIsValid: true };
+
+    return { pair1IsValid: true, pair2IsValid: true };
   };
 
   const createNewPoolClick = async () => {
