@@ -7,17 +7,19 @@ import UnknownIcon from '../base/Svg/Icons/Unknown';
 
 type Props = {
   asset: Asset;
+  width?: string;
+  height?: string;
 };
 
-export const AssetIcon: React.FC<Props> = ({ asset }) => {
+export const AssetIcon: React.FC<Props> = ({ asset, width = '1.75rem', height = '1.75rem' }) => {
   switch (asset.assetHash) {
     case TESTNET_ASSET_ID.LBTC:
-      return <LbtcIcon width="1.75rem" height="1.75rem" />;
+      return <LbtcIcon width={width} height={height} />;
 
     case TESTNET_ASSET_ID.USDT:
-      return <TetherIcon width="1.75rem" height="1.75rem" />;
+      return <TetherIcon width={width} height={height} />;
 
     default:
-      return <UnknownIcon width="1.75rem" height="1.75rem" />;
+      return <UnknownIcon width={width} height={height} />;
   }
 };

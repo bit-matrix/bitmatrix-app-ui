@@ -1,0 +1,62 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.asset-list-modal {
+  padding-top: 1rem !important;
+  margin: 0 auto !important;
+  width: 21rem !important;
+  .rs-modal-content {
+    background-color: $bmBlackRussian !important;
+    border: 2px solid $bmBlackRussian;
+  }
+  .rs-modal-dialog {
+    transform: translateY(-50%);
+    top: 50vh;
+    margin: 0 auto;
+    position: relative;
+  }
+}
+
+.asset-list-header {
+  .rs-modal-header-close {
+    font-size: 1.2rem !important;
+  }
+}
+
+.asset-list-title {
+  font-size: 1.4rem !important;
+}
+
+.asset-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0.75rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.asset-ticker {
+  color: $bmVeryLightGray;
+  margin-left: 1rem;
+}
+
+.asset-list-ticker-div {
+  display: flex;
+  align-items: center;
+}
+
+@media only screen and (min-width: 768px) {
+  .asset-list-modal {
+    width: 25rem !important;
+  }
+}
+
+@media only screen and (max-height: 650px) {
+  .asset-list-modal {
+    .rs-modal-dialog {
+      transform: translateY(-50%);
+      top: 40vh;
+    }
+  }
+}

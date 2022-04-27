@@ -1,7 +1,6 @@
 import React from 'react';
 import { Pool } from '@bitmatrix/models';
 import { calculateChartData } from '../utils/utils';
-import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import Numeral from 'numeral';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
