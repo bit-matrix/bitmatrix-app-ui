@@ -25,6 +25,7 @@ import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidi
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
+import { CreateNewPool } from '../../pages/CreateNewPool/CreateNewPool';
 import { detectProvider } from 'marina-provider';
 import { Wallet } from '../../lib/wallet';
 import { IWallet } from '../../lib/wallet/IWallet';
@@ -213,6 +214,7 @@ export const AppRouter = (): JSX.Element => {
                 <Route exact path={ROUTE_PATH.POOL} component={Pool} />
                 <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
                 <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
+                <Route exact path={ROUTE_PATH.CREATE_NEW_POOL} component={CreateNewPool} />
                 <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
                 <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
                 <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
