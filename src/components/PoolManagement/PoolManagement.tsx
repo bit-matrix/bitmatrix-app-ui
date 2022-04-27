@@ -120,7 +120,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
             <Button
               appearance="default"
               className="pm-add-button pm-create-new-pool"
-              onClick={() => console.log('create new pool')}
+              onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
             >
               Create New Pool
             </Button>
