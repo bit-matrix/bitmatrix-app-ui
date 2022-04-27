@@ -143,11 +143,15 @@ const chartDataDiff = (currentData: number, previousData: number) => {
   let icon = <ArrowDownIcon fill="#f44336" />;
 
   if (currentData > previousData) {
-    currentValue = ((currentData - previousData) / previousData) * 100;
+    if (previousData !== 0) {
+      currentValue = ((currentData - previousData) / previousData) * 100;
+    }
     direction = 'up';
     icon = <ArrowUpIcon fill="#4caf50" />;
   } else {
-    currentValue = ((currentData - previousData) / currentData) * 100;
+    if (currentData !== 0) {
+      currentValue = ((currentData - previousData) / currentData) * 100;
+    }
     direction = 'down';
     icon = <ArrowDownIcon fill="#f44336" />;
   }
