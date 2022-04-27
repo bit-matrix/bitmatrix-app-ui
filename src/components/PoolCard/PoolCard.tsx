@@ -30,8 +30,8 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
           <ul className="pool-card-list">
             <li className="column-1-item">#{rank}</li>
             <li className="column-1-item ">
-              <AssetIcon symbol={pool.quote.ticker as SWAP_ASSET} />
-              <AssetIcon symbol={pool.token.ticker as SWAP_ASSET} />
+              <AssetIcon asset={{ assetHash: pool.quote.asset, precision: 0 }} />
+              <AssetIcon asset={{ assetHash: pool.token.asset, precision: 0 }} />
             </li>
             <li className="column-1-item">
               <div>
