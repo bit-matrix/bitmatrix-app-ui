@@ -9,21 +9,15 @@ import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
-import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../context';
+import { useSettingsContext, useWalletContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { getAssetPrecession, getPrimaryPoolConfig } from '../../helper';
+import { getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
 import './CreateNewPool.scss';
-
-type Asset = {
-  assetHash: string;
-  ticker?: string | undefined;
-  name?: string | undefined;
-  precision: number;
-};
+import { Asset } from '../../model/Asset';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -34,8 +28,8 @@ export const CreateNewPool: React.FC = () => {
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
-  const { poolsContext } = usePoolContext();
-  const { poolConfigContext } = usePoolConfigContext();
+
+  const history = useHistory();
 
   const pair1AssetList: Asset[] | undefined = walletContext?.balances
     .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
@@ -44,8 +38,6 @@ export const CreateNewPool: React.FC = () => {
   const pair2AssetList: Asset[] | undefined = walletContext?.balances
     .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
     .map((balance) => balance.asset);
-
-  const history = useHistory();
 
   const onChangePair1Amount = (input: string) => {
     setPair1Amount(input);
