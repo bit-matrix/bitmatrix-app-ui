@@ -221,25 +221,21 @@ export const CreateNewPool: React.FC = () => {
                 <div>
                   <Button
                     appearance="default"
-                    className="wallet-button"
+                    className={`asset-button ${selectedPair1Asset && 'asset-button-selected'}`}
                     onClick={() => {
                       setShowPair1AssetListModal(true);
                     }}
                   >
                     {selectedPair1Asset ? (
-                      <>
-                        <div className="create-new-pool-lbtc-icon-content">
-                          <div className="create-new-pool-img-content">
-                            <AssetIcon
-                              asset={selectedPair1Asset}
-                              className="create-new-pool-lbtc-icon"
-                              width="1.5rem"
-                              height="1.5rem"
-                            />
-                            {selectedPair1Asset.ticker}
-                          </div>
-                        </div>
-                      </>
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={selectedPair1Asset}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{selectedPair1Asset.ticker}</div>
+                      </div>
                     ) : (
                       'Select an asset'
                     )}
@@ -288,7 +284,7 @@ export const CreateNewPool: React.FC = () => {
                 <div>
                   <Button
                     appearance="default"
-                    className="wallet-button"
+                    className={`asset-button ${selectedPair2Asset && 'asset-button-selected'}`}
                     onClick={() => {
                       setShowPair2AssetListModal(true);
                     }}
