@@ -346,7 +346,6 @@ export const CreateNewPool: React.FC = () => {
               setShowPair1AssetListModal(false);
             }}
             assetList={pair1AssetList}
-            showSearchBar={false}
           />
           <AssetListModal
             show={showPair2AssetListModal}
@@ -359,7 +358,6 @@ export const CreateNewPool: React.FC = () => {
               setShowPair2AssetListModal(false);
             }}
             assetList={pair2AssetList}
-            showSearchBar={true}
           />
         </div>
       </Content>
