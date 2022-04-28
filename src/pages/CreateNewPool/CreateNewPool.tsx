@@ -16,10 +16,10 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
-import './CreateNewPool.scss';
 import { Asset } from '../../model/Asset';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -60,48 +60,59 @@ export const CreateNewPool: React.FC = () => {
     setPair2Amount(input);
   };
 
-  // const inputsIsValid = () => {
-  //   if (walletContext) {
-  //     let pair1IsValid = false;
-  //     let pair2IsValid = false;
+  const inputsIsValid = () => {
+    if (walletContext) {
+      let pair1IsValid = false;
+      let pair2IsValid = false;
 
-  //     if (parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) {
-  //       const totalFee = 1000;
+      if (parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) {
+        const totalFee = 1000;
 
-  //       const quoteAssetId = selectedPair1Asset?.assetHash;
-  //       const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const quoteAssetId = selectedPair1Asset?.assetHash;
+        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-  //       const tokenAssetId = selectedPair2Asset?.assetHash;
-  //       const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        const tokenAssetId = selectedPair2Asset?.assetHash;
+        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-  //       let quoteAmountWallet = 0;
-  //       if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-  //         quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
-  //       }
+        let quoteAmountWallet = 0;
+        if (quoteAmountInWallet && quoteAmountInWallet > 0) {
+          quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
+        }
 
-  //       let tokenAmountWallet = '';
-  //       if (tokenAmountInWallet && tokenAmountInWallet > 0) {
-  //         tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-  //       }
+        let tokenAmountWallet = '';
+        if (tokenAmountInWallet && tokenAmountInWallet > 0) {
+          tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+        }
 
-  //       if (Number(pair1Amount) <= quoteAmountWallet && quoteAmountWallet > 0) {
-  //         pair1IsValid = true;
-  //       } else {
-  //         pair1IsValid = false;
-  //       }
+        if (Number(pair1Amount) <= quoteAmountWallet && quoteAmountWallet > 0) {
+          pair1IsValid = true;
+        } else {
+          pair1IsValid = false;
+        }
 
-  //       if (Number(pair2Amount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
-  //         pair2IsValid = true;
-  //       } else {
-  //         pair2IsValid = false;
-  //       }
+        if (Number(pair2Amount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
+          pair2IsValid = true;
+        } else {
+          pair2IsValid = false;
+        }
 
-  //       return { pair1IsValid, pair2IsValid };
-  //     }
-  //   }
+        return { pair1IsValid, pair2IsValid };
+      }
+    }
 
-  //   return { pair1IsValid: true, pair2IsValid: true };
-  // };
+    return { pair1IsValid: true, pair2IsValid: true };
+  };
+
+  const liquidityPoolButtonDisabled = (): boolean => {
+    return (
+      Number(pair1Amount) <= 0 ||
+      Number(pair2Amount) <= 0 ||
+      !inputsIsValid()?.pair1IsValid ||
+      !inputsIsValid()?.pair2IsValid ||
+      !selectedPair1Asset ||
+      !selectedPair2Asset
+    );
+  };
 
   const createNewPoolClick = async () => {
     if (walletContext?.marina && selectedPair1Asset && selectedPair2Asset) {
@@ -205,7 +216,11 @@ export const CreateNewPool: React.FC = () => {
         />
         <div>
           <div className="create-new-pool-main">
-            <div className="create-new-pool-item">
+            <div
+              className={`create-new-pool-item ${
+                !inputsIsValid()?.pair1IsValid ? 'create-new-pool-invalid-content' : ''
+              }`}
+            >
               <div className="create-new-pool-text">Pool Pair 1</div>
               <div className="create-new-pool-item-content">
                 <div>
@@ -269,7 +284,11 @@ export const CreateNewPool: React.FC = () => {
             <div className="create-new-pool-plus-icon">
               <img className="create-new-pool-page-icons" src={plus} alt="" />
             </div>
-            <div className="create-new-pool-item">
+            <div
+              className={`create-new-pool-item ${
+                !inputsIsValid()?.pair2IsValid ? 'create-new-pool-invalid-content' : ''
+              }`}
+            >
               <div className="create-new-pool-text">Pool Pair 2</div>
               <div className="create-new-pool-item-content">
                 <div>
@@ -289,7 +308,19 @@ export const CreateNewPool: React.FC = () => {
                       setShowPair2AssetListModal(true);
                     }}
                   >
-                    {selectedPair2Asset ? selectedPair2Asset.ticker : 'Select an asset'}
+                    {selectedPair2Asset ? (
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={selectedPair2Asset}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{selectedPair2Asset.ticker}</div>
+                      </div>
+                    ) : (
+                      'Select an asset'
+                    )}
                   </Button>
                 </div>
               </div>
@@ -325,13 +356,7 @@ export const CreateNewPool: React.FC = () => {
               onClick={() => {
                 createNewPoolClick();
               }}
-              // disabled={
-              //   Number(quoteAmount) <= 0 ||
-              //   Number(tokenAmount) <= 0 ||
-              //   !inputsIsValid()?.tokenIsValid ||
-              //   !inputsIsValid()?.quoteIsValid ||
-              //   !selectedAsset
-              // }
+              disabled={liquidityPoolButtonDisabled()}
               className="create-new-pool-button"
             />
           </div>
