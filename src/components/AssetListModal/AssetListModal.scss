@@ -18,12 +18,20 @@
   }
 }
 
+
+
 .asset-list-header {
-  padding: 1.25rem 0 0 1.25rem;
+  padding: 1.25rem 1.5rem 0 1.5rem;
   .rs-modal-header-close {
     font-size: 1.2rem !important;
-    top: 12px !important;
+    font-weight: 800;
+    top: 8px !important;
+    right: 26px !important;
   }
+}
+
+.asset-list-modal-body {
+  margin-top: 0 !important;
 }
 
 .asset-modal-input {
@@ -31,6 +39,7 @@
   margin: 0 1.5rem;
   height: 3rem;
   border-radius: 1rem;
+  background-color: $bmBlackRussian !important;
 
 
   &:hover:not(:disabled) {
@@ -49,7 +58,7 @@
 }
 
 .asset-list-title {
-  font-size: 1.4rem !important;
+  font-size: 1rem !important;
 }
 
 .asset-list-item {
@@ -63,7 +72,7 @@
   cursor: pointer;
   color: $bmVeryLightGray;
   border-radius: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   
   &:hover {
     background-color: $bmFrenchGray;

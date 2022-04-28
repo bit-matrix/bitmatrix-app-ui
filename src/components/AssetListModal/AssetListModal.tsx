@@ -10,17 +10,27 @@ type Props = {
   selectedAsset?: Asset;
   close: () => void;
   onSelectAsset: (asset: Asset) => void;
+  showSearchBar: boolean;
 };
 
-export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
+export const AssetListModal: React.FC<Props> = ({
+  show,
+  assetList,
+  close,
+  selectedAsset,
+  onSelectAsset,
+  showSearchBar = false,
+}) => {
   return (
     <Modal className="asset-list-modal" size="xs" backdrop={true} open={show} onClose={close}>
       <Modal.Header className="asset-list-header">
         <Modal.Title className="asset-list-title">Select an asset</Modal.Title>
       </Modal.Header>
 
-      <Modal.Body>
-        <Input className="asset-modal-input" placeholder="Search name,ticker symbol or paste assed ID" />
+      <Modal.Body className={`${!showSearchBar && 'asset-list-modal-body'}`}>
+        {showSearchBar && (
+          <Input className="asset-modal-input" placeholder="Search name,ticker symbol or paste assed ID" />
+        )}
         <hr className="divider" />
         <ul className="asset-list-item-ul">
           {assetList.map((asset) => {
