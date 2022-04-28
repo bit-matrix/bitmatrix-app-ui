@@ -2,8 +2,8 @@ import React from 'react';
 import Svg from '../Svg';
 import { IconSvg } from './IconSvg';
 
-const UnknownIcon: React.FC<IconSvg> = ({ fill, bgColor, width, height }) => (
-  <Svg fill={fill} bgColor={bgColor} width={width} height={height} viewBox="0 0 32 33">
+const UnknownIcon: React.FC<IconSvg> = ({ fill, bgColor, width, height, className }) => (
+  <Svg fill={fill} className={className} bgColor={bgColor} width={width} height={height} viewBox="0 0 32 33">
     <path
       fillRule="evenodd"
       clipRule="evenodd"
