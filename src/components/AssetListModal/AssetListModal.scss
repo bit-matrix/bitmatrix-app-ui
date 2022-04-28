@@ -6,7 +6,9 @@
   width: 21rem !important;
   .rs-modal-content {
     background-color: $bmBlackRussian !important;
-    border: 2px solid $bmBlackRussian;
+    border: 2px solid #212121;
+    border-radius: 1rem;
+    padding: 0 !important;
   }
   .rs-modal-dialog {
     transform: translateY(-50%);
@@ -17,9 +19,33 @@
 }
 
 .asset-list-header {
+  padding: 1.25rem 0 0 1.25rem;
   .rs-modal-header-close {
     font-size: 1.2rem !important;
+    top: 12px !important;
   }
+}
+
+.asset-modal-input {
+  width: 21.75rem;
+  margin: 0 1.5rem;
+  height: 3rem;
+  border-radius: 1rem;
+
+
+  &:hover:not(:disabled) {
+    border-color: var(--theme-color) !important;
+  }
+
+  &:focus {
+    border-color: $bmBoltgunMetal !important;
+    box-shadow: none !important;
+  }
+}
+
+.divider {
+  border-top: 1px solid #212121;
+  width: 100%;
 }
 
 .asset-list-title {
@@ -31,28 +57,35 @@
   align-items: center;
   justify-content: space-between;
   list-style: none;
-  margin: 0.75rem 0;
+  margin: 0.25rem 0;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-
+  color: $bmVeryLightGray;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  
   &:hover {
-    background-color: aqua;
+    background-color: $bmFrenchGray;
+    color: $bmNero;
   }
 }
 
 .selected-asset-item {
-  background-color: red;
+  background-color:$bmBoltgunMetal;
 }
 
 .asset-ticker {
-  color: $bmVeryLightGray;
   margin-left: 1rem;
 }
 
 .asset-list-ticker-div {
   display: flex;
   align-items: center;
+}
+
+.asset-list-hash {
+  opacity: 0.6;
 }
 
 @media only screen and (min-width: 768px) {

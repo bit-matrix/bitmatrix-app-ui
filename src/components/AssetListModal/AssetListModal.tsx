@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'rsuite';
+import { Input, Modal } from 'rsuite';
 import { Asset } from '../../model/Asset';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import './AssetListModal.scss';
@@ -18,7 +18,10 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
       <Modal.Header className="asset-list-header">
         <Modal.Title className="asset-list-title">Select an asset</Modal.Title>
       </Modal.Header>
+
       <Modal.Body>
+        <Input className="asset-modal-input" placeholder="Search name,ticker symbol or paste assed ID" />
+        <hr className="divider" />
         <ul className="asset-list-item-ul">
           {assetList.map((asset) => {
             return (
@@ -33,7 +36,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
                   <AssetIcon asset={asset} width="2rem" height="2rem" />
                   <div className="asset-ticker">{asset.name}</div>
                 </div>
-                <div>
+                <div className="asset-list-hash">
                   {'0x' +
                     asset.assetHash.substring(0, 4) +
                     '..' +
