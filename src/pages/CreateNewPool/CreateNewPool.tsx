@@ -9,7 +9,7 @@ import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
-import { useSettingsContext, useWalletContext } from '../../context';
+import { useSettingsContext, useWalletContext, usePoolContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
@@ -35,6 +35,7 @@ export const CreateNewPool: React.FC = () => {
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
+  const { poolsContext } = usePoolContext();
 
   const history = useHistory();
 
@@ -190,6 +191,36 @@ export const CreateNewPool: React.FC = () => {
     }
   };
 
+  const calcUsdtPrice = (lbtcPrice: number, usdtPrice: number) => {
+    return (usdtPrice / lbtcPrice / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+  };
+
+  const calcLpValues = () => {
+    if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+      if (selectedPair1Asset?.ticker === 'L-BTC') {
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(20, Number(pair1Amount));
+
+        const initialTVL = Number(calcUsdtPrice(Number(pair1Amount), Number(poolsContext[0].token.value))) * 2;
+        const initialAssetPrice = initialLPCirculation !== 0 ? initialTVL / initialLPCirculation! : 0;
+        return {
+          initialLPCirculation,
+          initialTVL,
+          initialAssetPrice,
+        };
+      } else {
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(1000000, Number(pair1Amount)) || 0;
+        const initialTVL = Number(pair1Amount);
+        const initialAssetPrice = initialLPCirculation !== 0 ? initialTVL / initialLPCirculation : 0;
+        return {
+          initialLPCirculation,
+          initialTVL,
+          initialAssetPrice,
+        };
+      }
+    }
+    return { initialLPCirculation: '0', initialTVL: '0', initialAssetPrice: '0' };
+  };
+
   return (
     <div className="create-new-pool-page-main">
       <Content className="create-new-pool-page-content">
@@ -338,21 +369,21 @@ export const CreateNewPool: React.FC = () => {
                 <span className="create-new-pool-page-footer-line-item-texts">Initial LP circulation</span>
                 <LpIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialLPCirculation}</div>
             </div>
             <div className="create-new-pool-page-footer-line-item-second mobile-hidden">
               <div className="create-new-pool-text-icon-content">
                 <span className="create-new-pool-page-footer-line-item-texts">Initial TVL</span>
                 <TVLIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialTVL}</div>
             </div>
             <div className="create-new-pool-page-footer-line-item-third">
               <div className="create-new-pool-text-icon-content">
                 <span className="create-new-pool-page-footer-line-item-texts">Initial asset price</span>
                 <PriceIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialAssetPrice}</div>
             </div>
           </div>
           <div className="create-new-pool-button-content">
