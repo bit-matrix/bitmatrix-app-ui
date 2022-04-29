@@ -11,10 +11,29 @@
     padding: 0 !important;
   }
   .rs-modal-dialog {
-    transform: translateY(-50%);
-    top: 50vh;
+    // transform: translateY(-50%);
+    top: 10vh;
     margin: 0 auto;
     position: relative;
+  }
+
+  .rs-modal-body {
+    max-height: 350px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    &::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #4d4e4f;
+    }
   }
 }
 
@@ -96,14 +115,15 @@
 @media only screen and (min-width: 768px) {
   .asset-list-modal {
     width: 25rem !important;
+    top: 12vh;
   }
 }
 
 @media only screen and (max-height: 650px) {
   .asset-list-modal {
     .rs-modal-dialog {
-      transform: translateY(-50%);
-      top: 40vh;
+      // transform: translateY(-50%);
+      top: 15vh;
     }
   }
 }
