@@ -66,7 +66,7 @@ export const CreateNewPool: React.FC = () => {
       let pair1IsValid = false;
       let pair2IsValid = false;
 
-      if (parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) {
+      if ((parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) && selectedPair1Asset && selectedPair2Asset) {
         const totalFee = 1000;
 
         const quoteAssetId = selectedPair1Asset?.assetHash;
@@ -96,7 +96,6 @@ export const CreateNewPool: React.FC = () => {
         } else {
           pair2IsValid = false;
         }
-
         return { pair1IsValid, pair2IsValid };
       }
     }
