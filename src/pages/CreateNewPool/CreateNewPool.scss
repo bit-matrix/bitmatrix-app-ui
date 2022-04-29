@@ -103,6 +103,21 @@
             color: #f3f3f3 !important;
           }
 
+          .asset-button-default-text-container {
+            display: flex;
+            align-items: center;
+
+            .asset-button-default-text {
+              margin-right: 0.5rem;
+            }
+
+            .asset-arrow-icon {
+              transform: translateY(3px);
+            }
+
+
+          }
+
           .create-new-pool-input {
             max-width: 5rem;
             background: $bmBlack;

@@ -19,6 +19,7 @@ import { notify } from '../../components/utils/utils';
 import { Asset } from '../../model/Asset';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
@@ -252,7 +253,10 @@ export const CreateNewPool: React.FC = () => {
                         <div>{selectedPair1Asset.ticker}</div>
                       </div>
                     ) : (
-                      'Select an asset'
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
                     )}
                   </Button>
 
@@ -319,7 +323,10 @@ export const CreateNewPool: React.FC = () => {
                         <div>{selectedPair2Asset.ticker}</div>
                       </div>
                     ) : (
-                      'Select an asset'
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
                     )}
                   </Button>
                 </div>
