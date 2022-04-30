@@ -1,0 +1,129 @@
+@import '../../style/themes/bitmatrix.scss';
+
+.asset-list-modal {
+  padding-top: 1rem !important;
+  margin: 0 auto !important;
+  width: 21rem !important;
+  .rs-modal-content {
+    background-color: $bmBlackRussian !important;
+    border: 2px solid #212121;
+    border-radius: 1rem;
+    padding: 0 !important;
+  }
+  .rs-modal-dialog {
+    // transform: translateY(-50%);
+    top: 10vh;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .rs-modal-body {
+    max-height: 350px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+
+    &::-webkit-scrollbar {
+      width: 3px;
+      height: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #4d4e4f;
+    }
+  }
+}
+
+
+
+.asset-list-header {
+  padding: 1.25rem 1.5rem 0 1.5rem;
+  .rs-modal-header-close {
+    font-size: 1.2rem !important;
+    font-weight: 800;
+    top: 8px !important;
+    right: 26px !important;
+  }
+}
+
+.asset-modal-input {
+  width: 21.75rem;
+  margin: 0 1.5rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background-color: $bmBlackRussian !important;
+
+
+  &:hover:not(:disabled) {
+    border-color: var(--theme-color) !important;
+  }
+
+  &:focus {
+    border-color: $bmBoltgunMetal !important;
+    box-shadow: none !important;
+  }
+}
+
+.divider {
+  border-top: 1px solid #212121;
+  width: 100%;
+}
+
+.asset-list-title {
+  font-size: 1rem !important;
+}
+
+.asset-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: $bmVeryLightGray;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  
+  &:hover {
+    background-color: $bmFrenchGray;
+    color: $bmNero;
+  }
+}
+
+.selected-asset-item {
+  background-color:$bmBoltgunMetal;
+}
+
+.asset-ticker {
+  margin-left: 1rem;
+}
+
+.asset-list-ticker-div {
+  display: flex;
+  align-items: center;
+}
+
+.asset-list-hash {
+  opacity: 0.6;
+}
+
+@media only screen and (min-width: 768px) {
+  .asset-list-modal {
+    width: 25rem !important;
+    top: 12vh;
+  }
+}
+
+@media only screen and (max-height: 650px) {
+  .asset-list-modal {
+    .rs-modal-dialog {
+      // transform: translateY(-50%);
+      top: 15vh;
+    }
+  }
+}
