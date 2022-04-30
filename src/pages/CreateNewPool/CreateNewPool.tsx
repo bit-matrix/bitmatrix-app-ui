@@ -1,29 +1,26 @@
 import Decimal from 'decimal.js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { api, poolDeployment } from '@bitmatrix/lib';
-import { Content, Dropdown } from 'rsuite';
+import { Button, Content } from 'rsuite';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
 import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
-import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../context';
+import { useSettingsContext, useWalletContext, usePoolContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { getAssetPrecession, getPrimaryPoolConfig } from '../../helper';
+import { getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
+import { Asset } from '../../model/Asset';
+import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
+import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import './CreateNewPool.scss';
-
-type Asset = {
-  assetHash: string;
-  ticker?: string | undefined;
-  name?: string | undefined;
-  precision: number;
-};
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -31,21 +28,31 @@ export const CreateNewPool: React.FC = () => {
   const [pair2Amount, setPair2Amount] = useState<string>('');
   const [selectedPair1Asset, setSelectedPair1Asset] = useState<Asset>();
   const [selectedPair2Asset, setSelectedPair2Asset] = useState<Asset>();
+  const [pair1AssetList, setPair1AssetList] = useState<Asset[]>([]);
+  const [pair2AssetList, setPair2AssetList] = useState<Asset[]>([]);
+  const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
+  const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
   const { poolsContext } = usePoolContext();
-  const { poolConfigContext } = usePoolConfigContext();
-
-  const pair1AssetList: Asset[] | undefined = walletContext?.balances
-    .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
-    .map((balance) => balance.asset);
-
-  const pair2AssetList: Asset[] | undefined = walletContext?.balances
-    .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
-    .map((balance) => balance.asset);
 
   const history = useHistory();
+
+  useEffect(() => {
+    if (walletContext) {
+      const filteredPair1AssetList: Asset[] | undefined = walletContext?.balances
+        .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
+        .map((balance) => balance.asset);
+
+      const filteredPair2AssetList: Asset[] | undefined = walletContext?.balances
+        .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
+        .map((balance) => balance.asset);
+
+      setPair1AssetList(filteredPair1AssetList);
+      setPair2AssetList(filteredPair2AssetList);
+    }
+  }, []);
 
   const onChangePair1Amount = (input: string) => {
     setPair1Amount(input);
@@ -56,23 +63,14 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const inputsIsValid = () => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext) {
-      let tokenIsValid = false;
-      let quoteIsValid = false;
+    if (walletContext) {
+      let pair1IsValid = false;
+      let pair2IsValid = false;
 
-      const currentPool = poolsContext[0];
+      if ((parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) && selectedPair1Asset && selectedPair2Asset) {
+        const totalFee = 1000;
 
-      if (parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const totalFee =
-          primaryPoolConfig.baseFee.number +
-          primaryPoolConfig.commitmentTxFee.number +
-          primaryPoolConfig.defaultOrderingFee.number +
-          primaryPoolConfig.serviceFee.number +
-          1000;
-
-        const quoteAssetId = currentPool.quote.asset;
+        const quoteAssetId = selectedPair1Asset?.assetHash;
         const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
         const tokenAssetId = selectedPair2Asset?.assetHash;
@@ -89,21 +87,32 @@ export const CreateNewPool: React.FC = () => {
         }
 
         if (Number(pair1Amount) <= quoteAmountWallet && quoteAmountWallet > 0) {
-          quoteIsValid = true;
+          pair1IsValid = true;
         } else {
-          quoteIsValid = false;
+          pair1IsValid = false;
         }
 
         if (Number(pair2Amount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
-          tokenIsValid = true;
+          pair2IsValid = true;
         } else {
-          tokenIsValid = false;
+          pair2IsValid = false;
         }
-
-        return { tokenIsValid, quoteIsValid };
+        return { pair1IsValid, pair2IsValid };
       }
     }
-    return { tokenIsValid: true, quoteIsValid: true };
+
+    return { pair1IsValid: true, pair2IsValid: true };
+  };
+
+  const liquidityPoolButtonDisabled = (): boolean => {
+    return (
+      Number(pair1Amount) <= 0 ||
+      Number(pair2Amount) <= 0 ||
+      !inputsIsValid()?.pair1IsValid ||
+      !inputsIsValid()?.pair2IsValid ||
+      !selectedPair1Asset ||
+      !selectedPair2Asset
+    );
   };
 
   const createNewPoolClick = async () => {
@@ -182,6 +191,49 @@ export const CreateNewPool: React.FC = () => {
     }
   };
 
+  const calcLpValues = () => {
+    const currentLBtcPrice = Number(poolsContext[0].token.value) / Number(poolsContext[0].quote.value);
+
+    if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+      if (selectedPair1Asset?.ticker === 'L-BTC') {
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
+          20,
+          Number(pair1Amount) * settingsContext.preferred_unit.value,
+        );
+
+        const initialTVL = Number(pair1Amount) * currentLBtcPrice * 2;
+
+        const initialAssetPrice =
+          (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) /
+          (Number(pair1Amount) * settingsContext.preferred_unit.value);
+
+        return {
+          initialLPCirculation,
+          initialTVL: initialTVL.toFixed(2),
+          initialAssetPrice: initialAssetPrice.toFixed(2),
+        };
+      } else {
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
+          1000000,
+          Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC,
+        );
+
+        const initialTVL = Number(pair1Amount) * 2;
+
+        const initialAssetPrice =
+          (Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC) / (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC);
+
+        return {
+          initialLPCirculation,
+          initialTVL: initialTVL.toFixed(2),
+          initialAssetPrice: initialAssetPrice.toFixed(2),
+        };
+      }
+    }
+
+    return { initialLPCirculation: '-', initialTVL: '-', initialAssetPrice: '-' };
+  };
+
   return (
     <div className="create-new-pool-page-main">
       <Content className="create-new-pool-page-content">
@@ -208,7 +260,11 @@ export const CreateNewPool: React.FC = () => {
         />
         <div>
           <div className="create-new-pool-main">
-            <div className="create-new-pool-item">
+            <div
+              className={`create-new-pool-item ${
+                !inputsIsValid()?.pair1IsValid ? 'create-new-pool-invalid-content' : ''
+              }`}
+            >
               <div className="create-new-pool-text">Pool Pair 1</div>
               <div className="create-new-pool-item-content">
                 <div>
@@ -222,7 +278,32 @@ export const CreateNewPool: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Dropdown
+                  <Button
+                    appearance="default"
+                    className={`asset-button ${selectedPair1Asset && 'asset-button-selected'}`}
+                    onClick={() => {
+                      setShowPair1AssetListModal(true);
+                    }}
+                  >
+                    {selectedPair1Asset ? (
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={selectedPair1Asset}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{selectedPair1Asset.ticker}</div>
+                      </div>
+                    ) : (
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    )}
+                  </Button>
+
+                  {/* <Dropdown
                     className="create-new-pool-dropdown"
                     title={selectedPair1Asset ? selectedPair1Asset.ticker : 'Select an asset'}
                     activeKey={selectedPair1Asset?.ticker}
@@ -243,14 +324,18 @@ export const CreateNewPool: React.FC = () => {
                         </Dropdown.Item>
                       );
                     })}
-                  </Dropdown>
+                  </Dropdown> */}
                 </div>
               </div>
             </div>
             <div className="create-new-pool-plus-icon">
               <img className="create-new-pool-page-icons" src={plus} alt="" />
             </div>
-            <div className="create-new-pool-item">
+            <div
+              className={`create-new-pool-item ${
+                !inputsIsValid()?.pair2IsValid ? 'create-new-pool-invalid-content' : ''
+              }`}
+            >
               <div className="create-new-pool-text">Pool Pair 2</div>
               <div className="create-new-pool-item-content">
                 <div>
@@ -263,28 +348,30 @@ export const CreateNewPool: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Dropdown
-                    className="create-new-pool-dropdown"
-                    title={selectedPair2Asset ? selectedPair2Asset.ticker : 'Select an asset'}
-                    activeKey={selectedPair2Asset?.ticker}
+                  <Button
+                    appearance="default"
+                    className={`asset-button ${selectedPair2Asset && 'asset-button-selected'}`}
+                    onClick={() => {
+                      setShowPair2AssetListModal(true);
+                    }}
                   >
-                    {pair2AssetList?.map((asset, i: number) => {
-                      return (
-                        <Dropdown.Item
-                          key={i}
-                          className="custom-dropdown-item"
-                          eventKey={asset.ticker}
-                          onSelect={(eventKey: any) => {
-                            const selectedAsset = pair2AssetList.find((asl) => asl.ticker === eventKey);
-
-                            setSelectedPair2Asset(selectedAsset);
-                          }}
-                        >
-                          {asset.ticker}
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown>
+                    {selectedPair2Asset ? (
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={selectedPair2Asset}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{selectedPair2Asset.ticker}</div>
+                      </div>
+                    ) : (
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    )}
+                  </Button>
                 </div>
               </div>
             </div>
@@ -295,21 +382,21 @@ export const CreateNewPool: React.FC = () => {
                 <span className="create-new-pool-page-footer-line-item-texts">Initial LP circulation</span>
                 <LpIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialLPCirculation}</div>
             </div>
             <div className="create-new-pool-page-footer-line-item-second mobile-hidden">
               <div className="create-new-pool-text-icon-content">
                 <span className="create-new-pool-page-footer-line-item-texts">Initial TVL</span>
                 <TVLIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialTVL}</div>
             </div>
             <div className="create-new-pool-page-footer-line-item-third">
               <div className="create-new-pool-text-icon-content">
                 <span className="create-new-pool-page-footer-line-item-texts">Initial asset price</span>
                 <PriceIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="create-new-pool-page-footer-line-item-values">-</div>
+              <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialAssetPrice}</div>
             </div>
           </div>
           <div className="create-new-pool-button-content">
@@ -319,16 +406,34 @@ export const CreateNewPool: React.FC = () => {
               onClick={() => {
                 createNewPoolClick();
               }}
-              // disabled={
-              //   Number(quoteAmount) <= 0 ||
-              //   Number(tokenAmount) <= 0 ||
-              //   !inputsIsValid()?.tokenIsValid ||
-              //   !inputsIsValid()?.quoteIsValid ||
-              //   !selectedAsset
-              // }
+              disabled={liquidityPoolButtonDisabled()}
               className="create-new-pool-button"
             />
           </div>
+          <AssetListModal
+            show={showPair1AssetListModal}
+            selectedAsset={selectedPair1Asset}
+            close={() => {
+              setShowPair1AssetListModal(false);
+            }}
+            onSelectAsset={(asset) => {
+              setSelectedPair1Asset(asset);
+              setShowPair1AssetListModal(false);
+            }}
+            assetList={pair1AssetList}
+          />
+          <AssetListModal
+            show={showPair2AssetListModal}
+            close={() => {
+              setShowPair2AssetListModal(false);
+            }}
+            selectedAsset={selectedPair2Asset}
+            onSelectAsset={(asset) => {
+              setSelectedPair2Asset(asset);
+              setShowPair2AssetListModal(false);
+            }}
+            assetList={pair2AssetList}
+          />
         </div>
       </Content>
     </div>
