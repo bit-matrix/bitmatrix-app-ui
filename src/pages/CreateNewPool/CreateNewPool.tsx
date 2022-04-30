@@ -191,34 +191,47 @@ export const CreateNewPool: React.FC = () => {
     }
   };
 
-  const calcUsdtPrice = (lbtcPrice: number, usdtPrice: number) => {
-    return (usdtPrice / lbtcPrice / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-  };
-
   const calcLpValues = () => {
+    const currentLBtcPrice = Number(poolsContext[0].token.value) / Number(poolsContext[0].quote.value);
+
     if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
       if (selectedPair1Asset?.ticker === 'L-BTC') {
-        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(20, Number(pair1Amount));
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
+          20,
+          Number(pair1Amount) * settingsContext.preferred_unit.value,
+        );
 
-        const initialTVL = Number(calcUsdtPrice(Number(pair1Amount), Number(poolsContext[0].token.value))) * 2;
-        const initialAssetPrice = initialLPCirculation !== 0 ? initialTVL / initialLPCirculation! : 0;
+        const initialTVL = Number(pair1Amount) * currentLBtcPrice * 2;
+
+        const initialAssetPrice =
+          (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) /
+          (Number(pair1Amount) * settingsContext.preferred_unit.value);
+
         return {
           initialLPCirculation,
-          initialTVL,
-          initialAssetPrice,
+          initialTVL: initialTVL.toFixed(2),
+          initialAssetPrice: initialAssetPrice.toFixed(2),
         };
       } else {
-        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(1000000, Number(pair1Amount)) || 0;
-        const initialTVL = Number(pair1Amount);
-        const initialAssetPrice = initialLPCirculation !== 0 ? initialTVL / initialLPCirculation : 0;
+        const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
+          1000000,
+          Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC,
+        );
+
+        const initialTVL = Number(pair1Amount) * 2;
+
+        const initialAssetPrice =
+          (Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC) / (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC);
+
         return {
           initialLPCirculation,
-          initialTVL,
-          initialAssetPrice,
+          initialTVL: initialTVL.toFixed(2),
+          initialAssetPrice: initialAssetPrice.toFixed(2),
         };
       }
     }
-    return { initialLPCirculation: '0', initialTVL: '0', initialAssetPrice: '0' };
+
+    return { initialLPCirculation: '-', initialTVL: '-', initialAssetPrice: '-' };
   };
 
   return (
