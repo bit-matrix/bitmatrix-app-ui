@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { api } from '@bitmatrix/lib';
+import { api, Wallet } from '@bitmatrix/lib';
 import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
 import {
   usePoolConfigContext,
@@ -26,13 +26,11 @@ import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../../pages/CreateNewPool/CreateNewPool';
-import { detectProvider } from 'marina-provider';
-import { Wallet } from '../../lib/wallet';
-import { IWallet } from '../../lib/wallet/IWallet';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
 import { NotFound } from '../../pages/NotFound/NotFound';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import { detectProvider } from 'marina-provider';
 import './AppRouter.scss';
 
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
@@ -101,7 +99,7 @@ export const AppRouter = (): JSX.Element => {
     // }, 60000);
   }, [walletContext?.marina]);
 
-  const fetchBalances = async (wall: IWallet) => {
+  const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {
       wall
         .getBalances()
