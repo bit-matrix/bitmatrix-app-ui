@@ -11,7 +11,7 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
+import { commitmentTx, fundingTx, api, convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -295,73 +295,29 @@ export const Swap = (): JSX.Element => {
       }
 
       if (poolsContext && poolConfigContext) {
-        const fundingTxInputs = fundingTx(numberFromAmount, poolsContext[0], poolConfigContext, methodCall);
-        let fundingTxId;
-
-        try {
-          setLoading(true);
-          const fundingTx = await walletContext.marina.sendTransaction([
-            {
-              address: fundingTxInputs.fundingOutput1Address,
-              value: fundingTxInputs.fundingOutput1Value,
-              asset: fundingTxInputs.fundingOutput1AssetId,
-            },
-            {
-              address: fundingTxInputs.fundingOutput2Address,
-              value: fundingTxInputs.fundingOutput2Value,
-              asset: fundingTxInputs.fundingOutput2AssetId,
-            },
-          ]);
-
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-        } catch (err: any) {
-          notify(err.toString(), 'Wallet Error : ', 'error');
-          setLoading(false);
-          // payloadData.wallet.marina.reloadCoins();
-          return Promise.reject();
-        }
-
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+        if (addressInformation.publicKey) {
           setSwapWay(undefined);
           setInputFromAmount('');
           setInputToAmount('');
           setSelectedFromAmountPercent(undefined);
 
-          let commitment: string;
+          let commitmentTxId = '';
 
           if (selectedAsset.from === SWAP_ASSET.LBTC) {
-            commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
+            commitmentTxId = await commitmentSign.case1(
+              walletContext.marina,
               numberFromAmount,
-              fundingTxId,
-              addressInformation.publicKey,
               numberToAmount,
-              poolConfigContext,
               poolsContext[0],
+              poolConfigContext,
+              addressInformation.publicKey,
             );
           } else {
-            commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
-              numberFromAmount,
-              fundingTxId,
-              addressInformation.publicKey,
-              numberToAmount,
-              poolConfigContext,
-              poolsContext[0],
-            );
           }
 
-          const commitmentTxId = await api.sendRawTransaction(commitment);
-
-          if (commitmentTxId && commitmentTxId !== '') {
-            // notify(
-            //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-            //     See in Explorer
-            //   </a>,
-            //   'Commitment Tx created successfully!',
-            //   'success',
-            // );
-
+          if (commitmentTxId !== '') {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
