@@ -4,7 +4,7 @@
   "homepage": "https://demo.bitmatrix.app/",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.38",
+    "@bitmatrix/lib": "^0.0.40",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -25,8 +25,6 @@
     "@visx/tooltip": "^2.8.0",
     "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
-    "ldk": "0.4.4",
-    "marina-provider": "^1.4.8",
     "numeral": "^2.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

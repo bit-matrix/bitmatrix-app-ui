@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
 import { useWalletContext } from '../../context';
 import { UnblindedOutput } from 'ldk';
-import { IWallet } from '../../lib/wallet/IWallet';
-import { Wallet } from '../../lib/wallet';
 import { AddressInterface } from 'marina-provider';
 import MarinaIcon from '../base/Svg/Icons/Marina';
 import AquaIcon from '../base/Svg/Icons/Aqua';
 import JadeIcon from '../base/Svg/Icons/Jade';
 import LedgerIcon from '../base/Svg/Icons/Ledger';
 import './WalletListModal.scss';
+import { Wallet } from '@bitmatrix/lib';
 
 type Props = {
   show: boolean;
-  wallet?: IWallet;
+  wallet?: Wallet;
   // walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
   setNewAddress?: (newAddress: AddressInterface) => void;
