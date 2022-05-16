@@ -25,6 +25,7 @@
     "@visx/tooltip": "^2.8.0",
     "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
+    "ldk": "^0.4.11",
     "marina-provider": "^1.5.0",
     "numeral": "^2.0.6",
     "react": "^17.0.2",
