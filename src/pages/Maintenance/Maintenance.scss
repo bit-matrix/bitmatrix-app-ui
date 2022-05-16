@@ -1,0 +1,18 @@
+
+
+.maintenance {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid #AAE0B5;
+    border-radius: 1rem;
+    padding: 2rem;
+
+    .maintenance-text {
+        margin-left: 1.5rem;
+        font-size: 3rem;
+    }
+}
