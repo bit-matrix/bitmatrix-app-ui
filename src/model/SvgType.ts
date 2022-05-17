@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type SvgType = {
   path?: string;
   fill?: string;
@@ -8,4 +10,5 @@ export type SvgType = {
   width?: string;
   height?: string;
   className?: string;
+  children?: ReactNode;
 };

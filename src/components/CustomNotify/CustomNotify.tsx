@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Notification } from 'rsuite';
 import { MessageType } from 'rsuite/esm/Notification/Notification';
 import './CustomNotify.scss';
@@ -6,6 +6,7 @@ import './CustomNotify.scss';
 type Props = {
   header?: string;
   type?: MessageType;
+  children?: ReactNode;
 };
 
 export const CustomNotify: React.FC<Props> = ({ type = 'info', header = type, children }) => {
