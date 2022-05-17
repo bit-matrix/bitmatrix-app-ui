@@ -16,10 +16,10 @@ import { initialSettingsState, settingsReducer } from './reducer';
 import { ISettingsContext } from './types';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-type CP = ComponentProps<FC> & { children?: ReactNode };
+type CP = ComponentProps<FC> & Props;
 
 const SettingsContext = createContext<ISettingsContext>({} as ISettingsContext);
 

@@ -5,10 +5,10 @@ import { walletReducer } from './reducer';
 import { IWalletContext } from './types';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-type CP = ComponentProps<FC> & { children?: ReactNode };
+type CP = ComponentProps<FC> & Props;
 
 const WalletContext = createContext<IWalletContext>({} as IWalletContext);
 

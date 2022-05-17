@@ -5,10 +5,10 @@ import { initialPoolConfigState, poolConfigReducer } from './reducer';
 import { IPoolConfigContext } from './types';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
-type CP = ComponentProps<FC> & { children?: ReactNode };
+type CP = ComponentProps<FC> & Props;
 
 const PoolConfigContext = createContext<IPoolConfigContext>({} as IPoolConfigContext);
 

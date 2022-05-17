@@ -8,7 +8,7 @@ type Props = {
   children?: ReactNode;
 };
 
-type CP = ComponentProps<FC> & { children?: ReactNode };
+type CP = ComponentProps<FC> & Props;
 
 const PoolChartDataContext = createContext<IPoolChartDataContext>({} as IPoolChartDataContext);
 
