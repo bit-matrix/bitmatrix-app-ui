@@ -1,5 +1,5 @@
 import { NetworkString } from 'marina-provider';
-import { ComponentProps, createContext, FC, useContext, useReducer } from 'react';
+import { ComponentProps, createContext, FC, ReactNode, useContext, useReducer } from 'react';
 import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
@@ -16,14 +16,16 @@ import { initialSettingsState, settingsReducer } from './reducer';
 import { ISettingsContext } from './types';
 
 type Props = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
+
+type CP = ComponentProps<FC> & Props;
 
 const SettingsContext = createContext<ISettingsContext>({} as ISettingsContext);
 
 export const useSettingsContext = (): ISettingsContext => useContext(SettingsContext);
 
-export const SettingsContextProvider: React.FC<Props> = ({ children }: ComponentProps<FC>): JSX.Element => {
+export const SettingsContextProvider: React.FC<Props> = ({ children }: CP): JSX.Element => {
   const [settingsContext, dispatch] = useReducer(settingsReducer, initialSettingsState);
 
   const setSlippageContext = (slippage: number): void => {
