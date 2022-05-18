@@ -11,7 +11,7 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { commitmentTx, fundingTx, api, convertion, commitmentSign } from '@bitmatrix/lib';
+import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
