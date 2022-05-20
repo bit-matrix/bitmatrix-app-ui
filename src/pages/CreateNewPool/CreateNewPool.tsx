@@ -294,6 +294,7 @@ export const CreateNewPool: React.FC = () => {
                           height="1.5rem"
                         />
                         <div>{selectedPair1Asset.ticker}</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
                       </div>
                     ) : (
                       <div className="asset-button-default-text-container">
@@ -364,6 +365,7 @@ export const CreateNewPool: React.FC = () => {
                           height="1.5rem"
                         />
                         <div>{selectedPair2Asset.ticker}</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
                       </div>
                     ) : (
                       <div className="asset-button-default-text-container">
