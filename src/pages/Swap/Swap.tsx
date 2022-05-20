@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { useEffect, useState } from 'react';
-import { Content } from 'rsuite';
+import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { SwapAssetList } from '../../components/SwapAssetList/SwapAssetList';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
@@ -22,15 +21,38 @@ import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
 import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
+import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
+import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
+import { Asset } from '../../model/Asset';
 import './Swap.scss';
+
+const pairAssetList: Asset[] = [
+  {
+    assetHash: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+    name: 'Liquid Bitcoin',
+    precision: 8,
+    ticker: SWAP_ASSET.LBTC,
+  },
+  {
+    assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+    name: 'Tether USD',
+    precision: 8,
+    ticker: SWAP_ASSET.USDT,
+  },
+];
 
 export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
 
-  const [selectedAsset, setSelectedAsset] = useState<{
-    from: SWAP_ASSET;
-    to: SWAP_ASSET;
-  }>({ from: SWAP_ASSET.LBTC, to: SWAP_ASSET.USDT });
+  const [selectedPairAsset, setSelectedPairAsset] = useState<{
+    from: Asset;
+    to: Asset;
+  }>({ from: pairAssetList[0], to: pairAssetList[1] });
+
+  const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
+
+  const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
 
   const [inputFromAmount, setInputFromAmount] = useState<string>('');
 
@@ -66,7 +88,7 @@ export const Swap = (): JSX.Element => {
 
     let methodCall;
 
-    if (selectedAsset.from === SWAP_ASSET.LBTC) {
+    if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
       inputNum = inputNum * settingsContext.preferred_unit.value;
       methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
     } else {
@@ -83,7 +105,7 @@ export const Swap = (): JSX.Element => {
     );
 
     if (output.amount > 0) {
-      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+      if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
         setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
         setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
       } else {
@@ -104,7 +126,7 @@ export const Swap = (): JSX.Element => {
     if (poolsContext && poolConfigContext) {
       let methodCall;
 
-      if (selectedAsset.to === SWAP_ASSET.LBTC) {
+      if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
         inputNum = inputNum * settingsContext.preferred_unit.value;
         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
       } else {
@@ -121,7 +143,7 @@ export const Swap = (): JSX.Element => {
       );
 
       if (output.amount > 0) {
-        if (selectedAsset.to === SWAP_ASSET.LBTC) {
+        if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
           setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
           setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
         } else {
@@ -159,7 +181,7 @@ export const Swap = (): JSX.Element => {
       if (quoteTotalAmountInWallet) {
         const quoteAmount = quoteTotalAmountInWallet - totalFee;
         if (quoteAmount > 0) {
-          if (selectedAsset.from === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
+          if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
               inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
             }
@@ -170,7 +192,7 @@ export const Swap = (): JSX.Element => {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
               inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
-          } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
+          } else if (selectedPairAsset.from.ticker === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
               inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
             }
@@ -211,9 +233,13 @@ export const Swap = (): JSX.Element => {
         const tokenAssetId = currentPool.token.asset;
         const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-        if (selectedAsset.from === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
+        if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
           inputAmount = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
-        } else if (selectedAsset.from === SWAP_ASSET.USDT && tokenAmountInWallet && tokenAmountInWallet > 0) {
+        } else if (
+          selectedPairAsset.from.ticker === SWAP_ASSET.USDT &&
+          tokenAmountInWallet &&
+          tokenAmountInWallet > 0
+        ) {
           inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
         }
 
@@ -228,28 +254,28 @@ export const Swap = (): JSX.Element => {
     return true;
   };
 
-  const assetOnChange = (asset: SWAP_ASSET, isFrom = true) => {
+  const assetOnChange = (asset: Asset, isFrom = true) => {
     if (isFrom) {
-      if (asset === SWAP_ASSET.LBTC) {
-        setSelectedAsset({
+      if (asset.ticker === SWAP_ASSET.LBTC) {
+        setSelectedPairAsset({
           from: asset,
-          to: SWAP_ASSET.USDT,
+          to: pairAssetList[1],
         });
       } else {
-        setSelectedAsset({
+        setSelectedPairAsset({
           from: asset,
-          to: SWAP_ASSET.LBTC,
+          to: pairAssetList[0],
         });
       }
     } else {
-      if (asset === SWAP_ASSET.LBTC) {
-        setSelectedAsset({
-          from: SWAP_ASSET.USDT,
+      if (asset.ticker === SWAP_ASSET.LBTC) {
+        setSelectedPairAsset({
+          from: pairAssetList[1],
           to: asset,
         });
       } else {
-        setSelectedAsset({
-          from: SWAP_ASSET.LBTC,
+        setSelectedPairAsset({
+          from: pairAssetList[0],
           to: asset,
         });
       }
@@ -261,15 +287,15 @@ export const Swap = (): JSX.Element => {
   };
 
   const swapRouteChange = () => {
-    if (selectedAsset.from === SWAP_ASSET.LBTC) {
-      setSelectedAsset({
-        from: SWAP_ASSET.USDT,
-        to: SWAP_ASSET.LBTC,
+    if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
+      setSelectedPairAsset({
+        from: pairAssetList[1],
+        to: pairAssetList[0],
       });
     } else {
-      setSelectedAsset({
-        from: SWAP_ASSET.LBTC,
-        to: SWAP_ASSET.USDT,
+      setSelectedPairAsset({
+        from: pairAssetList[0],
+        to: pairAssetList[1],
       });
     }
 
@@ -284,7 +310,7 @@ export const Swap = (): JSX.Element => {
       let numberFromAmount = 0;
       let numberToAmount = 0;
 
-      if (selectedAsset.from === SWAP_ASSET.LBTC) {
+      if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         numberFromAmount = new Decimal(Number(inputFromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
         numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
@@ -331,7 +357,7 @@ export const Swap = (): JSX.Element => {
 
           let commitment: string;
 
-          if (selectedAsset.from === SWAP_ASSET.LBTC) {
+          if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
             commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
@@ -450,34 +476,89 @@ export const Swap = (): JSX.Element => {
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={getAssetPrecession(selectedAsset.from, settingsContext.preferred_unit.text)}
+                    decimalLength={getAssetPrecession(
+                      selectedPairAsset.from.ticker as SWAP_ASSET,
+                      settingsContext.preferred_unit.text,
+                    )}
                   />
                 </div>
-                <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} />
+                {/* <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} /> */}
+                <div>
+                  <Button
+                    appearance="default"
+                    className={`asset-button ${selectedPairAsset?.from && 'asset-button-selected'}`}
+                    onClick={() => {
+                      setShowPair1AssetListModal(true);
+                    }}
+                  >
+                    <div className="create-new-pool-img-content">
+                      <AssetIcon
+                        asset={selectedPairAsset.from}
+                        className="create-new-pool-lbtc-icon"
+                        width="1.5rem"
+                        height="1.5rem"
+                      />
+                      <div>{selectedPairAsset.from.ticker}</div>
+                      <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                    </div>
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="swap-arrow-icon" onClick={swapRouteChange}>
               <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
             <div className="from-content">
-              <div className="from-amount-div">
-                <div className="from-text">To</div>
-                <NumericalInput
-                  className="from-input"
-                  inputValue={inputToAmount}
-                  onChange={(inputValue) => {
-                    if (inputValue === '.') return;
-                    setInputToAmount(inputValue);
-                    setSelectedFromAmountPercent(undefined);
-                    setSwapWay(SWAP_WAY.TO);
-                  }}
-                  decimalLength={getAssetPrecession(selectedAsset.to, settingsContext.preferred_unit.text)}
-                />
-              </div>
-              <SwapAssetList
+              <div className="from-input-content">
+                <div className="from-amount-div">
+                  <div className="from-text">To</div>
+                  <NumericalInput
+                    className="from-input"
+                    inputValue={inputToAmount}
+                    onChange={(inputValue) => {
+                      if (inputValue === '.') return;
+                      setInputToAmount(inputValue);
+                      setSelectedFromAmountPercent(undefined);
+                      setSwapWay(SWAP_WAY.TO);
+                    }}
+                    decimalLength={getAssetPrecession(
+                      selectedPairAsset.to.ticker as SWAP_ASSET,
+                      settingsContext.preferred_unit.text,
+                    )}
+                  />
+                </div>
+                {/* <SwapAssetList
                 selectedAsset={selectedAsset.to}
                 setSelectedAsset={(asset: SWAP_ASSET) => assetOnChange(asset, false)}
-              />
+              /> */}
+                <div>
+                  <Button
+                    appearance="default"
+                    className={`asset-button ${selectedPairAsset.to && 'asset-button-selected'}`}
+                    onClick={() => {
+                      setShowPair2AssetListModal(true);
+                    }}
+                  >
+                    {selectedPairAsset.to ? (
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={selectedPairAsset.to}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{selectedPairAsset.to.ticker}</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    ) : (
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    )}
+                  </Button>
+                </div>
+              </div>
             </div>
             <WalletButton
               text="Swap"
@@ -490,6 +571,32 @@ export const Swap = (): JSX.Element => {
           </div>
         </div>
         <Info content={infoMessage()} />
+        <AssetListModal
+          show={showPair1AssetListModal}
+          selectedAsset={selectedPairAsset?.from}
+          close={() => {
+            setShowPair1AssetListModal(false);
+          }}
+          onSelectAsset={(asset) => {
+            // setSelectedPairAsset({ ...selectedPairAsset, from: asset! });
+            assetOnChange(asset, true);
+            setShowPair1AssetListModal(false);
+          }}
+          assetList={pairAssetList}
+        />
+        <AssetListModal
+          show={showPair2AssetListModal}
+          close={() => {
+            setShowPair2AssetListModal(false);
+          }}
+          selectedAsset={selectedPairAsset.to}
+          onSelectAsset={(asset) => {
+            // setSelectedPairAsset({ from: { ...selectedPairAsset?.from }, to: asset });
+            assetOnChange(asset, false);
+            setShowPair2AssetListModal(false);
+          }}
+          assetList={pairAssetList}
+        />
       </Content>
     </div>
   );
