@@ -56,17 +56,15 @@
           align-items: center;
           justify-content: space-between;
 
+          .create-new-pool-img-content {
+            display: flex;
+            align-items: center;
+            color: #f3f3f3;
 
-            .create-new-pool-img-content {
-              display: flex;
-              align-items: center;
-              color: #f3f3f3;
-
-              .create-new-pool-lbtc-icon {
-                margin-right: 0.5rem;
-              }
+            .create-new-pool-lbtc-icon {
+              margin-right: 0.5rem;
             }
-     
+          }
 
           .asset-button {
             width: 100%;
@@ -78,21 +76,21 @@
             border-width: 0 !important;
             opacity: 0.9;
             min-width: 5.625rem;
-          
+
             .rs-btn-spin {
               &::before {
                 width: 1.5rem !important;
                 height: 1.5rem !important;
                 border: 3px solid $bmAluminium;
               }
-          
+
               &::after {
                 width: 1.5rem !important;
                 height: 1.5rem !important;
                 border-top: 3px solid $bmDeepFir !important;
               }
             }
-          
+
             &:hover {
               opacity: 1;
             }
@@ -106,16 +104,11 @@
           .asset-button-default-text-container {
             display: flex;
             align-items: center;
+          }
 
-            .asset-button-default-text {
-              margin-right: 0.5rem;
-            }
-
-            .asset-arrow-icon {
-              transform: translateY(3px);
-            }
-
-
+          .asset-arrow-icon {
+            transform: translateY(2px);
+            margin-left: 0.5rem;
           }
 
           .create-new-pool-input {
@@ -141,16 +134,16 @@
               background-color: var(--theme-color) !important;
               color: $bmDeepFir !important;
               font-weight: 600;
-              width: 8.5rem
+              width: 8.5rem;
             }
-            
+
             .rs-dropdown-menu {
               width: 8.5rem;
             }
 
             .rs-dropdown-toggle-caret {
               top: 12px !important;
-              right: 6px!important;
+              right: 6px !important;
               font-size: 20px !important;
             }
           }
@@ -260,13 +253,6 @@
     }
   }
 }
-
-
-
-
-
-
-
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .create-new-pool-page-main {
