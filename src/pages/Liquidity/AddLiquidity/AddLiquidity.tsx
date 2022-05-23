@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { CALL_METHOD } from '@bitmatrix/models';
-import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
-import { useHistory } from 'react-router-dom';
+import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
@@ -31,26 +31,38 @@ const AddLiquidity = (): JSX.Element => {
   const [usdtPercent, setUsdtPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenAmount, setTokenAmount] = useState<string>('');
   const [quoteAmount, setQuoteAmount] = useState<string>('');
+  const [poolConfig, setPoolConfig] = useState<BmConfig>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfigContext } = usePoolConfigContext();
+
   const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+
+  const currentPool = poolsContext.find((p) => p.id === id);
+
+  useEffect(() => {
+    if (currentPool) {
+      api.getBmConfigs(currentPool?.id).then((cp) => {
+        setPoolConfig(cp);
+      });
+    }
+  }, []);
 
   const onChangeQuoteAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (poolsContext && poolConfigContext && input !== '.') {
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+    if (currentPool && poolConfig && input !== '.') {
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
       const output = convertion.convertForLiquidityCtx(
         inputNum * settingsContext.preferred_unit.value,
-        poolsContext[0],
+        currentPool,
         primaryPoolConfig,
       );
 
@@ -63,12 +75,12 @@ const AddLiquidity = (): JSX.Element => {
   const onChangeTokenAmount = (input: string) => {
     const inputNum = Number(input);
 
-    if (poolsContext && poolConfigContext && input !== '.') {
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+    if (currentPool && poolConfig && input !== '.') {
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
       const output = convertion.convertForLiquidityCtx(
         inputNum * PREFERRED_UNIT_VALUE.LBTC,
-        poolsContext[0],
+        currentPool,
         primaryPoolConfig,
         true,
       );
@@ -84,9 +96,7 @@ const AddLiquidity = (): JSX.Element => {
     usdtPercent: FROM_AMOUNT_PERCENT | undefined,
     balances: Balance[],
   ) => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
-      const currentPool = poolsContext[0];
-
+    if (currentPool && poolConfig && walletContext && balances.length > 0) {
       let inputAmount = '';
 
       const quoteAssetId = currentPool.quote.asset;
@@ -95,7 +105,7 @@ const AddLiquidity = (): JSX.Element => {
       const tokenAssetId = currentPool.token.asset;
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-      const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+      const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
       const totalFee =
         primaryPoolConfig.baseFee.number +
@@ -116,7 +126,7 @@ const AddLiquidity = (): JSX.Element => {
               inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (lbctPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
             onChangeQuoteAmount(inputAmount);
             setUsdtPercent(undefined);
@@ -132,7 +142,7 @@ const AddLiquidity = (): JSX.Element => {
             inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           if (usdtPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           onChangeTokenAmount(inputAmount);
           setLbtcPercent(undefined);
@@ -148,14 +158,12 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   const inputsIsValid = () => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext) {
+    if (currentPool && poolConfig && walletContext) {
       let tokenIsValid = false;
       let quoteIsValid = false;
 
-      const currentPool = poolsContext[0];
-
       if (parseFloat(quoteAmount) > 0 || parseFloat(tokenAmount) > 0) {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -205,11 +213,16 @@ const AddLiquidity = (): JSX.Element => {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
-      if (poolsContext && poolConfigContext) {
-        const pool = poolsContext[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+      if (currentPool && poolConfig) {
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
-        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(
+          quoteAmountN,
+          tokenAmountN,
+          currentPool,
+          primaryPoolConfig,
+          methodCall,
+        );
 
         let fundingTxId;
 
@@ -247,7 +260,7 @@ const AddLiquidity = (): JSX.Element => {
           setLbtcPercent(undefined);
           setUsdtPercent(undefined);
 
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
           const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
             quoteAmountN,
@@ -255,7 +268,7 @@ const AddLiquidity = (): JSX.Element => {
             fundingTxId,
             addressInformation.publicKey,
             primaryPoolConfig,
-            pool,
+            currentPool,
           );
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
@@ -264,11 +277,11 @@ const AddLiquidity = (): JSX.Element => {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: quoteAmountN,
-              quoteAsset: pool.quote.ticker,
+              quoteAsset: currentPool.quote.ticker,
               tokenAmount: tokenAmountN,
-              tokenAsset: pool.token.ticker,
+              tokenAsset: currentPool.token.ticker,
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
-              lpAsset: pool.lp.ticker,
+              lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
               isOutOfSlippage: false,
               completed: false,
@@ -306,11 +319,10 @@ const AddLiquidity = (): JSX.Element => {
   };
 
   const calcLpValues = () => {
-    const currentPool = poolsContext;
-    if (currentPool && currentPool.length > 0 && quoteAmount !== '' && tokenAmount !== '') {
+    if (currentPool && quoteAmount !== '' && tokenAmount !== '') {
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-      const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool[0], quoteAmountN, tokenAmountN);
+      const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool, quoteAmountN, tokenAmountN);
 
       return {
         lpReceived: (Number(recipientValue.lpReceived) / PREFERRED_UNIT_VALUE.LBTC).toFixed(8),
