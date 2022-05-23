@@ -1,14 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api, Wallet } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
-import {
-  usePoolConfigContext,
-  usePoolContext,
-  useWalletContext,
-  usePoolChartDataContext,
-  useSettingsContext,
-} from '../../context';
+import { Pool as ModelPool, BmChart } from '@bitmatrix/models';
+import { usePoolContext, useWalletContext, usePoolChartDataContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
@@ -19,8 +13,8 @@ import { Pool } from '../../pages/Pool/Pool';
 // import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
-import { CommitmentStore } from '../../model/CommitmentStore';
+// import { useLocalStorage } from '../../hooks/useLocalStorage';
+// import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
@@ -36,15 +30,98 @@ import './AppRouter.scss';
 
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
+const mockPools: ModelPool[] = [
+  {
+    id: 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
+    quote: {
+      ticker: 'tL-BTC',
+      name: 'Liquid Testnet Bitcoin',
+      asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+      value: '3672106944',
+    },
+    token: {
+      ticker: 'tL-USDt',
+      name: 'Liquid Testnet Tether',
+      asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+      value: '130023286000000',
+    },
+    lp: {
+      ticker: 'tL-BTC:tL-USDt:0',
+      name: 'Liquid Testnet LP: Bitcoin:Tether:3 Liquidty Provider',
+      asset: 'afd89e5dc9e11e78f7482a5b6aeaac7d41854758d9879b946023cbfa130b6908',
+      value: '1983947548',
+    },
+    initialTx: {
+      txid: 'e85b7e376d40b5029a16546555d22398b0168c86768d9f53701976a054b242a6',
+      block_hash: 'fac4c35dd58fa5a337f04b02e4e1b2966df3e3d45ae2d3edbb87efde7c464fb9',
+      block_height: 198926,
+    },
+    lastSyncedBlock: {
+      block_height: 354691,
+      block_hash: '93fd1d29981f076ec4d47cf8a08e77413895889a17a04564d9cf57eed8e7922d',
+    },
+    bestBlockHeight: 354691,
+    synced: true,
+    active: true,
+    unspentTx: {
+      txid: '1bf61fed01391f1e5e8d039b0311333fd61032b9dee41492e0a49290e8aa0d33',
+      block_hash: 'f9c32660620caae9e67675981c12352f8649e6e5a73c7ec6ed046887a61821b3',
+      block_height: 354683,
+    },
+    lastSentPtx: '',
+    usdPrice: 30000,
+  },
+  {
+    id: '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
+    quote: {
+      ticker: 'tL-BTC',
+      name: 'Liquid Testnet Bitcoin',
+      asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+      value: '23468441280',
+    },
+    token: {
+      ticker: 'tL-USDt',
+      name: 'Liquid Testnet Tether',
+      asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+      value: '769146007000000',
+    },
+    lp: {
+      ticker: 'tL-BTC:tL-USDt:0',
+      name: 'Liquid Testnet LP: Bitcoin:Tether:3 Liquidty Provider',
+      asset: 'e720cb147bcb6777b08969ce9ba14cb376d84ea11c7edd4196a912ee9947ce2b',
+      value: '1825367664',
+    },
+    initialTx: {
+      txid: '61013008fd4c9138ac4ed25534b7222b93d10440f36ce78a1e9b9a23cb16a563',
+      block_hash: '3385d48b447135665195486dbea99f79c681427f8b2607bbe1233c2e6c8ad62d',
+      block_height: 171658,
+    },
+    lastSyncedBlock: {
+      block_height: 354691,
+      block_hash: '93fd1d29981f076ec4d47cf8a08e77413895889a17a04564d9cf57eed8e7922d',
+    },
+    bestBlockHeight: 354691,
+    synced: true,
+    active: true,
+    unspentTx: {
+      txid: '6f4099cfa11f9049b422a6c2f17210d312215a0ca0312058c4927f7c50cf6c85',
+      block_hash: 'd7f7503045108a6239ebb16ce2008fc22b3cd2f46311077d3e76cefbbbb21ab0',
+      block_height: 230544,
+    },
+    lastSentPtx: '',
+    usdPrice: 35000,
+  },
+];
+
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
-  const { setPoolConfigContext } = usePoolConfigContext();
+  // const { setPoolConfigContext } = usePoolConfigContext();
   const { setPoolChartDataContext } = usePoolChartDataContext();
 
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  // const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
@@ -127,73 +204,85 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const fetchData = async (isInitialize: boolean) => {
-    const pools: ModelPool[] = await api.getPools();
+    // const pools: ModelPool[] = await api.getPools();
 
-    const filteredPool = pools.filter(
-      (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
-    );
+    // const filteredPool = pools.filter(
+    //   (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
+    // );
 
-    const poolId: string = filteredPool[0].id;
+    setPoolsContext(mockPools);
 
-    setPoolsContext(filteredPool);
+    // let bestPrice = 0;
 
-    checkLastTxStatus(poolId);
+    // mockPools.forEach((pool) => {
+    //   if (bestPrice < pool.usdPrice) {
+    //     bestPrice = pool.usdPrice;
+    //   }
+    // });
 
-    if (isInitialize) {
-      const pool_config: BmConfig = await api.getBmConfigs(poolId);
+    // const currentPool = mockPools.find((p) => p.usdPrice === bestPrice);
 
-      setPoolConfigContext(pool_config);
-    }
+    // if (currentPool) {
+    //   const poolId: string = currentPool?.id;
+
+    //   checkLastTxStatus(poolId);
+
+    //   if (isInitialize) {
+    //     const pool_config: BmConfig = await api.getBmConfigs(poolId);
+
+    //     setPoolConfigContext(pool_config);
+    //   }
 
     if (location.pathname.startsWith('/pool') || isInitialize) {
-      const pool_chart_data: BmChart[] = await api.getPoolChartData(poolId);
+      const pool_chart_data: BmChart[] = await api.getPoolChartData(mockPools[0].id);
 
       setPoolChartDataContext(pool_chart_data);
     }
     setLoading(false);
+    // }
   };
 
-  const checkLastTxStatus = (poolId: string) => {
-    const txHistory = getLocalData();
+  // const checkLastTxStatus = (poolId: string) => {
+  //   const txHistory = getLocalData();
 
-    if (txHistory && txHistory.length > 0) {
-      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+  //   if (txHistory && txHistory.length > 0) {
+  //     const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
 
-      if (unconfirmedTxs.length > 0) {
-        unconfirmedTxs.forEach((transaction) => {
-          if (transaction.txId) {
-            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
-              if (ctxResponse) {
-                const newTxHistory = [...txHistory];
-                const willChangedTx = newTxHistory.findIndex((ntx) => {
-                  return ntx.txId === transaction.txId;
-                });
+  //     if (unconfirmedTxs.length > 0) {
+  //       unconfirmedTxs.forEach((transaction) => {
+  //         if (transaction.txId) {
+  //           api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
+  //             if (ctxResponse) {
+  //               const newTxHistory = [...txHistory];
+  //               const willChangedTx = newTxHistory.findIndex((ntx) => {
+  //                 return ntx.txId === transaction.txId;
+  //               });
 
-                newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
-                setLocalData(newTxHistory);
-              }
+  //               newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
+  //               setLocalData(newTxHistory);
+  //             }
 
-              if (!ctxResponse) {
-                api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
-                  if (ptxResponse) {
-                    const newTxHistory = [...txHistory];
-                    const willChangedTx = newTxHistory.findIndex((ntx) => {
-                      return ntx.txId === transaction.txId;
-                    });
+  //             if (!ctxResponse) {
+  //               api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
+  //                 if (ptxResponse) {
+  //                   const newTxHistory = [...txHistory];
+  //                   const willChangedTx = newTxHistory.findIndex((ntx) => {
+  //                     return ntx.txId === transaction.txId;
+  //                   });
 
-                    newTxHistory[willChangedTx].completed = true;
-                    newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
+  //                   newTxHistory[willChangedTx].completed = true;
+  //                   newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
 
-                    setLocalData(newTxHistory);
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    }
-  };
+  //                   setLocalData(newTxHistory);
+  //                 }
+  //               });
+  //             }
+  //           });
+  //         }
+  //       });
+  //     }
+  //   }
+  // };
 
   return (
     <Router>
