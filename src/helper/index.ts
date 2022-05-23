@@ -1,7 +1,8 @@
-import { BmConfig } from '@bitmatrix/models';
+import { BmConfig, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
+import { Asset } from '../model/Asset';
 
 export const timeDifference = (time: number): string => {
   const now = new Date().valueOf();
@@ -106,4 +107,27 @@ export const poolShareRound = (amount: number): string => {
 
 export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
+};
+
+export const uniqueAssetList = (pools: Pool[]): Asset[] => {
+  const assetList: { ticker: string; name: string; asset: string; value: string }[] = [];
+  pools.forEach((pool: Pool) => {
+    assetList.push(pool.token);
+    assetList.push(pool.quote);
+  });
+
+  const uniqueList: string[] = [];
+  const uniqueAssetList: Asset[] = [];
+  assetList.map((al) => {
+    if (!uniqueList.includes(al.ticker)) {
+      uniqueList.push(al.ticker);
+      uniqueAssetList.push({
+        assetHash: al.asset,
+        ticker: al.ticker,
+        name: al.name,
+        precision: 8,
+      });
+    }
+  });
+  return uniqueAssetList;
 };
