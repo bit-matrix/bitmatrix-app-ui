@@ -48,6 +48,8 @@ export const Swap = (): JSX.Element => {
 
   const [currentPool, setCurrentPool] = useState<Pool>();
 
+  const [poolConfig, setPoolConfig] = useState<BmConfig>();
+
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,14 +66,14 @@ export const Swap = (): JSX.Element => {
   const assetList: Asset[] = uniqueAssetList(poolsContext);
 
   useEffect(() => {
-    if (currentPool && poolsContext.length > 0 && poolConfigContext && swapWay) {
+    if (currentPool && poolsContext.length > 0 && poolConfig && swapWay) {
       if (swapWay === SWAP_WAY.FROM) {
-        onChangeFromInput(currentPool, poolConfigContext, inputFromAmount);
+        onChangeFromInput(currentPool, poolConfig, inputFromAmount);
       } else {
         onChangeToInput(inputToAmount);
       }
     }
-  }, [currentPool, poolConfigContext, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
+  }, [currentPool, poolConfig, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
 
   const onChangeFromInput = (currentPool: Pool, pool_config: BmConfig, input: string) => {
     let inputNum = Number(input);
@@ -86,34 +88,30 @@ export const Swap = (): JSX.Element => {
       methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
     }
 
-    const output = convertion.convertForCtx(
-      inputNum,
-      settingsContext.slippage,
-      currentPool,
-      poolConfigContext,
-      methodCall,
-    );
+    if (currentPool && poolConfig) {
+      const output = convertion.convertForCtx(inputNum, settingsContext.slippage, currentPool, poolConfig, methodCall);
 
-    if (output.amount > 0) {
-      if (selectedPairAsset.from?.ticker === SWAP_ASSET.LBTC) {
-        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+      if (output.amount > 0) {
+        if (selectedPairAsset.from?.ticker === SWAP_ASSET.LBTC) {
+          setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
+          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+        } else {
+          setInputToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+          setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+        }
       } else {
-        setInputToAmount((output.amount / settingsContext.preferred_unit.value).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+        setInputToAmount('');
+        setAmountWithSlippage(0);
       }
-    } else {
-      setInputToAmount('');
-      setAmountWithSlippage(0);
-    }
 
-    setInputFromAmount(input);
+      setInputFromAmount(input);
+    }
   };
 
   const onChangeToInput = (input: string) => {
     let inputNum = Number(input);
 
-    if (currentPool && poolConfigContext) {
+    if (currentPool && poolConfig) {
       let methodCall;
 
       if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
@@ -124,13 +122,7 @@ export const Swap = (): JSX.Element => {
         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
       }
 
-      const output = convertion.convertForCtx2(
-        inputNum,
-        settingsContext.slippage,
-        currentPool,
-        poolConfigContext,
-        methodCall,
-      );
+      const output = convertion.convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfig, methodCall);
 
       if (output.amount > 0) {
         if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
@@ -148,7 +140,7 @@ export const Swap = (): JSX.Element => {
     }
   };
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
-    if (currentPool && poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
+    if (currentPool && poolsContext.length > 0 && poolConfig && walletContext && balances.length > 0) {
       setSwapWay(SWAP_WAY.FROM);
 
       let inputAmount = '';
@@ -160,10 +152,10 @@ export const Swap = (): JSX.Element => {
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
-        poolConfigContext.baseFee.number +
-        poolConfigContext.commitmentTxFee.number +
-        poolConfigContext.defaultOrderingFee.number +
-        poolConfigContext.serviceFee.number +
+        poolConfig.baseFee.number +
+        poolConfig.commitmentTxFee.number +
+        poolConfig.defaultOrderingFee.number +
+        poolConfig.serviceFee.number +
         1000;
 
       if (quoteTotalAmountInWallet) {
@@ -178,7 +170,7 @@ export const Swap = (): JSX.Element => {
               inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
             }
           } else if (selectedPairAsset.from?.ticker === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -189,7 +181,7 @@ export const Swap = (): JSX.Element => {
               inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
             }
             if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
             }
           }
           setInputFromAmount(inputAmount);
@@ -200,17 +192,17 @@ export const Swap = (): JSX.Element => {
   };
 
   const inputIsValid = () => {
-    if (currentPool && poolsContext.length > 0 && poolConfigContext && walletContext) {
+    if (currentPool && poolsContext.length > 0 && poolConfig && walletContext) {
       let inputAmount = 0;
 
       const inputValue = Number(inputFromAmount);
       let isValid = false;
       if (inputValue > 0) {
         const totalFee =
-          poolConfigContext.baseFee.number +
-          poolConfigContext.commitmentTxFee.number +
-          poolConfigContext.defaultOrderingFee.number +
-          poolConfigContext.serviceFee.number +
+          poolConfig.baseFee.number +
+          poolConfig.commitmentTxFee.number +
+          poolConfig.defaultOrderingFee.number +
+          poolConfig.serviceFee.number +
           1000;
 
         const quoteAssetId = currentPool.quote.asset;
@@ -240,6 +232,12 @@ export const Swap = (): JSX.Element => {
     return true;
   };
 
+  const getBmConfigs = (poolId: string) => {
+    api.getBmConfigs(poolId).then((config) => {
+      setPoolConfig(config);
+    });
+  };
+
   const findCurrentPool = (from?: Asset, to?: Asset) => {
     if (from && to) {
       const filteredPools = poolsContext.filter(
@@ -247,7 +245,6 @@ export const Swap = (): JSX.Element => {
           (pool.quote.ticker === from.ticker || pool.quote.ticker === to.ticker) &&
           (pool.token.ticker === from.ticker || pool.token.ticker === to.ticker),
       );
-      console.log('currentPool', currentPool);
       if (filteredPools.length > 1) {
         let bestPrice = 0;
 
@@ -258,8 +255,13 @@ export const Swap = (): JSX.Element => {
         });
 
         const currentPool = filteredPools.find((p) => p.usdPrice === bestPrice);
-        setCurrentPool(currentPool);
+
+        if (currentPool) {
+          getBmConfigs(currentPool?.id);
+          setCurrentPool(currentPool);
+        }
       } else {
+        getBmConfigs(filteredPools[0].id);
         setCurrentPool(filteredPools[0]);
       }
     }
@@ -318,8 +320,8 @@ export const Swap = (): JSX.Element => {
         numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
       }
 
-      if (currentPool && poolConfigContext) {
-        const fundingTxInputs = fundingTx(numberFromAmount, currentPool, poolConfigContext, methodCall);
+      if (currentPool && poolConfig) {
+        const fundingTxInputs = fundingTx(numberFromAmount, currentPool, poolConfig, methodCall);
         let fundingTxId;
 
         try {
@@ -361,7 +363,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               addressInformation.publicKey,
               numberToAmount,
-              poolConfigContext,
+              poolConfig,
               currentPool,
             );
           } else {
@@ -370,7 +372,7 @@ export const Swap = (): JSX.Element => {
               fundingTxId,
               addressInformation.publicKey,
               numberToAmount,
-              poolConfigContext,
+              poolConfig,
               currentPool,
             );
           }
@@ -430,8 +432,8 @@ export const Swap = (): JSX.Element => {
   };
 
   const infoMessage = (): string => {
-    if (poolConfigContext && currentPool && poolsContext.length > 0) {
-      const config = poolConfigContext;
+    if (poolConfig && currentPool && poolsContext.length > 0) {
+      const config = poolConfig;
       const totalFee =
         config.baseFee.number +
         config.commitmentTxFee.number +
@@ -445,7 +447,7 @@ export const Swap = (): JSX.Element => {
 
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
-    return '';
+    return 'Please select asset';
   };
 
   return (
