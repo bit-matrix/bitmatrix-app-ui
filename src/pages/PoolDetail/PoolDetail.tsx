@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePoolChartDataContext, usePoolContext, useSettingsContext } from '../../context';
+import { usePoolContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { calculateChartData } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -9,7 +9,7 @@ import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { quoteAmountRound } from '../../helper';
 import { TabMenu } from '../../components/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
-import { Pool } from '@bitmatrix/models';
+import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
@@ -17,20 +17,30 @@ import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../components/base/Svg/Icons/Tether';
 // import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
 // import info from '../../images/info2.png';
+import { api } from '@bitmatrix/lib';
+import { Loading } from '../../components/Loading/Loading';
 import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
+  const [poolChartData, setPoolChartData] = useState<BmChart[]>();
 
   const { poolsContext } = usePoolContext();
-  const { poolChartDataContext } = usePoolChartDataContext();
+  // const { poolChartDataContext } = usePoolChartDataContext();
   const { settingsContext } = useSettingsContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
+
+  useEffect(() => {
+    api.getPoolChartData(id).then((pc) => {
+      setPoolChartData(pc);
+      setLoading(false);
+    });
+  }, []);
 
   useEffect(() => {
     if (poolsContext && poolsContext.length > 0) {
@@ -39,11 +49,11 @@ export const PoolDetail: React.FC = () => {
     }
   }, [poolsContext]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 200);
+  // }, []);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -76,10 +86,18 @@ export const PoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || poolChartDataContext === undefined) {
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading width="2rem" height="2rem" />
+      </div>
+    );
+  }
+
+  if (pool === undefined || poolChartData === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(poolChartDataContext, pool);
+    const data = calculateChartData(poolChartData, pool);
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
