@@ -55,7 +55,7 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
       const myCurrentPools: Pool[] = [];
 
       balanceAssets.forEach((ba) => {
-        const currentPool = pools.find((po) => po.lp.asset === ba);
+        const currentPool = pools.find((po) => po.lp.assetHash === ba);
 
         if (currentPool) {
           myCurrentPools.push(currentPool);

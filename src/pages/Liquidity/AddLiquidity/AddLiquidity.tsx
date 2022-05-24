@@ -99,10 +99,10 @@ const AddLiquidity = (): JSX.Element => {
     if (currentPool && poolConfig && walletContext && balances.length > 0) {
       let inputAmount = '';
 
-      const quoteAssetId = currentPool.quote.asset;
+      const quoteAssetId = currentPool.quote.assetHash;
       const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-      const tokenAssetId = currentPool.token.asset;
+      const tokenAssetId = currentPool.token.assetHash;
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
@@ -172,10 +172,10 @@ const AddLiquidity = (): JSX.Element => {
           primaryPoolConfig.serviceFee.number +
           1000;
 
-        const quoteAssetId = currentPool.quote.asset;
+        const quoteAssetId = currentPool.quote.assetHash;
         const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-        const tokenAssetId = currentPool.token.asset;
+        const tokenAssetId = currentPool.token.assetHash;
         const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
         let quoteAmountWallet = 0;

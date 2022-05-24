@@ -16,7 +16,7 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
-import { Asset } from '../../model/Asset';
+import { PAsset } from '@bitmatrix/models';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
@@ -26,10 +26,10 @@ export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pair1Amount, setPair1Amount] = useState<string>('');
   const [pair2Amount, setPair2Amount] = useState<string>('');
-  const [selectedPair1Asset, setSelectedPair1Asset] = useState<Asset>();
-  const [selectedPair2Asset, setSelectedPair2Asset] = useState<Asset>();
-  const [pair1AssetList, setPair1AssetList] = useState<Asset[]>([]);
-  const [pair2AssetList, setPair2AssetList] = useState<Asset[]>([]);
+  const [selectedPair1Asset, setSelectedPair1Asset] = useState<PAsset>();
+  const [selectedPair2Asset, setSelectedPair2Asset] = useState<PAsset>();
+  const [pair1AssetList, setPair1AssetList] = useState<PAsset[]>([]);
+  const [pair2AssetList, setPair2AssetList] = useState<PAsset[]>([]);
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
 
@@ -41,13 +41,29 @@ export const CreateNewPool: React.FC = () => {
 
   useEffect(() => {
     if (walletContext) {
-      const filteredPair1AssetList: Asset[] | undefined = walletContext?.balances
+      const filteredPair1AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
-        .map((balance) => balance.asset);
+        .map((balance) => {
+          const asset: PAsset = {
+            ticker: balance.asset.ticker || '',
+            name: balance.asset.name || '',
+            precision: balance.asset.precision,
+            assetHash: balance.asset.assetHash,
+          };
+          return asset;
+        });
 
-      const filteredPair2AssetList: Asset[] | undefined = walletContext?.balances
+      const filteredPair2AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
-        .map((balance) => balance.asset);
+        .map((balance) => {
+          const asset: PAsset = {
+            ticker: balance.asset.ticker || '',
+            name: balance.asset.name || '',
+            precision: balance.asset.precision,
+            assetHash: balance.asset.assetHash,
+          };
+          return asset;
+        });
 
       setPair1AssetList(filteredPair1AssetList);
       setPair2AssetList(filteredPair2AssetList);

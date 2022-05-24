@@ -45,7 +45,7 @@ const RemoveLiquidity = (): JSX.Element => {
   useEffect(() => {
     if (poolsContext && poolsContext.length > 0 && walletContext) {
       const currentPool = poolsContext[0];
-      const lpTokenAssetId = currentPool.lp.asset;
+      const lpTokenAssetId = currentPool.lp.assetHash;
 
       const lpTokenInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 

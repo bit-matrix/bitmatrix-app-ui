@@ -36,19 +36,19 @@ const mockPools: ModelPool[] = [
     quote: {
       ticker: 'tL-BTC',
       name: 'Liquid Testnet Bitcoin',
-      asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+      assetHash: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
       value: '3672106944',
     },
     token: {
       ticker: 'tL-USDt',
       name: 'Liquid Testnet Tether',
-      asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+      assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
       value: '130023286000000',
     },
     lp: {
       ticker: 'tL-BTC:tL-USDt:0',
       name: 'Liquid Testnet LP: Bitcoin:Tether:3 Liquidty Provider',
-      asset: 'afd89e5dc9e11e78f7482a5b6aeaac7d41854758d9879b946023cbfa130b6908',
+      assetHash: 'afd89e5dc9e11e78f7482a5b6aeaac7d41854758d9879b946023cbfa130b6908',
       value: '1983947548',
     },
     initialTx: {
@@ -69,26 +69,26 @@ const mockPools: ModelPool[] = [
       block_height: 354683,
     },
     lastSentPtx: '',
-    usdPrice: 30000,
+    usdPrice: 35000,
   },
   {
     id: '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
     quote: {
       ticker: 'tL-BTC',
       name: 'Liquid Testnet Bitcoin',
-      asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+      assetHash: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
       value: '23468441280',
     },
     token: {
       ticker: 'tL-USDt',
       name: 'Liquid Testnet Tether',
-      asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+      assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
       value: '769146007000000',
     },
     lp: {
       ticker: 'tL-BTC:tL-USDt:0',
       name: 'Liquid Testnet LP: Bitcoin:Tether:3 Liquidty Provider',
-      asset: 'e720cb147bcb6777b08969ce9ba14cb376d84ea11c7edd4196a912ee9947ce2b',
+      assetHash: 'e720cb147bcb6777b08969ce9ba14cb376d84ea11c7edd4196a912ee9947ce2b',
       value: '1825367664',
     },
     initialTx: {
@@ -109,7 +109,7 @@ const mockPools: ModelPool[] = [
       block_height: 230544,
     },
     lastSentPtx: '',
-    usdPrice: 35000,
+    usdPrice: 30000,
   },
 ];
 

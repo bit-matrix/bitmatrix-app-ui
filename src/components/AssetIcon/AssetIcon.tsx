@@ -1,12 +1,12 @@
 import React from 'react';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
-import { Asset } from '../../model/Asset';
+import { PAsset } from '@bitmatrix/models';
 import LbtcIcon from '../base/Svg/Icons/Lbtc';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import UnknownIcon from '../base/Svg/Icons/Unknown';
 
 type Props = {
-  asset: Asset;
+  asset: PAsset;
   width?: string;
   height?: string;
   className?: string;

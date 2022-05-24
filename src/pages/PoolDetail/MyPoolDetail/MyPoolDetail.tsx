@@ -53,7 +53,7 @@ export const MyPoolDetail: React.FC = () => {
     if (poolsContext && poolsContext.length > 0 && walletContext) {
       const currentPool = poolsContext[0];
 
-      const lpAssetId = currentPool.lp.asset;
+      const lpAssetId = currentPool.lp.assetHash;
       const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
       const lpAmountInWalletN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
