@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Input, Modal } from 'rsuite';
-import { Asset } from '../../model/Asset';
+import { PAsset } from '@bitmatrix/models';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import './AssetListModal.scss';
 
 type Props = {
   show: boolean;
-  assetList: Asset[];
-  selectedAsset?: Asset;
+  assetList: PAsset[];
+  selectedAsset?: PAsset;
   close: () => void;
-  onSelectAsset: (asset: Asset) => void;
+  onSelectAsset: (asset: PAsset) => void;
 };
 
 export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
-  const [filteredAssetList, setFilteredAssetLİst] = useState<Asset[]>();
+  const [filteredAssetList, setFilteredAssetLİst] = useState<PAsset[]>();
 
   useEffect(() => {
     setFilteredAssetLİst(assetList);
@@ -21,13 +21,13 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
 
   const assetSearch = (input: string) => {
     let currentAssetList = [...assetList];
-    const searchName: Asset[] = assetList.filter((asset) => {
+    const searchName: PAsset[] = assetList.filter((asset) => {
       return asset.name?.toLowerCase().match(input.toLowerCase().trim())?.input;
     });
-    const searchTicker: Asset[] = assetList.filter((asset) => {
+    const searchTicker: PAsset[] = assetList.filter((asset) => {
       return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
     });
-    const searchAssetID: Asset[] = assetList.filter((asset) => asset.assetHash === input.trim());
+    const searchAssetID: PAsset[] = assetList.filter((asset) => asset.assetHash === input.trim());
     if (searchTicker.length > 0) {
       currentAssetList = searchTicker;
     } else if (searchName.length > 0) {

@@ -87,6 +87,7 @@
   // border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   margin: 0;
+  user-select: none;
 
   &:hover {
     background-color: $bmFrenchGray;
@@ -95,7 +96,14 @@
 }
 
 .selected-asset-item {
-  background-color: $bmBoltgunMetal;
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+
+  &:hover {
+    background-color: transparent;
+    color: $bmVeryLightGray;
+  }
 }
 
 .asset-ticker {
