@@ -236,7 +236,7 @@ export const Swap = (): JSX.Element => {
     });
   };
 
-  const findCurrentPool = (from?: PAsset, to?: PAsset) => {
+  const findCurrentPool = useCallback((from?: PAsset, to?: PAsset) => {
     if (from && to) {
       const filteredPools = poolsContext.filter(
         (pool) =>
@@ -248,40 +248,43 @@ export const Swap = (): JSX.Element => {
       getBmConfigs(sortedPools[0].id);
       setCurrentPool(sortedPools[0]);
     }
-  };
+  }, []);
 
-  const assetOnChange = useCallback((asset: PAsset, isFrom = true) => {
-    if (isFrom) {
-      if (selectedPairAsset.from?.ticker !== asset.ticker) {
-        if (selectedPairAsset.to) {
-          if (selectedPairAsset.to?.ticker === asset.ticker) {
-            setSelectedPairAsset({ from: asset, to: selectedPairAsset.from });
-            findCurrentPool(asset, selectedPairAsset.from);
+  const assetOnChange = useCallback(
+    (asset: PAsset, isFrom = true) => {
+      if (isFrom) {
+        if (selectedPairAsset.from?.ticker !== asset.ticker) {
+          if (selectedPairAsset.to) {
+            if (selectedPairAsset.to?.ticker === asset.ticker) {
+              setSelectedPairAsset({ from: asset, to: selectedPairAsset.from });
+              findCurrentPool(asset, selectedPairAsset.from);
+            } else {
+              setSelectedPairAsset({ ...selectedPairAsset, from: asset });
+              findCurrentPool(asset, selectedPairAsset.to);
+            }
           } else {
             setSelectedPairAsset({ ...selectedPairAsset, from: asset });
             findCurrentPool(asset, selectedPairAsset.from);
           }
-        } else {
-          setSelectedPairAsset({ ...selectedPairAsset, from: asset });
-          findCurrentPool(asset, selectedPairAsset.from);
+        }
+      } else {
+        if (selectedPairAsset.to?.ticker !== asset.ticker) {
+          if (selectedPairAsset.from?.ticker === asset.ticker) {
+            setSelectedPairAsset({ from: selectedPairAsset.to, to: asset });
+            findCurrentPool(selectedPairAsset.to, asset);
+          } else {
+            setSelectedPairAsset({ ...selectedPairAsset, to: asset });
+            findCurrentPool(selectedPairAsset.from, asset);
+          }
         }
       }
-    } else {
-      if (selectedPairAsset.to?.ticker !== asset.ticker) {
-        if (selectedPairAsset.from?.ticker === asset.ticker) {
-          setSelectedPairAsset({ from: selectedPairAsset.to, to: asset });
-          findCurrentPool(selectedPairAsset.to, asset);
-        } else {
-          setSelectedPairAsset({ ...selectedPairAsset, to: asset });
-          findCurrentPool(selectedPairAsset.from, asset);
-        }
-      }
-    }
 
-    setInputFromAmount('');
-    setInputToAmount('');
-    setSelectedFromAmountPercent(undefined);
-  }, []);
+      setInputFromAmount('');
+      setInputToAmount('');
+      setSelectedFromAmountPercent(undefined);
+    },
+    [selectedPairAsset],
+  );
 
   const swapRouteChange = () => {
     setSelectedPairAsset({ from: selectedPairAsset.to, to: selectedPairAsset.from });
