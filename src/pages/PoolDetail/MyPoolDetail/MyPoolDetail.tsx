@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { convertion } from '@bitmatrix/lib';
-import { Pool } from '@bitmatrix/models';
-import { usePoolChartDataContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { api, convertion } from '@bitmatrix/lib';
+import { BmChart, Pool } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -24,30 +24,50 @@ import './MyPoolDetail.scss';
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
   const [pool, setPool] = useState<Pool>();
+  const [poolChartData, setPoolChartData] = useState<BmChart[]>();
   const [loading, setLoading] = useState(true);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolChartDataContext } = usePoolChartDataContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
-
-      setPool(currentPool);
-    }
+    api
+      .getPoolChartData(id)
+      .then((pc) => {
+        setPoolChartData(pc);
+        if (poolsContext && poolsContext.length > 0) {
+          const currentPool = poolsContext.find((pl) => pl.id === id);
+          setPool(currentPool);
+        }
+      })
+      .catch(() => console.log('Pool Chart Data Error'))
+      .finally(() => setLoading(false));
   }, [poolsContext]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 200);
+  // }, []);
+
+  // useEffect(() => {
+  //   if (poolsContext && poolsContext.length > 0) {
+  //     const currentPool = poolsContext.find((pl) => pl.id === id);
+
+  //     setPool(currentPool);
+  //   }
+  // }, [poolsContext]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 200);
+  // }, []);
 
   const calcPooledAssets = () => {
     if (poolsContext && poolsContext.length > 0 && walletContext) {
@@ -112,7 +132,7 @@ export const MyPoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || poolChartDataContext === undefined) {
+  if (pool === undefined || poolChartData === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);
