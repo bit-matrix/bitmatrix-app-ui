@@ -36,17 +36,17 @@ export const PoolDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    api.getPoolChartData(id).then((pc) => {
-      setPoolChartData(pc);
-      setLoading(false);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
-      setPool(currentPool);
-    }
+    api
+      .getPoolChartData(id)
+      .then((pc) => {
+        setPoolChartData(pc);
+        if (poolsContext && poolsContext.length > 0) {
+          const currentPool = poolsContext.find((pl) => pl.id === id);
+          setPool(currentPool);
+        }
+      })
+      .catch(() => console.log('Pool Chart Data Error'))
+      .finally(() => setLoading(false));
   }, [poolsContext]);
 
   // useEffect(() => {
