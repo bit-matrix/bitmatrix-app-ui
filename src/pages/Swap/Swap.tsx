@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
@@ -11,7 +11,7 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
+import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import Decimal from 'decimal.js';
@@ -20,11 +20,10 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
+import { usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-import { Asset } from '../../model/Asset';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './Swap.scss';
 
@@ -32,8 +31,8 @@ export const Swap = (): JSX.Element => {
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
 
   const [selectedPairAsset, setSelectedPairAsset] = useState<{
-    from?: Asset;
-    to?: Asset;
+    from?: PAsset;
+    to?: PAsset;
   }>({ from: lbtcAsset });
 
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
@@ -56,14 +55,13 @@ export const Swap = (): JSX.Element => {
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
 
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
-  const assetList: Asset[] = uniqueAssetList(poolsContext);
+  const assetList: PAsset[] = uniqueAssetList(poolsContext);
 
   useEffect(() => {
     if (currentPool && poolsContext.length > 0 && poolConfig && swapWay) {
@@ -145,10 +143,10 @@ export const Swap = (): JSX.Element => {
 
       let inputAmount = '';
 
-      const quoteAssetId = currentPool.quote.asset;
+      const quoteAssetId = currentPool.quote.assetHash;
       const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-      const tokenAssetId = currentPool.token.asset;
+      const tokenAssetId = currentPool.token.assetHash;
       const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
       const totalFee =
@@ -205,10 +203,10 @@ export const Swap = (): JSX.Element => {
           poolConfig.serviceFee.number +
           1000;
 
-        const quoteAssetId = currentPool.quote.asset;
+        const quoteAssetId = currentPool.quote.assetHash;
         const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-        const tokenAssetId = currentPool.token.asset;
+        const tokenAssetId = currentPool.token.assetHash;
         const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
         if (selectedPairAsset.from?.ticker === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
@@ -238,63 +236,52 @@ export const Swap = (): JSX.Element => {
     });
   };
 
-  const findCurrentPool = (from?: Asset, to?: Asset) => {
+  const findCurrentPool = (from?: PAsset, to?: PAsset) => {
     if (from && to) {
       const filteredPools = poolsContext.filter(
         (pool) =>
           (pool.quote.ticker === from.ticker || pool.quote.ticker === to.ticker) &&
           (pool.token.ticker === from.ticker || pool.token.ticker === to.ticker),
       );
-      if (filteredPools.length > 1) {
-        let bestPrice = 0;
 
-        filteredPools.forEach((pool) => {
-          if (bestPrice < pool.usdPrice) {
-            bestPrice = pool.usdPrice;
-          }
-        });
-
-        const currentPool = filteredPools.find((p) => p.usdPrice === bestPrice);
-
-        if (currentPool) {
-          getBmConfigs(currentPool?.id);
-          setCurrentPool(currentPool);
-        }
-      } else {
-        getBmConfigs(filteredPools[0].id);
-        setCurrentPool(filteredPools[0]);
-      }
+      const sortedPools = filteredPools.sort((a, b) => b.usdPrice - a.usdPrice);
+      getBmConfigs(sortedPools[0].id);
+      setCurrentPool(sortedPools[0]);
     }
   };
 
-  const assetOnChange = (asset: Asset, isFrom = true) => {
+  const assetOnChange = useCallback((asset: PAsset, isFrom = true) => {
     if (isFrom) {
-      if (selectedPairAsset.to) {
-        if (selectedPairAsset.to?.ticker === asset.ticker) {
-          setSelectedPairAsset({ from: asset, to: selectedPairAsset.from });
-          findCurrentPool(asset, selectedPairAsset.from);
+      if (selectedPairAsset.from?.ticker !== asset.ticker) {
+        if (selectedPairAsset.to) {
+          if (selectedPairAsset.to?.ticker === asset.ticker) {
+            setSelectedPairAsset({ from: asset, to: selectedPairAsset.from });
+            findCurrentPool(asset, selectedPairAsset.from);
+          } else {
+            setSelectedPairAsset({ ...selectedPairAsset, from: asset });
+            findCurrentPool(asset, selectedPairAsset.from);
+          }
         } else {
           setSelectedPairAsset({ ...selectedPairAsset, from: asset });
           findCurrentPool(asset, selectedPairAsset.from);
         }
-      } else {
-        setSelectedPairAsset({ ...selectedPairAsset, from: asset });
-        findCurrentPool(asset, selectedPairAsset.from);
       }
     } else {
-      if (selectedPairAsset.from?.ticker === asset.ticker) {
-        setSelectedPairAsset({ from: selectedPairAsset.to, to: asset });
-        findCurrentPool(selectedPairAsset.to, asset);
-      } else {
-        setSelectedPairAsset({ ...selectedPairAsset, to: asset });
-        findCurrentPool(selectedPairAsset.from, asset);
+      if (selectedPairAsset.to?.ticker !== asset.ticker) {
+        if (selectedPairAsset.from?.ticker === asset.ticker) {
+          setSelectedPairAsset({ from: selectedPairAsset.to, to: asset });
+          findCurrentPool(selectedPairAsset.to, asset);
+        } else {
+          setSelectedPairAsset({ ...selectedPairAsset, to: asset });
+          findCurrentPool(selectedPairAsset.from, asset);
+        }
       }
     }
 
     setInputFromAmount('');
     setInputToAmount('');
     setSelectedFromAmountPercent(undefined);
-  };
+  }, []);
 
   const swapRouteChange = () => {
     setSelectedPairAsset({ from: selectedPairAsset.to, to: selectedPairAsset.from });
@@ -447,7 +434,7 @@ export const Swap = (): JSX.Element => {
 
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
-    return 'Please select asset';
+    return 'Network fee 801 sats';
   };
 
   return (
