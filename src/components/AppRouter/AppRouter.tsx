@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { api, Wallet } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmChart } from '@bitmatrix/models';
-import { usePoolContext, useWalletContext, usePoolChartDataContext, useSettingsContext } from '../../context';
+import { Wallet } from '@bitmatrix/lib';
+import { Pool as ModelPool } from '@bitmatrix/models';
+import { usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
 import { Footer } from './Footer/Footer';
@@ -70,6 +70,27 @@ const mockPools: ModelPool[] = [
     },
     lastSentPtx: '',
     usdPrice: 35000,
+    tvl: {
+      value: 2600465.72,
+      rate: { value: '2.91', direction: 'up' },
+    },
+    volume: {
+      value: 272601,
+      rate: { value: '714.90', direction: 'up' },
+    },
+    fees: {
+      value: 545.202,
+      rate: { value: '714.90', direction: 'up' },
+    },
+    price: {
+      value: 35408.36037263298,
+      rate: { value: '5.93', direction: 'up' },
+      allPriceData: [
+        { close: 2324, date: '2022-02-02' },
+        { close: 3146, date: '2022-02-07' },
+        { close: 32897, date: '2022-05-24' },
+      ],
+    },
   },
   {
     id: '0bc48e957a11bb1fd50c6297c98225b8687b61f1af87a8ac625f5e5e5c6e3585',
@@ -110,6 +131,27 @@ const mockPools: ModelPool[] = [
     },
     lastSentPtx: '',
     usdPrice: 30000,
+    tvl: {
+      value: 2600465.72,
+      rate: { value: '2.91', direction: 'up' },
+    },
+    volume: {
+      value: 272601,
+      rate: { value: '714.90', direction: 'up' },
+    },
+    fees: {
+      value: 545.202,
+      rate: { value: '714.90', direction: 'up' },
+    },
+    price: {
+      value: 35408.36037263298,
+      rate: { value: '5.93', direction: 'up' },
+      allPriceData: [
+        { close: 2324, date: '2022-02-02' },
+        { close: 3146, date: '2022-02-07' },
+        { close: 32897, date: '2022-05-24' },
+      ],
+    },
   },
 ];
 
@@ -119,18 +161,18 @@ export const AppRouter = (): JSX.Element => {
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   // const { setPoolConfigContext } = usePoolConfigContext();
-  const { setPoolChartDataContext } = usePoolChartDataContext();
+  // const { setPoolChartDataContext } = usePoolChartDataContext();
 
   // const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
-    fetchData(true);
+    fetchData();
     // fetchPools(true);
-    setInterval(() => {
-      fetchData(false);
-      // fetchPools(false);
-    }, 10000);
+    // setInterval(() => {
+    //   fetchData(false);
+    //   // fetchPools(false);
+    // }, 10000);
   }, []);
 
   useEffect(() => {
@@ -203,7 +245,7 @@ export const AppRouter = (): JSX.Element => {
     }
   };
 
-  const fetchData = async (isInitialize: boolean) => {
+  const fetchData = async (/*isInitialize: boolean*/) => {
     // const pools: ModelPool[] = await api.getPools();
 
     // const filteredPool = pools.filter(
@@ -233,11 +275,11 @@ export const AppRouter = (): JSX.Element => {
     //     setPoolConfigContext(pool_config);
     //   }
 
-    if (location.pathname.startsWith('/pool') || isInitialize) {
-      const pool_chart_data: BmChart[] = await api.getPoolChartData(mockPools[0].id);
+    // if (location.pathname.startsWith('/pool') || isInitialize) {
+    //   const pool_chart_data: BmChart[] = await api.getPoolChartData(mockPools[0].id);
 
-      setPoolChartDataContext(pool_chart_data);
-    }
+    //   setPoolChartDataContext(pool_chart_data);
+    // }
     setLoading(false);
     // }
   };
