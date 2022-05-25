@@ -112,6 +112,10 @@
     background-color: var(--theme-color);
     opacity: 1;
   }
+
+  &:focus {
+    background-color: var(--theme-color);
+  }
 }
 
 .asset-button-selected {
