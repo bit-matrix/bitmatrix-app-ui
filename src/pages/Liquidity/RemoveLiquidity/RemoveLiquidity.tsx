@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
-import { CALL_METHOD } from '@bitmatrix/models';
-import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import Decimal from 'decimal.js';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
@@ -31,27 +31,37 @@ const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
+  const [poolConfig, setPoolConfig] = useState<BmConfig>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+
+  const currentPool = poolsContext.find((p) => p.id === id);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0 && walletContext) {
-      const currentPool = poolsContext[0];
+    if (currentPool) {
+      api.getBmConfigs(currentPool?.id).then((cp) => {
+        setPoolConfig(cp);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (currentPool && walletContext) {
       const lpTokenAssetId = currentPool.lp.assetHash;
 
       const lpTokenInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpTokenAssetId);
 
       setLpTokenAmount(lpTokenInWallet?.amount || 0);
     }
-  }, [poolsContext, walletContext?.balances]);
+  }, [currentPool, walletContext?.balances]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)
@@ -67,11 +77,10 @@ const RemoveLiquidity = (): JSX.Element => {
     if (walletContext?.marina) {
       const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
 
-      if (poolsContext && poolConfigContext) {
-        const pool = poolsContext[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+      if (currentPool && poolConfig) {
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
-        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
+        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, currentPool, primaryPoolConfig, methodCall);
 
         let fundingTxId;
 
@@ -101,14 +110,14 @@ const RemoveLiquidity = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
 
           const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
             calcLpTokenAmount,
             fundingTxId,
             addressInformation.publicKey,
             primaryPoolConfig,
-            pool,
+            currentPool,
           );
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
@@ -119,11 +128,11 @@ const RemoveLiquidity = (): JSX.Element => {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settingsContext.preferred_unit.value,
-              quoteAsset: pool.quote.ticker,
+              quoteAsset: currentPool.quote.ticker,
               tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
-              tokenAsset: pool.token.ticker,
+              tokenAsset: currentPool.token.ticker,
               lpAmount: calcLpTokenAmount,
-              lpAsset: pool.lp.ticker,
+              lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
               isOutOfSlippage: false,
               completed: false,
