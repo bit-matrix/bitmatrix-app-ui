@@ -25,10 +25,10 @@ export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(true);
   const [poolChartData, setPoolChartData] = useState<BmChart[]>();
 
   const { poolsContext } = usePoolContext();
-  // const { poolChartDataContext } = usePoolChartDataContext();
   const { settingsContext } = useSettingsContext();
 
   const history = useHistory();
@@ -40,20 +40,19 @@ export const PoolDetail: React.FC = () => {
       .getPoolChartData(id)
       .then((pc) => {
         setPoolChartData(pc);
+      })
+      .catch(() => console.log('Pool Chart Data Error'))
+      .finally(() => {
         if (poolsContext && poolsContext.length > 0) {
           const currentPool = poolsContext.find((pl) => pl.id === id);
           setPool(currentPool);
+          setLoading(false);
         }
-      })
-      .catch(() => console.log('Pool Chart Data Error'))
-      .finally(() => setLoading(false));
+        setTimeout(() => {
+          setChartLoading(false);
+        }, 200);
+      });
   }, [poolsContext]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 200);
-  // }, []);
 
   const renderChart = (allData: any) => {
     let data: ChartData[] = [
@@ -231,7 +230,7 @@ export const PoolDetail: React.FC = () => {
                 Add Liquidity
               </Button>
             </div>
-            <div className="pool-detail-content-right mobile-hidden">{!loading && renderChart(data)}</div>
+            <div className="pool-detail-content-right mobile-hidden">{!chartLoading && renderChart(data)}</div>
           </div>
         </div>
       </div>
