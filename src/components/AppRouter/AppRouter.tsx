@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Wallet } from '@bitmatrix/lib';
-import { Pool as ModelPool } from '@bitmatrix/models';
+import { Wallet, api } from '@bitmatrix/lib';
+import { Pool as ModelPool, BmCtxMempool } from '@bitmatrix/models';
 import { usePoolContext, useWalletContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { Swap } from '../../pages/Swap/Swap';
@@ -13,8 +13,8 @@ import { Pool } from '../../pages/Pool/Pool';
 // import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../../pages/Settings/Settings';
-// import { useLocalStorage } from '../../hooks/useLocalStorage';
-// import { CommitmentStore } from '../../model/CommitmentStore';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { CommitmentStore } from '../../model/CommitmentStore';
 import RemoveLiquidity from '../../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../../pages/PoolDetail/PoolDetail';
@@ -37,13 +37,13 @@ const mockPools: ModelPool[] = [
       ticker: 'tL-BTC',
       name: 'Liquid Testnet Bitcoin',
       assetHash: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-      value: '3672106944',
+      value: '3852510269',
     },
     token: {
       ticker: 'tL-USDt',
       name: 'Liquid Testnet Tether',
       assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-      value: '130023286000000',
+      value: '124096791000000',
     },
     lp: {
       ticker: 'tL-BTC:tL-USDt:0',
@@ -54,20 +54,20 @@ const mockPools: ModelPool[] = [
     initialTx: {
       txid: 'e85b7e376d40b5029a16546555d22398b0168c86768d9f53701976a054b242a6',
       block_hash: 'fac4c35dd58fa5a337f04b02e4e1b2966df3e3d45ae2d3edbb87efde7c464fb9',
-      block_height: 198926,
+      block_height: 1983624303,
     },
     lastSyncedBlock: {
-      block_height: 354691,
-      block_hash: '93fd1d29981f076ec4d47cf8a08e77413895889a17a04564d9cf57eed8e7922d',
+      block_height: 358138,
+      block_hash: '58d4bfcb22dc757d2deac836fba059c619ea615c520cb47fde54eefcd82374c2',
     },
-    bestBlockHeight: 354691,
+    unspentTx: {
+      txid: '6221fbcd3f09aae78b0acaacfb834d8cfe58eaf2b0e4a2bd7011d19d25d788fa',
+      block_hash: '8f3283337c8c571ee76c8e01027bce42335f930b0a20ebc88b93adbb5fa40c11',
+      block_height: 358070,
+    },
+    bestBlockHeight: 358138,
     synced: true,
     active: true,
-    unspentTx: {
-      txid: '1bf61fed01391f1e5e8d039b0311333fd61032b9dee41492e0a49290e8aa0d33',
-      block_hash: 'f9c32660620caae9e67675981c12352f8649e6e5a73c7ec6ed046887a61821b3',
-      block_height: 354683,
-    },
     lastSentPtx: '',
     usdPrice: 35000,
     tvl: {
@@ -163,16 +163,16 @@ export const AppRouter = (): JSX.Element => {
   // const { setPoolConfigContext } = usePoolConfigContext();
   // const { setPoolChartDataContext } = usePoolChartDataContext();
 
-  // const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
-    fetchData();
+    fetchData(true);
     // fetchPools(true);
-    // setInterval(() => {
-    //   fetchData(false);
-    //   // fetchPools(false);
-    // }, 10000);
+    setInterval(() => {
+      fetchData(false);
+      // fetchPools(false);
+    }, 10000);
   }, []);
 
   useEffect(() => {
@@ -200,23 +200,7 @@ export const AppRouter = (): JSX.Element => {
           fetchBalances(walletContext.marina);
         }
       });
-
-      // setInterval(() => {
-      //   if (walletContext) {
-      //     walletContext?.marina.getNetwork().then((network: NetworkString) => {
-      //       setNetworkContext(network);
-      //     });
-      //   }
-      // }, 1000);
-
-      // payloadData.wallet.marina.reloadCoins();
     }
-
-    // setInterval(() => {
-    //   if (payloadData.wallet) {
-    //     fetchBalances(payloadData.wallet?.marina);
-    //   }
-    // }, 60000);
   }, [walletContext?.marina]);
 
   const fetchBalances = async (wall: Wallet) => {
@@ -245,86 +229,56 @@ export const AppRouter = (): JSX.Element => {
     }
   };
 
-  const fetchData = async (/*isInitialize: boolean*/) => {
-    // const pools: ModelPool[] = await api.getPools();
-
-    // const filteredPool = pools.filter(
-    //   (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
-    // );
-
-    setPoolsContext(mockPools);
-
-    // let bestPrice = 0;
-
-    // mockPools.forEach((pool) => {
-    //   if (bestPrice < pool.usdPrice) {
-    //     bestPrice = pool.usdPrice;
-    //   }
-    // });
-
-    // const currentPool = mockPools.find((p) => p.usdPrice === bestPrice);
-
-    // if (currentPool) {
-    //   const poolId: string = currentPool?.id;
-
-    //   checkLastTxStatus(poolId);
-
-    //   if (isInitialize) {
-    //     const pool_config: BmConfig = await api.getBmConfigs(poolId);
-
-    //     setPoolConfigContext(pool_config);
-    //   }
-
-    // if (location.pathname.startsWith('/pool') || isInitialize) {
-    //   const pool_chart_data: BmChart[] = await api.getPoolChartData(mockPools[0].id);
-
-    //   setPoolChartDataContext(pool_chart_data);
-    // }
+  const fetchData = async (isInitialize: boolean) => {
+    if (isInitialize) {
+      // const pools: ModelPool[] = await api.getPools();
+      setPoolsContext(mockPools);
+    }
+    checkLastTxStatus(mockPools[0].id);
     setLoading(false);
-    // }
   };
 
-  // const checkLastTxStatus = (poolId: string) => {
-  //   const txHistory = getLocalData();
+  const checkLastTxStatus = (poolId: string) => {
+    const txHistory = getLocalData();
 
-  //   if (txHistory && txHistory.length > 0) {
-  //     const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+    if (txHistory && txHistory.length > 0) {
+      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
 
-  //     if (unconfirmedTxs.length > 0) {
-  //       unconfirmedTxs.forEach((transaction) => {
-  //         if (transaction.txId) {
-  //           api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
-  //             if (ctxResponse) {
-  //               const newTxHistory = [...txHistory];
-  //               const willChangedTx = newTxHistory.findIndex((ntx) => {
-  //                 return ntx.txId === transaction.txId;
-  //               });
+      if (unconfirmedTxs.length > 0) {
+        unconfirmedTxs.forEach((transaction) => {
+          if (transaction.txId) {
+            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
+              if (ctxResponse) {
+                const newTxHistory = [...txHistory];
+                const willChangedTx = newTxHistory.findIndex((ntx) => {
+                  return ntx.txId === transaction.txId;
+                });
 
-  //               newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
-  //               setLocalData(newTxHistory);
-  //             }
+                newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
+                setLocalData(newTxHistory);
+              }
 
-  //             if (!ctxResponse) {
-  //               api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
-  //                 if (ptxResponse) {
-  //                   const newTxHistory = [...txHistory];
-  //                   const willChangedTx = newTxHistory.findIndex((ntx) => {
-  //                     return ntx.txId === transaction.txId;
-  //                   });
+              if (!ctxResponse) {
+                api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
+                  if (ptxResponse) {
+                    const newTxHistory = [...txHistory];
+                    const willChangedTx = newTxHistory.findIndex((ntx) => {
+                      return ntx.txId === transaction.txId;
+                    });
 
-  //                   newTxHistory[willChangedTx].completed = true;
-  //                   newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
+                    newTxHistory[willChangedTx].completed = true;
+                    newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
 
-  //                   setLocalData(newTxHistory);
-  //                 }
-  //               });
-  //             }
-  //           });
-  //         }
-  //       });
-  //     }
-  //   }
-  // };
+                    setLocalData(newTxHistory);
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    }
+  };
 
   return (
     <Router>
