@@ -23,9 +23,12 @@ export const PoolManagement: React.FC<Props> = ({ pools, onClick }) => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
+
   const { walletContext } = useWalletContext();
-  const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
+
   const history = useHistory();
+
+  const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
   useEffect(() => {
     const prevPage = history.location.state;
