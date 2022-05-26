@@ -1,0 +1,69 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.tab-menu {
+  height: 30px;
+  display: flex;
+  white-space: nowrap;
+  position: relative;
+  // text-transform: uppercase;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+
+  div {
+    user-select: none;
+  }
+}
+
+.tab-menu-item {
+  flex: 1;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  height: 100%;
+  cursor: pointer;
+  max-width: 100%;
+  font-weight: 500;
+  z-index: 1;
+
+  &:active,
+  &:focus {
+    border: none;
+    outline: 0;
+  }
+}
+
+.tab-menu-item-text {
+  vertical-align: middle;
+  display: table-cell;
+  padding: 0 0.5rem;
+}
+
+.tab-menu-item-selected {
+  border-bottom: 2px solid var(--theme-color);
+  color: var(--theme-color);
+  height: 100%;
+  width: 70%;
+  margin: 0 auto;
+  min-width: fit-content;
+  font-weight: bold;
+
+  &::before {
+    left: 0;
+    right: 0;
+    -webkit-transition: left 0.3s ease-out, right 0.3s ease-out;
+    transition: left 0.3s ease-out, right 0.3s ease-out;
+  }
+}
+
+.tab-menu-line {
+  border-top: 2px solid $bmBalticSea;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .tab-menu-item-text {
+    padding: 0 2rem;
+  }
+}
