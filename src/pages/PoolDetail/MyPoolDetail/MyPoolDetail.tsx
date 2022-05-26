@@ -8,7 +8,7 @@ import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
-import { TabMenu } from '../../../components/TabMenu/TabMenu';
+import { TabMenu } from '../../../components/base/TabMenu/TabMenu';
 import { MY_POOL_DETAIL_TABS } from '../../../enum/MY_POOL_DETAIL_TABS';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';

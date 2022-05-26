@@ -7,7 +7,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useSettingsContext } from '../../context';
 import Numeral from 'numeral';
-import { Loading } from '../Loading/Loading';
+import { Loading } from '../base/Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';

@@ -7,7 +7,7 @@ import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { quoteAmountRound } from '../../helper';
-import { TabMenu } from '../../components/TabMenu/TabMenu';
+import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { BmChart, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
@@ -18,7 +18,7 @@ import TetherIcon from '../../components/base/Svg/Icons/Tether';
 // import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
 // import info from '../../images/info2.png';
 import { api } from '@bitmatrix/lib';
-import { Loading } from '../../components/Loading/Loading';
+import { Loading } from '../../components/base/Loading/Loading';
 import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {

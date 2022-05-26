@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { AppRouter } from './components/AppRouter/AppRouter';
+import { useEffect } from 'react';
+import { AppRouter } from './routes/AppRouter';
 import { useSettingsContext } from './context';
 import './App.scss';
 
