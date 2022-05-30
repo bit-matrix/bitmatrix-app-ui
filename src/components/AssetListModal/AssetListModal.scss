@@ -37,8 +37,6 @@
   }
 }
 
-
-
 .asset-list-header {
   padding: 1.25rem 1.5rem 0 1.5rem;
   .rs-modal-header-close {
@@ -56,7 +54,6 @@
   border-radius: 1rem;
   background-color: $bmBlackRussian !important;
 
-
   &:hover:not(:disabled) {
     border-color: var(--theme-color) !important;
   }
@@ -68,8 +65,9 @@
 }
 
 .divider {
-  border-top: 1px solid #212121;
+  border-top: 2px solid #212121;
   width: 100%;
+  margin-bottom: 0;
 }
 
 .asset-list-title {
@@ -86,9 +84,10 @@
   font-weight: 600;
   cursor: pointer;
   color: $bmVeryLightGray;
-  border-radius: 0.5rem;
+  // border-radius: 0.5rem;
   padding: 0.5rem 1rem;
-  
+  margin: 0;
+
   &:hover {
     background-color: $bmFrenchGray;
     color: $bmNero;
@@ -96,7 +95,7 @@
 }
 
 .selected-asset-item {
-  background-color:$bmBoltgunMetal;
+  background-color: $bmBoltgunMetal;
 }
 
 .asset-ticker {
