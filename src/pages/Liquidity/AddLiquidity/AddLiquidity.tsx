@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { useHistory } from 'react-router-dom';
@@ -200,48 +200,17 @@ const AddLiquidity = (): JSX.Element => {
 
   const addLiquidityClick = async () => {
     if (walletContext?.marina) {
-      const methodCall = CALL_METHOD.ADD_LIQUIDITY;
-
       const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
       const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
       if (poolsContext && poolConfigContext) {
         const pool = poolsContext[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const fundingTxInputs = fundingTxForLiquidity(quoteAmountN, tokenAmountN, pool, primaryPoolConfig, methodCall);
-
-        let fundingTxId;
-
-        try {
-          setLoading(true);
-          const fundingTx = await walletContext.marina.sendTransaction([
-            {
-              address: fundingTxInputs.fundingOutput1Address,
-              value: fundingTxInputs.fundingOutput1Value,
-              asset: fundingTxInputs.fundingOutput1AssetId,
-            },
-            {
-              address: fundingTxInputs.fundingOutput2Address,
-              value: fundingTxInputs.fundingOutput2Value,
-              asset: fundingTxInputs.fundingOutput2AssetId,
-            },
-          ]);
-
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-        } catch (err: any) {
-          notify(err.toString(), 'Wallet Error : ', 'error');
-          setLoading(false);
-
-          // payloadData.wallet.marina.reloadCoins();
-          return Promise.reject();
-        }
 
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+        if (addressInformation.publicKey) {
           setQuoteAmount('');
           setTokenAmount('');
           setLbtcPercent(undefined);
@@ -249,20 +218,19 @@ const AddLiquidity = (): JSX.Element => {
 
           const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
-          const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
+          const commitment = await commitmentSign.case3(
+            walletContext.marina,
             quoteAmountN,
             tokenAmountN,
-            fundingTxId,
-            addressInformation.publicKey,
-            primaryPoolConfig,
+
             pool,
+            primaryPoolConfig,
+            addressInformation.publicKey,
           );
 
-          const commitmentTxId = await api.sendRawTransaction(commitment);
-
-          if (commitmentTxId && commitmentTxId !== '') {
+          if (commitment && commitment !== '') {
             const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
+              txId: commitment,
               quoteAmount: quoteAmountN,
               quoteAsset: pool.quote.ticker,
               tokenAmount: tokenAmountN,

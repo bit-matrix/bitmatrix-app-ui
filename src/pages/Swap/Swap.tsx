@@ -157,6 +157,7 @@ export const Swap = (): JSX.Element => {
       setInputToAmount(input);
     }
   };
+
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       setSwapWay(SWAP_WAY.FROM);
@@ -341,6 +342,14 @@ export const Swap = (): JSX.Element => {
               addressInformation.publicKey,
             );
           } else {
+            commitmentTxId = await commitmentSign.case2(
+              walletContext.marina,
+              numberFromAmount,
+              numberToAmount,
+              poolsContext[0],
+              poolConfigContext,
+              addressInformation.publicKey,
+            );
           }
 
           if (commitmentTxId !== '') {

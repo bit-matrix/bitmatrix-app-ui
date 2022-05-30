@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolConfigContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import Decimal from 'decimal.js';
@@ -65,59 +65,27 @@ const RemoveLiquidity = (): JSX.Element => {
 
   const removeLiquidityClick = async () => {
     if (walletContext?.marina) {
-      const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
-
       if (poolsContext && poolConfigContext) {
         const pool = poolsContext[0];
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, pool, primaryPoolConfig, methodCall);
-
-        let fundingTxId;
-
-        try {
-          setLoading(true);
-          const fundingTx = await walletContext.marina.sendTransaction([
-            {
-              address: fundingTxInputs.fundingOutput1Address,
-              value: fundingTxInputs.fundingOutput1Value,
-              asset: fundingTxInputs.fundingOutput1AssetId,
-            },
-            {
-              address: fundingTxInputs.fundingOutput2Address,
-              value: fundingTxInputs.fundingOutput2Value,
-              asset: fundingTxInputs.fundingOutput2AssetId,
-            },
-          ]);
-
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-        } catch (err: any) {
-          notify(err.toString(), 'Wallet Error : ', 'error');
-          setLoading(false);
-          // payloadData.wallet.marina.reloadCoins();
-          return Promise.reject();
-        }
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+        if (addressInformation.publicKey) {
           const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
-          const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
+          const commitment = await commitmentSign.case4(
+            walletContext.marina,
             calcLpTokenAmount,
-            fundingTxId,
-            addressInformation.publicKey,
-            primaryPoolConfig,
             pool,
+            primaryPoolConfig,
+            addressInformation.publicKey,
           );
 
-          const commitmentTxId = await api.sendRawTransaction(commitment);
-
-          if (commitmentTxId && commitmentTxId !== '') {
+          if (commitment && commitment !== '') {
             const calcLpAmounts = calcLpValues();
 
             const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
+              txId: commitment,
               quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settingsContext.preferred_unit.value,
               quoteAsset: pool.quote.ticker,
               tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
