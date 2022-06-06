@@ -1,6 +1,8 @@
 import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
 import Numeral from 'numeral';
+import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
+import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
 
 export const timeDifference = (time: number): string => {
@@ -108,25 +110,53 @@ export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
 };
 
-export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
-  const assetList: PAsset[] = [];
+export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset[] } => {
+  const quoteList: PAsset[] = [];
+  const tokenList: PAsset[] = [];
   pools.forEach((pool: Pool) => {
-    assetList.push(pool.token);
-    assetList.push(pool.quote);
+    tokenList.push(pool.token);
+    quoteList.push(pool.quote);
   });
 
-  const uniqueList: string[] = [];
-  const uniqueAssetList: PAsset[] = [];
-  assetList.map((al) => {
-    if (!uniqueList.includes(al.ticker)) {
-      uniqueList.push(al.ticker);
-      uniqueAssetList.push({
-        assetHash: al.assetHash,
-        ticker: al.ticker,
-        name: al.name,
+  const uniqueQuoteList: string[] = [];
+  const uniqueQuoteAssetList: PAsset[] = [];
+  quoteList.map((ql) => {
+    if (!uniqueQuoteList.includes(ql.assetHash)) {
+      uniqueQuoteList.push(ql.assetHash);
+      uniqueQuoteAssetList.push({
+        assetHash: ql.assetHash,
+        ticker: ql.ticker,
+        name: ql.name,
         precision: 8,
       });
     }
   });
-  return uniqueAssetList;
+
+  const uniqueTokenList: string[] = [];
+  const uniqueTokenAssetList: PAsset[] = [];
+
+  tokenList.map((tl) => {
+    if (!uniqueTokenList.includes(tl.assetHash)) {
+      uniqueTokenList.push(tl.assetHash);
+      uniqueTokenAssetList.push({
+        assetHash: tl.assetHash,
+        ticker: tl.ticker,
+        name: tl.name,
+        precision: 8,
+      });
+    }
+  });
+
+  return {
+    quote: uniqueQuoteAssetList,
+    token: uniqueTokenAssetList,
+  };
+};
+
+export const getUnitValue = (asset: PAsset, settings: Settings): number => {
+  if (asset.ticker === SWAP_ASSET.LBTC) {
+    return settings.preferred_unit.value;
+  } else {
+    return PREFERRED_UNIT_VALUE.LBTC;
+  }
 };
