@@ -4,7 +4,7 @@ import { Wallet, api } from '@bitmatrix/lib';
 import { Pool as ModelPool, BmCtxMempool } from '@bitmatrix/models';
 import { usePoolContext, useWalletContext, useSettingsContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
-import { Swap } from '../pages/Swap/Swap';
+import { Swap2 } from '../pages/Swap2/Swap2';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
 import { Home } from '../pages/Home/Home';
@@ -295,7 +295,7 @@ export const AppRouter = (): JSX.Element => {
               <div className="app-content">
                 <Switch component={Fader}>
                   <Route exact path={ROUTE_PATH.HOME} component={Home} />
-                  <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+                  <Route exact path={ROUTE_PATH.SWAP} component={Swap2} />
                   <Route exact path={ROUTE_PATH.POOL} component={PoolPage} />
                   <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
                   <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />

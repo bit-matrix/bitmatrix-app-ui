@@ -347,6 +347,8 @@ export const Swap = (): JSX.Element => {
           ]);
 
           fundingTxId = await api.sendRawTransaction(fundingTx.hex);
+
+          console.log('fundingTxId', fundingTxId);
         } catch (err: any) {
           notify(err.toString(), 'Wallet Error : ', 'error');
           setLoading(false);
@@ -357,6 +359,8 @@ export const Swap = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          console.log('1');
+
           setSwapWay(undefined);
           setInputFromAmount('');
           setInputToAmount('');
@@ -365,6 +369,13 @@ export const Swap = (): JSX.Element => {
           let commitment: string;
 
           if (selectedPairAsset.from?.ticker === SWAP_ASSET.LBTC) {
+            console.log('2');
+            console.log('numberFromAmount', numberFromAmount);
+            console.log('fundingTxId', fundingTxId);
+            console.log('addressInformation.publicKey', addressInformation.publicKey);
+            console.log('numberToAmount', numberToAmount);
+            console.log('poolConfig', poolConfig);
+            console.log('currentPool', currentPool);
             commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
@@ -373,7 +384,9 @@ export const Swap = (): JSX.Element => {
               poolConfig,
               currentPool,
             );
+            console.log('commitment', commitment);
           } else {
+            console.log('3');
             commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
               numberFromAmount,
               fundingTxId,
@@ -385,8 +398,11 @@ export const Swap = (): JSX.Element => {
           }
 
           const commitmentTxId = await api.sendRawTransaction(commitment);
+          console.log('commitmentTxId', commitmentTxId);
 
           if (commitmentTxId && commitmentTxId !== '') {
+            console.log('4');
+
             // notify(
             //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
             //     See in Explorer
