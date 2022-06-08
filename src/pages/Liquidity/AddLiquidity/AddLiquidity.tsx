@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, commitmentTx, convertion, fundingTxForLiquidity } from '@bitmatrix/lib';
+import { api, commitmentTx, convertion } from '@bitmatrix/lib';
 import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
@@ -216,115 +216,95 @@ const AddLiquidity = (): JSX.Element => {
   }, [currentPool, poolConfig, quoteAmount, tokenAmount, walletContext]);
 
   const addLiquidityClick = async () => {
-    if (walletContext?.marina) {
-      const methodCall = CALL_METHOD.ADD_LIQUIDITY;
-
-      const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
-      const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-
-      if (currentPool && poolConfig) {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
-
-        const fundingTxInputs = fundingTxForLiquidity(
-          quoteAmountN,
-          tokenAmountN,
-          currentPool,
-          primaryPoolConfig,
-          methodCall,
-        );
-
-        let fundingTxId;
-
-        try {
-          setLoading(true);
-          const fundingTx = await walletContext.marina.sendTransaction([
-            {
-              address: fundingTxInputs.fundingOutput1Address,
-              value: fundingTxInputs.fundingOutput1Value,
-              asset: fundingTxInputs.fundingOutput1AssetId,
-            },
-            {
-              address: fundingTxInputs.fundingOutput2Address,
-              value: fundingTxInputs.fundingOutput2Value,
-              asset: fundingTxInputs.fundingOutput2AssetId,
-            },
-          ]);
-
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-        } catch (err: any) {
-          notify(err.toString(), 'Wallet Error : ', 'error');
-          setLoading(false);
-
-          // payloadData.wallet.marina.reloadCoins();
-          return Promise.reject();
-        }
-
-        setLoading(true);
-
-        const addressInformation = await walletContext.marina.getNextChangeAddress();
-
-        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-          setQuoteAmount('');
-          setTokenAmount('');
-          setLbtcPercent(undefined);
-          setUsdtPercent(undefined);
-
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
-
-          const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
-            quoteAmountN,
-            tokenAmountN,
-            fundingTxId,
-            addressInformation.publicKey,
-            primaryPoolConfig,
-            currentPool,
-          );
-
-          const commitmentTxId = await api.sendRawTransaction(commitment);
-
-          if (commitmentTxId && commitmentTxId !== '') {
-            const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
-              quoteAmount: quoteAmountN,
-              quoteAsset: currentPool.quote.ticker,
-              tokenAmount: tokenAmountN,
-              tokenAsset: currentPool.token.ticker,
-              lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
-              lpAsset: currentPool.lp.ticker,
-              timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
-              completed: false,
-              seen: false,
-              method: CALL_METHOD.ADD_LIQUIDITY,
-            };
-
-            const storeOldData = getLocalData() || [];
-
-            const newStoreData = [...storeOldData, tempTxData];
-
-            setLocalData(newStoreData);
-          }
-
-          // notify(
-          //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-          //     See in Explorer
-          //   </a>,
-          //   'Commitment Tx created successfully!',
-          //   'success',
-          // );
-          setLoading(false);
-
-          // await sleep(3000);
-
-          // payloadData.wallet.marina.reloadCoins();
-        } else {
-          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-
-          // payloadData.wallet.marina.reloadCoins();
-          setLoading(false);
-        }
-      }
-    }
+    // @afarukcali - review
+    // if (walletContext?.marina) {
+    //   const methodCall = CALL_METHOD.ADD_LIQUIDITY;
+    //   const quoteAmountN = new Decimal(Number(quoteAmount)).mul(settingsContext.preferred_unit.value).toNumber();
+    //   const tokenAmountN = new Decimal(tokenAmount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+    //   if (currentPool && poolConfig) {
+    //     const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+    //     const fundingTxInputs = fundingTxForLiquidity(
+    //       quoteAmountN,
+    //       tokenAmountN,
+    //       currentPool,
+    //       primaryPoolConfig,
+    //       methodCall,
+    //     );
+    //     let fundingTxId;
+    //     try {
+    //       setLoading(true);
+    //       const fundingTx = await walletContext.marina.sendTransaction([
+    //         {
+    //           address: fundingTxInputs.fundingOutput1Address,
+    //           value: fundingTxInputs.fundingOutput1Value,
+    //           asset: fundingTxInputs.fundingOutput1AssetId,
+    //         },
+    //         {
+    //           address: fundingTxInputs.fundingOutput2Address,
+    //           value: fundingTxInputs.fundingOutput2Value,
+    //           asset: fundingTxInputs.fundingOutput2AssetId,
+    //         },
+    //       ]);
+    //       fundingTxId = await api.sendRawTransaction(fundingTx.hex);
+    //     } catch (err: any) {
+    //       notify(err.toString(), 'Wallet Error : ', 'error');
+    //       setLoading(false);
+    //       // payloadData.wallet.marina.reloadCoins();
+    //       return Promise.reject();
+    //     }
+    //     setLoading(true);
+    //     const addressInformation = await walletContext.marina.getNextChangeAddress();
+    //     if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+    //       setQuoteAmount('');
+    //       setTokenAmount('');
+    //       setLbtcPercent(undefined);
+    //       setUsdtPercent(undefined);
+    //       const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+    //       const commitment = commitmentTx.liquidityAddCreateCommitmentTx(
+    //         quoteAmountN,
+    //         tokenAmountN,
+    //         fundingTxId,
+    //         addressInformation.publicKey,
+    //         primaryPoolConfig,
+    //         currentPool,
+    //       );
+    //       const commitmentTxId = await api.sendRawTransaction(commitment);
+    //       if (commitmentTxId && commitmentTxId !== '') {
+    //         const tempTxData: CommitmentStore = {
+    //           txId: commitmentTxId,
+    //           quoteAmount: quoteAmountN,
+    //           quoteAsset: currentPool.quote.ticker,
+    //           tokenAmount: tokenAmountN,
+    //           tokenAsset: currentPool.token.ticker,
+    //           lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
+    //           lpAsset: currentPool.lp.ticker,
+    //           timestamp: new Date().valueOf(),
+    //           isOutOfSlippage: false,
+    //           completed: false,
+    //           seen: false,
+    //           method: CALL_METHOD.ADD_LIQUIDITY,
+    //         };
+    //         const storeOldData = getLocalData() || [];
+    //         const newStoreData = [...storeOldData, tempTxData];
+    //         setLocalData(newStoreData);
+    //       }
+    //       // notify(
+    //       //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+    //       //     See in Explorer
+    //       //   </a>,
+    //       //   'Commitment Tx created successfully!',
+    //       //   'success',
+    //       // );
+    //       setLoading(false);
+    //       // await sleep(3000);
+    //       // payloadData.wallet.marina.reloadCoins();
+    //     } else {
+    //       notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
+    //       // payloadData.wallet.marina.reloadCoins();
+    //       setLoading(false);
+    //     }
+    //   }
+    // }
   };
 
   const calcLpValues = useCallback(() => {
