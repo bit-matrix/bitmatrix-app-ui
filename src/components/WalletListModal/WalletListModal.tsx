@@ -30,7 +30,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
           .then(() => {
             // wallet.getNextAddress().then((newAddress: MarinaAddressInterface) => {
             // setNewAddress(newAddress);
-            const marinaWallet = new Wallet();
+            const marinaWallet = new Wallet(window.marina);
 
             setLoading(false);
             close();

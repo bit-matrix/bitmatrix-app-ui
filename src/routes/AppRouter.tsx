@@ -22,11 +22,17 @@ import { MyPoolDetail } from '../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../pages/CreateNewPool/CreateNewPool';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
-import { NotFound } from '../pages/NotFound/NotFound';
+import { detectProvider, MarinaProvider } from 'marina-provider';
 import { SELECTED_THEME } from '../enum/SELECTED_THEME';
-import { detectProvider } from 'marina-provider';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
+import { NotFound } from '../pages/NotFound/NotFound';
 import './AppRouter.scss';
+
+declare global {
+  interface Window {
+    marina: MarinaProvider;
+  }
+}
 
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
@@ -178,14 +184,14 @@ export const AppRouter = (): JSX.Element => {
   useEffect(() => {
     detectProvider('marina')
       .then((marina) => {
-        const marinaWallet = new Wallet();
+        const marinaWallet = new Wallet(window.marina);
 
         marina.isEnabled().then((enabled) => {
           setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [] });
         });
       })
       .catch(() => {
-        const marinaWallet = new Wallet();
+        const marinaWallet = new Wallet(window.marina);
 
         setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [] });
       });
