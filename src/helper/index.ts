@@ -110,6 +110,29 @@ export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
 };
 
+// export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
+//   const assetList: PAsset[] = [];
+//   pools.forEach((pool: Pool) => {
+//     assetList.push(pool.token);
+//     assetList.push(pool.quote);
+//   });
+
+//   const uniqueList: string[] = [];
+//   const uniqueAssetList: PAsset[] = [];
+//   assetList.map((al) => {
+//     if (!uniqueList.includes(al.ticker)) {
+//       uniqueList.push(al.ticker);
+//       uniqueAssetList.push({
+//         assetHash: al.assetHash,
+//         ticker: al.ticker,
+//         name: al.name,
+//         precision: 8,
+//       });
+//     }
+//   });
+//   return uniqueAssetList;
+// };
+
 export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset[] } => {
   const quoteList: PAsset[] = [];
   const tokenList: PAsset[] = [];
@@ -128,6 +151,7 @@ export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset
         ticker: ql.ticker,
         name: ql.name,
         precision: 8,
+        value: '',
       });
     }
   });
@@ -143,6 +167,7 @@ export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset
         ticker: tl.ticker,
         name: tl.name,
         precision: 8,
+        value: '',
       });
     }
   });
@@ -159,4 +184,9 @@ export const getUnitValue = (asset: PAsset, settings: Settings): number => {
   } else {
     return PREFERRED_UNIT_VALUE.LBTC;
   }
+};
+
+export const isQuote = (currentPool: Pool, asset: PAsset | undefined): boolean => {
+  if (asset && asset.assetHash === currentPool.quote.assetHash) return true;
+  return false;
 };
