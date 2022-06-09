@@ -228,6 +228,7 @@ const AddLiquidity = (): JSX.Element => {
             setTokenAmount('');
             setLbtcPercent(undefined);
             setUsdtPercent(undefined);
+
             const tempTxData: CommitmentStore = {
               txId: commitment,
               quoteAmount: quoteAmountN,
@@ -248,6 +249,8 @@ const AddLiquidity = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setLocalData(newStoreData);
+
+            window.open('https://blockstream.info/liquidtestnet/tx/' + commitment, '_blank');
           }
 
           // notify(

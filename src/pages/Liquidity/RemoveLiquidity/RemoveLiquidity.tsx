@@ -104,6 +104,8 @@ const RemoveLiquidity = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
 
             setLocalData(newStoreData);
+
+            window.open('https://blockstream.info/liquidtestnet/tx/' + commitment, '_blank');
           }
 
           // notify(

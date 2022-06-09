@@ -373,6 +373,8 @@ export const Swap = (): JSX.Element => {
 
             setLoading(false);
 
+            window.open('https://blockstream.info/liquidtestnet/tx/' + commitmentTxId, '_blank');
+
             // await sleep(3000);
 
             // payloadData.wallet.marina.reloadCoins();
