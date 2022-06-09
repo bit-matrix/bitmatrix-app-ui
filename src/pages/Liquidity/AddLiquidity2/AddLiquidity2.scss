@@ -1,0 +1,259 @@
+@import '../../../style/themes/bitmatrix.scss';
+
+.add-liquidity-page-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: $bmDeepFir;
+  width: 100%;
+
+  .add-liquidity-page-content {
+    position: relative;
+    margin: 0 auto;
+    border: 2px solid var(--theme-color);
+    border-radius: 1.5rem;
+    padding: 0.75rem;
+    min-height: 20.8125rem;
+    z-index: 6;
+    width: 95%;
+    animation: shrink 0.3s linear;
+    animation-delay: -0.1s;
+
+    @keyframes shrink {
+      from {
+        width: 60rem;
+      }
+      to {
+        width: 45rem;
+      }
+    }
+
+    .add-liquidity-page-loading {
+      z-index: 999;
+      position: fixed;
+      background: $bmBlackRussian;
+      opacity: 0.5;
+      bottom: 3rem !important;
+    }
+
+    .add-liquidity-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0.75rem 0;
+
+      .add-liquidity-invalid-content {
+        border: 1px solid $bmRed !important;
+      }
+
+      .add-liquidity-item {
+        display: flex;
+        border: 1px solid $bmDimGray;
+        border-radius: 1rem;
+        width: 100%;
+        justify-content: space-between;
+        position: relative;
+
+        .add-liquidity-item-content {
+          display: flex;
+          align-items: center;
+
+          .add-liquidity-input-div {
+            padding: 0.25rem 1rem;
+
+            .add-liquidity-input-content {
+              display: flex;
+              align-items: center;
+              margin-top: 0.25rem;
+
+              .add-liquidity-text {
+                text-align: left;
+                font-size: 1rem;
+                font-weight: 500;
+                user-select: none;
+              }
+
+              .add-liquidity-input-icons {
+                margin-left: 0.5rem;
+              }
+            }
+
+            .add-liquidity-input {
+              max-width: 15rem;
+              background: $bmBlack;
+              border-width: 0px;
+              font-size: 1.5rem;
+              font-weight: bold;
+              outline: none;
+              color: $bmShadyLady;
+              margin: 0.25rem 0;
+              &::placeholder {
+                color: $bmShadyLady !important;
+                line-height: 2rem;
+                margin-bottom: 2rem;
+              }
+            }
+          }
+        }
+      }
+
+      .add-liquidity-plus-icon {
+        margin: 0.5rem 0;
+
+        .add-liquidity-page-icons {
+          width: 1rem;
+          height: 1rem;
+        }
+      }
+    }
+
+    .add-liquidity-page-footer {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: 0.5rem 0;
+
+      .add-liquidity-page-footer-line-item-first {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-right: 2px solid;
+      }
+
+      .add-liquidity-page-footer-line-item-second {
+        width: 36%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-left: 2px solid;
+        border-right: 2px solid;
+      }
+
+      .add-liquidity-page-footer-line-item-third {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .add-liquidity-text-icon-content {
+        display: flex;
+        align-items: center;
+
+        .add-liquidity-input-icons path {
+          fill: var(--theme-color);
+        }
+      }
+
+      .add-liquidity-page-footer-line-item-texts {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+      }
+
+      .add-liquidity-page-icons {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .add-liquidity-page-footer-line-item-values {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: $bmShadyLady;
+        max-width: 13.5rem;
+        overflow: hidden;
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .add-liquidity-button-content {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .add-liquidity-button {
+      width: 100%;
+      height: 2.75rem;
+      border-radius: 1rem !important;
+      font-weight: 600 !important;
+      color: $bmDeepFir !important;
+      background: var(--theme-color) !important;
+      border-width: 0 !important;
+      opacity: 0.9;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: $mobile-view-breakpoint) {
+  .add-liquidity-page-main {
+    .add-liquidity-page-content {
+      width: 40rem;
+      padding: 1.5rem;
+
+      .add-liquidity-main {
+        margin-top: 2rem;
+        padding: 0;
+        flex-direction: row;
+
+        .add-liquidity-item {
+          .add-liquidity-item-content {
+            .add-liquidity-input-div {
+              padding: 0.25rem 0.5rem;
+
+              .add-liquidity-input-content {
+                margin-top: 0.5rem;
+                padding-left: 0.5rem;
+              }
+
+              .add-liquidity-input {
+                margin: 0.5rem 0;
+                padding-left: 0.5rem;
+              }
+            }
+          }
+        }
+
+        .add-liquidity-plus-icon {
+          margin: 0 1rem;
+
+          .add-liquidity-page-icons {
+            width: 1.5rem;
+            height: 1.5rem;
+          }
+        }
+      }
+
+      .add-liquidity-page-footer {
+        margin: 2rem 0;
+
+        .add-liquidity-page-footer-line-item-first {
+          width: 32%;
+          border-right: unset;
+        }
+
+        .add-liquidity-page-footer-line-item-third {
+          width: 32%;
+        }
+      }
+
+      .add-liquidity-button {
+        width: 20rem;
+        padding: 0 !important;
+      }
+    }
+  }
+}
