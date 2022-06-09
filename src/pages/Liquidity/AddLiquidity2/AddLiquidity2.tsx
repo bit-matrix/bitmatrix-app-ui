@@ -15,8 +15,7 @@ import { getAssetPrecession, getPrimaryPoolConfig, poolShareRound } from '../../
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
-import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
-import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import PercentIcon from '../../../components/base/Svg/Icons/Percent';
 import RewardIcon from '../../../components/base/Svg/Icons/Reward';
@@ -368,15 +367,17 @@ const AddLiquidity = (): JSX.Element => {
             >
               <SwapFromTab
                 selectedFromAmountPercent={quotePercent}
-                setselectedFromAmountPercent={(lbtcPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
-                  calcAmountPercent(lbtcPercent, undefined, balances)
+                setselectedFromAmountPercent={(quotePercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
+                  calcAmountPercent(quotePercent, undefined, balances)
                 }
               />
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{`tL-${settingsContext.preferred_unit.text}`} Liquidity</div>
-                    <LbtcIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
+                    <div className="add-liquidity-text">{quote?.ticker} Liquidity</div>
+                    {quote && (
+                      <AssetIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" asset={quote} />
+                    )}
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
@@ -385,7 +386,11 @@ const AddLiquidity = (): JSX.Element => {
                       onChangeQuoteAmount(inputValue);
                       setQuotePercent(undefined);
                     }}
-                    decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, settingsContext.preferred_unit.text)}
+                    decimalLength={
+                      quote?.ticker === SWAP_ASSET.LBTC
+                        ? getAssetPrecession(SWAP_ASSET.LBTC, settingsContext.preferred_unit.text)
+                        : 2
+                    }
                   />
                 </div>
               </div>
@@ -400,15 +405,17 @@ const AddLiquidity = (): JSX.Element => {
             >
               <SwapFromTab
                 selectedFromAmountPercent={tokenPercent}
-                setselectedFromAmountPercent={(usdtPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
-                  calcAmountPercent(undefined, usdtPercent, balances)
+                setselectedFromAmountPercent={(tokenPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) =>
+                  calcAmountPercent(undefined, tokenPercent, balances)
                 }
               />
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{SWAP_ASSET.USDT} Liquidity</div>
-                    <TetherIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" />
+                    <div className="add-liquidity-text">{token?.ticker} Liquidity</div>
+                    {token && (
+                      <AssetIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" asset={token} />
+                    )}
                   </div>
                   <NumericalInput
                     className="add-liquidity-input"
@@ -447,7 +454,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add tL-${settingsContext.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
+              text={`Add ${quote?.ticker} and ${token?.ticker}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();
