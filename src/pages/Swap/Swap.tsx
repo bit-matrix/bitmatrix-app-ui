@@ -325,11 +325,6 @@ export const Swap = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          setSwapWay(undefined);
-          setInputFromAmount('');
-          setInputToAmount('');
-          setSelectedFromAmountPercent(undefined);
-
           let commitmentTxId = '';
 
           if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
@@ -353,6 +348,10 @@ export const Swap = (): JSX.Element => {
           }
 
           if (commitmentTxId !== '') {
+            setSwapWay(undefined);
+            setInputFromAmount('');
+            setInputToAmount('');
+            setSelectedFromAmountPercent(undefined);
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,

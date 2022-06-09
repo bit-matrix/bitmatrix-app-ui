@@ -211,11 +211,6 @@ const AddLiquidity = (): JSX.Element => {
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          setQuoteAmount('');
-          setTokenAmount('');
-          setLbtcPercent(undefined);
-          setUsdtPercent(undefined);
-
           const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitment = await commitmentSign.case3(
@@ -229,6 +224,10 @@ const AddLiquidity = (): JSX.Element => {
           );
 
           if (commitment && commitment !== '') {
+            setQuoteAmount('');
+            setTokenAmount('');
+            setLbtcPercent(undefined);
+            setUsdtPercent(undefined);
             const tempTxData: CommitmentStore = {
               txId: commitment,
               quoteAmount: quoteAmountN,
