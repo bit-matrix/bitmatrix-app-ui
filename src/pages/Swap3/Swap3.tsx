@@ -406,6 +406,8 @@ export const Swap3 = (): JSX.Element => {
           numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
         }
 
+        setLoading(true);
+
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
@@ -423,7 +425,7 @@ export const Swap3 = (): JSX.Element => {
               walletContext.marina,
               numberFromAmount,
               numberToAmount,
-              poolsContext[0],
+              currentPool,
               poolConfig,
               addressInformation.publicKey,
             );
@@ -432,7 +434,7 @@ export const Swap3 = (): JSX.Element => {
               walletContext.marina,
               numberFromAmount,
               numberToAmount,
-              poolsContext[0],
+              currentPool,
               poolConfig,
               addressInformation.publicKey,
             );
