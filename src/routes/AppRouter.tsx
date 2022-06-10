@@ -15,8 +15,8 @@ import { Content, Loader } from 'rsuite';
 import { Settings } from '../pages/Settings/Settings';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
-import RemoveLiquidity from '../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
-import AddLiquidity from '../pages/Liquidity/AddLiquidity/AddLiquidity';
+import RemoveLiquidity2 from '../pages/Liquidity/RemoveLiquidity2/RemoveLiquidity2';
+import AddLiquidity2 from '../pages/Liquidity/AddLiquidity2/AddLiquidity2';
 import { PoolDetail } from '../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../pages/CreateNewPool/CreateNewPool';
@@ -307,8 +307,8 @@ export const AppRouter = (): JSX.Element => {
                   <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
                   <Route exact path={ROUTE_PATH.CREATE_NEW_POOL} component={CreateNewPool} />
                   <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-                  <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-                  <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+                  <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity2} />
+                  <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity2} />
                   {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
                   <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
