@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api, commitmentSign, convertion } from '@bitmatrix/lib';
-import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
-import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { commitmentSign, convertion } from '@bitmatrix/lib';
+import { CALL_METHOD } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
 import Decimal from 'decimal.js';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
@@ -30,12 +30,12 @@ const RemoveLiquidity2 = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
-  const [poolConfig, setPoolConfig] = useState<BmConfig>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -43,14 +43,6 @@ const RemoveLiquidity2 = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
 
   const currentPool = poolsContext.find((p) => p.id === id);
-
-  useEffect(() => {
-    if (currentPool) {
-      api.getBmConfigs(currentPool?.id).then((cp) => {
-        setPoolConfig(cp);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (currentPool && walletContext) {
@@ -74,12 +66,12 @@ const RemoveLiquidity2 = (): JSX.Element => {
 
   const removeLiquidityClick = async () => {
     if (walletContext?.marina) {
-      if (currentPool && poolConfig) {
+      if (currentPool && poolConfigContext) {
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
         if (addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitmentTxId = await commitmentSign.case4(
             walletContext.marina,
