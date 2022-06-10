@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmCtxMempool } from '@bitmatrix/models';
-import { usePoolContext, useWalletContext, useSettingsContext } from '../context';
+import { Pool as ModelPool, BmCtxMempool, BmConfig } from '@bitmatrix/models';
+import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap3 } from '../pages/Swap3/Swap3';
 import { Footer } from '../components/Footer/Footer';
@@ -166,7 +166,7 @@ export const AppRouter = (): JSX.Element => {
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
-  // const { setPoolConfigContext } = usePoolConfigContext();
+  const { setPoolConfigContext } = usePoolConfigContext();
   // const { setPoolChartDataContext } = usePoolChartDataContext();
 
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -238,6 +238,8 @@ export const AppRouter = (): JSX.Element => {
   const fetchData = async (isInitialize: boolean) => {
     if (isInitialize) {
       // const pools: ModelPool[] = await api.getPools();
+      const pool_config: BmConfig = await api.getBmConfigs(mockPools[0].id);
+      setPoolConfigContext(pool_config);
       setPoolsContext(mockPools);
     }
     checkLastTxStatus(mockPools[0].id);
