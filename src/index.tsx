@@ -5,12 +5,19 @@ import reportWebVitals from './reportWebVitals';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
-import { PoolsContextProvider, SettingsContextProvider, WalletContextProvider } from './context';
+import {
+  PoolsContextProvider,
+  SettingsContextProvider,
+  WalletContextProvider,
+  PoolConfigContextProvider,
+} from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <AppContextProvider providers={[PoolsContextProvider, SettingsContextProvider, WalletContextProvider]}>
+  <AppContextProvider
+    providers={[PoolsContextProvider, SettingsContextProvider, WalletContextProvider, PoolConfigContextProvider]}
+  >
     <CustomProvider theme="dark">
       <App />
     </CustomProvider>
