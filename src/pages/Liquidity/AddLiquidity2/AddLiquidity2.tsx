@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { api, commitmentSign, convertion } from '@bitmatrix/lib';
-import { BmConfig, CALL_METHOD, PAsset } from '@bitmatrix/models';
-import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { commitmentSign, convertion } from '@bitmatrix/lib';
+import { CALL_METHOD, PAsset } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
@@ -29,6 +29,7 @@ const AddLiquidity = (): JSX.Element => {
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
   const [quotePercent, setQuotePercent] = useState<FROM_AMOUNT_PERCENT>();
   const [tokenPercent, setTokenPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -36,7 +37,6 @@ const AddLiquidity = (): JSX.Element => {
   const [quote, setQuote] = useState<PAsset>();
   const [token, setToken] = useState<PAsset>();
 
-  const [poolConfig, setPoolConfig] = useState<BmConfig>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -62,9 +62,6 @@ const AddLiquidity = (): JSX.Element => {
         precision: currentPool.token.precision,
         value: '',
       });
-      api.getBmConfigs(currentPool?.id).then((cp) => {
-        setPoolConfig(cp);
-      });
     }
   }, []);
 
@@ -72,8 +69,8 @@ const AddLiquidity = (): JSX.Element => {
     (input: string) => {
       const inputNum = Number(input);
 
-      if (currentPool && poolConfig && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+      if (currentPool && poolConfigContext && input !== '.') {
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const output = convertion.convertForLiquidityCtx(
           inputNum * settingsContext.preferred_unit.value,
@@ -86,15 +83,15 @@ const AddLiquidity = (): JSX.Element => {
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfig, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
   );
 
   const onChangeTokenAmount = useCallback(
     (input: string) => {
       const inputNum = Number(input);
 
-      if (currentPool && poolConfig && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+      if (currentPool && poolConfigContext && input !== '.') {
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const output = convertion.convertForLiquidityCtx(
           inputNum * PREFERRED_UNIT_VALUE.LBTC,
@@ -114,7 +111,7 @@ const AddLiquidity = (): JSX.Element => {
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfig, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
   );
 
   const calcAmountPercent = useCallback(
@@ -123,7 +120,7 @@ const AddLiquidity = (): JSX.Element => {
       tokenPercent: FROM_AMOUNT_PERCENT | undefined,
       balances: Balance[],
     ) => {
-      if (currentPool && poolConfig && walletContext && balances.length > 0) {
+      if (currentPool && poolConfigContext && walletContext && balances.length > 0) {
         let inputAmount = '';
 
         const quoteAssetId = quote?.assetHash;
@@ -132,7 +129,7 @@ const AddLiquidity = (): JSX.Element => {
         const tokenAssetId = token?.assetHash;
         const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -153,7 +150,7 @@ const AddLiquidity = (): JSX.Element => {
                 inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+                inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
               }
             } else {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -164,7 +161,7 @@ const AddLiquidity = (): JSX.Element => {
                 inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toString();
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfig.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toString();
+                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toString();
               }
             }
             onChangeQuoteAmount(inputAmount);
@@ -181,7 +178,7 @@ const AddLiquidity = (): JSX.Element => {
             inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           onChangeTokenAmount(inputAmount);
           setQuotePercent(undefined);
@@ -194,11 +191,11 @@ const AddLiquidity = (): JSX.Element => {
         }
       }
     },
-    [currentPool, poolConfig, walletContext],
+    [currentPool, poolConfigContext, walletContext],
   );
 
   const inputsIsValid = useCallback(() => {
-    if (currentPool && poolConfig && walletContext) {
+    if (currentPool && poolConfigContext && walletContext) {
       let tokenIsValid = false;
       let quoteIsValid = false;
 
@@ -212,7 +209,7 @@ const AddLiquidity = (): JSX.Element => {
         let quoteAmountWallet = 0;
         if (quoteAmountInWallet && quoteAmountInWallet > 0) {
           if (quote?.ticker === SWAP_ASSET.LBTC) {
-            const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+            const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
             const totalFee =
               primaryPoolConfig.baseFee.number +
@@ -248,7 +245,7 @@ const AddLiquidity = (): JSX.Element => {
       }
     }
     return { tokenIsValid: true, quoteIsValid: true };
-  }, [currentPool, poolConfig, quote?.value, token?.value, walletContext]);
+  }, [currentPool, poolConfigContext, quote?.value, token?.value, walletContext]);
 
   const addLiquidityClick = async () => {
     if (walletContext?.marina) {
@@ -257,7 +254,7 @@ const AddLiquidity = (): JSX.Element => {
         .toNumber();
       const tokenAmountN = new Decimal(Number(token?.value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
 
-      if (currentPool && poolConfig) {
+      if (currentPool && poolConfigContext) {
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
@@ -267,7 +264,7 @@ const AddLiquidity = (): JSX.Element => {
           setToken({ ...token, value: '' } as PAsset);
           setQuotePercent(undefined);
           setTokenPercent(undefined);
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
           const commitmentTxId = await commitmentSign.case3(
             walletContext.marina,
