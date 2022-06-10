@@ -11,7 +11,7 @@ import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { api, convertion, commitmentSign } from '@bitmatrix/lib';
+import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -20,7 +20,7 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { usePoolContext, useWalletContext, useSettingsContext } from '../../context';
+import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
@@ -45,8 +45,6 @@ export const Swap3 = (): JSX.Element => {
 
   const [currentPool, setCurrentPool] = useState<Pool>();
 
-  const [poolConfig, setPoolConfig] = useState<BmConfig>();
-
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -54,6 +52,7 @@ export const Swap3 = (): JSX.Element => {
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
   const [assetList, setAssetList] = useState<{
     quote: PAsset[];
@@ -65,17 +64,17 @@ export const Swap3 = (): JSX.Element => {
   // const assetList = uniqueAssetList(poolsContext);
 
   useEffect(() => {
-    if (currentPool && poolConfig && pairAsset) {
+    if (currentPool && poolConfigContext && pairAsset) {
       if (swapWay === SWAP_WAY.FROM) {
         console.log('FROM');
 
-        onChangeFromInput(currentPool, poolConfig, pairAsset.up?.value || '');
+        onChangeFromInput(currentPool, poolConfigContext, pairAsset.up?.value || '');
       } else {
         console.log('TO');
-        onChangeToInput(currentPool, poolConfig, pairAsset.down?.value || '');
+        onChangeToInput(currentPool, poolConfigContext, pairAsset.down?.value || '');
       }
     }
-  }, [currentPool, poolConfig, swapWay, pairAsset.down?.value, pairAsset.up?.value]);
+  }, [currentPool, poolConfigContext, swapWay, pairAsset.down?.value, pairAsset.up?.value]);
 
   const onChangeFromInput = useCallback(
     (current_pool: Pool, pool_config: BmConfig, input: string) => {
@@ -222,7 +221,7 @@ export const Swap3 = (): JSX.Element => {
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     console.log(pairAsset.up?.ticker);
 
-    if (poolsContext.length > 0 && poolConfig && walletContext && balances.length > 0) {
+    if (poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       let inputAmount = '';
       setSwapWay(SWAP_WAY.FROM);
       const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === pairAsset.up?.assetHash)?.amount || 0;
@@ -232,10 +231,10 @@ export const Swap3 = (): JSX.Element => {
           console.log('btc');
 
           const totalFee =
-            poolConfig.baseFee.number +
-            poolConfig.commitmentTxFee.number +
-            poolConfig.defaultOrderingFee.number +
-            poolConfig.serviceFee.number +
+            poolConfigContext.baseFee.number +
+            poolConfigContext.commitmentTxFee.number +
+            poolConfigContext.defaultOrderingFee.number +
+            poolConfigContext.serviceFee.number +
             1000;
           const quoteAmount = totalAmountInWallet - totalFee;
 
@@ -247,7 +246,7 @@ export const Swap3 = (): JSX.Element => {
             inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
           }
           if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+            inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
           }
         } else {
           console.log('usdt');
@@ -259,7 +258,7 @@ export const Swap3 = (): JSX.Element => {
             inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
           if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
           }
         }
         console.log('up', inputAmount);
@@ -271,7 +270,7 @@ export const Swap3 = (): JSX.Element => {
   };
 
   const inputIsValid = useCallback(() => {
-    if (currentPool && poolsContext.length > 0 && poolConfig && walletContext) {
+    if (currentPool && poolsContext.length > 0 && poolConfigContext && walletContext) {
       let inputAmount = 0;
       let isValid = false;
 
@@ -285,10 +284,10 @@ export const Swap3 = (): JSX.Element => {
         if (pair1AmountInWallet && pair1AmountInWallet > 0) {
           if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
             const totalFee =
-              poolConfig.baseFee.number +
-              poolConfig.commitmentTxFee.number +
-              poolConfig.defaultOrderingFee.number +
-              poolConfig.serviceFee.number +
+              poolConfigContext.baseFee.number +
+              poolConfigContext.commitmentTxFee.number +
+              poolConfigContext.defaultOrderingFee.number +
+              poolConfigContext.serviceFee.number +
               1000;
 
             inputAmount = (pair1AmountInWallet - totalFee) / settingsContext.preferred_unit.value;
@@ -306,13 +305,7 @@ export const Swap3 = (): JSX.Element => {
       }
     }
     return true;
-  }, [currentPool, poolsContext, poolConfig, settingsContext.preferred_unit.value, walletContext, pairAsset]);
-
-  const getBmConfigs = useCallback((poolId: string) => {
-    api.getBmConfigs(poolId).then((config) => {
-      setPoolConfig(config);
-    });
-  }, []);
+  }, [currentPool, poolsContext, poolConfigContext, settingsContext.preferred_unit.value, walletContext, pairAsset]);
 
   const findCurrentPool = useCallback((from?: PAsset, to?: PAsset) => {
     console.log('findCurrentPool');
@@ -329,7 +322,6 @@ export const Swap3 = (): JSX.Element => {
       const sortedPools = filteredPools.sort((a, b) => b.usdPrice - a.usdPrice);
       console.log('sortedPools', sortedPools);
 
-      getBmConfigs(sortedPools[0].id);
       setCurrentPool(sortedPools[0]);
     }
   }, []);
@@ -387,7 +379,7 @@ export const Swap3 = (): JSX.Element => {
       let numberFromAmount = 0;
       let numberToAmount = 0;
 
-      if (currentPool && poolConfig) {
+      if (currentPool && poolConfigContext) {
         if (isQuote(currentPool, pairAsset.up)) {
           if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
             methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -426,7 +418,7 @@ export const Swap3 = (): JSX.Element => {
               numberFromAmount,
               numberToAmount,
               currentPool,
-              poolConfig,
+              poolConfigContext,
               addressInformation.publicKey,
             );
           } else {
@@ -435,7 +427,7 @@ export const Swap3 = (): JSX.Element => {
               numberFromAmount,
               numberToAmount,
               currentPool,
-              poolConfig,
+              poolConfigContext,
               addressInformation.publicKey,
             );
           }
@@ -493,8 +485,8 @@ export const Swap3 = (): JSX.Element => {
   };
 
   const infoMessage = useCallback((): string => {
-    if (poolConfig && currentPool && poolsContext.length > 0) {
-      const config = poolConfig;
+    if (poolConfigContext && currentPool && poolsContext.length > 0) {
+      const config = poolConfigContext;
       const totalFee =
         config.baseFee.number +
         config.commitmentTxFee.number +
@@ -509,7 +501,7 @@ export const Swap3 = (): JSX.Element => {
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
     return 'Network fee 801 sats';
-  }, [poolConfig, currentPool, poolsContext]);
+  }, [poolConfigContext, currentPool, poolsContext]);
 
   return (
     <div className="swap-page-main">
