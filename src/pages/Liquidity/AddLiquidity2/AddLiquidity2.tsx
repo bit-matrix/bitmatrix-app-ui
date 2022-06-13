@@ -11,7 +11,7 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetPrecession, getPrimaryPoolConfig, poolShareRound } from '../../../helper';
+import { getAssetPrecession, getPrimaryPoolConfig, getAssetTicker, poolShareRound } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
@@ -333,6 +333,7 @@ const AddLiquidity = (): JSX.Element => {
     return { lpReceived: '0', poolRate: '0' };
   }, [currentPool, quote?.value, token?.value]);
 
+  const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
@@ -374,7 +375,7 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{currentPool?.quote.ticker} Liquidity</div>
+                    <div className="add-liquidity-text">{quoteTicker} Liquidity</div>
                     {currentPool?.quote && (
                       <AssetIcon
                         className="add-liquidity-input-icons"
@@ -464,7 +465,7 @@ const AddLiquidity = (): JSX.Element => {
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add ${quote?.ticker} and ${token?.ticker}`}
+              text={`Add ${quoteTicker} and ${token?.ticker}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();

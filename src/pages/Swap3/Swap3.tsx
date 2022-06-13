@@ -15,7 +15,7 @@ import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import { getAssetPrecession, isQuote, uniqueAssetList } from '../../helper';
+import { getAssetPrecession, getAssetTicker, isQuote, uniqueAssetList } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
@@ -551,7 +551,7 @@ export const Swap3 = (): JSX.Element => {
                           width="1.5rem"
                           height="1.5rem"
                         />
-                        <div>{pairAsset.up?.ticker}</div>
+                        <div>{getAssetTicker(pairAsset.up, settingsContext.preferred_unit.text)}</div>
                         <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
                       </div>
                     ) : (
@@ -603,7 +603,7 @@ export const Swap3 = (): JSX.Element => {
                           width="1.5rem"
                           height="1.5rem"
                         />
-                        <div>{pairAsset.down.ticker}</div>
+                        <div>{getAssetTicker(pairAsset.down, settingsContext.preferred_unit.text)}</div>
                         <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
                       </div>
                     ) : (
