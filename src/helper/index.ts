@@ -190,3 +190,22 @@ export const isQuote = (currentPool: Pool, asset: PAsset | undefined): boolean =
   if (asset && asset.assetHash === currentPool.quote.assetHash) return true;
   return false;
 };
+
+export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT): string => {
+  if (!asset) return '';
+  if (asset.ticker === SWAP_ASSET.LBTC) {
+    if (unit === PREFERRED_UNIT.LBTC) {
+      return 'tL-BTC';
+    }
+    if (unit === PREFERRED_UNIT.SAT) {
+      return 'tL-Sats';
+    }
+    if (unit === PREFERRED_UNIT.uBTC) {
+      return 'tL-Bits';
+    }
+    if (unit === PREFERRED_UNIT.mBTC) {
+      return 'tL-mBTC';
+    }
+  }
+  return asset.ticker;
+};
