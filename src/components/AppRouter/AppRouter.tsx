@@ -134,27 +134,63 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const fetchData = async (isInitialize: boolean) => {
-    const pools: ModelPool[] = await api.getPools();
+    const newPool: ModelPool = {
+      id: 'd3ffddaf4e61517bd0a538507d4164a8881edfd38329e0112338fd1894c2c0d1',
+      quote: {
+        ticker: 'tL-BTC',
+        name: 'Liquid Bitcoin',
+        asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+        value: '20000000',
+      },
+      token: {
+        ticker: 'tL-USDt',
+        name: 'Liquid Tether',
+        asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+        value: '600000000000',
+      },
+      lp: {
+        ticker: '5326',
+        name: 'unknown',
+        asset: '53265881ac18ccc7b0c4e8c5b2238bf05163a7bb1a5a8d0152e32c83d9db035f',
+        value: '1999800000',
+      },
+      initialTx: {
+        txid: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
+        block_height: 379558,
+        block_hash: '8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6',
+      },
+      lastSyncedBlock: {
+        block_height: 381436,
+        block_hash: '44340f3f93fd21859b1f4a379d172c95b4214dfd6e639d5b7a9fc6d2b669e5e0',
+      },
+      bestBlockHeight: 385093,
+      synced: false,
+      unspentTx: {
+        txid: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
+        block_height: 379558,
+        block_hash: '8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6',
+      },
+      lastSentPtx: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
+      active: true,
+    };
 
-    const filteredPool = pools.filter(
-      (p) => p.id === 'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
-    );
+    setPoolsContext([newPool]);
 
-    const poolId: string = filteredPool[0].id;
-
-    setPoolsContext(filteredPool);
-
-    checkLastTxStatus(poolId);
+    // checkLastTxStatus(poolId);
 
     if (isInitialize) {
-      const pool_config: BmConfig = await api.getBmConfigs(poolId);
+      const pool_config: BmConfig = await api.getBmConfigs(
+        'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
+      );
       const new_config = deepCopy(pool_config);
       new_config.baseFee = { number: 550, hex: '' };
       setPoolConfigContext(new_config);
     }
 
     if (location.pathname.startsWith('/pool') || isInitialize) {
-      const pool_chart_data: BmChart[] = await api.getPoolChartData(poolId);
+      const pool_chart_data: BmChart[] = await api.getPoolChartData(
+        'd55c1cffed395dac02042c4e4c8a0bc8aff9bb7a9a75fefec4bfa49aae0c83fb',
+      );
 
       setPoolChartDataContext(pool_chart_data);
     }
