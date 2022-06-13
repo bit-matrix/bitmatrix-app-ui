@@ -31,11 +31,11 @@ const AddLiquidity = (): JSX.Element => {
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
 
-  const [quotePercent, setQuotePercent] = useState<FROM_AMOUNT_PERCENT>();
-  const [tokenPercent, setTokenPercent] = useState<FROM_AMOUNT_PERCENT>();
-
   const [quote, setQuote] = useState<PAsset>();
   const [token, setToken] = useState<PAsset>();
+
+  const [quotePercent, setQuotePercent] = useState<FROM_AMOUNT_PERCENT>();
+  const [tokenPercent, setTokenPercent] = useState<FROM_AMOUNT_PERCENT>();
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -123,11 +123,13 @@ const AddLiquidity = (): JSX.Element => {
       if (currentPool && poolConfigContext && walletContext && balances.length > 0) {
         let inputAmount = '';
 
-        const quoteAssetId = quote?.assetHash;
-        const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const quoteTotalAmountInWallet = balances.find(
+          (bl) => bl.asset.assetHash === currentPool.quote.assetHash,
+        )?.amount;
 
-        const tokenAssetId = token?.assetHash;
-        const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        const tokenTotalAmountInWallet = balances.find(
+          (bl) => bl.asset.assetHash === currentPool.token.assetHash,
+        )?.amount;
 
         const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
@@ -140,6 +142,7 @@ const AddLiquidity = (): JSX.Element => {
 
         if (quoteTotalAmountInWallet && quoteTotalAmountInWallet > 0 && quotePercent) {
           const quoteAmount = quoteTotalAmountInWallet - totalFee;
+
           if (quoteAmount > 0) {
             if (quote?.ticker === SWAP_ASSET.LBTC) {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -371,9 +374,14 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{quote?.ticker} Liquidity</div>
-                    {quote && (
-                      <AssetIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" asset={quote} />
+                    <div className="add-liquidity-text">{currentPool?.quote.ticker} Liquidity</div>
+                    {currentPool?.quote && (
+                      <AssetIcon
+                        className="add-liquidity-input-icons"
+                        width="1.75rem"
+                        height="1.75rem"
+                        asset={currentPool?.quote}
+                      />
                     )}
                   </div>
                   <NumericalInput
@@ -409,9 +417,14 @@ const AddLiquidity = (): JSX.Element => {
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{token?.ticker} Liquidity</div>
-                    {token && (
-                      <AssetIcon className="add-liquidity-input-icons" width="1.75rem" height="1.75rem" asset={token} />
+                    <div className="add-liquidity-text">{currentPool?.token.ticker} Liquidity</div>
+                    {currentPool?.token && (
+                      <AssetIcon
+                        className="add-liquidity-input-icons"
+                        width="1.75rem"
+                        height="1.75rem"
+                        asset={currentPool.token}
+                      />
                     )}
                   </div>
                   <NumericalInput
