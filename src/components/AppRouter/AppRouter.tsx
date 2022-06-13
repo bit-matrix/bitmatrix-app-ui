@@ -33,6 +33,7 @@ import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { detectProvider, MarinaProvider } from 'marina-provider';
 import { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 import './AppRouter.scss';
+import { deepCopy } from '../../helper';
 
 declare global {
   interface Window {
@@ -147,8 +148,9 @@ export const AppRouter = (): JSX.Element => {
 
     if (isInitialize) {
       const pool_config: BmConfig = await api.getBmConfigs(poolId);
-
-      setPoolConfigContext(pool_config);
+      const new_config = deepCopy(pool_config);
+      new_config.baseFee = { number: 550, hex: '' };
+      setPoolConfigContext(new_config);
     }
 
     if (location.pathname.startsWith('/pool') || isInitialize) {
