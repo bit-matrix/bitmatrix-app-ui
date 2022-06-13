@@ -19,6 +19,7 @@ import Numeral from 'numeral';
 import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
 import TetherIcon from '../../../components/base/Svg/Icons/Tether';
 import { poolShareRound, quoteAmountRound } from '../../../helper';
+import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
@@ -131,6 +132,14 @@ export const MyPoolDetail: React.FC = () => {
       </ParentSize>
     );
   };
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading width="2rem" height="2rem" />
+      </div>
+    );
+  }
 
   if (pool === undefined || poolChartData === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
