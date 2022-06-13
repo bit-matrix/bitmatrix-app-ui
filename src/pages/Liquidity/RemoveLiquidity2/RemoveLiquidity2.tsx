@@ -13,7 +13,7 @@ import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity2.scss';
@@ -144,6 +144,7 @@ const RemoveLiquidity2 = (): JSX.Element => {
     }
     return { quoteReceived: '0', tokenReceived: '0' };
   };
+  const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
 
   return (
     <div className="remove-liquidity-page-main">
@@ -237,9 +238,7 @@ const RemoveLiquidity2 = (): JSX.Element => {
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">
-                  tL-{settingsContext.preferred_unit.text} You Get
-                </span>
+                <span className="remove-liquidity-page-footer-line-item-texts">{quoteTicker} You Get</span>
                 {currentPool?.quote && (
                   <AssetIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" asset={currentPool?.quote} />
                 )}
@@ -273,7 +272,7 @@ const RemoveLiquidity2 = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove ${currentPool?.quote.ticker} and ${currentPool?.token.ticker}`}
+            text={`Remove ${quoteTicker} and ${currentPool?.token.ticker}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();
