@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { api, convertion } from '@bitmatrix/lib';
-import { BmChart, Pool } from '@bitmatrix/models';
+import { convertion } from '@bitmatrix/lib';
+import { Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
@@ -16,8 +16,7 @@ import info from '../../../images/info2.png';
 import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
-import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
-import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { poolShareRound, quoteAmountRound } from '../../../helper';
 import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
@@ -25,8 +24,8 @@ import './MyPoolDetail.scss';
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
   const [pool, setPool] = useState<Pool>();
-  const [poolChartData, setPoolChartData] = useState<BmChart[]>();
   const [loading, setLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(true);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
@@ -37,17 +36,14 @@ export const MyPoolDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    api
-      .getPoolChartData(id)
-      .then((pc) => {
-        setPoolChartData(pc);
-        if (poolsContext && poolsContext.length > 0) {
-          const currentPool = poolsContext.find((pl) => pl.id === id);
-          setPool(currentPool);
-        }
-      })
-      .catch(() => console.log('Pool Chart Data Error'))
-      .finally(() => setLoading(false));
+    if (poolsContext && poolsContext.length > 0) {
+      const currentPool = poolsContext.find((pl) => pl.id === id);
+      setPool(currentPool);
+      setLoading(false);
+    }
+    setTimeout(() => {
+      setChartLoading(false);
+    }, 200);
   }, [poolsContext]);
 
   // useEffect(() => {
@@ -141,7 +137,7 @@ export const MyPoolDetail: React.FC = () => {
     );
   }
 
-  if (pool === undefined || poolChartData === undefined) {
+  if (pool === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);
@@ -178,14 +174,14 @@ export const MyPoolDetail: React.FC = () => {
               <div className="my-pooled-assets-content">
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.quote} />
                     {calcPooledAssets().pooledQuote}
                   </div>
                 </div>
 
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.token} />
                     {calcPooledAssets().pooledToken}
                   </div>
                 </div>
@@ -246,7 +242,7 @@ export const MyPoolDetail: React.FC = () => {
               </Button>
             </div>
 
-            <div className="my-pool-detail-content-right mobile-hidden">{!loading && renderChart()}</div>
+            <div className="my-pool-detail-content-right mobile-hidden">{!chartLoading && renderChart()}</div>
           </div>
         </div>
       </div>
