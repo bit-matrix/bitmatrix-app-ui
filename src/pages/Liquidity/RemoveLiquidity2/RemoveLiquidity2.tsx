@@ -247,7 +247,9 @@ const RemoveLiquidity2 = (): JSX.Element => {
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">tL-USDT You Get</span>
+                <span className="remove-liquidity-page-footer-line-item-texts">
+                  {currentPool?.token.ticker} You Get
+                </span>
                 {currentPool?.token && (
                   <AssetIcon
                     className="liquidity-usdt-icon"
