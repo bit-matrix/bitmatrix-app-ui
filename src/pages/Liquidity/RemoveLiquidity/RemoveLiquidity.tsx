@@ -47,7 +47,7 @@ const RemoveLiquidity = (): JSX.Element => {
 
   useEffect(() => {
     if (currentPool) {
-      api.getBmConfigs(currentPool?.id).then((cp) => {
+      api.getBmConfigs().then((cp) => {
         setPoolConfig(cp);
       });
     }

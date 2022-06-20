@@ -113,7 +113,7 @@ export const AppRouter = (): JSX.Element => {
   const fetchData = async (isInitialize: boolean) => {
     if (isInitialize) {
       const pools: ModelPool[] = await api.getPools();
-      const pool_config: BmConfig = await api.getBmConfigs(pools[0].id);
+      const pool_config: BmConfig = await api.getBmConfigs();
       setPoolConfigContext(pool_config);
       setPoolsContext(pools);
     }
