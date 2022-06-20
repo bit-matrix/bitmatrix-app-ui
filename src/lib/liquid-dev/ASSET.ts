@@ -6,11 +6,5 @@ export const lbtcAsset: PAsset = {
   name: 'Liquid Bitcoin',
   precision: 8,
   ticker: SWAP_ASSET.LBTC,
-};
-
-export const usdtAsset: PAsset = {
-  assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-  name: 'Tether USD',
-  precision: 8,
-  ticker: SWAP_ASSET.USDT,
+  isQuote: true,
 };
