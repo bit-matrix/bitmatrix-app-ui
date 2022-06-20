@@ -195,11 +195,6 @@ export const getUnitValue = (asset: PAsset, settings: Settings): number => {
   }
 };
 
-export const isQuote = (currentPool: Pool, asset: PAsset | undefined): boolean => {
-  if (asset && asset.assetHash === currentPool.quote.assetHash) return true;
-  return false;
-};
-
 export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT): string => {
   if (!asset) return '';
   if (asset.ticker === SWAP_ASSET.LBTC) {
