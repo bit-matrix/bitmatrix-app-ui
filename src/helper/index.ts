@@ -133,11 +133,10 @@ export const deepCopy = <T>(oldObject: T): T => {
 //   return uniqueAssetList;
 // };
 
-export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset[] } => {
+export const uniqueQuoteAssetList = (pools: Pool[]): PAsset[] => {
   const quoteList: PAsset[] = [];
-  const tokenList: PAsset[] = [];
+
   pools.forEach((pool: Pool) => {
-    tokenList.push(pool.token);
     quoteList.push(pool.quote);
   });
 
@@ -152,13 +151,25 @@ export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset
         name: ql.name,
         precision: 8,
         value: '',
+        isQuote: true,
       });
     }
   });
 
+  return uniqueQuoteAssetList;
+};
+
+export const uniqueTokenAssetList = (pools: Pool[], selectedQuote?: PAsset): PAsset[] => {
+  const tokenList: PAsset[] = [];
+
+  const currentPools = pools.filter((pool: Pool) => pool.quote.assetHash === selectedQuote?.assetHash);
+
+  currentPools.forEach((pool: Pool) => {
+    tokenList.push(pool.token);
+  });
+
   const uniqueTokenList: string[] = [];
   const uniqueTokenAssetList: PAsset[] = [];
-
   tokenList.map((tl) => {
     if (!uniqueTokenList.includes(tl.assetHash)) {
       uniqueTokenList.push(tl.assetHash);
@@ -168,14 +179,12 @@ export const uniqueAssetList = (pools: Pool[]): { quote: PAsset[]; token: PAsset
         name: tl.name,
         precision: 8,
         value: '',
+        isQuote: false,
       });
     }
   });
 
-  return {
-    quote: uniqueQuoteAssetList,
-    token: uniqueTokenAssetList,
-  };
+  return uniqueTokenAssetList;
 };
 
 export const getUnitValue = (asset: PAsset, settings: Settings): number => {
