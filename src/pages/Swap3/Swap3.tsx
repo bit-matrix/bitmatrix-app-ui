@@ -15,7 +15,7 @@ import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import { getAssetPrecession, getAssetTicker, isQuote, uniqueQuoteAssetList, uniqueTokenAssetList } from '../../helper';
+import { getAssetPrecession, getAssetTicker, uniqueQuoteAssetList, uniqueTokenAssetList } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
@@ -84,7 +84,7 @@ export const Swap3 = (): JSX.Element => {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        if (pairAsset.up && isQuote(current_pool, pairAsset.up)) {
+        if (pairAsset.up && pairAsset.up.isQuote) {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         } else {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
@@ -99,7 +99,7 @@ export const Swap3 = (): JSX.Element => {
         );
 
         if (output.amount > 0) {
-          if (isQuote(current_pool, pairAsset.up)) {
+          if (pairAsset.up && pairAsset.up.isQuote) {
             if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
               setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
               setPairAsset({
@@ -157,7 +157,7 @@ export const Swap3 = (): JSX.Element => {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        if (pairAsset.down && !isQuote(current_pool, pairAsset.down)) {
+        if (pairAsset.down && !pairAsset.down.isQuote) {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
         } else {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -172,7 +172,7 @@ export const Swap3 = (): JSX.Element => {
         );
 
         if (output.amount > 0) {
-          if (!isQuote(current_pool, pairAsset.up)) {
+          if (!pairAsset.up?.isQuote) {
             if (pairAsset.down?.ticker === SWAP_ASSET.LBTC) {
               setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
               setPairAsset({
@@ -363,7 +363,7 @@ export const Swap3 = (): JSX.Element => {
       let numberToAmount = 0;
 
       if (currentPool && poolConfigContext) {
-        if (isQuote(currentPool, pairAsset.up)) {
+        if (pairAsset.up?.isQuote) {
           if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
             methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
             numberFromAmount = new Decimal(Number(pairAsset.up.value))
@@ -395,7 +395,7 @@ export const Swap3 = (): JSX.Element => {
 
           let commitmentTxId = '';
 
-          if (isQuote(currentPool, pairAsset.up)) {
+          if (pairAsset.up?.isQuote) {
             commitmentTxId = await commitmentSign.case1(
               walletContext.marina,
               numberFromAmount,
