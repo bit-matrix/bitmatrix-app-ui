@@ -6,7 +6,7 @@ import './AssetListModal.scss';
 
 type Props = {
   show: boolean;
-  assetList: PAsset[];
+  assetList?: PAsset[];
   selectedAsset?: PAsset;
   close: () => void;
   onSelectAsset: (asset: PAsset) => void;
@@ -20,24 +20,26 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
   }, [assetList]);
 
   const assetSearch = (input: string) => {
-    let currentAssetList = [...assetList];
-    const searchName: PAsset[] = assetList.filter((asset) => {
-      return asset.name?.toLowerCase().match(input.toLowerCase().trim())?.input;
-    });
-    const searchTicker: PAsset[] = assetList.filter((asset) => {
-      return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
-    });
-    const searchAssetID: PAsset[] = assetList.filter((asset) => asset.assetHash === input.trim());
-    if (searchTicker.length > 0) {
-      currentAssetList = searchTicker;
-    } else if (searchName.length > 0) {
-      currentAssetList = searchName;
-    } else if (searchAssetID.length > 0) {
-      currentAssetList = searchAssetID;
-    } else {
-      currentAssetList = [];
+    if (assetList) {
+      let currentAssetList = [...assetList];
+      const searchName: PAsset[] = assetList.filter((asset) => {
+        return asset.name?.toLowerCase().match(input.toLowerCase().trim())?.input;
+      });
+      const searchTicker: PAsset[] = assetList.filter((asset) => {
+        return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
+      });
+      const searchAssetID: PAsset[] = assetList.filter((asset) => asset.assetHash === input.trim());
+      if (searchTicker.length > 0) {
+        currentAssetList = searchTicker;
+      } else if (searchName.length > 0) {
+        currentAssetList = searchName;
+      } else if (searchAssetID.length > 0) {
+        currentAssetList = searchAssetID;
+      } else {
+        currentAssetList = [];
+      }
+      setFilteredAssetLİst(currentAssetList);
     }
-    setFilteredAssetLİst(currentAssetList);
   };
 
   const onChange = (input: string) => {
