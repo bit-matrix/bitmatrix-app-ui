@@ -3,7 +3,6 @@ import { Reducer } from 'react';
 import { SetPoolConfigAction, SET_POOL_CONFIG } from './types';
 
 export const initialPoolConfigState: BmConfig = {
-  id: '',
   minRemainingSupply: 0,
   minTokenValue: 0,
   baseFee: { number: 0, hex: '' },
@@ -12,20 +11,6 @@ export const initialPoolConfigState: BmConfig = {
   defaultOrderingFee: { number: 0, hex: '' },
   innerPublicKey: '',
   recipientValueMinus: 0,
-  holderCovenant: {
-    scriptpubkey: {
-      main: '',
-      token: '',
-      lp: '',
-    },
-    controlBlockPrefix: {
-      main: '',
-      token: '',
-      lp: '',
-    },
-  },
-  mainCovenantScript: [],
-  maxLeaf: 0,
 };
 
 export const poolConfigReducer: Reducer<BmConfig, SetPoolConfigAction> = (
