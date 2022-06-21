@@ -26,6 +26,7 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './Swap3.scss';
+import { useSocket } from '../../socket/useSocket';
 
 export const Swap3 = (): JSX.Element => {
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
@@ -58,6 +59,10 @@ export const Swap3 = (): JSX.Element => {
     quote?: PAsset[];
     token?: PAsset[];
   }>({ quote: uniqueQuoteAssetList(poolsContext), token: uniqueTokenAssetList(poolsContext, pairAsset.up) });
+
+  const { isConnected, pools } = useSocket();
+  console.log('swap pools', pools);
+  console.log('swap isconnected', isConnected);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
