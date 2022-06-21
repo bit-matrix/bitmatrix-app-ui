@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig } from '@bitmatrix/models';
-import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
+import { BmConfig } from '@bitmatrix/models';
+import { useAppState } from '../state/useAppState';
+import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap3 } from '../pages/Swap3/Swap3';
 import { Footer } from '../components/Footer/Footer';
@@ -37,11 +38,14 @@ declare global {
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(true);
+  // const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
+
+  const { appLoading, pools } = useAppState();
+
   // const { setPoolChartDataContext } = usePoolChartDataContext();
 
   // const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
@@ -55,6 +59,12 @@ export const AppRouter = (): JSX.Element => {
       // fetchPools(false);
     }, 10000);
   }, []);
+
+  useEffect(() => {
+    if (appLoading === false) {
+      setPoolsContext(pools);
+    }
+  }, [pools, appLoading]);
 
   useEffect(() => {
     detectProvider('marina')
@@ -112,13 +122,14 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchData = async (isInitialize: boolean) => {
     if (isInitialize) {
-      const pools: ModelPool[] = await api.getPools();
+      // const pools: ModelPool[] = await api.getPools();
       const pool_config: BmConfig = await api.getBmConfigs();
       setPoolConfigContext(pool_config);
-      setPoolsContext(pools);
+
+      // setPoolsContext(pools);
     }
     // checkLastTxStatus(pools[0].id);
-    setLoading(false);
+    // setLoading(false);
   };
 
   // const checkLastTxStatus = (poolId: string) => {
@@ -170,7 +181,7 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {loading ? (
+            {appLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
