@@ -60,10 +60,6 @@ export const Swap3 = (): JSX.Element => {
     token?: PAsset[];
   }>({ quote: uniqueQuoteAssetList(poolsContext), token: uniqueTokenAssetList(poolsContext, pairAsset.up) });
 
-  const { isConnected, pools } = useSocket();
-  console.log('swap pools', pools);
-  console.log('swap isconnected', isConnected);
-
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
