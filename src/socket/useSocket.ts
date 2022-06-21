@@ -4,14 +4,15 @@ import { Pool } from '@bitmatrix/models';
 
 const socketServerUrl = '//127.0.0.1:4499';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useSocket = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [pools, setPools] = useState<Pool[]>();
-  const [poolsLoading, setPoolsLoading] = useState<boolean>(false);
+  const [appLoading, setAppLoading] = useState<boolean>(true);
 
   const onPools = useCallback((pools: Pool[]) => {
     setPools(pools);
-    setPoolsLoading(false);
+    setAppLoading(false);
   }, []);
 
   useEffect(() => {
@@ -36,13 +37,13 @@ export const useSocket = () => {
       socket.off('disconnect');
       socket.off('pong');
       setIsConnected(false);
-      console.log('clenup');
+      console.log('cleanup');
     };
   }, []);
 
   return {
     isConnected,
-    poolsLoading,
+    appLoading,
     pools,
   };
 };
