@@ -26,7 +26,6 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './Swap3.scss';
-import { useSocket } from '../../socket/useSocket';
 
 export const Swap3 = (): JSX.Element => {
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
@@ -58,9 +57,15 @@ export const Swap3 = (): JSX.Element => {
   const [assetList, setAssetList] = useState<{
     quote?: PAsset[];
     token?: PAsset[];
-  }>({ quote: uniqueQuoteAssetList(poolsContext), token: uniqueTokenAssetList(poolsContext, pairAsset.up) });
+  }>();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
+
+  useEffect(() => {
+    const quote = uniqueQuoteAssetList(poolsContext);
+    const token = uniqueTokenAssetList(poolsContext, pairAsset.up);
+    setAssetList({ quote, token });
+  }, [poolsContext]);
 
   useEffect(() => {
     if (currentPool && poolConfigContext && pairAsset) {
@@ -309,7 +314,7 @@ export const Swap3 = (): JSX.Element => {
   }, []);
 
   const assetOnChange = (asset: PAsset, isFrom = true) => {
-    const assetIsQuote = assetList.quote?.some((q) => q.assetHash === asset.assetHash && q.isQuote === true);
+    const assetIsQuote = assetList?.quote?.some((q) => q.assetHash === asset.assetHash && q.isQuote === true);
 
     if (assetIsQuote) {
       const tokenAssetList = uniqueTokenAssetList(poolsContext, asset);
@@ -353,7 +358,7 @@ export const Swap3 = (): JSX.Element => {
       up: { ...pairAsset.down, value: '' } as PAsset,
       down: { ...pairAsset.up, value: '' } as PAsset,
     });
-    setAssetList({ quote: assetList.token, token: assetList.quote });
+    setAssetList({ quote: assetList?.token, token: assetList?.quote });
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -622,7 +627,7 @@ export const Swap3 = (): JSX.Element => {
             assetOnChange(asset, true);
             setShowPair1AssetListModal(false);
           }}
-          assetList={assetList.quote}
+          assetList={assetList?.quote}
         />
         <AssetListModal
           show={showPair2AssetListModal}
@@ -635,7 +640,7 @@ export const Swap3 = (): JSX.Element => {
             assetOnChange(asset, false);
             setShowPair2AssetListModal(false);
           }}
-          assetList={assetList.token}
+          assetList={assetList?.token}
         />
       </Content>
     </div>
