@@ -57,14 +57,16 @@ export const Swap3 = (): JSX.Element => {
   const [assetList, setAssetList] = useState<{
     quote?: PAsset[];
     token?: PAsset[];
-  }>();
+  }>({ quote: [], token: [] });
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    const quote = uniqueQuoteAssetList(poolsContext);
-    const token = uniqueTokenAssetList(poolsContext, pairAsset.up);
-    setAssetList({ quote, token });
+    if (assetList?.quote?.length === 0 && assetList?.token?.length === 0) {
+      const quote = uniqueQuoteAssetList(poolsContext);
+      const token = uniqueTokenAssetList(poolsContext, pairAsset.up);
+      setAssetList({ quote, token });
+    }
   }, [poolsContext]);
 
   useEffect(() => {
