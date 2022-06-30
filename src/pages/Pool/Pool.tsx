@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { usePoolContext, useWalletContext } from '../../context';
-import { api } from '@bitmatrix/lib';
+import { useChartsSocket } from '../../socket/useChartsSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
-import { Pool, ChartSummary } from '@bitmatrix/models';
+import { Pool } from '@bitmatrix/models';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
+import { Loading } from '../../components/base/Loading/Loading';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
@@ -20,25 +21,19 @@ export const PoolPage: React.FC = () => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
-  const [chartSummaries, setChartSummeries] = useState<ChartSummary[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const { walletContext } = useWalletContext();
   const { poolsContext } = usePoolContext();
+
+  const poolIds = poolsContext.map((pc) => pc.id);
+
+  const { chartsData, chartsLoading } = useChartsSocket();
 
   const history = useHistory();
 
   document.title = ROUTE_PATH_TITLE.POOL;
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
-
-  useEffect(() => {
-    const poolIds = poolsContext.map((pc) => pc.id);
-    api.getPoolChartDatas(poolIds).then((chartDatas) => {
-      setChartSummeries(chartDatas);
-      setLoading(false);
-    });
-  }, [poolsContext]);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -86,7 +81,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
               pool={pool}
-              chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
+              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={() =>
                 history.push({
@@ -110,7 +105,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
               pool={pool}
-              chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
+              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={(poolId: string) => {
                 history.push({
@@ -174,7 +169,7 @@ export const PoolPage: React.FC = () => {
                 <div key={pool.id} className="pool-page-card card-2">
                   <PoolCard
                     pool={pool}
-                    chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
+                    chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
                     onClick={() => {
                       history.push({
@@ -195,7 +190,15 @@ export const PoolPage: React.FC = () => {
     );
   };
 
-  if (poolsContext && poolsContext.length > 0 && !loading) {
+  if (chartsLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading width="2rem" height="2rem" />
+      </div>
+    );
+  }
+
+  if (poolsContext && poolsContext.length > 0) {
     return (
       <div className={poolContainerClasses.join(' ')}>
         <div className="pool-page-header">
