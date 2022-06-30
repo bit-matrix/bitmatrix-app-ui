@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
-import { useAppState } from '../state/useAppState';
+import { usePoolsSocket } from '../socket/usePoolsSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap3 } from '../pages/Swap3/Swap3';
@@ -44,7 +44,7 @@ export const AppRouter = (): JSX.Element => {
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
 
-  const { appLoading, pools } = useAppState();
+  const { poolsLoading, pools } = usePoolsSocket();
 
   // const { setPoolChartDataContext } = usePoolChartDataContext();
 
@@ -61,10 +61,10 @@ export const AppRouter = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (appLoading === false) {
+    if (poolsLoading === false && pools) {
       setPoolsContext(pools);
     }
-  }, [pools, appLoading]);
+  }, [pools, poolsLoading]);
 
   useEffect(() => {
     detectProvider('marina')
@@ -181,7 +181,7 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {appLoading ? (
+            {poolsLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
