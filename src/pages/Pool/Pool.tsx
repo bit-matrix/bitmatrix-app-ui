@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { usePoolContext, useWalletContext } from '../../context';
+import { api } from '@bitmatrix/lib';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
-import { Pool } from '@bitmatrix/models';
+import { Pool, ChartSummary } from '@bitmatrix/models';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
 import Backdrop from '../../components/Backdrop/Backdrop';
@@ -19,6 +20,8 @@ export const PoolPage: React.FC = () => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
+  const [chartSummaries, setChartSummeries] = useState<ChartSummary[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const { walletContext } = useWalletContext();
   const { poolsContext } = usePoolContext();
@@ -28,6 +31,14 @@ export const PoolPage: React.FC = () => {
   document.title = ROUTE_PATH_TITLE.POOL;
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
+
+  useEffect(() => {
+    const poolIds = poolsContext.map((pc) => pc.id);
+    api.getPoolChartDatas(poolIds).then((chartDatas) => {
+      setChartSummeries(chartDatas);
+      setLoading(false);
+    });
+  }, [poolsContext]);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -75,6 +86,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
               pool={pool}
+              chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={() =>
                 history.push({
@@ -98,6 +110,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
               pool={pool}
+              chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={(poolId: string) => {
                 history.push({
@@ -161,6 +174,7 @@ export const PoolPage: React.FC = () => {
                 <div key={pool.id} className="pool-page-card card-2">
                   <PoolCard
                     pool={pool}
+                    chartSummary={chartSummaries.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
                     onClick={() => {
                       history.push({
@@ -181,7 +195,7 @@ export const PoolPage: React.FC = () => {
     );
   };
 
-  if (poolsContext && poolsContext.length > 0) {
+  if (poolsContext && poolsContext.length > 0 && !loading) {
     return (
       <div className={poolContainerClasses.join(' ')}>
         <div className="pool-page-header">
