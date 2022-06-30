@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pool } from '@bitmatrix/models';
+import { Pool, ChartSummary } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
@@ -9,15 +9,16 @@ import './PoolCard.scss';
 type Props = {
   rank: number;
   pool: Pool;
+  chartSummary?: ChartSummary;
   onClick: (poolId: string) => void;
   showDetail?: boolean;
 };
 
-export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = true }) => {
+export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, showDetail = true }) => {
   if (pool === undefined) {
     return <span>Something went wrong.</span>;
   } else {
-    const chartColor = pool.price.rate.direction === 'up' ? '#4caf50' : '#f44336';
+    const chartColor = chartSummary?.price.rate.direction === 'up' ? '#4caf50' : '#f44336';
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
         <div className={`pool-card-column ${!showDetail && 'pool-card-modal-column-1'}`}>
@@ -31,12 +32,12 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
               <div>
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
-              <div className={`token-item pool-card-${pool.price.rate.direction}-text`}>
-                ${pool.price.value.toLocaleString()}
+              <div className={`token-item pool-card-${chartSummary?.price.rate.direction}-text`}>
+                ${chartSummary?.price.todayValue.toLocaleString()}
               </div>
             </li>
             <li className="column-1-item percent">
-              <XyChart data={pool.price.allPriceData} color={chartColor} />
+              <XyChart data={chartSummary?.price.allPriceData || []} color={chartColor} />
             </li>
           </ul>
         </div>
@@ -46,31 +47,37 @@ export const PoolCard: React.FC<Props> = ({ pool, rank, onClick, showDetail = tr
             <li>
               <div>
                 <span>TVL</span>&nbsp;
-                <Tag className="pool-card-tag" color={`${pool.tvl.rate.direction === 'up' ? 'green' : 'red'}`}>
-                  {Number(pool.tvl.rate.value)}%
+                <Tag className="pool-card-tag" color={`${chartSummary?.tvl.rate.direction === 'up' ? 'green' : 'red'}`}>
+                  {Number(chartSummary?.tvl.rate.value)}%
                 </Tag>
               </div>
-              <div>${Numeral(pool.tvl.value).format('(0.00a)')}</div>
+              <div>${Numeral(chartSummary?.tvl.todayValue).format('(0.00a)')}</div>
             </li>
             {showDetail && (
               <>
                 <li>
                   <div>
                     <span>Volume</span>&nbsp;
-                    <Tag className="pool-card-tag" color={`${pool.volume.rate.direction === 'up' ? 'green' : 'red'}`}>
-                      {Number(pool.volume.rate.value)}%
+                    <Tag
+                      className="pool-card-tag"
+                      color={`${chartSummary?.volume.rate.direction === 'up' ? 'green' : 'red'}`}
+                    >
+                      {Number(chartSummary?.volume.rate.value)}%
                     </Tag>
                   </div>
-                  <div>${Numeral(pool.volume.value).format('(0.00a)')}</div>
+                  <div>${Numeral(chartSummary?.volume.todayValue).format('(0.00a)')}</div>
                 </li>
                 <li>
                   <div>
                     <span>Fees</span>&nbsp;
-                    <Tag className="pool-card-tag" color={`${pool.fees.rate.direction === 'up' ? 'green' : 'red'}`}>
-                      {Number(pool.fees.rate.value)}%
+                    <Tag
+                      className="pool-card-tag"
+                      color={`${chartSummary?.fees.rate.direction === 'up' ? 'green' : 'red'}`}
+                    >
+                      {Number(chartSummary?.fees.rate.value)}%
                     </Tag>
                   </div>
-                  <div>${Numeral(pool.fees.value).format('(0.00a)')}</div>
+                  <div>${Numeral(chartSummary?.fees.todayValue).format('(0.00a)')}</div>
                 </li>
               </>
             )}
