@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { usePoolContext, useSettingsContext } from '../../context';
+import { useChartSocket } from '../../socket/useChartSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -30,6 +31,8 @@ export const PoolDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
+  const { chartData } = useChartSocket(id);
+
   useEffect(() => {
     if (poolsContext && poolsContext.length > 0) {
       const currentPool = poolsContext.find((pl) => pl.id === id);
@@ -42,7 +45,7 @@ export const PoolDetail: React.FC = () => {
   }, [poolsContext]);
 
   const renderChart = () => {
-    const data: ChartData[] = [
+    const defaultData: ChartData[] | undefined = [
       {
         date: '',
         close: 0,
@@ -50,24 +53,21 @@ export const PoolDetail: React.FC = () => {
     ];
 
     let key = '';
+    let data: ChartData[] = [];
 
     if (pool) {
       if (selectedTab === POOL_DETAIL_TABS.PRICE) {
         key = 'price';
-        data;
-        // data = pool.price.allPriceData;
+        data = chartData?.price.allPriceData || defaultData;
       } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
         key = 'volume';
-        data;
-        // data = pool.volume.allVolumeData;
+        data = chartData?.volume.allVolumeData || defaultData;
       } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
         key = 'liquidity';
-        data;
-        // data = pool.tvl.allTvlData;
+        data = chartData?.tvl.allTvlData || defaultData;
       } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
         key = 'fees';
-        data;
-        // data = pool.fees.allFeesData;
+        data = chartData?.fees.allFeesData || defaultData;
       }
     }
 
@@ -163,21 +163,23 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>{pool.quote.ticker} Price</div>
-                    <div className="pool-detail-table-text">${pool.price.value.toLocaleString()}</div>
+                    <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
-                      {arrowIconDirection(pool.price.rate.direction)}
-                      <span className={`pool-detail-table-arrow-${pool.price.rate.direction}-text`}>
-                        {pool.price.rate.value}%
+                      {arrowIconDirection(chartData?.price.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.price.rate.direction}-text`}>
+                        {chartData?.price.rate.value}%
                       </span>
                     </div>
                   </div>
                   <div className="pool-metrics-item">
                     <div>Volume 24h</div>
-                    <div className="pool-detail-table-text">${Numeral(pool.volume.value).format('(0.00a)')}</div>
+                    <div className="pool-detail-table-text">
+                      ${Numeral(chartData?.volume.todayValue).format('(0.00a)')}
+                    </div>
                     <div className="pool-detail-icon-content">
-                      {arrowIconDirection(pool.volume.rate.direction)}
-                      <span className={`pool-detail-table-arrow-${pool.volume.rate.direction}-text`}>
-                        {pool.volume.rate.value}%
+                      {arrowIconDirection(chartData?.volume.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.volume.rate.direction}-text`}>
+                        {chartData?.volume.rate.value}%
                       </span>
                     </div>
                   </div>
@@ -185,21 +187,25 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>TVL</div>
-                    <div className="pool-detail-table-text">${Numeral(pool.tvl.value).format('(0.00a)')}</div>
+                    <div className="pool-detail-table-text">
+                      ${Numeral(chartData?.tvl.todayValue).format('(0.00a)')}
+                    </div>
                     <div className="pool-detail-icon-content">
-                      {arrowIconDirection(pool.tvl.rate.direction)}
-                      <span className={`pool-detail-table-arrow-${pool.tvl.rate.direction}-text`}>
-                        {pool.tvl.rate.value}%
+                      {arrowIconDirection(chartData?.tvl.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.tvl.rate.direction}-text`}>
+                        {chartData?.tvl.rate.value}%
                       </span>
                     </div>
                   </div>
                   <div className="pool-metrics-item">
                     <div>Fees 24h</div>
-                    <div className="pool-detail-table-text">${Numeral(pool.fees.value).format('(0.00a)')}</div>
+                    <div className="pool-detail-table-text">
+                      ${Numeral(chartData?.fees.todayValue).format('(0.00a)')}
+                    </div>
                     <div className="pool-detail-icon-content">
-                      {arrowIconDirection(pool.fees.rate.direction)}
-                      <span className={`pool-detail-table-arrow-${pool.fees.rate.direction}-text`}>
-                        {pool.fees.rate.value}%
+                      {arrowIconDirection(chartData?.fees.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.fees.rate.direction}-text`}>
+                        {chartData?.fees.rate.value}%
                       </span>
                     </div>
                   </div>
