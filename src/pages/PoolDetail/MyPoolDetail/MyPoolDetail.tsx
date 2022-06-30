@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { convertion } from '@bitmatrix/lib';
 import { Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { useChartSocket } from '../../../socket/useChartSocket';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -34,6 +35,8 @@ export const MyPoolDetail: React.FC = () => {
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
+
+  const { chartData } = useChartSocket(id);
 
   useEffect(() => {
     if (poolsContext && poolsContext.length > 0) {
@@ -103,23 +106,23 @@ export const MyPoolDetail: React.FC = () => {
   };
 
   const renderChart = (/*allData: any*/) => {
-    const data: ChartData[] = [
+    const defaultData: ChartData[] | undefined = [
       {
-        date: new Date().toLocaleDateString(),
+        date: '',
         close: 0,
       },
     ];
 
     let key = '';
+    let data: ChartData[] = [];
 
     if (selectedTab === MY_POOL_DETAIL_TABS.EARNINGS) {
       key = 'earnings';
-      data;
-      // data = allData.allPriceData;
+      data = chartData?.price.allPriceData || defaultData;
     } else if (selectedTab === MY_POOL_DETAIL_TABS.SHARE) {
       key = 'share';
       data;
-      // data = allData.allVolumeData;
+      data = chartData?.volume.allVolumeData || defaultData;
     }
 
     return (
