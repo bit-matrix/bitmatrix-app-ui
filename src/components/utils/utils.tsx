@@ -27,7 +27,7 @@ export const notify = (
   }, duration);
 };
 
-export const arrowIconDirection = (direction: string): JSX.Element => {
+export const arrowIconDirection = (direction?: string): JSX.Element => {
   if (direction === 'up') {
     return <ArrowUpIcon fill="#4caf50" />;
   } else {
