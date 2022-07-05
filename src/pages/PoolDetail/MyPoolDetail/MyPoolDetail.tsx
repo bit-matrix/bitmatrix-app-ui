@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { convertion } from '@bitmatrix/lib';
 import { Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
-import { useChartSocket } from '../../../socket/useChartSocket';
+import { useChartSocket } from '../../../hooks/useChartSocket';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';

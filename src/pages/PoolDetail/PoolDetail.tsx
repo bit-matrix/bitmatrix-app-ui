@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { usePoolContext, useSettingsContext } from '../../context';
-import { useChartSocket } from '../../socket/useChartSocket';
+import { useChartSocket } from '../../hooks/useChartSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';

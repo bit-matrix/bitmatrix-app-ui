@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
-import { usePoolsSocket } from '../socket/usePoolsSocket';
+import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap3 } from '../pages/Swap3/Swap3';

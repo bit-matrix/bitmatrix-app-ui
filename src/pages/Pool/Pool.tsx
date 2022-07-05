@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { usePoolContext, useWalletContext } from '../../context';
-import { useChartsSocket } from '../../socket/useChartsSocket';
+import { useChartsSocket } from '../../hooks/useChartsSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
