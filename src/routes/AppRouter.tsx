@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
+import { useTxStatusSocket } from '../hooks/useTxStatusSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap3 } from '../pages/Swap3/Swap3';
@@ -14,8 +15,8 @@ import { PoolPage } from '../pages/Pool/Pool';
 // import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../pages/Settings/Settings';
-// import { useLocalStorage } from '../hooks/useLocalStorage';
-// import { CommitmentStore } from '../model/CommitmentStore';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { CommitmentStore } from '../model/CommitmentStore';
 import RemoveLiquidity2 from '../pages/Liquidity/RemoveLiquidity2/RemoveLiquidity2';
 import AddLiquidity2 from '../pages/Liquidity/AddLiquidity2/AddLiquidity2';
 import { PoolDetail } from '../pages/PoolDetail/PoolDetail';
@@ -35,6 +36,14 @@ declare global {
   }
 }
 
+enum TX_STATUS {
+  PENDING,
+  WAITING_PTX,
+  WAITING_PTX_CONFIRM,
+  SUCCESS,
+  FAILED,
+}
+
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
@@ -48,17 +57,22 @@ export const AppRouter = (): JSX.Element => {
 
   // const { setPoolChartDataContext } = usePoolChartDataContext();
 
-  // const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+
+  const txHistory = getLocalData();
+
+  const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+  const txIds = unconfirmedTxs?.map((tx) => tx.txId);
+  const { txStatues } = useTxStatusSocket(txIds);
 
   // fetch pools with timer
   useEffect(() => {
-    fetchData(true);
-    // fetchPools(true);
-    setInterval(() => {
-      fetchData(false);
-      // fetchPools(false);
-    }, 10000);
+    fetchData();
   }, []);
+
+  useEffect(() => {
+    checkTxStatues();
+  }, [txStatues]);
 
   useEffect(() => {
     if (poolsLoading === false && pools) {
@@ -94,6 +108,31 @@ export const AppRouter = (): JSX.Element => {
     }
   }, [walletContext?.marina]);
 
+  const checkTxStatues = () => {
+    const txHistory = getLocalData();
+    if (txHistory && txHistory.length > 0) {
+      if (unconfirmedTxs && unconfirmedTxs.length > 0) {
+        const newTxHistory = [...txHistory];
+        if (txStatues) {
+          txStatues.forEach((txStatus) => {
+            const willChangeTxIndex = newTxHistory.findIndex((txh) => txh.txId === txStatus.txId);
+            if (willChangeTxIndex > -1) {
+              if (txStatus.status === TX_STATUS.SUCCESS) {
+                newTxHistory[willChangeTxIndex].completed = true;
+              } else if (txStatus.status === TX_STATUS.FAILED) {
+                newTxHistory[willChangeTxIndex].completed = true;
+                newTxHistory[willChangeTxIndex].isOutOfSlippage = true;
+              } else {
+                newTxHistory[willChangeTxIndex].completed = false;
+              }
+              setLocalData(newTxHistory);
+            }
+          });
+        }
+      }
+    }
+  };
+
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {
       wall
@@ -120,24 +159,18 @@ export const AppRouter = (): JSX.Element => {
     }
   };
 
-  const fetchData = async (isInitialize: boolean) => {
-    if (isInitialize) {
-      // const pools: ModelPool[] = await api.getPools();
-      const pool_config: BmConfig = await api.getBmConfigs();
-      setPoolConfigContext(pool_config);
+  const fetchData = async () => {
+    const pool_config: BmConfig = await api.getBmConfigs();
+    setPoolConfigContext(pool_config);
 
-      // setPoolsContext(pools);
-    }
     // checkLastTxStatus(pools[0].id);
     // setLoading(false);
   };
 
   // const checkLastTxStatus = (poolId: string) => {
   //   const txHistory = getLocalData();
-
   //   if (txHistory && txHistory.length > 0) {
   //     const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
-
   //     if (unconfirmedTxs.length > 0) {
   //       unconfirmedTxs.forEach((transaction) => {
   //         if (transaction.txId) {
@@ -147,11 +180,9 @@ export const AppRouter = (): JSX.Element => {
   //               const willChangedTx = newTxHistory.findIndex((ntx) => {
   //                 return ntx.txId === transaction.txId;
   //               });
-
   //               newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
   //               setLocalData(newTxHistory);
   //             }
-
   //             if (!ctxResponse) {
   //               api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
   //                 if (ptxResponse) {
@@ -159,10 +190,8 @@ export const AppRouter = (): JSX.Element => {
   //                   const willChangedTx = newTxHistory.findIndex((ntx) => {
   //                     return ntx.txId === transaction.txId;
   //                   });
-
   //                   newTxHistory[willChangedTx].completed = true;
   //                   newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
-
   //                   setLocalData(newTxHistory);
   //                 }
   //               });
