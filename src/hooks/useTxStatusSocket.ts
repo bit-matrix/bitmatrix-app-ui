@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
-const socketServerUrl = '//127.0.0.1:9901/';
+const socketServerUrl = '//127.0.0.1:4499/';
 
 enum TX_STATUS {
   PENDING,
@@ -18,8 +19,7 @@ export type TxStatus = {
   timestamp: number;
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const useTxStatusSocket = (txIds: string[]) => {
+export const useTxStatusSocket = (txIds?: string[]) => {
   const [isTxStatusConnected, setIsTxStatusConnected] = useState<boolean>(false);
   const [txStatues, setTxStatues] = useState<TxStatus[]>();
   const [txStatusLoading, setTxStatusLoading] = useState<boolean>(true);
@@ -42,7 +42,7 @@ export const useTxStatusSocket = (txIds: string[]) => {
       setIsTxStatusConnected(false);
     });
 
-    socket.emit('checkTxStatus', `${txIds[0]}`);
+    socket.emit('checkTxStatus', `${txIds}`);
 
     socket.on('checkTxStatusResponse', (data) => {
       console.log('checkTxStatusResponse', data);
