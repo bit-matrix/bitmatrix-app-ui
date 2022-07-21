@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { Pool } from '@bitmatrix/models';
-
-const socketServerUrl = '//127.0.0.1:4499';
+import { DB_SOCKET_SERVER_URL } from '../config';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePoolsSocket = () => {
@@ -16,7 +15,7 @@ export const usePoolsSocket = () => {
   }, []);
 
   useEffect(() => {
-    const socket = io(socketServerUrl);
+    const socket = io(DB_SOCKET_SERVER_URL);
 
     socket.on('connect', () => {
       console.log('connect pools');

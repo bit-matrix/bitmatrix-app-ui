@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
-
-const socketServerUrl = '//127.0.0.1:4499/';
+import { DB_SOCKET_SERVER_URL } from '../config';
 
 enum TX_STATUS {
   PENDING,
@@ -30,7 +29,7 @@ export const useTxStatusSocket = (txIds?: string[]) => {
   }, []);
 
   useEffect(() => {
-    const socket = io(socketServerUrl);
+    const socket = io(DB_SOCKET_SERVER_URL);
 
     socket.on('connect', () => {
       console.log('connect txStatues');

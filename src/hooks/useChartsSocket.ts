@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { ChartSummary } from '@bitmatrix/models';
 import { usePoolContext } from '../context';
-
-const socketServerUrl = '//127.0.0.1:9901/';
+import { API_SOCKET_SERVER_URL } from '../config';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
@@ -19,7 +18,7 @@ export const useChartsSocket = () => {
   }, []);
 
   useEffect(() => {
-    const socket = io(socketServerUrl);
+    const socket = io(API_SOCKET_SERVER_URL);
     const poolIds = poolsContext.map((pc) => pc.id);
     socket.on('connect', () => {
       console.log('connect charts');
