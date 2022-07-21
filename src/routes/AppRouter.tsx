@@ -6,7 +6,7 @@ import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useTxStatusSocket } from '../hooks/useTxStatusSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
-import { Swap3 } from '../pages/Swap3/Swap3';
+import { Swap } from '../pages/Swap/Swap';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
 import { Home } from '../pages/Home/Home';
@@ -17,8 +17,8 @@ import { Content, Loader } from 'rsuite';
 import { Settings } from '../pages/Settings/Settings';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
-import RemoveLiquidity2 from '../pages/Liquidity/RemoveLiquidity2/RemoveLiquidity2';
-import AddLiquidity2 from '../pages/Liquidity/AddLiquidity2/AddLiquidity2';
+import RemoveLiquidity from '../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
+import AddLiquidity from '../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../pages/PoolDetail/PoolDetail';
 import { MyPoolDetail } from '../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../pages/CreateNewPool/CreateNewPool';
@@ -55,8 +55,6 @@ export const AppRouter = (): JSX.Element => {
 
   const { poolsLoading, pools } = usePoolsSocket();
 
-  // const { setPoolChartDataContext } = usePoolChartDataContext();
-
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const txHistory = getLocalData();
@@ -65,7 +63,6 @@ export const AppRouter = (): JSX.Element => {
   const txIds = unconfirmedTxs?.map((tx) => tx.txId);
   const { txStatues } = useTxStatusSocket(txIds);
 
-  // fetch pools with timer
   useEffect(() => {
     fetchData();
   }, []);
@@ -119,10 +116,16 @@ export const AppRouter = (): JSX.Element => {
             if (willChangeTxIndex > -1) {
               if (txStatus.status === TX_STATUS.SUCCESS) {
                 newTxHistory[willChangeTxIndex].completed = true;
-              } else if (txStatus.status === TX_STATUS.FAILED) {
+              }
+              if (txStatus.status === TX_STATUS.FAILED) {
                 newTxHistory[willChangeTxIndex].completed = true;
                 newTxHistory[willChangeTxIndex].isOutOfSlippage = true;
-              } else {
+              }
+              if (
+                txStatus.status === TX_STATUS.PENDING ||
+                txStatus.status === TX_STATUS.WAITING_PTX ||
+                txStatus.status === TX_STATUS.WAITING_PTX_CONFIRM
+              ) {
                 newTxHistory[willChangeTxIndex].completed = false;
               }
               setLocalData(newTxHistory);
@@ -162,7 +165,6 @@ export const AppRouter = (): JSX.Element => {
   const fetchData = async () => {
     const pool_config: BmConfig = await api.getBmConfigs();
     setPoolConfigContext(pool_config);
-
     // checkLastTxStatus(pools[0].id);
     // setLoading(false);
   };
@@ -218,14 +220,14 @@ export const AppRouter = (): JSX.Element => {
               <div className="app-content">
                 <Switch component={Fader}>
                   <Route exact path={ROUTE_PATH.HOME} component={Home} />
-                  <Route exact path={ROUTE_PATH.SWAP} component={Swap3} />
+                  <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
                   <Route exact path={ROUTE_PATH.POOL} component={PoolPage} />
                   <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
                   <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
                   <Route exact path={ROUTE_PATH.CREATE_NEW_POOL} component={CreateNewPool} />
                   <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-                  <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity2} />
-                  <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity2} />
+                  <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
+                  <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
                   {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
                   <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
