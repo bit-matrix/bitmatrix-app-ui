@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { api, commitmentTx, convertion } from '@bitmatrix/lib';
-import { BmConfig, CALL_METHOD } from '@bitmatrix/models';
-import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { commitmentSign, convertion } from '@bitmatrix/lib';
+import { CALL_METHOD } from '@bitmatrix/models';
+import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
 import Decimal from 'decimal.js';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
@@ -11,10 +11,9 @@ import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
-import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
-import TetherIcon from '../../../components/base/Svg/Icons/Tether';
+import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getPrimaryPoolConfig } from '../../../helper';
+import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -31,12 +30,12 @@ const RemoveLiquidity = (): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
-  const [poolConfig, setPoolConfig] = useState<BmConfig>();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { poolsContext } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
   const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -44,14 +43,6 @@ const RemoveLiquidity = (): JSX.Element => {
   const { id } = useParams<{ id: string }>();
 
   const currentPool = poolsContext.find((p) => p.id === id);
-
-  useEffect(() => {
-    if (currentPool) {
-      api.getBmConfigs().then((cp) => {
-        setPoolConfig(cp);
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (currentPool && walletContext) {
@@ -74,96 +65,86 @@ const RemoveLiquidity = (): JSX.Element => {
   }, [removalPercentage, lpTokenAmount]);
 
   const removeLiquidityClick = async () => {
-    // @afarukcali review
-    // if (walletContext?.marina) {
-    //   const methodCall = CALL_METHOD.REMOVE_LIQUIDITY;
-    //   if (currentPool && poolConfig) {
-    //     const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
-    //     const fundingTxInputs = fundingTxForLiquidity(0, calcLpTokenAmount, currentPool, primaryPoolConfig, methodCall);
-    //     let fundingTxId;
-    //     try {
-    //       setLoading(true);
-    //       const fundingTx = await walletContext.marina.sendTransaction([
-    //         {
-    //           address: fundingTxInputs.fundingOutput1Address,
-    //           value: fundingTxInputs.fundingOutput1Value,
-    //           asset: fundingTxInputs.fundingOutput1AssetId,
-    //         },
-    //         {
-    //           address: fundingTxInputs.fundingOutput2Address,
-    //           value: fundingTxInputs.fundingOutput2Value,
-    //           asset: fundingTxInputs.fundingOutput2AssetId,
-    //         },
-    //       ]);
-    //       fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-    //     } catch (err: any) {
-    //       notify(err.toString(), 'Wallet Error : ', 'error');
-    //       setLoading(false);
-    //       // payloadData.wallet.marina.reloadCoins();
-    //       return Promise.reject();
-    //     }
-    //     const addressInformation = await walletContext.marina.getNextChangeAddress();
-    //     if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-    //       const primaryPoolConfig = getPrimaryPoolConfig(poolConfig);
-    //       const commitment = commitmentTx.liquidityRemoveCreateCommitmentTx(
-    //         calcLpTokenAmount,
-    //         fundingTxId,
-    //         addressInformation.publicKey,
-    //         primaryPoolConfig,
-    //         currentPool,
-    //       );
-    //       const commitmentTxId = await api.sendRawTransaction(commitment);
-    //       if (commitmentTxId && commitmentTxId !== '') {
-    //         const calcLpAmounts = calcLpValues();
-    //         const tempTxData: CommitmentStore = {
-    //           txId: commitmentTxId,
-    //           quoteAmount: new Decimal(calcLpAmounts.quoteReceived).toNumber() * settingsContext.preferred_unit.value,
-    //           quoteAsset: currentPool.quote.ticker,
-    //           tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
-    //           tokenAsset: currentPool.token.ticker,
-    //           lpAmount: calcLpTokenAmount,
-    //           lpAsset: currentPool.lp.ticker,
-    //           timestamp: new Date().valueOf(),
-    //           isOutOfSlippage: false,
-    //           completed: false,
-    //           seen: false,
-    //           method: CALL_METHOD.REMOVE_LIQUIDITY,
-    //         };
-    //         const storeOldData = getLocalData() || [];
-    //         const newStoreData = [...storeOldData, tempTxData];
-    //         setLocalData(newStoreData);
-    //       }
-    //       // notify(
-    //       //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-    //       //     See in Explorer
-    //       //   </a>,
-    //       //   'Commitment Tx created successfully!',
-    //       //   'success',
-    //       // );
-    //       setLoading(false);
-    //       // await sleep(3000);
-    //       // payloadData.wallet.marina.reloadCoins();
-    //     } else {
-    //       notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-    //       // payloadData.wallet.marina.reloadCoins();
-    //       setLoading(false);
-    //     }
-    //   }
-    // }
+    if (walletContext?.marina) {
+      if (currentPool && poolConfigContext) {
+        setLoading(true);
+
+        const addressInformation = await walletContext.marina.getNextChangeAddress();
+        if (addressInformation.publicKey) {
+          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+
+          const commitmentTxId = await commitmentSign.case4(
+            walletContext.marina,
+            calcLpTokenAmount,
+            currentPool,
+            primaryPoolConfig,
+            addressInformation.publicKey,
+          );
+
+          if (commitmentTxId && commitmentTxId !== '') {
+            const calcLpAmounts = calcLpValues();
+            const tempTxData: CommitmentStore = {
+              txId: commitmentTxId,
+              quoteAmount:
+                new Decimal(calcLpAmounts.quoteReceived).toNumber() *
+                (currentPool.quote.ticker === SWAP_ASSET.LBTC
+                  ? settingsContext.preferred_unit.value
+                  : PREFERRED_UNIT_VALUE.LBTC),
+              quoteAsset: currentPool.quote.ticker,
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
+              tokenAsset: currentPool.token.ticker,
+              lpAmount: calcLpTokenAmount,
+              lpAsset: currentPool.lp.ticker,
+              timestamp: new Date().valueOf(),
+              isOutOfSlippage: false,
+              completed: false,
+              seen: false,
+              method: CALL_METHOD.REMOVE_LIQUIDITY,
+            };
+            const storeOldData = getLocalData() || [];
+            const newStoreData = [...storeOldData, tempTxData];
+            setLocalData(newStoreData);
+            setLoading(false);
+          } else {
+            notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
+            setLoading(false);
+          }
+          // notify(
+          //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+          //     See in Explorer
+          //   </a>,
+          //   'Commitment Tx created successfully!',
+          //   'success',
+          // );
+          // setLoading(false);
+          // await sleep(3000);
+          // payloadData.wallet.marina.reloadCoins();
+        } else {
+          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
+          // payloadData.wallet.marina.reloadCoins();
+          setLoading(false);
+        }
+      }
+    }
   };
 
   const calcLpValues = () => {
-    const currentPool = poolsContext;
-    if (currentPool && currentPool.length > 0) {
+    if (currentPool) {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
-      const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool[0], lpAmountN);
+      const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
       return {
-        quoteReceived: (Number(recipientValue.user_lbtc_received) / settingsContext.preferred_unit.value).toString(),
+        quoteReceived: (
+          Number(recipientValue.user_lbtc_received) /
+          (currentPool.quote.ticker === SWAP_ASSET.LBTC
+            ? settingsContext.preferred_unit.value
+            : PREFERRED_UNIT_VALUE.LBTC)
+        ).toString(),
         tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
       };
     }
     return { quoteReceived: '0', tokenReceived: '0' };
   };
+  const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
 
   return (
     <div className="remove-liquidity-page-main">
@@ -257,17 +238,26 @@ const RemoveLiquidity = (): JSX.Element => {
           <div className="remove-liquidity-page-footer">
             <div className="remove-liquidity-page-footer-line-item-first">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">
-                  tL-{settingsContext.preferred_unit.text} You Get
-                </span>
-                <LbtcIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" />
+                <span className="remove-liquidity-page-footer-line-item-texts">{quoteTicker} You Get</span>
+                {currentPool?.quote && (
+                  <AssetIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" asset={currentPool?.quote} />
+                )}
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">tL-USDT You Get</span>
-                <TetherIcon className="liquidity-usdt-icon" width="1.5rem" height="1.5rem" />
+                <span className="remove-liquidity-page-footer-line-item-texts">
+                  {currentPool?.token.ticker} You Get
+                </span>
+                {currentPool?.token && (
+                  <AssetIcon
+                    className="liquidity-usdt-icon"
+                    width="1.5rem"
+                    height="1.5rem"
+                    asset={currentPool?.token}
+                  />
+                )}
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().tokenReceived}</div>
             </div>
@@ -284,7 +274,7 @@ const RemoveLiquidity = (): JSX.Element => {
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove tL-${settingsContext.preferred_unit.text} and ${SWAP_ASSET.USDT}`}
+            text={`Remove ${quoteTicker} and ${currentPool?.token.ticker}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();
