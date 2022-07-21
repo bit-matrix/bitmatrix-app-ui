@@ -25,9 +25,9 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
-import './Swap3.scss';
+import './Swap.scss';
 
-export const Swap3 = (): JSX.Element => {
+export const Swap = (): JSX.Element => {
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
