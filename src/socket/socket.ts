@@ -3,23 +3,23 @@ import { ISocket } from './ISocket';
 
 export class Socket implements ISocket {
   private socket: any;
-  private isChartConnected: boolean;
+  private isConnected: boolean;
 
   constructor(ip: string) {
     this.socket = io(ip);
-    this.isChartConnected = false;
+    this.isConnected = false;
   }
 
   connect() {
     this.socket.on('connect', () => {
-      this.isChartConnected = true;
+      this.isConnected = true;
     });
   }
 
   disconnect() {
-    if (!this.isChartConnected) return;
+    if (!this.isConnected) return;
     this.socket.on('disconnect', () => {
-      this.isChartConnected = false;
+      this.isConnected = false;
     });
   }
 
@@ -38,6 +38,6 @@ export class Socket implements ISocket {
   }
 
   sendMessage(message: string, data: any) {
-    if (this.isChartConnected) this.socket.emit(message, data);
+    if (this.isConnected) this.socket.emit(message, data);
   }
 }
