@@ -301,9 +301,9 @@ export const Swap = (): JSX.Element => {
     return true;
   }, [currentPool, poolsContext, poolConfigContext, settingsContext.preferred_unit.value, walletContext, pairAsset]);
 
-  const findCurrentPool = useCallback((up?: PAsset, down?: PAsset) => {
+  const findCurrentPool = useCallback((pools: Pool[], up?: PAsset, down?: PAsset) => {
     if (up && down) {
-      const filteredPools = poolsContext.filter(
+      const filteredPools = pools.filter(
         (pool) =>
           (pool.quote.ticker === up.ticker || pool.quote.ticker === down.ticker) &&
           (pool.token.ticker === up.ticker || pool.token.ticker === down.ticker),
@@ -316,22 +316,24 @@ export const Swap = (): JSX.Element => {
   }, []);
 
   const assetOnChange = (asset: PAsset, isFrom = true) => {
-    const assetIsQuote = assetList?.quote?.some((q) => q.assetHash === asset.assetHash && q.isQuote === true);
+    // const assetIsQuote = assetList?.quote?.some((q) => q.assetHash === asset.assetHash && q.isQuote === true);
 
-    if (assetIsQuote) {
-      const tokenAssetList = uniqueTokenAssetList(poolsContext, asset);
-      setAssetList({ ...assetList, token: tokenAssetList });
-    }
+    // Is it necessary?
+    // if (assetIsQuote) {
+    // const tokenAssetList = uniqueTokenAssetList(poolsContext, asset);
+    //   setAssetList({ ...assetList, token: tokenAssetList });
+    //   console.log('assetOnChange : assetIsQuote');
+    // }
 
     if (isFrom) {
       if (pairAsset.up?.ticker !== asset.ticker) {
         if (pairAsset.down) {
           if (pairAsset.down?.ticker === asset.ticker) {
             setPairAsset({ up: { ...asset, value: '' }, down: undefined });
-            findCurrentPool(asset, pairAsset.up);
+            findCurrentPool(poolsContext, asset, pairAsset.up);
           } else {
             setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
-            findCurrentPool(asset, pairAsset.down);
+            findCurrentPool(poolsContext, asset, pairAsset.down);
           }
         } else {
           setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
@@ -342,10 +344,10 @@ export const Swap = (): JSX.Element => {
         if (pairAsset.up) {
           if (pairAsset.up?.ticker === asset.ticker) {
             setPairAsset({ up: undefined, down: { ...asset, value: '' } });
-            findCurrentPool(pairAsset.down, asset);
+            findCurrentPool(poolsContext, pairAsset.down, asset);
           } else {
             setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
-            findCurrentPool(pairAsset.up, asset);
+            findCurrentPool(poolsContext, pairAsset.up, asset);
           }
         } else {
           setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
