@@ -44,7 +44,7 @@ export const useTxStatusSocket = (txIds?: string[]) => {
     socket.emit('checkTxStatus', `${txIds}`);
 
     socket.on('checkTxStatusResponse', (data) => {
-      console.log('checkTxStatusResponse', data);
+      // console.log('checkTxStatusResponse', data);
       if (data) onTxStatusData(data);
     });
 
