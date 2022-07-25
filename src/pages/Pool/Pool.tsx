@@ -25,7 +25,7 @@ export const PoolPage: React.FC = () => {
   const { walletContext } = useWalletContext();
   const { poolsContext } = usePoolContext();
 
-  const poolIds = poolsContext.map((pc) => pc.id);
+  // const poolIds = poolsContext.map((pc) => pc.id);
 
   const { chartsData, chartsLoading } = useChartsSocket();
 
