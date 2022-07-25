@@ -154,23 +154,23 @@ export const AppRouter = (): JSX.Element => {
         asset: '402bb6d457ff10edb630ef80390f327b17dd02179a2ec04bb9259285f84f980d',
         value: '1999998000',
       },
-      initialTx: {
-        txid: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
-        block_height: 379558,
-        block_hash: '8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6',
-      },
       lastSyncedBlock: {
         block_height: 381436,
         block_hash: '44340f3f93fd21859b1f4a379d172c95b4214dfd6e639d5b7a9fc6d2b669e5e0',
       },
       bestBlockHeight: 385093,
       synced: false,
-      unspentTx: {
-        txid: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
-        block_height: 379558,
-        block_hash: '8c11b11e9c59b3ea5819565630a9f19a350ea8eabea0bd975ae1d492ceb898b6',
+      initialTx: {
+        txid: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
+        block_height: 445843,
+        block_hash: 'd1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c',
       },
-      lastSentPtx: 'e3b6041ef56f481520bb63c111e666640c3d5c2dd4ee735929fc8ae3dc4b26c0',
+      unspentTx: {
+        txid: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
+        block_height: 445843,
+        block_hash: 'd1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c',
+      },
+      lastSentPtx: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
       active: true,
     };
 
