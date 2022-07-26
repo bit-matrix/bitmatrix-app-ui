@@ -150,7 +150,7 @@ export const AppRouter = (): JSX.Element => {
         ticker: '6507',
         name: 'unknown',
         asset: '650753ef49c11996173a89ddeee785f4830baf18a525f56ff93aa73ddc45820d',
-        value: '1999998280',
+        value: '1999998000',
       },
       lastSyncedBlock: {
         block_height: 381436,
