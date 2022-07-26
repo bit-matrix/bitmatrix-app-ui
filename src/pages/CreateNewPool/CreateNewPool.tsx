@@ -176,7 +176,7 @@ export const CreateNewPool: React.FC = () => {
           pair2AmountN,
           addressInformation.publicKey,
           1,
-          pair1IsLbtc ? 20 : 1000000,
+          pair1IsLbtc ? 50 : 1000000,
         );
 
         const poolTxId = await api.sendRawTransaction(newPool);
