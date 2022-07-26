@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { api, Wallet } from '@bitmatrix/lib';
-import { Pool as ModelPool, BmConfig, BmChart, BmCtxMempool } from '@bitmatrix/models';
+import { Pool as ModelPool, BmConfig, BmChart } from '@bitmatrix/models';
 import {
   usePoolConfigContext,
   usePoolContext,
@@ -50,8 +50,6 @@ export const AppRouter = (): JSX.Element => {
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { setPoolChartDataContext } = usePoolChartDataContext();
-
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   // fetch pools with timer
   useEffect(() => {
@@ -135,24 +133,24 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchData = async (isInitialize: boolean) => {
     const newPool: ModelPool = {
-      id: '2e27304eef17c3546eff8c8f85439802bd5a545da701b03f7838c8046a01da95',
+      id: 'e053e3bd52e7692f12fc8f61df6dc5e747a058f679bf1046ac96649d15e50d2c',
       quote: {
         ticker: 'tL-BTC',
         name: 'Liquid Bitcoin',
         asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-        value: '200000',
+        value: '430000',
       },
       token: {
         ticker: 'tL-USDt',
         name: 'Liquid Tether',
         asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-        value: '100000000000',
+        value: '50000000000',
       },
       lp: {
-        ticker: '402b',
+        ticker: '3a5d',
         name: 'unknown',
-        asset: '402bb6d457ff10edb630ef80390f327b17dd02179a2ec04bb9259285f84f980d',
-        value: '1999998000',
+        asset: '3a5d580b7de1d3b0f7aa560495eb8ef5615e66db9c72939ad0d66753d6bb114c',
+        value: '1999998280',
       },
       lastSyncedBlock: {
         block_height: 381436,
@@ -161,16 +159,16 @@ export const AppRouter = (): JSX.Element => {
       bestBlockHeight: 385093,
       synced: false,
       initialTx: {
-        txid: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
-        block_height: 445843,
-        block_hash: 'd1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c',
+        txid: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
+        block_height: 447086,
+        block_hash: '8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229',
       },
       unspentTx: {
-        txid: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
-        block_height: 445843,
-        block_hash: 'd1ecce31620a28f34d37243e84327472bdb8de0a5dde451836c3b70ed03ce50c',
+        txid: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
+        block_height: 447086,
+        block_hash: '8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229',
       },
-      lastSentPtx: '3928c154e432f903302ccb9232512837c7db0617b382ac5e9d416eb23ebd715f',
+      lastSentPtx: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
       active: true,
     };
 
@@ -197,47 +195,47 @@ export const AppRouter = (): JSX.Element => {
     setLoading(false);
   };
 
-  const checkLastTxStatus = (poolId: string) => {
-    const txHistory = getLocalData();
+  // const checkLastTxStatus = (poolId: string) => {
+  //   const txHistory = getLocalData();
 
-    if (txHistory && txHistory.length > 0) {
-      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+  //   if (txHistory && txHistory.length > 0) {
+  //     const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
 
-      if (unconfirmedTxs.length > 0) {
-        unconfirmedTxs.forEach((transaction) => {
-          if (transaction.txId) {
-            api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
-              if (ctxResponse) {
-                const newTxHistory = [...txHistory];
-                const willChangedTx = newTxHistory.findIndex((ntx) => {
-                  return ntx.txId === transaction.txId;
-                });
+  //     if (unconfirmedTxs.length > 0) {
+  //       unconfirmedTxs.forEach((transaction) => {
+  //         if (transaction.txId) {
+  //           api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
+  //             if (ctxResponse) {
+  //               const newTxHistory = [...txHistory];
+  //               const willChangedTx = newTxHistory.findIndex((ntx) => {
+  //                 return ntx.txId === transaction.txId;
+  //               });
 
-                newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
-                setLocalData(newTxHistory);
-              }
+  //               newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
+  //               setLocalData(newTxHistory);
+  //             }
 
-              if (!ctxResponse) {
-                api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
-                  if (ptxResponse) {
-                    const newTxHistory = [...txHistory];
-                    const willChangedTx = newTxHistory.findIndex((ntx) => {
-                      return ntx.txId === transaction.txId;
-                    });
+  //             if (!ctxResponse) {
+  //               api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
+  //                 if (ptxResponse) {
+  //                   const newTxHistory = [...txHistory];
+  //                   const willChangedTx = newTxHistory.findIndex((ntx) => {
+  //                     return ntx.txId === transaction.txId;
+  //                   });
 
-                    newTxHistory[willChangedTx].completed = true;
-                    newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
+  //                   newTxHistory[willChangedTx].completed = true;
+  //                   newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
 
-                    setLocalData(newTxHistory);
-                  }
-                });
-              }
-            });
-          }
-        });
-      }
-    }
-  };
+  //                   setLocalData(newTxHistory);
+  //                 }
+  //               });
+  //             }
+  //           });
+  //         }
+  //       });
+  //     }
+  //   }
+  // };
 
   return (
     <Router>
