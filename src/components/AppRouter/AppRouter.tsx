@@ -133,12 +133,12 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchData = async (isInitialize: boolean) => {
     const newPool: ModelPool = {
-      id: 'e053e3bd52e7692f12fc8f61df6dc5e747a058f679bf1046ac96649d15e50d2c',
+      id: 'ba353403ba235320322d1bb0cb15aeaddd03d240b7b56415e48fc25c3c745a99',
       quote: {
         ticker: 'tL-BTC',
         name: 'Liquid Bitcoin',
         asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-        value: '430000',
+        value: '500000',
       },
       token: {
         ticker: 'tL-USDt',
@@ -147,9 +147,9 @@ export const AppRouter = (): JSX.Element => {
         value: '50000000000',
       },
       lp: {
-        ticker: '3a5d',
+        ticker: '6507',
         name: 'unknown',
-        asset: '3a5d580b7de1d3b0f7aa560495eb8ef5615e66db9c72939ad0d66753d6bb114c',
+        asset: '650753ef49c11996173a89ddeee785f4830baf18a525f56ff93aa73ddc45820d',
         value: '1999998280',
       },
       lastSyncedBlock: {
@@ -158,18 +158,18 @@ export const AppRouter = (): JSX.Element => {
       },
       bestBlockHeight: 385093,
       synced: false,
+      active: true,
       initialTx: {
-        txid: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
-        block_height: 447086,
-        block_hash: '8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229',
+        txid: '78d281ee0780f76260aaa75654877b9ad9c813713d00509225159cba68eed417',
+        block_height: 447580,
+        block_hash: '53a89b2cc117ec4a46fad37ca9b839754d6379e388334c756ba79954ec2831b3',
       },
       unspentTx: {
-        txid: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
-        block_height: 447086,
-        block_hash: '8199c248886ca066062136c883a80ccca106238cc6346b55edb9109d11cd7229',
+        txid: '78d281ee0780f76260aaa75654877b9ad9c813713d00509225159cba68eed417',
+        block_height: 447580,
+        block_hash: '53a89b2cc117ec4a46fad37ca9b839754d6379e388334c756ba79954ec2831b3',
       },
-      lastSentPtx: 'a8ff436da29ffd89753bd0f8c46b27bbfa03faec5ad528fa387b26908d3697ae',
-      active: true,
+      lastSentPtx: '78d281ee0780f76260aaa75654877b9ad9c813713d00509225159cba68eed417',
     };
 
     setPoolsContext([newPool]);
