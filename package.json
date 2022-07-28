@@ -4,7 +4,7 @@
   "homepage": "https://commitment.bitmatrix.app/",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^10.0.53",
+    "@bitmatrix/lib": "^10.0.54",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
