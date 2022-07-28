@@ -34,7 +34,7 @@ export const General = (): JSX.Element => {
           onChange={(option) => {
             const selectedOption = SlippageFeeList.find((sf) => sf.text === option)?.value;
 
-            setSlippageContext(selectedOption || 200);
+            setSlippageContext(0);
           }}
         />
       </div>
