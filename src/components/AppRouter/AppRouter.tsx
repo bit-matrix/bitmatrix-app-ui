@@ -138,19 +138,19 @@ export const AppRouter = (): JSX.Element => {
         ticker: 'tL-BTC',
         name: 'Liquid Bitcoin',
         asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-        value: '209442',
+        value: '210537',
       },
       token: {
         ticker: 'tL-USDt',
         name: 'Liquid Tether',
         asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-        value: '95550000000',
+        value: '96050000000',
       },
       lp: {
         ticker: 'fc65',
         name: 'unknown',
         asset: 'fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232',
-        value: '1999999200',
+        value: '1999999196',
       },
       lastSyncedBlock: {
         block_height: 381436,
@@ -165,9 +165,9 @@ export const AppRouter = (): JSX.Element => {
         block_hash: '7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35',
       },
       unspentTx: {
-        txid: 'c498dcc20e03bc1867158bb8cf9bf8f909cb83fe2b1613292e2a9519dbb5f2a5',
-        block_height: 450021,
-        block_hash: 'a8a12b76b9fa21ebd9bb8a37bc750c17b000f9aaa42f070f1528fb97d51320fe',
+        txid: 'd9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c',
+        block_height: 450143,
+        block_hash: 'd9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c',
       },
       lastSentPtx: '78d281ee0780f76260aaa75654877b9ad9c813713d00509225159cba68eed417',
     };
