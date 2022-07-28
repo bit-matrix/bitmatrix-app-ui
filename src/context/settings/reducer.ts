@@ -20,7 +20,7 @@ const { getLocalData, setLocalData } = useLocalStorage<SettingsStore>('BMXSettin
 const settings = getLocalData();
 
 export const initialSettingsState: Settings = {
-  slippage: 0,
+  slippage: settings?.slippage || 200,
   preferred_unit: settings?.preferred_unit || { text: PREFERRED_UNIT.LBTC, value: PREFERRED_UNIT_VALUE.LBTC },
   theme: settings?.theme || SELECTED_THEME.NEON,
   exclusiveThemes: [],
