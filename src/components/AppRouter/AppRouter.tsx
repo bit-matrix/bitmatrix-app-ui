@@ -133,14 +133,10 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const fetchData = async (isInitialize: boolean) => {
-    const newPool = await axios
-      .get<any>('https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json')
-      .then((response) => {
-        return response.data;
-      })
-      .catch((err) => {
-        return err;
-      });
+    const newPool = await (
+      await fetch('https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json')
+    ).json();
+
     setPoolsContext([newPool]);
 
     // checkLastTxStatus(poolId);
