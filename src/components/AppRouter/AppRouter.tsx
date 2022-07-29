@@ -33,6 +33,7 @@ import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { detectProvider, MarinaProvider } from 'marina-provider';
 import { ErrorBoundary } from './ErrorBoundary/ErrorBoundary';
 import './AppRouter.scss';
+import axios from 'axios';
 import { deepCopy } from '../../helper';
 
 declare global {
@@ -132,46 +133,14 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const fetchData = async (isInitialize: boolean) => {
-    const newPool: ModelPool = {
-      id: '0b427dc1862dc6d658ccd109b8d54cf0dcd8848626c2bdb5e0ddce0f17383ff7',
-      quote: {
-        ticker: 'tL-BTC',
-        name: 'Liquid Bitcoin',
-        asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-        value: '210537',
-      },
-      token: {
-        ticker: 'tL-USDt',
-        name: 'Liquid Tether',
-        asset: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-        value: '96050000000',
-      },
-      lp: {
-        ticker: 'fc65',
-        name: 'unknown',
-        asset: 'fc65994dc9467dc99f35cbe7382d0adad3519aaade30e023d79d70c41f63a232',
-        value: '1999999196',
-      },
-      lastSyncedBlock: {
-        block_height: 381436,
-        block_hash: '44340f3f93fd21859b1f4a379d172c95b4214dfd6e639d5b7a9fc6d2b669e5e0',
-      },
-      bestBlockHeight: 385093,
-      synced: false,
-      active: true,
-      initialTx: {
-        txid: 'e3094b74a3db4f83b472531d6564a3e94b956c661fe94296d4da22c7a8624415',
-        block_height: 447661,
-        block_hash: '7fa6f90f1b8bfe5c9e5aeecda0441cc2814a9374c73ee9e22f8ed1ec6af4bc35',
-      },
-      unspentTx: {
-        txid: 'd9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c',
-        block_height: 450143,
-        block_hash: 'd9873d3118d5dd08644027b7e2a6abfd035c0470b8c80d99b2fcb042d98b5d0c',
-      },
-      lastSentPtx: '78d281ee0780f76260aaa75654877b9ad9c813713d00509225159cba68eed417',
-    };
-
+    const newPool = await axios
+      .get<any>('https://raw.githubusercontent.com/bit-matrix/bitmatrix-app-config/master/testpool.json')
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => {
+        return err;
+      });
     setPoolsContext([newPool]);
 
     // checkLastTxStatus(poolId);

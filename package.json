@@ -24,6 +24,7 @@
     "@visx/shape": "^2.4.0",
     "@visx/tooltip": "^2.8.0",
     "@visx/xychart": "^2.9.0",
+    "axios": "^0.27.2",
     "decimal.js": "^10.3.1",
     "numeral": "^2.0.6",
     "react": "^18.1.0",
