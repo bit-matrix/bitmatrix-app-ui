@@ -4,7 +4,7 @@
   "homepage": "https://beta.bitmatrix.app/",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.41",
+    "@bitmatrix/lib": "^0.0.63",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -25,7 +25,7 @@
     "@visx/tooltip": "^2.8.0",
     "@visx/xychart": "^2.9.0",
     "decimal.js": "^10.3.1",
-    "ldk": "^0.4.11",
+    "ldk": "^0.5.0",
     "marina-provider": "^1.5.0",
     "numeral": "^2.0.6",
     "react": "^18.1.0",
@@ -39,10 +39,11 @@
     "sass": "^1.49.7",
     "socket.io-client": "^4.5.1",
     "typescript": "^4.1.2",
+    "tiny-secp256k1": "^1.1.6",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "PUBLIC_URL=http://localhost:3000 react-scripts start",
+    "start": "react-scripts start",
     "build": "PUBLIC_URL=https://beta.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -53,18 +54,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@types/d3-array": "^3.0.1",
     "@types/d3-time-format": "^4.0.0",
@@ -76,6 +70,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "prettier": "^2.3.1",
-    "react-error-overlay": "6.0.9"
+    "react-error-overlay": "6.0.9",
+    "@types/tiny-secp256k1": "^2.0.1"
   }
 }
