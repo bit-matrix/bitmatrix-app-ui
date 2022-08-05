@@ -14,11 +14,15 @@ import Backdrop from '../../components/Backdrop/Backdrop';
 import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import AddIcon from '../../components/base/Svg/Icons/Add';
+import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
+import { uniqueQuoteAssetList } from '../../helper';
 import './Pool.scss';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  const [showFilter, setShowFilter] = useState<boolean>(false);
+  const [selectedFilterOption, setSelectedFilterOption] = useState<string>();
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
 
@@ -34,6 +38,8 @@ export const PoolPage: React.FC = () => {
   document.title = ROUTE_PATH_TITLE.POOL;
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
+
+  const poolFilterOptions = uniqueQuoteAssetList(poolsContext);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -75,8 +81,14 @@ export const PoolPage: React.FC = () => {
   }, [walletContext?.balances, poolsContext, selectedTab]);
 
   const getPoolData = () => {
+    let pools: Pool[] = [];
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
-      return poolsContext.map((pool, index) => {
+      if (selectedFilterOption) {
+        pools = poolsContext.filter((pool) => pool.quote.ticker === selectedFilterOption);
+      } else {
+        pools = poolsContext;
+      }
+      return pools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
@@ -99,8 +111,12 @@ export const PoolPage: React.FC = () => {
       if (myPools.length === 0) {
         return <div className="no-pool-text">No pool found.</div>;
       }
-
-      return myPools.map((pool, index) => {
+      if (selectedFilterOption) {
+        pools = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
+      } else {
+        pools = myPools;
+      }
+      return pools.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
@@ -146,6 +162,24 @@ export const PoolPage: React.FC = () => {
               Create New Pool
             </Button>
           </div>
+        </div>
+      </>
+    );
+  };
+
+  const poolFilter = (): JSX.Element => {
+    return (
+      <>
+        <Backdrop show={showFilter} clicked={() => setShowFilter(false)} />
+        <div className="pools-filter-content">
+          <CheckBoxGroup
+            className="pools-filter-checkbox-group"
+            options={poolFilterOptions.map((asset) => asset.ticker)}
+            onChange={(checkedValue) => {
+              setSelectedFilterOption(checkedValue);
+            }}
+            checkedValue={selectedFilterOption}
+          />
         </div>
       </>
     );
@@ -202,7 +236,7 @@ export const PoolPage: React.FC = () => {
     return (
       <div className={poolContainerClasses.join(' ')}>
         <div className="pool-page-header">
-          <div className="pool-page-button pool-page-icon">
+          <div className="pool-page-button pool-page-icon" onClick={() => setShowFilter(!showFilter)}>
             <SliderIcon width="1.25rem" height="1.5rem" />
           </div>
           <TabMenu
@@ -217,6 +251,7 @@ export const PoolPage: React.FC = () => {
           {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
 
           {showButtons && addButtons()}
+          {showFilter && poolFilter()}
           {showPoolListModal && poolListModal()}
         </div>
         <div className="pool-page-content">
