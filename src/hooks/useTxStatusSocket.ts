@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
+import { notify } from '../components/utils/utils';
 import { DB_SOCKET_SERVER_URL } from '../config';
 
 enum TX_STATUS {
@@ -38,6 +39,7 @@ export const useTxStatusSocket = (txIds?: string[]) => {
 
     socket.on('disconnect', () => {
       console.log('disconnect txStatues');
+      notify('Tx statuses socket disconnect.', 'Bitmatrix Error : ');
       setIsTxStatusConnected(false);
     });
 

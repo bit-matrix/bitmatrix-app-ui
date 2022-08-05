@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import { ChartSummary } from '@bitmatrix/models';
 import { usePoolContext } from '../context';
 import { API_SOCKET_SERVER_URL } from '../config';
+import { notify } from '../components/utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
@@ -27,6 +28,7 @@ export const useChartsSocket = () => {
 
     socket.on('disconnect', () => {
       console.log('disconnect charts');
+      notify('Charts socket disconnect.', 'Bitmatrix Error : ');
       setIsChartsConnected(false);
     });
 

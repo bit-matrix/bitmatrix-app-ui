@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { Pool } from '@bitmatrix/models';
 import { DB_SOCKET_SERVER_URL } from '../config';
+import { notify } from '../components/utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePoolsSocket = () => {
@@ -24,6 +25,7 @@ export const usePoolsSocket = () => {
 
     socket.on('disconnect', () => {
       console.log('disconnect pools');
+      notify('Pools socket disconnect.', 'Bitmatrix Error : ');
       setIsPoolsConnected(false);
     });
 

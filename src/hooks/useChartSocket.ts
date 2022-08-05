@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { ChartSummary } from '@bitmatrix/models';
 import { API_SOCKET_SERVER_URL } from '../config';
+import { notify } from '../components/utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartSocket = (poolId: string) => {
@@ -24,6 +25,7 @@ export const useChartSocket = (poolId: string) => {
 
     socket.on('disconnect', () => {
       console.log('disconnect chart');
+      notify('Chart socket disconnect.', 'Bitmatrix Error : ');
       setIsChartConnected(false);
     });
 
