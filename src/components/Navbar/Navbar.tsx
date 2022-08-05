@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -40,7 +40,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = (): React.ReactElement => {
+  const txInfo = useMemo(() => {
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
         return (
@@ -64,10 +64,37 @@ export const Navbar: React.FC = (): JSX.Element => {
         }
       }
     }
-    return <div></div>;
-  };
+    return <div />;
+  }, []);
 
-  const infoTab = (): JSX.Element | undefined => {
+  // const txInfo = (): React.ReactElement => {
+  //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
+  //     if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
+  //       return (
+  //         <div>
+  //           <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />
+  //         </div>
+  //       );
+  //     } else {
+  //       return (
+  //         <div>
+  //           <Loading width="1.5rem" height="1.5rem" />
+  //         </div>
+  //       );
+  //     }
+  //   } else {
+  //     if (txHistory && txHistory.length > 0) {
+  //       if (txHistory[txHistory.length - 1].isOutOfSlippage) {
+  //         return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
+  //       } else {
+  //         return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
+  //       }
+  //     }
+  //   }
+  //   return <div />;
+  // };
+
+  const infoTab = useMemo(() => {
     if (txHistory && txHistory.length > 0) {
       if (txHistory[txHistory.length - 1].seen === false) {
         return (
@@ -98,7 +125,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                   speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
                   enterable
                 >
-                  <div>{txInfo()}</div>
+                  <div>{txInfo}</div>
                 </Whisper>
               </ButtonToolbar>
             </div>
@@ -106,7 +133,48 @@ export const Navbar: React.FC = (): JSX.Element => {
         );
       }
     }
-  };
+  }, [txHistory]);
+
+  // const infoTab = (): JSX.Element | undefined => {
+  //   if (txHistory && txHistory.length > 0) {
+  //     if (txHistory[txHistory.length - 1].seen === false) {
+  //       return (
+  //         <li className="navbar-item mobile-hidden">
+  //           <div
+  //             tabIndex={0}
+  //             className="navbar-item-circle-div"
+  //             onBlur={() => {
+  //               if (txHistory && txHistory.length > 0) {
+  //                 const completedTxs = txHistory.filter((txh) => txh.completed === true);
+  //                 if (completedTxs.length > 0) {
+  //                   const newTxHistory = [...txHistory];
+  //                   completedTxs.forEach((tx) => {
+  //                     const txIndex = newTxHistory.findIndex((newTxH) => newTxH.txId === tx.txId);
+  //                     if (txIndex > -1) {
+  //                       newTxHistory[txIndex].seen = true;
+  //                     }
+  //                   });
+  //                   setLocalData(newTxHistory);
+  //                 }
+  //               }
+  //             }}
+  //           >
+  //             <ButtonToolbar>
+  //               <Whisper
+  //                 placement="bottom"
+  //                 trigger="click"
+  //                 speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
+  //                 enterable
+  //               >
+  //                 <div>{txInfo()}</div>
+  //               </Whisper>
+  //             </ButtonToolbar>
+  //           </div>
+  //         </li>
+  //       );
+  //     }
+  //   }
+  // };
 
   return (
     <ul className="navbar-main">
@@ -195,7 +263,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         </Button>
       </li>
 
-      {infoTab()}
+      {infoTab}
     </ul>
   );
 };
