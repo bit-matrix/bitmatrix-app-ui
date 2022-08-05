@@ -53,7 +53,7 @@ export const AppRouter = (): JSX.Element => {
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
 
-  const { poolsLoading, pools } = usePoolsSocket();
+  const { poolsLoading, pools, isPoolsConnected } = usePoolsSocket();
 
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
@@ -128,6 +128,7 @@ export const AppRouter = (): JSX.Element => {
               ) {
                 newTxHistory[willChangeTxIndex].completed = false;
               }
+
               setLocalData(newTxHistory);
             }
           });
@@ -218,20 +219,24 @@ export const AppRouter = (): JSX.Element => {
               </div>
             ) : (
               <div className="app-content">
-                <Switch component={Fader}>
-                  <Route exact path={ROUTE_PATH.HOME} component={Home} />
-                  <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
-                  <Route exact path={ROUTE_PATH.POOL} component={PoolPage} />
-                  <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
-                  <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
-                  <Route exact path={ROUTE_PATH.CREATE_NEW_POOL} component={CreateNewPool} />
-                  <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
-                  <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
-                  <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
-                  {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
+                {isPoolsConnected ? (
+                  <Switch component={Fader}>
+                    <Route exact path={ROUTE_PATH.HOME} component={Home} />
+                    <Route exact path={ROUTE_PATH.SWAP} component={Swap} />
+                    <Route exact path={ROUTE_PATH.POOL} component={PoolPage} />
+                    <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />
+                    <Route exact path={ROUTE_PATH.MY_POOL} component={MyPoolDetail} />
+                    <Route exact path={ROUTE_PATH.CREATE_NEW_POOL} component={CreateNewPool} />
+                    <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
+                    <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
+                    <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
+                    {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
               <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
-                  <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
-                </Switch>
+                    <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
+                  </Switch>
+                ) : (
+                  <div className="error-content">Socket connection error</div>
+                )}
               </div>
             )}
           </div>

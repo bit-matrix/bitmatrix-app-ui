@@ -39,6 +39,11 @@
 
   .app-content {
     width: 100%;
+
+    .error-content {
+      text-align: center;
+      font-size: 2rem;
+    }
   }
 }
 
