@@ -7,4 +7,5 @@ export const lbtcAsset: PAsset = {
   precision: 8,
   ticker: SWAP_ASSET.LBTC,
   isQuote: true,
+  value: '',
 };
