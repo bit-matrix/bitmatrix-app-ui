@@ -192,7 +192,7 @@ export const CreateNewPool: React.FC = () => {
           pair2AmountN,
           addressInformation.publicKey,
           1,
-          pair1IsLbtc ? 20 : 1000000,
+          pair1IsLbtc ? 50 : 1000000,
         );
 
         const poolTxId = await api.sendRawTransaction(newPool);
@@ -213,7 +213,7 @@ export const CreateNewPool: React.FC = () => {
     if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
       if (selectedPair1Asset?.ticker === 'L-BTC') {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
-          20,
+          50,
           Number(pair1Amount) * settingsContext.preferred_unit.value,
         );
 
