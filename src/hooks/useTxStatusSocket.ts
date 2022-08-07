@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { notify } from '../components/utils/utils';
-import { DB_SOCKET_SERVER_URL } from '../config';
+import { API_SOCKET_SERVER_URL } from '../config';
 
 enum TX_STATUS {
   PENDING,
@@ -30,7 +30,7 @@ export const useTxStatusSocket = (txIds?: string[]) => {
   }, []);
 
   useEffect(() => {
-    const socket = io(DB_SOCKET_SERVER_URL);
+    const socket = io(API_SOCKET_SERVER_URL);
 
     socket.on('connect', () => {
       console.log('connect txStatues');
