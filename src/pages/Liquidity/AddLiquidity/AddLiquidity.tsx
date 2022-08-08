@@ -63,7 +63,7 @@ const AddLiquidity = (): JSX.Element => {
         value: '',
       });
     }
-  }, []);
+  }, [currentPool]);
 
   const onChangeQuoteAmount = useCallback(
     (input: string) => {
