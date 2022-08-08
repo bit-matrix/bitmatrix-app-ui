@@ -33,7 +33,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
               <div className={`token-item pool-card-${chartSummary?.price.rate.direction}-text`}>
-                ${chartSummary?.price.todayValue.toLocaleString()}
+                ${chartSummary?.price.todayValue ? chartSummary?.price.todayValue.toLocaleString() : '0.0'}
               </div>
             </li>
             <li className="column-1-item percent">
@@ -48,7 +48,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
               <div>
                 <span>TVL</span>&nbsp;
                 <Tag className="pool-card-tag" color={`${chartSummary?.tvl.rate.direction === 'up' ? 'green' : 'red'}`}>
-                  {Number(chartSummary?.tvl.rate.value)}%
+                  {chartSummary?.tvl.rate.value ? Number(chartSummary?.tvl.rate.value) : '0.0'}%
                 </Tag>
               </div>
               <div>${Numeral(chartSummary?.tvl.todayValue).format('(0.00a)')}</div>
@@ -62,7 +62,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
                       className="pool-card-tag"
                       color={`${chartSummary?.volume.rate.direction === 'up' ? 'green' : 'red'}`}
                     >
-                      {Number(chartSummary?.volume.rate.value)}%
+                      {chartSummary?.volume.rate.value ? Number(chartSummary?.volume.rate.value) : '0.0'}%
                     </Tag>
                   </div>
                   <div>${Numeral(chartSummary?.volume.todayValue).format('(0.00a)')}</div>
@@ -74,7 +74,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
                       className="pool-card-tag"
                       color={`${chartSummary?.fees.rate.direction === 'up' ? 'green' : 'red'}`}
                     >
-                      {Number(chartSummary?.fees.rate.value)}%
+                      {chartSummary?.fees.rate.value ? Number(chartSummary?.fees.rate.value) : '0.0'}%
                     </Tag>
                   </div>
                   <div>${Numeral(chartSummary?.fees.todayValue).format('(0.00a)')}</div>
