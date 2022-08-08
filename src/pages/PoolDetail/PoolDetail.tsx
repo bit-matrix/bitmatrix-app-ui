@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { usePoolContext, useSettingsContext } from '../../context';
-import { useChartSocket } from '../../hooks/useChartSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
@@ -17,6 +16,7 @@ import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
 import './PoolDetail.scss';
+import { useChartsSocket } from '../../hooks/useChartsSocket';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -31,7 +31,10 @@ export const PoolDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const { chartData } = useChartSocket(id);
+  // const { chartData } = useChartSocket(id);
+  const { chartsData } = useChartsSocket();
+
+  const chartData = chartsData?.find((chart) => chart.poolId === id);
 
   useEffect(() => {
     if (poolsContext && poolsContext.length > 0) {

@@ -20,7 +20,8 @@ export const useChartsSocket = () => {
 
   useEffect(() => {
     const socket = io(API_SOCKET_SERVER_URL);
-    const poolIds = poolsContext.map((pc) => pc.id);
+    // const poolIds = poolsContext.map((pc) => pc.id);
+
     socket.on('connect', () => {
       console.log('connect charts');
       setIsChartsConnected(true);
@@ -32,9 +33,10 @@ export const useChartsSocket = () => {
       setIsChartsConnected(false);
     });
 
-    socket.emit('fetchpools', poolIds);
+    // socket.emit('fetchpools', poolIds);
 
     socket.on('poolschart', (data) => {
+      console.log(data);
       if (data && data.length > 0) onChartsData(data);
     });
 
