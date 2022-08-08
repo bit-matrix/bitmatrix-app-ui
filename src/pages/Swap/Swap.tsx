@@ -166,9 +166,9 @@ export const Swap = (): JSX.Element => {
         }
 
         if (pairAsset.down && !pairAsset.down.isQuote) {
-          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-        } else {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
         }
 
         const output = convertion.convertForCtx2(
@@ -570,7 +570,6 @@ export const Swap = (): JSX.Element => {
                     onChange={(inputValue) => {
                       if (inputValue === '.') return;
                       setPairAsset({ ...pairAsset, down: { ...pairAsset.down, value: inputValue } as PAsset });
-                      // setInputToAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.TO);
                     }}
