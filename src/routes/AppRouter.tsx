@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
@@ -11,12 +11,8 @@ import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
 import { Home } from '../pages/Home/Home';
 import { PoolPage } from '../pages/Pool/Pool';
-// import { Factory } from '../../pages/Factory/Factory';
-// import { IssueToken } from '../../pages/Factory/Issuance/IssueToken/IssueToken';
 import { Content, Loader } from 'rsuite';
 import { Settings } from '../pages/Settings/Settings';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { CommitmentStore } from '../model/CommitmentStore';
 import RemoveLiquidity from '../pages/Liquidity/RemoveLiquidity/RemoveLiquidity';
 import AddLiquidity from '../pages/Liquidity/AddLiquidity/AddLiquidity';
 import { PoolDetail } from '../pages/PoolDetail/PoolDetail';
@@ -36,32 +32,24 @@ declare global {
   }
 }
 
-enum TX_STATUS {
-  PENDING,
-  WAITING_PTX,
-  WAITING_PTX_CONFIRM,
-  SUCCESS,
-  FAILED,
-}
+// enum TX_STATUS {
+//   PENDING,
+//   WAITING_PTX,
+//   WAITING_PTX_CONFIRM,
+//   SUCCESS,
+//   FAILED,
+// }
 
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
-  // const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
-
   const { poolsLoading, pools, isPoolsConnected } = usePoolsSocket();
-
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-
-  const txHistory = getLocalData();
-
-  const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
-  const txIds = unconfirmedTxs?.map((tx) => tx.txId);
-  const { txStatues } = useTxStatusSocket(txIds);
+  const { txStatues, txStatusLoading } = useTxStatusSocket();
 
   useEffect(() => {
     fetchData();
@@ -106,35 +94,34 @@ export const AppRouter = (): JSX.Element => {
   }, [walletContext?.marina]);
 
   const checkTxStatues = () => {
-    const txHistory = getLocalData();
-    if (txHistory && txHistory.length > 0) {
-      if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-        const newTxHistory = [...txHistory];
-        if (txStatues) {
-          txStatues.forEach((txStatus) => {
-            const willChangeTxIndex = newTxHistory.findIndex((txh) => txh.txId === txStatus.txId);
-            if (willChangeTxIndex > -1) {
-              if (txStatus.status === TX_STATUS.SUCCESS) {
-                newTxHistory[willChangeTxIndex].completed = true;
-              }
-              if (txStatus.status === TX_STATUS.FAILED) {
-                newTxHistory[willChangeTxIndex].completed = true;
-                newTxHistory[willChangeTxIndex].isOutOfSlippage = true;
-              }
-              if (
-                txStatus.status === TX_STATUS.PENDING ||
-                txStatus.status === TX_STATUS.WAITING_PTX ||
-                txStatus.status === TX_STATUS.WAITING_PTX_CONFIRM
-              ) {
-                newTxHistory[willChangeTxIndex].completed = false;
-              }
-
-              setLocalData(newTxHistory);
-            }
-          });
-        }
-      }
-    }
+    // const txHistory = getLocalData();
+    // if (txHistory && txHistory.length > 0) {
+    //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
+    //     const newTxHistory = [...txHistory];
+    //     if (txStatues) {
+    //       txStatues.forEach((txStatus) => {
+    //         const willChangeTxIndex = newTxHistory.findIndex((txh) => txh.txId === txStatus.txId);
+    //         if (willChangeTxIndex > -1) {
+    //           if (txStatus.status === TX_STATUS.SUCCESS) {
+    //             newTxHistory[willChangeTxIndex].completed = true;
+    //           }
+    //           if (txStatus.status === TX_STATUS.FAILED) {
+    //             newTxHistory[willChangeTxIndex].completed = true;
+    //             newTxHistory[willChangeTxIndex].isOutOfSlippage = true;
+    //           }
+    //           if (
+    //             txStatus.status === TX_STATUS.PENDING ||
+    //             txStatus.status === TX_STATUS.WAITING_PTX ||
+    //             txStatus.status === TX_STATUS.WAITING_PTX_CONFIRM
+    //           ) {
+    //             newTxHistory[willChangeTxIndex].completed = false;
+    //           }
+    //           setLocalData(newTxHistory);
+    //         }
+    //       });
+    //     }
+    //   }
+    // }
   };
 
   const fetchBalances = async (wall: Wallet) => {
@@ -166,8 +153,7 @@ export const AppRouter = (): JSX.Element => {
   const fetchData = async () => {
     const pool_config: BmConfig = await api.getBmConfigs();
     setPoolConfigContext(pool_config);
-    // checkLastTxStatus(pools[0].id);
-    // setLoading(false);
+    setLoading(false);
   };
 
   // const checkLastTxStatus = (poolId: string) => {
@@ -213,7 +199,7 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {poolsLoading ? (
+            {poolsLoading || txStatusLoading || loading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
@@ -230,8 +216,6 @@ export const AppRouter = (): JSX.Element => {
                     <Route exact path={ROUTE_PATH.SETTINGS} component={Settings} />
                     <Route exact path={ROUTE_PATH.ADD_LIQUIDTY} component={AddLiquidity} />
                     <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY} component={RemoveLiquidity} />
-                    {/* <Route exact path={ROUTE_PATH.FACTORY} component={Factory} />
-              <Route exact path={ROUTE_PATH.ISSUE_TOKEN} component={IssueToken} /> */}
                     <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
                   </Switch>
                 ) : (

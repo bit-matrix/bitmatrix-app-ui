@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { notify } from '../components/utils/utils';
 import { API_SOCKET_SERVER_URL } from '../config';
+import { CommitmentStore } from '../model/CommitmentStore';
+import { useLocalStorage } from './useLocalStorage';
 
 enum TX_STATUS {
   PENDING,
@@ -19,10 +21,11 @@ export type TxStatus = {
   timestamp: number;
 };
 
-export const useTxStatusSocket = (txIds?: string[]) => {
+export const useTxStatusSocket = () => {
   const [isTxStatusConnected, setIsTxStatusConnected] = useState<boolean>(false);
   const [txStatues, setTxStatues] = useState<TxStatus[]>();
   const [txStatusLoading, setTxStatusLoading] = useState<boolean>(true);
+  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const onTxStatusData = useCallback((txStatues: TxStatus[]) => {
     setTxStatues(txStatues);
@@ -42,6 +45,11 @@ export const useTxStatusSocket = (txIds?: string[]) => {
       notify('Tx statuses socket disconnect.', 'Bitmatrix Error : ');
       setIsTxStatusConnected(false);
     });
+
+    const txHistory = getLocalData();
+
+    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+    const txIds = unconfirmedTxs?.map((tx) => tx.txId);
 
     socket.emit('checkTxStatus', `${txIds}`);
 
