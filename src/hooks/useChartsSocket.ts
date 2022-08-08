@@ -36,7 +36,7 @@ export const useChartsSocket = () => {
     // socket.emit('fetchpools', poolIds);
 
     socket.on('poolschart', (data) => {
-      if (data && data.length > 0) onChartsData(data);
+      if (data) onChartsData(data);
     });
 
     return () => {
