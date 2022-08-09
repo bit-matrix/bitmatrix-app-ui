@@ -25,6 +25,7 @@ import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import './AppRouter.scss';
+import { useChartsSocket } from '../hooks/useChartsSocket';
 
 declare global {
   interface Window {
@@ -48,6 +49,7 @@ export const AppRouter = (): JSX.Element => {
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { poolsLoading, isPoolsConnected } = usePoolsSocket();
+  const { chartsLoading, isChartsConnected } = useChartsSocket();
   const { txStatues, txStatusLoading } = useTxStatusSocket();
 
   useEffect(() => {
@@ -192,13 +194,13 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {poolsLoading || txStatusLoading || loading ? (
+            {poolsLoading || txStatusLoading || loading || chartsLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
             ) : (
               <div className="app-content">
-                {isPoolsConnected ? (
+                {isPoolsConnected && isChartsConnected ? (
                   <Switch component={Fader}>
                     <Route exact path={ROUTE_PATH.HOME} component={Home} />
                     <Route exact path={ROUTE_PATH.SWAP} component={Swap} />

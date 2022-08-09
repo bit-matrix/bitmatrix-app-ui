@@ -15,8 +15,8 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
+import { useChartsContext } from '../../context/charts';
 import './PoolDetail.scss';
-import { useChartsSocket } from '../../hooks/useChartsSocket';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -27,14 +27,13 @@ export const PoolDetail: React.FC = () => {
   const { pools } = usePoolContext();
   const { settingsContext } = useSettingsContext();
 
+  const { charts } = useChartsContext();
+
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
-  // const { chartData } = useChartSocket(id);
-  const { chartsData } = useChartsSocket();
-
-  const chartData = chartsData?.find((chart) => chart.poolId === id);
+  const chartData = charts.find((chart) => chart.poolId === id);
 
   useEffect(() => {
     if (pools && pools.length > 0) {

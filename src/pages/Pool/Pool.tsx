@@ -17,6 +17,7 @@ import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
 import { uniqueQuoteAssetList } from '../../helper';
 import './Pool.scss';
+import { useChartsContext } from '../../context/charts';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
@@ -26,12 +27,9 @@ export const PoolPage: React.FC = () => {
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
 
+  const { charts } = useChartsContext();
   const { walletContext } = useWalletContext();
   const { pools } = usePoolContext();
-
-  // const poolIds = poolsContext.map((pc) => pc.id);
-
-  const { chartsData, chartsLoading } = useChartsSocket();
 
   const history = useHistory();
 
@@ -93,7 +91,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
               pool={pool}
-              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+              chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={() =>
                 history.push({
@@ -121,7 +119,7 @@ export const PoolPage: React.FC = () => {
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
               pool={pool}
-              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+              chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={(poolId: string) => {
                 history.push({
@@ -203,7 +201,7 @@ export const PoolPage: React.FC = () => {
                 <div key={pool.id} className="pool-page-card card-2">
                   <PoolCard
                     pool={pool}
-                    chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+                    chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
                     onClick={() => {
                       history.push({
@@ -223,14 +221,6 @@ export const PoolPage: React.FC = () => {
       </Modal>
     );
   };
-
-  if (chartsLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Loading width="2rem" height="2rem" />
-      </div>
-    );
-  }
 
   if (pools && pools.length > 0) {
     return (
@@ -260,6 +250,7 @@ export const PoolPage: React.FC = () => {
       </div>
     );
   }
+
   return (
     <div className="pool-page-main">
       <div className="no-pool-text">There are no pools</div>
