@@ -8,6 +8,6 @@ export type SetPoolsAction = {
 };
 
 export interface IPoolContext {
-  poolsContext: Pool[];
+  pools: Pool[];
   setPoolsContext: (pools: Pool[]) => void;
 }

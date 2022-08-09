@@ -28,7 +28,7 @@ export const MyPoolDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
 
@@ -39,15 +39,15 @@ export const MyPoolDetail: React.FC = () => {
   const { chartData } = useChartSocket(id);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
       setLoading(false);
     }
     setTimeout(() => {
       setChartLoading(false);
     }, 200);
-  }, [poolsContext]);
+  }, [pools]);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -70,8 +70,8 @@ export const MyPoolDetail: React.FC = () => {
   // }, []);
 
   const calcPooledAssets = () => {
-    if (poolsContext && poolsContext.length > 0 && walletContext) {
-      const currentPool = poolsContext[0];
+    if (pools && pools.length > 0 && walletContext) {
+      const currentPool = pools[0];
 
       const lpAssetId = currentPool.lp.assetHash;
       const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;

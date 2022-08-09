@@ -32,7 +32,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
@@ -42,7 +42,7 @@ const RemoveLiquidity = (): JSX.Element => {
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
 
-  const currentPool = poolsContext.find((p) => p.id === id);
+  const currentPool = pools.find((p) => p.id === id);
 
   useEffect(() => {
     if (currentPool && walletContext) {

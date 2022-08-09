@@ -7,7 +7,7 @@ import { notify } from '../components/utils/utils';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
 
   const [isChartsConnected, setIsChartsConnected] = useState<boolean>(false);
   const [chartsData, setChartsData] = useState<ChartSummary[]>();
@@ -46,7 +46,7 @@ export const useChartsSocket = () => {
       setIsChartsConnected(false);
       console.log('cleanup charts');
     };
-  }, [poolsContext]);
+  }, [pools]);
 
   return {
     isChartsConnected,

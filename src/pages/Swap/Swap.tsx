@@ -49,7 +49,7 @@ export const Swap = (): JSX.Element => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
@@ -63,11 +63,11 @@ export const Swap = (): JSX.Element => {
 
   useEffect(() => {
     if (assetList?.quote?.length === 0 && assetList?.token?.length === 0) {
-      const quote = uniqueQuoteAssetList(poolsContext);
-      const token = uniqueTokenAssetList(poolsContext, pairAsset.up);
+      const quote = uniqueQuoteAssetList(pools);
+      const token = uniqueTokenAssetList(pools, pairAsset.up);
       setAssetList({ quote, token });
     }
-  }, [poolsContext]);
+  }, [pools]);
 
   useEffect(() => {
     if (currentPool && poolConfigContext && pairAsset) {
@@ -220,7 +220,7 @@ export const Swap = (): JSX.Element => {
   );
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
-    if (poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
+    if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       let inputAmount = '';
       setSwapWay(SWAP_WAY.FROM);
       const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === pairAsset.up?.assetHash)?.amount || 0;
@@ -265,7 +265,7 @@ export const Swap = (): JSX.Element => {
   };
 
   const inputIsValid = useCallback(() => {
-    if (currentPool && poolsContext.length > 0 && poolConfigContext && walletContext) {
+    if (currentPool && pools.length > 0 && poolConfigContext && walletContext) {
       let inputAmount = 0;
       let isValid = false;
 
@@ -299,7 +299,7 @@ export const Swap = (): JSX.Element => {
       }
     }
     return true;
-  }, [currentPool, poolsContext, poolConfigContext, settingsContext.preferred_unit.value, walletContext, pairAsset]);
+  }, [currentPool, pools, poolConfigContext, settingsContext.preferred_unit.value, walletContext, pairAsset]);
 
   const findCurrentPool = useCallback((pools: Pool[], up?: PAsset, down?: PAsset) => {
     if (up && down) {
@@ -330,10 +330,10 @@ export const Swap = (): JSX.Element => {
         if (pairAsset.down) {
           if (pairAsset.down?.ticker === asset.ticker) {
             setPairAsset({ up: { ...asset, value: '' }, down: undefined });
-            findCurrentPool(poolsContext, asset, pairAsset.up);
+            findCurrentPool(pools, asset, pairAsset.up);
           } else {
             setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
-            findCurrentPool(poolsContext, asset, pairAsset.down);
+            findCurrentPool(pools, asset, pairAsset.down);
           }
         } else {
           setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
@@ -344,10 +344,10 @@ export const Swap = (): JSX.Element => {
         if (pairAsset.up) {
           if (pairAsset.up?.ticker === asset.ticker) {
             setPairAsset({ up: undefined, down: { ...asset, value: '' } });
-            findCurrentPool(poolsContext, pairAsset.down, asset);
+            findCurrentPool(pools, pairAsset.down, asset);
           } else {
             setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
-            findCurrentPool(poolsContext, pairAsset.up, asset);
+            findCurrentPool(pools, pairAsset.up, asset);
           }
         } else {
           setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
@@ -478,7 +478,7 @@ export const Swap = (): JSX.Element => {
   };
 
   const infoMessage = useCallback((): string => {
-    if (poolConfigContext && currentPool && poolsContext.length > 0) {
+    if (poolConfigContext && currentPool && pools.length > 0) {
       const config = poolConfigContext;
       const totalFee =
         config.baseFee.number +
@@ -494,7 +494,7 @@ export const Swap = (): JSX.Element => {
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
     return 'Network fee 801 sats';
-  }, [poolConfigContext, currentPool, poolsContext]);
+  }, [poolConfigContext, currentPool, pools]);
 
   return (
     <div className="swap-page-main">

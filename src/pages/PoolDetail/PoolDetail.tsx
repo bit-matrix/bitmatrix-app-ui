@@ -24,7 +24,7 @@ export const PoolDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { settingsContext } = useSettingsContext();
 
   const history = useHistory();
@@ -37,15 +37,15 @@ export const PoolDetail: React.FC = () => {
   const chartData = chartsData?.find((chart) => chart.poolId === id);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
       setLoading(false);
     }
     setTimeout(() => {
       setChartLoading(false);
     }, 200);
-  }, [poolsContext]);
+  }, [pools]);
 
   const renderChart = () => {
     const defaultData: ChartData[] | undefined = [

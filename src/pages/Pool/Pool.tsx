@@ -27,7 +27,7 @@ export const PoolPage: React.FC = () => {
   const [myPools, setMyPools] = useState<Pool[]>([]);
 
   const { walletContext } = useWalletContext();
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
 
   // const poolIds = poolsContext.map((pc) => pc.id);
 
@@ -39,7 +39,7 @@ export const PoolPage: React.FC = () => {
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
-  const poolFilterOptions = uniqueQuoteAssetList(poolsContext);
+  const poolFilterOptions = uniqueQuoteAssetList(pools);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -64,12 +64,12 @@ export const PoolPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+    if (pools && pools.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       const balanceAssets = walletContext?.balances.filter((bl) => bl.amount > 0).map((bl) => bl.asset.assetHash);
       const myCurrentPools: Pool[] = [];
 
       balanceAssets.forEach((ba) => {
-        const currentPool = poolsContext.find((po) => po.lp.assetHash === ba);
+        const currentPool = pools.find((po) => po.lp.assetHash === ba);
 
         if (currentPool) {
           myCurrentPools.push(currentPool);
@@ -78,17 +78,17 @@ export const PoolPage: React.FC = () => {
 
       setMyPools(myCurrentPools);
     }
-  }, [walletContext?.balances, poolsContext, selectedTab]);
+  }, [walletContext?.balances, pools, selectedTab]);
 
   const getPoolData = () => {
-    let pools: Pool[] = [];
+    let poolsdata: Pool[] = [];
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
       if (selectedFilterOption) {
-        pools = poolsContext.filter((pool) => pool.quote.ticker === selectedFilterOption);
+        poolsdata = pools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
-        pools = poolsContext;
+        poolsdata = pools;
       }
-      return pools.map((pool, index) => {
+      return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
@@ -112,11 +112,11 @@ export const PoolPage: React.FC = () => {
         return <div className="no-pool-text">No pool found.</div>;
       }
       if (selectedFilterOption) {
-        pools = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
+        poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
-        pools = myPools;
+        poolsdata = myPools;
       }
-      return pools.map((pool, index) => {
+      return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
@@ -198,7 +198,7 @@ export const PoolPage: React.FC = () => {
         </Modal.Header>
         <Modal.Body>
           <ul>
-            {poolsContext.map((pool: Pool, index: number) => {
+            {pools.map((pool: Pool, index: number) => {
               return (
                 <div key={pool.id} className="pool-page-card card-2">
                   <PoolCard
@@ -232,7 +232,7 @@ export const PoolPage: React.FC = () => {
     );
   }
 
-  if (poolsContext && poolsContext.length > 0) {
+  if (pools && pools.length > 0) {
     return (
       <div className={poolContainerClasses.join(' ')}>
         <div className="pool-page-header">
