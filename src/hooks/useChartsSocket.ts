@@ -4,17 +4,18 @@ import { ChartSummary } from '@bitmatrix/models';
 import { usePoolContext } from '../context';
 import { API_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
+import { useChartsContext } from '../context/charts';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
+  const { setChartsContext } = useChartsContext();
 
   const [isChartsConnected, setIsChartsConnected] = useState<boolean>(false);
-  const [chartsData, setChartsData] = useState<ChartSummary[]>();
   const [chartsLoading, setChartsLoading] = useState<boolean>(true);
 
   const onChartsData = useCallback((chartsData: ChartSummary[]) => {
-    setChartsData(chartsData);
+    setChartsContext(chartsData);
     setChartsLoading(false);
   }, []);
 
@@ -46,11 +47,10 @@ export const useChartsSocket = () => {
       setIsChartsConnected(false);
       console.log('cleanup charts');
     };
-  }, [poolsContext]);
+  }, [pools]);
 
   return {
     isChartsConnected,
     chartsLoading,
-    chartsData,
   };
 };

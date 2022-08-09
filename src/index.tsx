@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
 import {
+  ChartsContextProvider,
   PoolsContextProvider,
   SettingsContextProvider,
   WalletContextProvider,
@@ -16,7 +17,13 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <AppContextProvider
-    providers={[PoolsContextProvider, SettingsContextProvider, WalletContextProvider, PoolConfigContextProvider]}
+    providers={[
+      ChartsContextProvider,
+      PoolsContextProvider,
+      SettingsContextProvider,
+      WalletContextProvider,
+      PoolConfigContextProvider,
+    ]}
   >
     <CustomProvider theme="dark">
       <App />

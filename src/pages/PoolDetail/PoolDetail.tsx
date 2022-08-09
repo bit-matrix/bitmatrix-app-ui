@@ -15,8 +15,8 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
+import { useChartsContext } from '../../context/charts';
 import './PoolDetail.scss';
-import { useChartsSocket } from '../../hooks/useChartsSocket';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -24,28 +24,27 @@ export const PoolDetail: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { settingsContext } = useSettingsContext();
+
+  const { charts } = useChartsContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
-  // const { chartData } = useChartSocket(id);
-  const { chartsData } = useChartsSocket();
-
-  const chartData = chartsData?.find((chart) => chart.poolId === id);
+  const chartData = charts.find((chart) => chart.poolId === id);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
       setLoading(false);
     }
     setTimeout(() => {
       setChartLoading(false);
     }, 200);
-  }, [poolsContext]);
+  }, [pools]);
 
   const renderChart = () => {
     const defaultData: ChartData[] | undefined = [

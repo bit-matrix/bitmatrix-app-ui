@@ -17,6 +17,7 @@ import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
 import { uniqueQuoteAssetList } from '../../helper';
 import './Pool.scss';
+import { useChartsContext } from '../../context/charts';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
@@ -26,12 +27,9 @@ export const PoolPage: React.FC = () => {
   const [showPoolListModal, setShowPoolListModal] = useState<boolean>(false);
   const [myPools, setMyPools] = useState<Pool[]>([]);
 
+  const { charts } = useChartsContext();
   const { walletContext } = useWalletContext();
-  const { poolsContext } = usePoolContext();
-
-  // const poolIds = poolsContext.map((pc) => pc.id);
-
-  const { chartsData, chartsLoading } = useChartsSocket();
+  const { pools } = usePoolContext();
 
   const history = useHistory();
 
@@ -39,7 +37,7 @@ export const PoolPage: React.FC = () => {
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
-  const poolFilterOptions = uniqueQuoteAssetList(poolsContext);
+  const poolFilterOptions = uniqueQuoteAssetList(pools);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -64,12 +62,12 @@ export const PoolPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
+    if (pools && pools.length > 0 && walletContext && selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       const balanceAssets = walletContext?.balances.filter((bl) => bl.amount > 0).map((bl) => bl.asset.assetHash);
       const myCurrentPools: Pool[] = [];
 
       balanceAssets.forEach((ba) => {
-        const currentPool = poolsContext.find((po) => po.lp.assetHash === ba);
+        const currentPool = pools.find((po) => po.lp.assetHash === ba);
 
         if (currentPool) {
           myCurrentPools.push(currentPool);
@@ -78,22 +76,22 @@ export const PoolPage: React.FC = () => {
 
       setMyPools(myCurrentPools);
     }
-  }, [walletContext?.balances, poolsContext, selectedTab]);
+  }, [walletContext?.balances, pools, selectedTab]);
 
   const getPoolData = () => {
-    let pools: Pool[] = [];
+    let poolsdata: Pool[] = [];
     if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
       if (selectedFilterOption) {
-        pools = poolsContext.filter((pool) => pool.quote.ticker === selectedFilterOption);
+        poolsdata = pools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
-        pools = poolsContext;
+        poolsdata = pools;
       }
-      return pools.map((pool, index) => {
+      return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
             <PoolCard
               pool={pool}
-              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+              chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={() =>
                 history.push({
@@ -112,16 +110,16 @@ export const PoolPage: React.FC = () => {
         return <div className="no-pool-text">No pool found.</div>;
       }
       if (selectedFilterOption) {
-        pools = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
+        poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
-        pools = myPools;
+        poolsdata = myPools;
       }
-      return pools.map((pool, index) => {
+      return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
             <PoolCard
               pool={pool}
-              chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+              chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
               onClick={(poolId: string) => {
                 history.push({
@@ -198,12 +196,12 @@ export const PoolPage: React.FC = () => {
         </Modal.Header>
         <Modal.Body>
           <ul>
-            {poolsContext.map((pool: Pool, index: number) => {
+            {pools.map((pool: Pool, index: number) => {
               return (
                 <div key={pool.id} className="pool-page-card card-2">
                   <PoolCard
                     pool={pool}
-                    chartSummary={chartsData?.find((cs) => cs.poolId === pool.id)}
+                    chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
                     onClick={() => {
                       history.push({
@@ -224,15 +222,7 @@ export const PoolPage: React.FC = () => {
     );
   };
 
-  if (chartsLoading) {
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Loading width="2rem" height="2rem" />
-      </div>
-    );
-  }
-
-  if (poolsContext && poolsContext.length > 0) {
+  if (pools && pools.length > 0) {
     return (
       <div className={poolContainerClasses.join(' ')}>
         <div className="pool-page-header">
@@ -260,6 +250,7 @@ export const PoolPage: React.FC = () => {
       </div>
     );
   }
+
   return (
     <div className="pool-page-main">
       <div className="no-pool-text">There are no pools</div>

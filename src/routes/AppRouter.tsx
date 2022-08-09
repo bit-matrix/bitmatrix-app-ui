@@ -4,7 +4,7 @@ import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useTxStatusSocket } from '../hooks/useTxStatusSocket';
-import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
+import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap } from '../pages/Swap/Swap';
 import { Footer } from '../components/Footer/Footer';
@@ -25,6 +25,7 @@ import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import './AppRouter.scss';
+import { useChartsSocket } from '../hooks/useChartsSocket';
 
 declare global {
   interface Window {
@@ -44,11 +45,11 @@ const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
-  const { poolsLoading, pools, isPoolsConnected } = usePoolsSocket();
+  const { poolsLoading, isPoolsConnected } = usePoolsSocket();
+  const { chartsLoading, isChartsConnected } = useChartsSocket();
   const { txStatues, txStatusLoading } = useTxStatusSocket();
 
   useEffect(() => {
@@ -58,12 +59,6 @@ export const AppRouter = (): JSX.Element => {
   useEffect(() => {
     checkTxStatues();
   }, [txStatues]);
-
-  useEffect(() => {
-    if (poolsLoading === false && pools) {
-      setPoolsContext(pools);
-    }
-  }, [pools, poolsLoading]);
 
   useEffect(() => {
     detectProvider('marina')
@@ -199,13 +194,13 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {poolsLoading || txStatusLoading || loading ? (
+            {poolsLoading || txStatusLoading || loading || chartsLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
             ) : (
               <div className="app-content">
-                {isPoolsConnected ? (
+                {isPoolsConnected && isChartsConnected ? (
                   <Switch component={Fader}>
                     <Route exact path={ROUTE_PATH.HOME} component={Home} />
                     <Route exact path={ROUTE_PATH.SWAP} component={Swap} />

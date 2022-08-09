@@ -3,15 +3,16 @@ import io from 'socket.io-client';
 import { Pool } from '@bitmatrix/models';
 import { DB_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
+import { usePoolContext } from '../context';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePoolsSocket = () => {
   const [isPoolsConnected, setIsPoolsConnected] = useState<boolean>(false);
-  const [pools, setPools] = useState<Pool[]>();
   const [poolsLoading, setPoolsLoading] = useState<boolean>(true);
+  const { setPoolsContext } = usePoolContext();
 
   const onPools = useCallback((pools: Pool[]) => {
-    setPools(pools);
+    setPoolsContext(pools);
     setPoolsLoading(false);
   }, []);
 
@@ -45,6 +46,5 @@ export const usePoolsSocket = () => {
   return {
     isPoolsConnected,
     poolsLoading,
-    pools,
   };
 };

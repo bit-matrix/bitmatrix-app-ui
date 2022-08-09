@@ -35,7 +35,7 @@ export const CreateNewPool: React.FC = () => {
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
 
   const history = useHistory();
 
@@ -208,9 +208,9 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const calcLpValues = () => {
-    const currentLBtcPrice = Number(poolsContext[0].token.value) / Number(poolsContext[0].quote.value);
+    const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
 
-    if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+    if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
       if (selectedPair1Asset?.ticker === 'L-BTC') {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           50,
