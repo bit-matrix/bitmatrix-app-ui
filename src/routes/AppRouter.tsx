@@ -4,7 +4,7 @@ import { Wallet, api } from '@bitmatrix/lib';
 import { BmConfig } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useTxStatusSocket } from '../hooks/useTxStatusSocket';
-import { useWalletContext, useSettingsContext, usePoolConfigContext, usePoolContext } from '../context';
+import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap } from '../pages/Swap/Swap';
 import { Footer } from '../components/Footer/Footer';
@@ -44,11 +44,10 @@ const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
-  const { setPoolsContext } = usePoolContext();
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
-  const { poolsLoading, pools, isPoolsConnected } = usePoolsSocket();
+  const { poolsLoading, isPoolsConnected } = usePoolsSocket();
   const { txStatues, txStatusLoading } = useTxStatusSocket();
 
   useEffect(() => {
@@ -58,12 +57,6 @@ export const AppRouter = (): JSX.Element => {
   useEffect(() => {
     checkTxStatues();
   }, [txStatues]);
-
-  useEffect(() => {
-    if (poolsLoading === false && pools) {
-      setPoolsContext(pools);
-    }
-  }, [pools, poolsLoading]);
 
   useEffect(() => {
     detectProvider('marina')
