@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { ChartSummary } from '@bitmatrix/models';
-import { usePoolContext } from '../context';
 import { API_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { useChartsContext } from '../context/charts';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
-  const { pools } = usePoolContext();
   const { setChartsContext } = useChartsContext();
 
   const [isChartsConnected, setIsChartsConnected] = useState<boolean>(false);
@@ -21,7 +19,6 @@ export const useChartsSocket = () => {
 
   useEffect(() => {
     const socket = io(API_SOCKET_SERVER_URL);
-    // const poolIds = poolsContext.map((pc) => pc.id);
 
     socket.on('connect', () => {
       console.log('connect charts');
@@ -47,7 +44,7 @@ export const useChartsSocket = () => {
       setIsChartsConnected(false);
       console.log('cleanup charts');
     };
-  }, [pools]);
+  }, []);
 
   return {
     isChartsConnected,
