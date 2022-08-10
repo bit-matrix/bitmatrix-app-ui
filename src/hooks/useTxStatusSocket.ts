@@ -24,7 +24,7 @@ export type TxStatus = {
 export const useTxStatusSocket = () => {
   const [isTxStatusConnected, setIsTxStatusConnected] = useState<boolean>(false);
   const [txStatues, setTxStatues] = useState<TxStatus[]>();
-  const [txStatusLoading, setTxStatusLoading] = useState<boolean>(true);
+  const [txStatusLoading, setTxStatusLoading] = useState<boolean>(false);
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   const onTxStatusData = useCallback((txStatues: TxStatus[]) => {
