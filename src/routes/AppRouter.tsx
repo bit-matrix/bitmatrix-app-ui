@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet, api } from '@bitmatrix/lib';
-import { BmConfig } from '@bitmatrix/models';
+import { BmConfig, TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
-import { useTxStatusSocket } from '../hooks/useTxStatusSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Swap } from '../pages/Swap/Swap';
@@ -26,20 +25,14 @@ import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import './AppRouter.scss';
 import { useChartsSocket } from '../hooks/useChartsSocket';
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import { CommitmentStore } from '../model/CommitmentStore';
 
 declare global {
   interface Window {
     marina: MarinaProvider;
   }
 }
-
-// enum TX_STATUS {
-//   PENDING,
-//   WAITING_PTX,
-//   WAITING_PTX_CONFIRM,
-//   SUCCESS,
-//   FAILED,
-// }
 
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
@@ -49,16 +42,12 @@ export const AppRouter = (): JSX.Element => {
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
   const { setPoolConfigContext } = usePoolConfigContext();
   const { poolsLoading, isPoolsConnected } = usePoolsSocket();
-  const { chartsLoading, isChartsConnected } = useChartsSocket();
-  const { txStatues, txStatusLoading } = useTxStatusSocket();
+  const { chartsLoading, isChartsConnected, txStatuses, txStatusesLoading } = useChartsSocket();
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    checkTxStatues();
-  }, [txStatues]);
 
   useEffect(() => {
     detectProvider('marina')
@@ -88,36 +77,23 @@ export const AppRouter = (): JSX.Element => {
     }
   }, [walletContext?.marina]);
 
-  const checkTxStatues = () => {
-    // const txHistory = getLocalData();
-    // if (txHistory && txHistory.length > 0) {
-    //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
-    //     const newTxHistory = [...txHistory];
-    //     if (txStatues) {
-    //       txStatues.forEach((txStatus) => {
-    //         const willChangeTxIndex = newTxHistory.findIndex((txh) => txh.txId === txStatus.txId);
-    //         if (willChangeTxIndex > -1) {
-    //           if (txStatus.status === TX_STATUS.SUCCESS) {
-    //             newTxHistory[willChangeTxIndex].completed = true;
-    //           }
-    //           if (txStatus.status === TX_STATUS.FAILED) {
-    //             newTxHistory[willChangeTxIndex].completed = true;
-    //             newTxHistory[willChangeTxIndex].isOutOfSlippage = true;
-    //           }
-    //           if (
-    //             txStatus.status === TX_STATUS.PENDING ||
-    //             txStatus.status === TX_STATUS.WAITING_PTX ||
-    //             txStatus.status === TX_STATUS.WAITING_PTX_CONFIRM
-    //           ) {
-    //             newTxHistory[willChangeTxIndex].completed = false;
-    //           }
-    //           setLocalData(newTxHistory);
-    //         }
-    //       });
-    //     }
-    //   }
-    // }
-  };
+  useEffect(() => {
+    const localStorageData = getLocalData();
+
+    if (localStorageData && localStorageData.length > 0 && txStatuses) {
+      const newLocalStorageData = [...localStorageData];
+
+      txStatuses.forEach((ts) => {
+        const currentTxIndex = newLocalStorageData.findIndex((lt) => lt.txId === ts.txId);
+        const currentData = newLocalStorageData[currentTxIndex];
+        currentData.poolTxId = ts.poolTxId;
+        currentData.completed = ts.status === TX_STATUS.SUCCESS || ts.status === TX_STATUS.FAILED ? true : false;
+        currentData.isOutOfSlippage = ts.status === TX_STATUS.FAILED ? true : false;
+      });
+
+      setLocalData(newLocalStorageData);
+    }
+  }, [txStatuses]);
 
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {
@@ -151,42 +127,6 @@ export const AppRouter = (): JSX.Element => {
     setLoading(false);
   };
 
-  // const checkLastTxStatus = (poolId: string) => {
-  //   const txHistory = getLocalData();
-  //   if (txHistory && txHistory.length > 0) {
-  //     const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
-  //     if (unconfirmedTxs.length > 0) {
-  //       unconfirmedTxs.forEach((transaction) => {
-  //         if (transaction.txId) {
-  //           api.getCtxMempool(transaction.txId, poolId).then((ctxResponse: BmCtxMempool) => {
-  //             if (ctxResponse) {
-  //               const newTxHistory = [...txHistory];
-  //               const willChangedTx = newTxHistory.findIndex((ntx) => {
-  //                 return ntx.txId === transaction.txId;
-  //               });
-  //               newTxHistory[willChangedTx].poolTxId = ctxResponse.poolTxid;
-  //               setLocalData(newTxHistory);
-  //             }
-  //             if (!ctxResponse) {
-  //               api.getPtx(transaction.txId, poolId).then((ptxResponse) => {
-  //                 if (ptxResponse) {
-  //                   const newTxHistory = [...txHistory];
-  //                   const willChangedTx = newTxHistory.findIndex((ntx) => {
-  //                     return ntx.txId === transaction.txId;
-  //                   });
-  //                   newTxHistory[willChangedTx].completed = true;
-  //                   newTxHistory[willChangedTx].isOutOfSlippage = ptxResponse.isOutOfSlippage;
-  //                   setLocalData(newTxHistory);
-  //                 }
-  //               });
-  //             }
-  //           });
-  //         }
-  //       });
-  //     }
-  //   }
-  // };
-
   return (
     <Router>
       <ErrorBoundary>
@@ -194,7 +134,7 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {poolsLoading || txStatusLoading || loading || chartsLoading ? (
+            {poolsLoading || loading || chartsLoading || txStatusesLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
