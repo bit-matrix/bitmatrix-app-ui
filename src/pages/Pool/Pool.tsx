@@ -2,14 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { usePoolContext, useWalletContext } from '../../context';
-import { useChartsSocket } from '../../hooks/useChartsSocket';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
 import { Pool } from '@bitmatrix/models';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { PoolCard } from '../../components/PoolCard/PoolCard';
-import { Loading } from '../../components/base/Loading/Loading';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';

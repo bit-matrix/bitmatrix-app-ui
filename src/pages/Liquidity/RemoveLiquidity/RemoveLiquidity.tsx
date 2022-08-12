@@ -18,6 +18,10 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 
+type Props = {
+  checkTxStatusWithIds: () => void;
+};
+
 enum SELECTED_PERCENTAGE {
   TEN = 10,
   TWENTY_FIVE = 25,
@@ -26,7 +30,7 @@ enum SELECTED_PERCENTAGE {
   HUNDRED = 100,
 }
 
-const RemoveLiquidity = (): JSX.Element => {
+const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
   const [lpTokenAmount, setLpTokenAmount] = useState<number>(0);
   const [removalPercentage, setRemovalPercentage] = useState<SELECTED_PERCENTAGE>(SELECTED_PERCENTAGE.HUNDRED);
   const [calcLpTokenAmount, setCalcLpTokenAmount] = useState<number>(0);
@@ -105,6 +109,8 @@ const RemoveLiquidity = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
             setLocalData(newStoreData);
             setLoading(false);
+
+            checkTxStatusWithIds();
           } else {
             notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
             setLoading(false);

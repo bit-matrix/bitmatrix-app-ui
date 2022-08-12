@@ -25,7 +25,11 @@ import { NumericalInput } from '../../../components/NumericalInput/NumericalInpu
 import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
 
-const AddLiquidity = (): JSX.Element => {
+type Props = {
+  checkTxStatusWithIds: () => void;
+};
+
+const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
@@ -297,6 +301,8 @@ const AddLiquidity = (): JSX.Element => {
             const newStoreData = [...storeOldData, tempTxData];
             setLocalData(newStoreData);
             setLoading(false);
+
+            checkTxStatusWithIds();
           }
           // notify(
           //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>

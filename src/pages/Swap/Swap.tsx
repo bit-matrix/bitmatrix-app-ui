@@ -27,7 +27,11 @@ import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './Swap.scss';
 
-export const Swap = (): JSX.Element => {
+type Props = {
+  checkTxStatusWithIds: () => void;
+};
+
+export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
 
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
@@ -454,6 +458,8 @@ export const Swap = (): JSX.Element => {
             setLocalData(newStoreData);
 
             setLoading(false);
+
+            checkTxStatusWithIds();
 
             // await sleep(3000);
 
