@@ -65,7 +65,7 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     }
     return <div />;
-  }, []);
+  }, [unconfirmedTxs]);
 
   // const txInfo = (): React.ReactElement => {
   //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
