@@ -22,7 +22,7 @@ import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const { settingsContext } = useSettingsContext();
 

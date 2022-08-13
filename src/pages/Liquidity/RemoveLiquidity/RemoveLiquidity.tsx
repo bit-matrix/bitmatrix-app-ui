@@ -41,7 +41,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const history = useHistory();
   const { id } = useParams<{ id: string }>();

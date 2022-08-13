@@ -17,7 +17,7 @@ export const useChartsSocket = () => {
 
   const [socketInstance, setSocketInstance] = useState<Socket>();
 
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const onChartsData = useCallback((chartsData: ChartSummary[]) => {
     setChartsContext(chartsData);

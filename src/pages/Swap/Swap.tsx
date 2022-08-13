@@ -49,7 +49,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   const [currentPool, setCurrentPool] = useState<Pool>();
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const [loading, setLoading] = useState<boolean>(false);
 

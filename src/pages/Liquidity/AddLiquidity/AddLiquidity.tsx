@@ -43,7 +43,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const history = useHistory();
   const { id } = useParams<{ id: string }>();

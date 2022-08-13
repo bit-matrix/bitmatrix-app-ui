@@ -43,7 +43,7 @@ export const AppRouter = (): JSX.Element => {
   const { setPoolConfigContext } = usePoolConfigContext();
   const { poolsLoading, isPoolsConnected } = usePoolsSocket();
   const { chartsLoading, isChartsConnected, txStatuses, txStatusesLoading, checkTxStatusWithIds } = useChartsSocket();
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   useEffect(() => {
     fetchData();

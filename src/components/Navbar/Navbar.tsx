@@ -18,7 +18,7 @@ export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
 
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const { settingsContext } = useSettingsContext();
 
