@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -19,8 +19,6 @@ export const Navbar: React.FC = (): JSX.Element => {
   const history = useHistory();
 
   const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-  const txHistory = getLocalData();
-  const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
   const { settingsContext } = useSettingsContext();
 
@@ -40,7 +38,10 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = useMemo(() => {
+  const txInfo = () => {
+    const txHistory = getLocalData();
+    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
         return (
@@ -65,7 +66,7 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     }
     return <div />;
-  }, [unconfirmedTxs]);
+  };
 
   // const txInfo = (): React.ReactElement => {
   //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
@@ -94,7 +95,9 @@ export const Navbar: React.FC = (): JSX.Element => {
   //   return <div />;
   // };
 
-  const infoTab = useMemo(() => {
+  const infoTab = () => {
+    const txHistory = getLocalData();
+
     if (txHistory && txHistory.length > 0) {
       if (txHistory[txHistory.length - 1].seen === false) {
         return (
@@ -125,7 +128,7 @@ export const Navbar: React.FC = (): JSX.Element => {
                   speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
                   enterable
                 >
-                  <div>{txInfo}</div>
+                  <div>{txInfo()}</div>
                 </Whisper>
               </ButtonToolbar>
             </div>
@@ -133,7 +136,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         );
       }
     }
-  }, [txHistory]);
+  };
 
   // const infoTab = (): JSX.Element | undefined => {
   //   if (txHistory && txHistory.length > 0) {
@@ -263,7 +266,7 @@ export const Navbar: React.FC = (): JSX.Element => {
         </Button>
       </li>
 
-      {infoTab}
+      {infoTab()}
     </ul>
   );
 };

@@ -62,7 +62,6 @@ export const useChartsSocket = () => {
     }
 
     socket.on('checkTxStatusResponse', (data) => {
-      console.log('1.', data);
       setTxStatuses(data);
       setTxStatusesLoading(false);
     });
@@ -77,10 +76,7 @@ export const useChartsSocket = () => {
   }, []);
 
   const checkTxStatusWithIds = () => {
-    console.log('checkTxStatusWithIds');
-
     if (socketInstance) {
-      console.log('checkTxStatusWithId2s');
       const txHistory = getLocalData();
 
       if (txHistory && txHistory.length > 0) {
