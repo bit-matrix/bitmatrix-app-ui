@@ -22,7 +22,7 @@ export const Advanced = (): JSX.Element => {
     if (currentWallet && currentWallet.marina) {
       currentWallet.marina.disable();
 
-      setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [] });
+      setWalletContext({ marina: currentWallet.marina, isEnabled: false, balances: [], coins: [] });
 
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
         setThemeContext(SELECTED_THEME.NEON);
