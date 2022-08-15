@@ -142,7 +142,7 @@ export const uniqueQuoteAssetList = (pools: Pool[]): PAsset[] => {
 
   const uniqueQuoteList: string[] = [];
   const uniqueQuoteAssetList: PAsset[] = [];
-  quoteList.map((ql) => {
+  quoteList.forEach((ql) => {
     if (!uniqueQuoteList.includes(ql.assetHash)) {
       uniqueQuoteList.push(ql.assetHash);
       uniqueQuoteAssetList.push({
@@ -170,7 +170,7 @@ export const uniqueTokenAssetList = (pools: Pool[], selectedQuote?: PAsset): PAs
 
   const uniqueTokenList: string[] = [];
   const uniqueTokenAssetList: PAsset[] = [];
-  tokenList.map((tl) => {
+  tokenList.forEach((tl) => {
     if (!uniqueTokenList.includes(tl.assetHash)) {
       uniqueTokenList.push(tl.assetHash);
       uniqueTokenAssetList.push({

@@ -47,6 +47,7 @@ export const AppRouter = (): JSX.Element => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export const AppRouter = (): JSX.Element => {
 
         setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [] });
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -75,6 +77,7 @@ export const AppRouter = (): JSX.Element => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletContext?.marina]);
 
   useEffect(() => {
@@ -93,6 +96,7 @@ export const AppRouter = (): JSX.Element => {
 
       setLocalData(newLocalStorageData);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txStatuses]);
 
   const fetchBalances = async (wall: Wallet) => {

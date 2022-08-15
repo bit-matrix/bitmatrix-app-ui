@@ -70,7 +70,7 @@ export default withTooltip<AreaProps, TooltipData>(
           range: [margin.left, innerWidth + margin.left],
           domain: extent(stock, getDate) as [Date, Date],
         }),
-      [innerWidth, margin.left],
+      [innerWidth, margin.left, stock],
     );
     const stockValueScale = useMemo(
       () =>
@@ -79,7 +79,7 @@ export default withTooltip<AreaProps, TooltipData>(
           domain: [0, (max(stock, getStockValue) || 0) + innerHeight / 3],
           nice: true,
         }),
-      [margin.top, innerHeight],
+      [innerHeight, margin.top, stock],
     );
 
     // tooltip handler
@@ -100,7 +100,7 @@ export default withTooltip<AreaProps, TooltipData>(
           tooltipTop: stockValueScale(getStockValue(d)),
         });
       },
-      [showTooltip, stockValueScale, dateScale],
+      [dateScale, bisectDate, stock, showTooltip, stockValueScale],
     );
 
     return (

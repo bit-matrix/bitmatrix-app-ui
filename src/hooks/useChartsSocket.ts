@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
-import { ChartSummary, TxStatus } from '@bitmatrix/models';
+import { TxStatus } from '@bitmatrix/models';
 import { API_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { useChartsContext } from '../context/charts';
@@ -18,11 +18,6 @@ export const useChartsSocket = () => {
   const [socketInstance, setSocketInstance] = useState<Socket>();
 
   const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
-
-  const onChartsData = useCallback((chartsData: ChartSummary[]) => {
-    setChartsContext(chartsData);
-    setChartsLoading(false);
-  }, []);
 
   console.log('socket id', socketInstance?.id);
 
@@ -42,7 +37,10 @@ export const useChartsSocket = () => {
     });
 
     socket.on('poolschart', (data) => {
-      if (data) onChartsData(data);
+      if (data) {
+        setChartsContext(data);
+        setChartsLoading(false);
+      }
     });
 
     const txHistory = getLocalData();
@@ -73,6 +71,7 @@ export const useChartsSocket = () => {
       setIsChartsConnected(false);
       console.log('cleanup charts');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkTxStatusWithIds = () => {

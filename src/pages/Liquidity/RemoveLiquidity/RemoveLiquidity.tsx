@@ -56,7 +56,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
       setLpTokenAmount(lpTokenInWallet?.amount || 0);
     }
-  }, [currentPool, walletContext?.balances]);
+  }, [currentPool, walletContext]);
 
   useEffect(() => {
     const lpTokenAmountInput = new Decimal(lpTokenAmount)

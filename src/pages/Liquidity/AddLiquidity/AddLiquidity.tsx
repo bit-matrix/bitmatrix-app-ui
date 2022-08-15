@@ -87,7 +87,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, quote, settingsContext.preferred_unit.value, token],
   );
 
   const onChangeTokenAmount = useCallback(
@@ -115,7 +115,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, quote, settingsContext.preferred_unit.value, token],
   );
 
   const calcAmountPercent = useCallback(
@@ -198,7 +198,15 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
       }
     },
-    [currentPool, poolConfigContext, walletContext],
+    [
+      currentPool,
+      onChangeQuoteAmount,
+      onChangeTokenAmount,
+      poolConfigContext,
+      quote?.ticker,
+      settingsContext.preferred_unit.value,
+      walletContext,
+    ],
   );
 
   const inputsIsValid = useCallback(() => {
@@ -252,7 +260,15 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       }
     }
     return { tokenIsValid: true, quoteIsValid: true };
-  }, [currentPool, poolConfigContext, quote?.value, token?.value, walletContext]);
+  }, [
+    currentPool,
+    poolConfigContext,
+    quote?.ticker,
+    quote?.value,
+    settingsContext.preferred_unit.value,
+    token?.value,
+    walletContext,
+  ]);
 
   const addLiquidityClick = async () => {
     if (walletContext?.marina) {
@@ -337,7 +353,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       };
     }
     return { lpReceived: '0', poolRate: '0' };
-  }, [currentPool, quote?.value, token?.value]);
+  }, [currentPool, quote?.ticker, quote?.value, settingsContext.preferred_unit.value, token?.value]);
 
   const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   return (

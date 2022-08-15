@@ -44,7 +44,7 @@ export const MyPoolDetail: React.FC = () => {
     setTimeout(() => {
       setChartLoading(false);
     }, 200);
-  }, [pools]);
+  }, [id, pools]);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -118,7 +118,6 @@ export const MyPoolDetail: React.FC = () => {
       data = defaultData;
     } else if (selectedTab === MY_POOL_DETAIL_TABS.SHARE) {
       key = 'share';
-      data;
       data = defaultData;
     }
 

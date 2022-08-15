@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { Reducer } from 'react';
 import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';

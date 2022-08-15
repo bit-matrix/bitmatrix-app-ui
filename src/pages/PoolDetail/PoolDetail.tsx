@@ -44,7 +44,7 @@ export const PoolDetail: React.FC = () => {
     setTimeout(() => {
       setChartLoading(false);
     }, 200);
-  }, [pools]);
+  }, [id, pools]);
 
   const renderChart = () => {
     const defaultData: ChartData[] | undefined = [
