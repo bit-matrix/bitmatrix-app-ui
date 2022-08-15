@@ -19,7 +19,7 @@ import { MyPoolDetail } from '../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../pages/CreateNewPool/CreateNewPool';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
-import { detectProvider, MarinaProvider } from 'marina-provider';
+import { Balance, detectProvider, MarinaProvider, Utxo } from 'marina-provider';
 import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
@@ -56,13 +56,13 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet(window.marina);
 
         marina.isEnabled().then((enabled) => {
-          setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [] });
+          setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [], coins: [] });
         });
       })
       .catch(() => {
         const marinaWallet = new Wallet(window.marina);
 
-        setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [] });
+        setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [], coins: [] });
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -101,27 +101,45 @@ export const AppRouter = (): JSX.Element => {
 
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {
-      wall
-        .getBalances()
-        .then((balances) => {
-          setWalletContext({ marina: wall, isEnabled: true, balances });
+      const balances = new Promise<Balance[]>((resolve, reject) => {
+        wall
+          .getBalances()
+          .then((balances) => {
+            resolve(balances);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+      const coins = new Promise<Utxo[]>((resolve, reject) => {
+        wall
+          .getCoins()
+          .then((coins: Utxo[]) => {
+            resolve(coins);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
 
-          const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
-            balances.some(({ asset }) => value === asset.assetHash),
-          );
-          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme);
-          const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+      Promise.all([balances, coins]).then((values: [Balance[], Utxo[]]) => {
+        setWalletContext({ marina: wall, isEnabled: true, balances: values[0], coins: values[1] });
 
-          if (selectedExclusive) {
-            if (!exclusiveAmount || exclusiveAmount === 0) {
-              setThemeContext(SELECTED_THEME.NEON);
-            }
+        const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
+          values[0].some(({ asset }) => value === asset.assetHash),
+        );
+        const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme);
+        const exclusiveAmount = values[0].find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+
+        if (selectedExclusive) {
+          if (!exclusiveAmount || exclusiveAmount === 0) {
+            setThemeContext(SELECTED_THEME.NEON);
           }
-          setExclusiveThemesContext(existExclusiveThemes);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+        setExclusiveThemesContext(existExclusiveThemes);
+      });
     }
   };
 
