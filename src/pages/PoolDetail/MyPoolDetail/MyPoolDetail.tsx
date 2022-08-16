@@ -17,7 +17,7 @@ import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
-import { poolShareRound, quoteAmountRound } from '../../../helper';
+import { getMyPoolsChartData, poolShareRound, quoteAmountRound } from '../../../helper';
 import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
 
@@ -26,6 +26,7 @@ export const MyPoolDetail: React.FC = () => {
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
+  const [chartData, setChartData] = useState<ChartData[]>();
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
@@ -40,24 +41,23 @@ export const MyPoolDetail: React.FC = () => {
       const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
       setLoading(false);
+      getMyPoolsChartData(walletContext?.coins, currentPool?.lp.assetHash).then((chartData) => {
+        setChartData(chartData);
+        setChartLoading(false);
+      });
     }
-    setTimeout(() => {
-      setChartLoading(false);
-    }, 200);
-  }, [id, pools]);
+  }, [id, pool?.lp.assetHash, pools, walletContext?.coins]);
 
   const calcPooledAssets = () => {
-    if (pools && pools.length > 0 && walletContext) {
-      const currentPool = pools[0];
-
-      const lpAssetId = currentPool.lp.assetHash;
+    if (pool && walletContext) {
+      const lpAssetId = pool.lp.assetHash;
       const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
       const lpAmountInWalletN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
-      const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountInWalletN);
+      const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(pool, lpAmountInWalletN);
 
       const recipientValue = convertion.calcAddLiquidityRecipientValue(
-        currentPool,
+        pool,
         quoteTokenRecipients.user_lbtc_received,
         quoteTokenRecipients.user_token_received,
       );
@@ -95,10 +95,10 @@ export const MyPoolDetail: React.FC = () => {
 
     if (selectedTab === MY_POOL_DETAIL_TABS.EARNINGS) {
       key = 'earnings';
-      data = defaultData;
+      data = chartData || defaultData;
     } else if (selectedTab === MY_POOL_DETAIL_TABS.SHARE) {
       key = 'share';
-      data = defaultData;
+      data = chartData || defaultData;
     }
 
     return (
