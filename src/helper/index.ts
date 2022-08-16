@@ -224,7 +224,7 @@ export const getMyPoolsChartData = async (coins: Utxo[] | undefined): Promise<{ 
 
   if (coins && coins?.length > 0) {
     coins.forEach((coin) => {
-      esplora.txPromise(coin.txid).then((values) => {
+      esplora.txDetailPromise(coin.txid).then((values) => {
         const spent = values[1][coin.vout].spent;
         const d = {
           date: values[0].status.block_time,
