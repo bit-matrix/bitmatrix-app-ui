@@ -46,26 +46,6 @@ export const MyPoolDetail: React.FC = () => {
     }, 200);
   }, [id, pools]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 200);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (poolsContext && poolsContext.length > 0) {
-  //     const currentPool = poolsContext.find((pl) => pl.id === id);
-
-  //     setPool(currentPool);
-  //   }
-  // }, [poolsContext]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 200);
-  // }, []);
-
   const calcPooledAssets = () => {
     if (pools && pools.length > 0 && walletContext) {
       const currentPool = pools[0];
