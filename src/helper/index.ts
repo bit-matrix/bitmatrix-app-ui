@@ -1,4 +1,6 @@
+import { esplora } from '@bitmatrix/lib';
 import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
+import { Utxo } from 'marina-provider';
 import Numeral from 'numeral';
 import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
@@ -212,4 +214,25 @@ export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT):
     }
   }
   return asset.ticker;
+};
+
+export const getMyPoolsChartData = async (coins: Utxo[] | undefined): Promise<{ date: number; close: number }[]> => {
+  const data: {
+    date: number;
+    close: number;
+  }[] = [];
+
+  if (coins && coins?.length > 0) {
+    coins.forEach((coin) => {
+      esplora.txPromise(coin.txid).then((values) => {
+        const spent = values[1][coin.vout].spent;
+        const d = {
+          date: values[0].status.block_time,
+          close: spent ? (coin.value || 0) * -1 : coin.value || 0,
+        };
+        data.push(d);
+      });
+    });
+  }
+  return data;
 };
