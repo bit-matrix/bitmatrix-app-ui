@@ -74,20 +74,14 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const output = convertion.convertForLiquidityCtx(
-          inputNum * settingsContext.preferred_unit.value,
-          currentPool,
-          primaryPoolConfig,
-        );
+        const output = convertion.convertForLiquidityCtx(inputNum * settingsContext.preferred_unit.value, currentPool);
 
         setQuote({ ...quote, value: input } as PAsset);
         setToken({ ...token, value: (output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset);
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, quote, settingsContext.preferred_unit.value, token],
   );
 
   const onChangeTokenAmount = useCallback(
@@ -95,17 +89,10 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const output = convertion.convertForLiquidityCtx(
-          inputNum * PREFERRED_UNIT_VALUE.LBTC,
-          currentPool,
-          primaryPoolConfig,
-          true,
-        );
+        const output = convertion.convertForLiquidityCtx(inputNum * PREFERRED_UNIT_VALUE.LBTC, currentPool, true);
 
         if (quote?.ticker === SWAP_ASSET.LBTC) {
-          setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toFixed(2) } as PAsset);
+          setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toString() } as PAsset);
         } else {
           setQuote({ ...quote, value: (output / PREFERRED_UNIT_VALUE.LBTC).toString() } as PAsset);
         }
@@ -115,7 +102,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, quote, settingsContext.preferred_unit.value, token],
   );
 
   const calcAmountPercent = useCallback(
@@ -198,7 +185,15 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
       }
     },
-    [currentPool, poolConfigContext, walletContext],
+    [
+      currentPool,
+      onChangeQuoteAmount,
+      onChangeTokenAmount,
+      poolConfigContext,
+      quote?.ticker,
+      settingsContext.preferred_unit.value,
+      walletContext,
+    ],
   );
 
   const inputsIsValid = useCallback(() => {
@@ -252,7 +247,15 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       }
     }
     return { tokenIsValid: true, quoteIsValid: true };
-  }, [currentPool, poolConfigContext, quote?.value, token?.value, walletContext]);
+  }, [
+    currentPool,
+    poolConfigContext,
+    quote?.ticker,
+    quote?.value,
+    settingsContext.preferred_unit.value,
+    token?.value,
+    walletContext,
+  ]);
 
   const addLiquidityClick = async () => {
     if (walletContext?.marina) {
@@ -292,7 +295,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
+              errorMessage: undefined,
               completed: false,
               seen: false,
               method: CALL_METHOD.ADD_LIQUIDITY,
@@ -337,7 +340,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       };
     }
     return { lpReceived: '0', poolRate: '0' };
-  }, [currentPool, quote?.value, token?.value]);
+  }, [currentPool, quote?.ticker, quote?.value, settingsContext.preferred_unit.value, token?.value]);
 
   const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   return (

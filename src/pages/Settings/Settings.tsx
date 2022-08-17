@@ -17,16 +17,12 @@ export const Settings = (): JSX.Element => {
     switch (selectedTab) {
       case SETTINGS_DETAIL_TABS.GENERAL:
         return <General />;
-        break;
       case SETTINGS_DETAIL_TABS.PRIVACY:
         return <Privacy />;
-        break;
       case SETTINGS_DETAIL_TABS.THEME:
         return <Theme />;
-        break;
       case SETTINGS_DETAIL_TABS.ADVANCED:
         return <Advanced />;
-        break;
       default:
         return;
     }

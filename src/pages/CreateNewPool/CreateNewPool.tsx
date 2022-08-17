@@ -68,7 +68,7 @@ export const CreateNewPool: React.FC = () => {
       setPair1AssetList(filteredPair1AssetList);
       setPair2AssetList(filteredPair2AssetList);
     }
-  }, []);
+  }, [walletContext]);
 
   const onChangePair1Amount = (input: string) => {
     setPair1Amount(input);

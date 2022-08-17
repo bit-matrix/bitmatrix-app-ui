@@ -4,7 +4,7 @@
   "homepage": "https://multi.bitmatrix.app",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.67",
+    "@bitmatrix/lib": "^0.0.69",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -47,12 +47,6 @@
     "build": "PUBLIC_URL=https://multi.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": [
     ">0.2%",

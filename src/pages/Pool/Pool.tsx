@@ -57,6 +57,7 @@ export const PoolPage: React.FC = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -74,11 +75,11 @@ export const PoolPage: React.FC = () => {
 
       setMyPools(myCurrentPools);
     }
-  }, [walletContext?.balances, pools, selectedTab]);
+  }, [walletContext?.balances, pools, selectedTab, walletContext]);
 
   const getPoolData = () => {
     let poolsdata: Pool[] = [];
-    if (selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS) {
+    if (selectedTab === POOL_MANAGEMENT_TABS.TOP_POOLS) {
       if (selectedFilterOption) {
         poolsdata = pools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
@@ -103,7 +104,7 @@ export const PoolPage: React.FC = () => {
           </div>
         );
       });
-    } else if (selectedTab == POOL_MANAGEMENT_TABS.MY_POOLS) {
+    } else if (selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       if (myPools.length === 0) {
         return <div className="no-pool-text">No pool found.</div>;
       }
@@ -243,7 +244,7 @@ export const PoolPage: React.FC = () => {
           {showPoolListModal && poolListModal()}
         </div>
         <div className="pool-page-content">
-          <div className={`${selectedTab == POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
+          <div className={`${selectedTab === POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
         </div>
       </div>
     );

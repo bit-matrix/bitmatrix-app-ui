@@ -71,6 +71,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       const token = uniqueTokenAssetList(pools, pairAsset.up);
       setAssetList({ quote, token });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pools]);
 
   useEffect(() => {
@@ -81,6 +82,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         onChangeToInput(currentPool, poolConfigContext, pairAsset.down?.value || '');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPool, poolConfigContext, swapWay, pairAsset.down?.value, pairAsset.up?.value]);
 
   const onChangeFromInput = useCallback(
@@ -153,7 +155,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [pairAsset],
+    [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
   );
 
   const onChangeToInput = useCallback(
@@ -220,7 +222,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [pairAsset],
+    [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
   );
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
@@ -445,7 +447,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
               tokenAsset: currentPool.token.ticker,
               timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
+              errorMessage: undefined,
               completed: false,
               seen: false,
               method: methodCall,
@@ -497,6 +499,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         totalFee
       ).toFixed(2);
 
+      // eslint-disable-next-line no-useless-concat
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
     return 'Network fee 801 sats';

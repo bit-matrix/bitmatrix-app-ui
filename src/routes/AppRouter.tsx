@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Wallet, api } from '@bitmatrix/lib';
-import { BmConfig, TX_STATUS } from '@bitmatrix/models';
+import { Wallet } from '@bitmatrix/lib';
+import { TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
@@ -19,7 +19,7 @@ import { MyPoolDetail } from '../pages/PoolDetail/MyPoolDetail/MyPoolDetail';
 import { CreateNewPool } from '../pages/CreateNewPool/CreateNewPool';
 import Switch from 'react-router-transition-switch';
 import Fader from 'react-fader';
-import { detectProvider, MarinaProvider } from 'marina-provider';
+import { Balance, detectProvider, MarinaProvider, Utxo } from 'marina-provider';
 import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
@@ -27,6 +27,7 @@ import './AppRouter.scss';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
+import { testnetConfig } from '../config/testnet';
 
 declare global {
   interface Window {
@@ -47,6 +48,7 @@ export const AppRouter = (): JSX.Element => {
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -55,14 +57,15 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet(window.marina);
 
         marina.isEnabled().then((enabled) => {
-          setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [] });
+          setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [], coins: [] });
         });
       })
       .catch(() => {
         const marinaWallet = new Wallet(window.marina);
 
-        setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [] });
+        setWalletContext({ marina: marinaWallet, isEnabled: false, balances: [], coins: [] });
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -75,6 +78,7 @@ export const AppRouter = (): JSX.Element => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletContext?.marina]);
 
   useEffect(() => {
@@ -88,42 +92,60 @@ export const AppRouter = (): JSX.Element => {
         const currentData = newLocalStorageData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
         currentData.completed = ts.status === TX_STATUS.SUCCESS || ts.status === TX_STATUS.FAILED ? true : false;
-        currentData.isOutOfSlippage = ts.status === TX_STATUS.FAILED ? true : false;
+        if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
 
       setLocalData(newLocalStorageData);
     }
-  }, [txStatuses]);
+  }, [getLocalData, setLocalData, txStatuses]);
 
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {
-      wall
-        .getBalances()
-        .then((balances) => {
-          setWalletContext({ marina: wall, isEnabled: true, balances });
+      const balances = new Promise<Balance[]>((resolve, reject) => {
+        wall
+          .getBalances()
+          .then((balances) => {
+            resolve(balances);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
+      const coins = new Promise<Utxo[]>((resolve, reject) => {
+        wall
+          .getCoins()
+          .then((coins: Utxo[]) => {
+            resolve(coins);
+          })
+          .catch((err) => {
+            console.log(err);
+            reject(err);
+          });
+      });
 
-          const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
-            balances.some(({ asset }) => value === asset.assetHash),
-          );
-          const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme);
-          const exclusiveAmount = balances.find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+      Promise.all([balances, coins]).then((values: [Balance[], Utxo[]]) => {
+        setWalletContext({ marina: wall, isEnabled: true, balances: values[0], coins: values[1] });
 
-          if (selectedExclusive) {
-            if (!exclusiveAmount || exclusiveAmount === 0) {
-              setThemeContext(SELECTED_THEME.NEON);
-            }
+        const existExclusiveThemes = exclusiveThemeAssets.filter((value) =>
+          values[0].some(({ asset }) => value === asset.assetHash),
+        );
+        const selectedExclusive = existExclusiveThemes.find((exc) => exc === settingsContext.theme);
+        const exclusiveAmount = values[0].find((bl) => bl.asset.assetHash === selectedExclusive)?.amount;
+
+        if (selectedExclusive) {
+          if (!exclusiveAmount || exclusiveAmount === 0) {
+            setThemeContext(SELECTED_THEME.NEON);
           }
-          setExclusiveThemesContext(existExclusiveThemes);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+        setExclusiveThemesContext(existExclusiveThemes);
+      });
     }
   };
 
   const fetchData = async () => {
-    const pool_config: BmConfig = await api.getBmConfigs();
-    setPoolConfigContext(pool_config);
+    // const pool_config: BmConfig = await api.getBmConfigs();
+    setPoolConfigContext(testnetConfig);
     setLoading(false);
   };
 

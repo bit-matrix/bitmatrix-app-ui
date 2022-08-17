@@ -35,7 +35,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
             setLoading(false);
             close();
 
-            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [] });
+            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [], coins: [] });
 
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);

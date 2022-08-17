@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { Pool } from '@bitmatrix/models';
 import { DB_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { usePoolContext } from '../context';
@@ -10,11 +9,6 @@ export const usePoolsSocket = () => {
   const [isPoolsConnected, setIsPoolsConnected] = useState<boolean>(false);
   const [poolsLoading, setPoolsLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
-
-  const onPools = useCallback((pools: Pool[]) => {
-    setPoolsContext(pools);
-    setPoolsLoading(false);
-  }, []);
 
   useEffect(() => {
     const socket = io(DB_SOCKET_SERVER_URL);
@@ -31,7 +25,10 @@ export const usePoolsSocket = () => {
     });
 
     socket.on('pools', (data) => {
-      if (data) onPools(data);
+      if (data) {
+        setPoolsContext(data);
+        setPoolsLoading(false);
+      }
     });
 
     return () => {
@@ -41,6 +38,7 @@ export const usePoolsSocket = () => {
       setIsPoolsConnected(false);
       console.log('cleanup pools');
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {
