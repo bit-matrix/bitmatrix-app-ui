@@ -91,13 +91,12 @@ export const AppRouter = (): JSX.Element => {
         const currentData = newLocalStorageData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
         currentData.completed = ts.status === TX_STATUS.SUCCESS || ts.status === TX_STATUS.FAILED ? true : false;
-        currentData.isOutOfSlippage = ts.status === TX_STATUS.FAILED ? true : false;
+        if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
 
       setLocalData(newLocalStorageData);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [txStatuses]);
+  }, [getLocalData, setLocalData, txStatuses]);
 
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {

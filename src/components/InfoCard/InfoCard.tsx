@@ -113,9 +113,9 @@ export const InfoCard: React.FC = () => {
 
     const txStatus = (cs: CommitmentStore): JSX.Element => {
       if (cs.completed) {
-        if (cs.isOutOfSlippage) {
+        if (cs.errorMessage) {
           return (
-            <CustomPopover placement="right" title="" content="Out of slippage">
+            <CustomPopover placement="right" title="" content={cs.errorMessage}>
               <div>
                 <ExclamationIcon width="1.5rem" height="1.5rem" />
               </div>
