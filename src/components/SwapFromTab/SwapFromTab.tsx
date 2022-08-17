@@ -17,7 +17,7 @@ export const SwapFromTab: React.FC<Props> = ({ selectedFromAmountPercent, setsel
   const onChangeSelectedFromTab = (value: any) => {
     if (walletContext && walletContext.isEnabled) {
       walletContext.marina.getBalances().then((balances) => {
-        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances });
+        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances, coins: walletContext.coins });
 
         if (value === selectedFromAmountPercent) {
           setselectedFromAmountPercent(undefined, balances);

@@ -295,7 +295,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
+              errorMessage: undefined,
               completed: false,
               seen: false,
               method: CALL_METHOD.ADD_LIQUIDITY,

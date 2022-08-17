@@ -100,7 +100,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
+              errorMessage: undefined,
               completed: false,
               seen: false,
               method: CALL_METHOD.REMOVE_LIQUIDITY,

@@ -1,5 +1,8 @@
+import { esplora } from '@bitmatrix/lib';
 import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
+import { Utxo } from 'marina-provider';
 import Numeral from 'numeral';
+import { ChartData } from '../components/AreaChart/AreaChart';
 import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
@@ -212,4 +215,39 @@ export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT):
     }
   }
   return asset.ticker;
+};
+
+export const padTo2Digits = (num: number): string => {
+  return num.toString().padStart(2, '0');
+};
+
+export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?: string): Promise<ChartData[]> => {
+  if (coins && coins?.length > 0) {
+    const filteredCoins = coins.filter((coin) => coin.asset === assetHash);
+    const outSpendsPromises = filteredCoins.map((coin) => esplora.txDetailPromise(coin.txid));
+    const outSpends = await Promise.all(outSpendsPromises);
+
+    const finalData = filteredCoins.map((coin) => {
+      const spent = outSpends[0][1][coin.vout].spent;
+
+      const date = new Date(outSpends[0][0].status.block_time * 1000);
+
+      const year = date.getFullYear();
+      const month = padTo2Digits(date.getMonth() + 1);
+      const day = padTo2Digits(date.getDate());
+
+      const dateTime = `${year}-${month}-${day}`;
+
+      const d: ChartData = {
+        date: dateTime,
+        close: spent ? (coin.value || 0) * -1 : coin.value || 0,
+      };
+
+      return d;
+    });
+
+    return finalData;
+  }
+
+  return [];
 };

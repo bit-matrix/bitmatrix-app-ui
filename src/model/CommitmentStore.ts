@@ -13,5 +13,5 @@ export type CommitmentStore = {
   seen: boolean;
   method: CALL_METHOD;
   poolTxId?: string;
-  isOutOfSlippage: boolean;
+  errorMessage?: string;
 };

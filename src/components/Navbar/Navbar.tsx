@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
@@ -38,7 +38,7 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = () => {
+  const txInfo = useCallback(() => {
     const txHistory = getLocalData();
     const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
 
@@ -58,7 +58,7 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     } else {
       if (txHistory && txHistory.length > 0) {
-        if (txHistory[txHistory.length - 1].isOutOfSlippage) {
+        if (txHistory[txHistory.length - 1].errorMessage) {
           return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
           return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
@@ -66,7 +66,7 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     }
     return <div />;
-  };
+  }, [getLocalData, settingsContext.exclusiveThemes.length, settingsContext.theme]);
 
   // const txInfo = (): React.ReactElement => {
   //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {

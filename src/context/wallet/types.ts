@@ -1,4 +1,4 @@
-import { Balance } from 'marina-provider';
+import { Balance, Utxo } from 'marina-provider';
 import { Wallet as MarinaWallet } from '@bitmatrix/lib';
 
 export const SET_WALLET = 'SET_WALLET';
@@ -7,6 +7,7 @@ export type Wallet = {
   marina: MarinaWallet;
   isEnabled: boolean;
   balances: Balance[];
+  coins: Utxo[];
 };
 
 export type SetWalletAction = {
