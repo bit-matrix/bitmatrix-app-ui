@@ -485,6 +485,14 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     }
   };
 
+  const swapButtonDisabled =
+    Number(pairAsset.down?.value) <= 0 ||
+    !inputIsValid() ||
+    assetList?.quote?.length === 0 ||
+    assetList?.token?.length === 0 ||
+    !pairAsset.up ||
+    !pairAsset.down;
+
   const infoMessage = useCallback((): string => {
     if (poolConfigContext && currentPool && pools.length > 0) {
       const config = poolConfigContext;
@@ -623,7 +631,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 swapClick();
               }}
               loading={loading}
-              disabled={Number(pairAsset.down?.value) <= 0 || !inputIsValid()}
+              disabled={swapButtonDisabled}
             />
           </div>
         </div>
