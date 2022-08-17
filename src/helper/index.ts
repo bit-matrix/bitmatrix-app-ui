@@ -222,28 +222,32 @@ export const padTo2Digits = (num: number): string => {
 };
 
 export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?: string): Promise<ChartData[]> => {
-  const data: ChartData[] = [];
   if (coins && coins?.length > 0) {
     const filteredCoins = coins.filter((coin) => coin.asset === assetHash);
-    filteredCoins.forEach((coin) => {
-      esplora.txDetailPromise(coin.txid).then((values) => {
-        const spent = values[1][coin.vout].spent;
+    const outSpendsPromises = filteredCoins.map((coin) => esplora.txDetailPromise(coin.txid));
+    const outSpends = await Promise.all(outSpendsPromises);
 
-        const date = new Date(values[0].status.block_time * 1000);
+    const finalData = filteredCoins.map((coin) => {
+      const spent = outSpends[0][1][coin.vout].spent;
 
-        const year = date.getFullYear();
-        const month = padTo2Digits(date.getMonth() + 1);
-        const day = padTo2Digits(date.getDate());
+      const date = new Date(outSpends[0][0].status.block_time * 1000);
 
-        const dateTime = `${year}-${month}-${day}`;
+      const year = date.getFullYear();
+      const month = padTo2Digits(date.getMonth() + 1);
+      const day = padTo2Digits(date.getDate());
 
-        const d: ChartData = {
-          date: dateTime,
-          close: spent ? (coin.value || 0) * -1 : coin.value || 0,
-        };
-        data.push(d);
-      });
+      const dateTime = `${year}-${month}-${day}`;
+
+      const d: ChartData = {
+        date: dateTime,
+        close: spent ? (coin.value || 0) * -1 : coin.value || 0,
+      };
+
+      return d;
     });
+
+    return finalData;
   }
-  return data;
+
+  return [];
 };
