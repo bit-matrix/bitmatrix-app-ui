@@ -208,9 +208,9 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const calcLpValues = () => {
-    const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
-
     if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+      const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
+
       if (selectedPair1Asset?.ticker === 'L-BTC') {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           50,
@@ -246,7 +246,6 @@ export const CreateNewPool: React.FC = () => {
         };
       }
     }
-
     return { initialLPCirculation: '-', initialTVL: '-', initialAssetPrice: '-' };
   };
 
