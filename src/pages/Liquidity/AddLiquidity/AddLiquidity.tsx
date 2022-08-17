@@ -74,13 +74,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const output = convertion.convertForLiquidityCtx(
-          inputNum * settingsContext.preferred_unit.value,
-          currentPool,
-          primaryPoolConfig,
-        );
+        const output = convertion.convertForLiquidityCtx(inputNum * settingsContext.preferred_unit.value, currentPool);
 
         setQuote({ ...quote, value: input } as PAsset);
         setToken({ ...token, value: (output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset);
@@ -95,14 +89,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
-
-        const output = convertion.convertForLiquidityCtx(
-          inputNum * PREFERRED_UNIT_VALUE.LBTC,
-          currentPool,
-          primaryPoolConfig,
-          true,
-        );
+        const output = convertion.convertForLiquidityCtx(inputNum * PREFERRED_UNIT_VALUE.LBTC, currentPool, true);
 
         if (quote?.ticker === SWAP_ASSET.LBTC) {
           setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toFixed(2) } as PAsset);
