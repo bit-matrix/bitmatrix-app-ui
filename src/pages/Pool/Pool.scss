@@ -15,11 +15,17 @@
   margin: 0 auto;
   min-height: 27rem;
 
-  .no-pool-text {
+  .no-pool-content {
     text-align: center;
     vertical-align: middle;
     line-height: 90px;
     font-size: 1.5rem;
+
+    .no-pool-button-div {
+      display: flex;
+      width: 14rem;
+      margin: 0 auto;
+    }
   }
 }
 
@@ -57,13 +63,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.no-pool-text {
-  text-align: center;
-  vertical-align: middle;
-  line-height: 90px;
-  font-size: 1.5rem;
 }
 
 .pool-page-content::-webkit-scrollbar {
@@ -211,7 +210,7 @@
   background: var(--theme-color) !important;
   border-width: 0 !important;
   opacity: 0.9;
-
+  border-radius: 1rem;
   &:hover {
     opacity: 1;
   }

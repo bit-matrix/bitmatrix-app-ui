@@ -252,7 +252,18 @@ export const PoolPage: React.FC = () => {
 
   return (
     <div className="pool-page-main">
-      <div className="no-pool-text">There are no pools</div>
+      <div className="no-pool-content">
+        <div>There are no pools</div>
+        <div className="no-pool-button-div">
+          <Button
+            appearance="default"
+            className="pm-add-button"
+            onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
+          >
+            Create New Pool
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
