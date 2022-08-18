@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal } from 'rsuite';
 import { PAsset } from '@bitmatrix/models';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './AssetListModal.scss';
 
