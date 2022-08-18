@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { Wallet, api } from '@bitmatrix/lib';
-import { BmConfig, TX_STATUS } from '@bitmatrix/models';
+import { Wallet /*, api*/ } from '@bitmatrix/lib';
+import { /*BmConfig,*/ TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
@@ -23,10 +23,11 @@ import { Balance, detectProvider, MarinaProvider, Utxo } from 'marina-provider';
 import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
-import './AppRouter.scss';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
+import { config } from '../config/testnet';
+import './AppRouter.scss';
 
 declare global {
   interface Window {
@@ -143,8 +144,8 @@ export const AppRouter = (): JSX.Element => {
   };
 
   const fetchData = async () => {
-    const pool_config: BmConfig = await api.getBmConfigs();
-    setPoolConfigContext(pool_config);
+    // const pool_config: BmConfig = await api.getBmConfigs();
+    setPoolConfigContext(config);
     setLoading(false);
   };
 
