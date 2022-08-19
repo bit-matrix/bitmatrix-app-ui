@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
@@ -15,7 +15,13 @@ import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import { getAssetPrecession, getAssetTicker, uniqueQuoteAssetList, uniqueTokenAssetList } from '../../helper';
+import {
+  getAssetPrecession,
+  getAssetTicker,
+  uniqueQuoteAssetList,
+  uniqueTokenAssetList,
+  usePrevious,
+} from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
@@ -63,16 +69,26 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     token?: PAsset[];
   }>({ quote: [], token: [] });
 
+  const prevPairAsset = usePrevious(pairAsset);
+
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (assetList?.quote?.length === 0 && assetList?.token?.length === 0) {
+    if (prevPairAsset?.up !== pairAsset.up || prevPairAsset?.down !== pairAsset.down) {
       const quote = uniqueQuoteAssetList(pools);
       const token = uniqueTokenAssetList(pools, pairAsset.up);
       setAssetList({ quote, token });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pools]);
+  }, [assetList, pairAsset.down, pairAsset.up, pools, prevPairAsset]);
+
+  // useEffect(() => {
+  //   if (assetList?.quote?.length === 0 && assetList?.token?.length === 0) {
+  //     const quote = uniqueQuoteAssetList(pools);
+  //     const token = uniqueTokenAssetList(pools, pairAsset.up);
+  //     setAssetList({ quote, token });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [pools]);
 
   useEffect(() => {
     if (currentPool && poolConfigContext && pairAsset) {
@@ -315,8 +331,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           (pool.token.ticker === up.ticker || pool.token.ticker === down.ticker),
       );
 
-      const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
+      if (filteredPools.length === 0) setPairAsset({ up, down: undefined });
 
+      const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
       setCurrentPool(sortedPools[0]);
     }
   }, []);
@@ -326,7 +343,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
     // Is it necessary?
     // if (assetIsQuote) {
-    // const tokenAssetList = uniqueTokenAssetList(poolsContext, asset);
+    //   const tokenAssetList = uniqueTokenAssetList(pools, asset);
     //   setAssetList({ ...assetList, token: tokenAssetList });
     //   console.log('assetOnChange : assetIsQuote');
     // }
@@ -362,15 +379,17 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     }
   };
 
-  const swapRouteChange = () => {
-    setPairAsset({
-      ...pairAsset,
-      up: { ...pairAsset.down, value: '' } as PAsset,
-      down: { ...pairAsset.up, value: '' } as PAsset,
-    });
-    setAssetList({ quote: assetList?.token, token: assetList?.quote });
-    setSelectedFromAmountPercent(undefined);
-  };
+  // const swapRouteChange = () => {
+  //   setPairAsset({
+  //     ...pairAsset,
+  //     up: { ...pairAsset.down, value: '' } as PAsset,
+  //     down: { ...pairAsset.up, value: '' } as PAsset,
+  //   });
+
+  //   setAssetList({ quote: assetList?.token, token: assetList?.quote });
+
+  //   setSelectedFromAmountPercent(undefined);
+  // };
 
   const swapClick = async () => {
     if (walletContext?.marina) {
@@ -574,7 +593,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 </div>
               </div>
             </div>
-            <div className="swap-arrow-icon" onClick={swapRouteChange}>
+            <div className="swap-arrow-icon" /* onClick={swapRouteChange} */>
               <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
             <div className="from-content">
