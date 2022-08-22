@@ -1,4 +1,4 @@
-export const config = {
+export const testnetConfig = {
   minRemainingSupply: 1000,
   minTokenValue: 50000000,
   baseFee: {

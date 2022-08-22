@@ -92,7 +92,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const output = convertion.convertForLiquidityCtx(inputNum * PREFERRED_UNIT_VALUE.LBTC, currentPool, true);
 
         if (quote?.ticker === SWAP_ASSET.LBTC) {
-          setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toFixed(2) } as PAsset);
+          setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toString() } as PAsset);
         } else {
           setQuote({ ...quote, value: (output / PREFERRED_UNIT_VALUE.LBTC).toString() } as PAsset);
         }

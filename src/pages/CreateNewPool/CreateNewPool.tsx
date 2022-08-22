@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { api, poolDeployment } from '@bitmatrix/lib';
-import { Button, Content } from 'rsuite';
+import { Button, Content, Dropdown } from 'rsuite';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
 import PriceIcon from '../../components/base/Svg/Icons/Price';
@@ -20,6 +20,7 @@ import { PAsset } from '@bitmatrix/models';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
+import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
@@ -32,6 +33,7 @@ export const CreateNewPool: React.FC = () => {
   const [pair2AssetList, setPair2AssetList] = useState<PAsset[]>([]);
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
+  const [lpFeeTier, setLpFeeTier] = useState<{ value: number; index: number }>({ value: 500, index: 2 });
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
@@ -193,7 +195,10 @@ export const CreateNewPool: React.FC = () => {
           addressInformation.publicKey,
           1,
           pair1IsLbtc ? 50 : 1000000,
+          lpFeeTier.index,
         );
+
+        console.log(newPool);
 
         const poolTxId = await api.sendRawTransaction(newPool);
 
@@ -416,6 +421,23 @@ export const CreateNewPool: React.FC = () => {
               <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialAssetPrice}</div>
             </div>
           </div>
+          <div>
+            <Dropdown
+              title={lpFeeTier.value}
+              activeKey={lpFeeTier.index}
+              onSelect={(eventKey: any) => {
+                setLpFeeTier({ value: lpFeeTiers[eventKey], index: eventKey });
+              }}
+            >
+              {lpFeeTiers.map((feeTier, i: number) => {
+                return (
+                  <Dropdown.Item key={i} eventKey={i}>
+                    {feeTier}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown>
+          </div>
           <div className="create-new-pool-button-content">
             <WalletButton
               text=" Create New Liquidity Pool"
@@ -427,6 +449,7 @@ export const CreateNewPool: React.FC = () => {
               className="create-new-pool-button"
             />
           </div>
+
           <AssetListModal
             show={showPair1AssetListModal}
             selectedAsset={selectedPair1Asset}
