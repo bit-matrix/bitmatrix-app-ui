@@ -230,6 +230,43 @@
       }
     }
 
+    .create-new-pool-lp-fee-tier {
+      button {
+        position: relative;
+        z-index: 5;
+        padding-right: 32px;
+        display: inline-block;
+        width: 100%;
+        font-weight: 600 !important;
+        color: #010403 !important;
+        background: var(--theme-color);
+        border-width: 0 !important;
+        opacity: 0.9;
+        cursor: pointer;
+        border-radius: 0.75rem;
+
+        &:hover {
+          opacity: 1;
+        }
+
+        .rs-dropdown-toggle-caret {
+          top: 9px;
+        }
+      }
+      .rs-dropdown-menu {
+        height: 10.25rem;
+        width: 4rem;
+        z-index: 500;
+        overflow-y: auto;
+      }
+
+      li {
+        &:hover {
+          color: #fff !important;
+        }
+      }
+    }
+
     .create-new-pool-button-content {
       width: 100%;
       display: flex;
@@ -250,6 +287,12 @@
       &:hover {
         opacity: 1;
       }
+    }
+
+    .create-new-pool-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   }
 }

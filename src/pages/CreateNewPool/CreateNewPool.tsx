@@ -257,27 +257,47 @@ export const CreateNewPool: React.FC = () => {
   return (
     <div className="create-new-pool-page-main">
       <Content className="create-new-pool-page-content">
-        <BackButton
-          buttonText="Create New Pool"
-          onClick={() => {
-            const prevPageLocation = history.location.state;
-            if (prevPageLocation) {
-              history.push({
-                pathname: (prevPageLocation as { from: string }).from,
-                state: {
-                  from: history.location.pathname,
-                },
-              });
-            } else {
-              history.push({
-                pathname: ROUTE_PATH.POOL,
-                state: {
-                  from: history.location.pathname,
-                },
-              });
-            }
-          }}
-        />
+        <div className="create-new-pool-page-header">
+          <BackButton
+            buttonText="Create New Pool"
+            onClick={() => {
+              const prevPageLocation = history.location.state;
+              if (prevPageLocation) {
+                history.push({
+                  pathname: (prevPageLocation as { from: string }).from,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              } else {
+                history.push({
+                  pathname: ROUTE_PATH.POOL,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              }
+            }}
+          />
+          <div>
+            <Dropdown
+              className="create-new-pool-lp-fee-tier"
+              title={lpFeeTier.value}
+              activeKey={lpFeeTier.index}
+              onSelect={(eventKey: any) => {
+                setLpFeeTier({ value: lpFeeTiers[eventKey], index: eventKey });
+              }}
+            >
+              {lpFeeTiers.map((feeTier, i: number) => {
+                return (
+                  <Dropdown.Item key={i} eventKey={i}>
+                    {feeTier}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown>
+          </div>
+        </div>
         <div>
           <div className="create-new-pool-main">
             <div
@@ -420,23 +440,6 @@ export const CreateNewPool: React.FC = () => {
               </div>
               <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialAssetPrice}</div>
             </div>
-          </div>
-          <div>
-            <Dropdown
-              title={lpFeeTier.value}
-              activeKey={lpFeeTier.index}
-              onSelect={(eventKey: any) => {
-                setLpFeeTier({ value: lpFeeTiers[eventKey], index: eventKey });
-              }}
-            >
-              {lpFeeTiers.map((feeTier, i: number) => {
-                return (
-                  <Dropdown.Item key={i} eventKey={i}>
-                    {feeTier}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown>
           </div>
           <div className="create-new-pool-button-content">
             <WalletButton
