@@ -384,17 +384,17 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     }
   };
 
-  // const swapRouteChange = () => {
-  //   setPairAsset({
-  //     ...pairAsset,
-  //     up: { ...pairAsset.down, value: '' } as PAsset,
-  //     down: { ...pairAsset.up, value: '' } as PAsset,
-  //   });
+  const swapRouteChange = () => {
+    setPairAsset({
+      ...pairAsset,
+      up: { ...pairAsset.down, value: '' } as PAsset,
+      down: { ...pairAsset.up, value: '' } as PAsset,
+    });
 
-  //   setAssetList({ quote: assetList?.token, token: assetList?.quote });
+    setAssetList({ quote: assetList?.token, token: assetList?.quote });
 
-  //   setSelectedFromAmountPercent(undefined);
-  // };
+    setSelectedFromAmountPercent(undefined);
+  };
 
   const swapClick = async () => {
     if (walletContext?.marina) {
@@ -434,6 +434,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setSelectedFromAmountPercent(undefined);
 
           let commitmentTxId = '';
+
+          console.log(numberToAmount);
 
           if (pairAsset.up?.isQuote) {
             commitmentTxId = await commitmentSign.case1(
@@ -598,7 +600,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 </div>
               </div>
             </div>
-            <div className="swap-arrow-icon" /* onClick={swapRouteChange} */>
+            <div className="swap-arrow-icon" onClick={swapRouteChange}>
               <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
             <div className="from-content">
