@@ -198,8 +198,6 @@ export const CreateNewPool: React.FC = () => {
           lpFeeTier.index,
         );
 
-        console.log(newPool);
-
         const poolTxId = await api.sendRawTransaction(newPool);
 
         console.log(poolTxId);
