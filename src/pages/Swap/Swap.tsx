@@ -657,7 +657,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 swapClick();
               }}
               loading={loading}
-              disabled={swapButtonDisabled}
+              // disabled={swapButtonDisabled}
             />
           </div>
         </div>
