@@ -23,11 +23,11 @@ import { Balance, detectProvider, MarinaProvider, Utxo } from 'marina-provider';
 import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
-import './AppRouter.scss';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
 import { testnetConfig } from '../config/testnet';
+import './AppRouter.scss';
 
 declare global {
   interface Window {

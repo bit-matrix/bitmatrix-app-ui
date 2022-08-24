@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { esplora } from '@bitmatrix/lib';
 import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
 import { Utxo } from 'marina-provider';
@@ -250,4 +251,12 @@ export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?:
   }
 
   return [];
+};
+
+export const usePrevious = <T>(value: T): T | undefined => {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 };
