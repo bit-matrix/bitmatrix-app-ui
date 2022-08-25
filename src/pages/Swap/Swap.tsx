@@ -499,7 +499,6 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         } else {
           notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
           setLoading(false);
-          // payloadData.wallet.marina.reloadCoins();
         }
       } else {
         notify('Pool Error', 'Error : ', 'error');

@@ -114,62 +114,24 @@ export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
 };
 
-// export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
-//   const assetList: PAsset[] = [];
-//   pools.forEach((pool: Pool) => {
-//     assetList.push(pool.token);
-//     assetList.push(pool.quote);
-//   });
-
-//   const uniqueList: string[] = [];
-//   const uniqueAssetList: PAsset[] = [];
-//   assetList.map((al) => {
-//     if (!uniqueList.includes(al.ticker)) {
-//       uniqueList.push(al.ticker);
-//       uniqueAssetList.push({
-//         assetHash: al.assetHash,
-//         ticker: al.ticker,
-//         name: al.name,
-//         precision: 8,
-//       });
-//     }
-//   });
-//   return uniqueAssetList;
-// };
-
 export const uniqueQuoteAssetList = (pools: Pool[]): PAsset[] => {
-  const quoteList: PAsset[] = [];
+  const result = pools.filter(
+    (value, index, self) => index === self.findIndex((t) => t.quote.assetHash === value.quote.assetHash),
+  );
 
-  pools.forEach((pool: Pool) => {
-    quoteList.push(pool.quote);
-  });
-
-  const uniqueQuoteList: string[] = [];
-  const uniqueQuoteAssetList: PAsset[] = [];
-  quoteList.forEach((ql) => {
-    if (!uniqueQuoteList.includes(ql.assetHash)) {
-      uniqueQuoteList.push(ql.assetHash);
-      uniqueQuoteAssetList.push({
-        assetHash: ql.assetHash,
-        ticker: ql.ticker,
-        name: ql.name,
-        precision: 8,
-        value: '',
-        isQuote: true,
-      });
-    }
-  });
-
-  return uniqueQuoteAssetList;
+  return result.map((pool) => pool.quote);
 };
 
 export const uniqueTokenAssetList = (pools: Pool[], selectedQuote?: PAsset): PAsset[] => {
   const tokenList: PAsset[] = [];
 
-  const currentPools = pools.filter((pool: Pool) => pool.quote.assetHash === selectedQuote?.assetHash);
+  const currentPools = pools.filter(
+    (pool) => pool.quote.assetHash === selectedQuote?.assetHash || pool.token.assetHash === selectedQuote?.assetHash,
+  );
 
   currentPools.forEach((pool: Pool) => {
-    tokenList.push(pool.token);
+    if (pool.token.assetHash === selectedQuote?.assetHash) tokenList.push(pool.quote);
+    else tokenList.push(pool.token);
   });
 
   const uniqueTokenList: string[] = [];
