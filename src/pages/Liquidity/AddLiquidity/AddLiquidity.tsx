@@ -94,7 +94,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         if (quote?.ticker === SWAP_ASSET.LBTC) {
           setQuote({ ...quote, value: (output / settingsContext.preferred_unit.value).toString() } as PAsset);
         } else {
-          setQuote({ ...quote, value: (output / PREFERRED_UNIT_VALUE.LBTC).toString() } as PAsset);
+          setQuote({ ...quote, value: (output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset);
         }
 
         setToken({ ...token, value: input } as PAsset);
@@ -148,14 +148,14 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               }
             } else {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
-                inputAmount = (quoteAmount / PREFERRED_UNIT_VALUE.LBTC).toString();
+                inputAmount = (quoteAmount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.HALF) {
                 const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-                inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toString();
+                inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toString();
+                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
               }
             }
             onChangeQuoteAmount(inputAmount);
