@@ -134,7 +134,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
               setPairAsset({
                 ...pairAsset,
-                down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toString() } as PAsset,
+                down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
               });
             } else {
               setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
