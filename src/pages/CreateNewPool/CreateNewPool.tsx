@@ -193,7 +193,7 @@ export const CreateNewPool: React.FC = () => {
           pair1AmountN,
           pair2AmountN,
           addressInformation.publicKey,
-          1,
+          3,
           pair1IsLbtc ? 50 : 1000000,
           lpFeeTier.index,
         );
