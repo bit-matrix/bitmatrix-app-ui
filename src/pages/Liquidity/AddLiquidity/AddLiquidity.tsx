@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
-import { CALL_METHOD, PAsset } from '@bitmatrix/models';
+import { CALL_METHOD, PAsset, Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
@@ -48,7 +48,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
 
-  const currentPool = pools.find((p) => p.id === id);
+  const currentPool: Pool | undefined = pools.find((p) => p.id === id);
 
   useEffect(() => {
     if (currentPool) {
