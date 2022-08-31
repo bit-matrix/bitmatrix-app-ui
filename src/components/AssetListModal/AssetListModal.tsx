@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Input, Modal } from 'rsuite';
-import { PAsset } from '@bitmatrix/models';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import './AssetListModal.scss';
+import { AssetModel } from '../../helper';
 
 type Props = {
   show: boolean;
-  assetList?: PAsset[];
-  selectedAsset?: PAsset;
+  assetList?: AssetModel[];
+  selectedAsset?: AssetModel;
   close: () => void;
-  onSelectAsset: (asset: PAsset) => void;
+  onSelectAsset: (asset: AssetModel) => void;
 };
 
 export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
-  const [filteredAssetList, setFilteredAssetLİst] = useState<PAsset[]>();
+  const [filteredAssetList, setFilteredAssetLİst] = useState<AssetModel[]>();
 
   const history = useHistory();
 
@@ -26,13 +26,16 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
   const assetSearch = (input: string) => {
     if (assetList) {
       let currentAssetList = [...assetList];
-      const searchName: PAsset[] = assetList.filter((asset) => {
+      const searchName: AssetModel[] = assetList.filter((asset) => {
         return asset.name?.toLowerCase().match(input.toLowerCase().trim())?.input;
       });
-      const searchTicker: PAsset[] = assetList.filter((asset) => {
+
+      const searchTicker: AssetModel[] = assetList.filter((asset) => {
         return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
       });
-      const searchAssetID: PAsset[] = assetList.filter((asset) => asset.assetHash === input.trim());
+
+      const searchAssetID: AssetModel[] = assetList.filter((asset) => asset.hash === input.trim());
+
       if (searchTicker.length > 0) {
         currentAssetList = searchTicker;
       } else if (searchName.length > 0) {
@@ -42,6 +45,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
       } else {
         currentAssetList = [];
       }
+
       setFilteredAssetLİst(currentAssetList);
     }
   };
@@ -74,23 +78,18 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
               {filteredAssetList?.map((asset) => {
                 return (
                   <li
-                    key={asset.assetHash}
+                    key={asset.hash}
                     onClick={() => {
                       onSelectAsset(asset);
                     }}
-                    className={`asset-list-item ${
-                      selectedAsset?.assetHash === asset.assetHash && 'selected-asset-item'
-                    }`}
+                    className={`asset-list-item ${selectedAsset?.hash === asset.hash && 'selected-asset-item'}`}
                   >
                     <div className="asset-list-ticker-div">
-                      <AssetIcon asset={asset} width="2rem" height="2rem" />
+                      <AssetIcon asset={asset.hash} width="2rem" height="2rem" />
                       <div className="asset-ticker">{asset.name}</div>
                     </div>
                     <div className="asset-list-hash">
-                      {'0x' +
-                        asset.assetHash.substring(0, 4) +
-                        '..' +
-                        asset.assetHash.substring(asset.assetHash.length - 4)}
+                      {'0x' + asset.hash.substring(0, 4) + '..' + asset.hash.substring(asset.hash.length - 4)}
                     </div>
                   </li>
                 );
