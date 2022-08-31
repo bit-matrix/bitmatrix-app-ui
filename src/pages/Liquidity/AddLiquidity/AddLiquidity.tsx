@@ -276,14 +276,20 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           setTokenPercent(undefined);
           const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
-          const commitmentTxId = await commitmentSign.case3(
-            walletContext.marina,
-            quoteAmountN,
-            tokenAmountN,
-            currentPool,
-            primaryPoolConfig,
-            addressInformation.publicKey,
-          );
+          let commitmentTxId = '';
+
+          try {
+            commitmentTxId = await commitmentSign.case3(
+              walletContext.marina,
+              quoteAmountN,
+              tokenAmountN,
+              currentPool,
+              primaryPoolConfig,
+              addressInformation.publicKey,
+            );
+          } catch (error) {
+            setLoading(false);
+          }
 
           if (commitmentTxId && commitmentTxId !== '') {
             const tempTxData: CommitmentStore = {
