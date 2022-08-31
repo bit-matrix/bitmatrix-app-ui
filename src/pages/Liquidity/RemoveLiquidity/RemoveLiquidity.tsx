@@ -77,13 +77,19 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
         if (addressInformation.publicKey) {
           const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
-          const commitmentTxId = await commitmentSign.case4(
-            walletContext.marina,
-            calcLpTokenAmount,
-            currentPool,
-            primaryPoolConfig,
-            addressInformation.publicKey,
-          );
+          let commitmentTxId = '';
+
+          try {
+            commitmentTxId = await commitmentSign.case4(
+              walletContext.marina,
+              calcLpTokenAmount,
+              currentPool,
+              primaryPoolConfig,
+              addressInformation.publicKey,
+            );
+          } catch (error) {
+            setLoading(false);
+          }
 
           if (commitmentTxId && commitmentTxId !== '') {
             const calcLpAmounts = calcLpValues();

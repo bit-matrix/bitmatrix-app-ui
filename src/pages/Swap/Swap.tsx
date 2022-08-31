@@ -454,23 +454,31 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           console.log(numberToAmount);
 
           if (pairAsset.up?.isQuote) {
-            commitmentTxId = await commitmentSign.case1(
-              walletContext.marina,
-              numberFromAmount,
-              numberToAmount,
-              currentPool,
-              poolConfigContext,
-              addressInformation.publicKey,
-            );
+            try {
+              commitmentTxId = await commitmentSign.case1(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
           } else {
-            commitmentTxId = await commitmentSign.case2(
-              walletContext.marina,
-              numberFromAmount,
-              numberToAmount,
-              currentPool,
-              poolConfigContext,
-              addressInformation.publicKey,
-            );
+            try {
+              commitmentTxId = await commitmentSign.case2(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
           }
 
           if (commitmentTxId !== '') {
