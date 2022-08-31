@@ -27,6 +27,14 @@ export const notify = (
   }, duration);
 };
 
+export const arrowIconDirection = (direction?: string): JSX.Element => {
+  if (direction === 'up') {
+    return <ArrowUpIcon fill="#4caf50" />;
+  } else {
+    return <ArrowDownIcon fill="#f44336" />;
+  }
+};
+
 export const groupBydailyPrice = (chartData: BmChart[]): ChartData[] => {
   if (chartData.length === 0) return [{ date: '', close: 0 }];
 

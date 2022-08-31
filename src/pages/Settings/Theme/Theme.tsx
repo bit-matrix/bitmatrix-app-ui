@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import { SELECTED_THEME } from '../../../enum/SELECTED_THEME';

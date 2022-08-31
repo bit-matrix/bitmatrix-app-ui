@@ -2,7 +2,7 @@ import Decimal from 'decimal.js';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { api, poolDeployment } from '@bitmatrix/lib';
-import { Button, Content } from 'rsuite';
+import { Button, Content, Dropdown } from 'rsuite';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
 import PriceIcon from '../../components/base/Svg/Icons/Price';
@@ -16,43 +16,61 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
-import { Asset } from '../../model/Asset';
+import { PAsset } from '@bitmatrix/models';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
+import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pair1Amount, setPair1Amount] = useState<string>('');
   const [pair2Amount, setPair2Amount] = useState<string>('');
-  const [selectedPair1Asset, setSelectedPair1Asset] = useState<Asset>();
-  const [selectedPair2Asset, setSelectedPair2Asset] = useState<Asset>();
-  const [pair1AssetList, setPair1AssetList] = useState<Asset[]>([]);
-  const [pair2AssetList, setPair2AssetList] = useState<Asset[]>([]);
+  const [selectedPair1Asset, setSelectedPair1Asset] = useState<PAsset>();
+  const [selectedPair2Asset, setSelectedPair2Asset] = useState<PAsset>();
+  const [pair1AssetList, setPair1AssetList] = useState<PAsset[]>([]);
+  const [pair2AssetList, setPair2AssetList] = useState<PAsset[]>([]);
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
+  const [lpFeeTier, setLpFeeTier] = useState<{ value: number; index: number }>({ value: 500, index: 2 });
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
 
   const history = useHistory();
 
   useEffect(() => {
     if (walletContext) {
-      const filteredPair1AssetList: Asset[] | undefined = walletContext?.balances
+      const filteredPair1AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
-        .map((balance) => balance.asset);
+        .map((balance) => {
+          const asset: PAsset = {
+            ticker: balance.asset.ticker || '',
+            name: balance.asset.name || '',
+            precision: balance.asset.precision,
+            assetHash: balance.asset.assetHash,
+          };
+          return asset;
+        });
 
-      const filteredPair2AssetList: Asset[] | undefined = walletContext?.balances
+      const filteredPair2AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
-        .map((balance) => balance.asset);
+        .map((balance) => {
+          const asset: PAsset = {
+            ticker: balance.asset.ticker || '',
+            name: balance.asset.name || '',
+            precision: balance.asset.precision,
+            assetHash: balance.asset.assetHash,
+          };
+          return asset;
+        });
 
       setPair1AssetList(filteredPair1AssetList);
       setPair2AssetList(filteredPair2AssetList);
     }
-  }, []);
+  }, [walletContext]);
 
   const onChangePair1Amount = (input: string) => {
     setPair1Amount(input);
@@ -175,8 +193,9 @@ export const CreateNewPool: React.FC = () => {
           pair1AmountN,
           pair2AmountN,
           addressInformation.publicKey,
-          1,
-          pair1IsLbtc ? 20 : 1000000,
+          3,
+          pair1IsLbtc ? 50 : 1000000,
+          lpFeeTier.index,
         );
 
         const poolTxId = await api.sendRawTransaction(newPool);
@@ -192,12 +211,12 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const calcLpValues = () => {
-    const currentLBtcPrice = Number(poolsContext[0].token.value) / Number(poolsContext[0].quote.value);
+    if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+      const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
 
-    if (poolsContext && poolsContext.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
       if (selectedPair1Asset?.ticker === 'L-BTC') {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
-          20,
+          50,
           Number(pair1Amount) * settingsContext.preferred_unit.value,
         );
 
@@ -230,34 +249,53 @@ export const CreateNewPool: React.FC = () => {
         };
       }
     }
-
     return { initialLPCirculation: '-', initialTVL: '-', initialAssetPrice: '-' };
   };
 
   return (
     <div className="create-new-pool-page-main">
       <Content className="create-new-pool-page-content">
-        <BackButton
-          buttonText="Create New Pool"
-          onClick={() => {
-            const prevPageLocation = history.location.state;
-            if (prevPageLocation) {
-              history.push({
-                pathname: (prevPageLocation as { from: string }).from,
-                state: {
-                  from: history.location.pathname,
-                },
-              });
-            } else {
-              history.push({
-                pathname: ROUTE_PATH.POOL,
-                state: {
-                  from: history.location.pathname,
-                },
-              });
-            }
-          }}
-        />
+        <div className="create-new-pool-page-header">
+          <BackButton
+            buttonText="Create New Pool"
+            onClick={() => {
+              const prevPageLocation = history.location.state;
+              if (prevPageLocation) {
+                history.push({
+                  pathname: (prevPageLocation as { from: string }).from,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              } else {
+                history.push({
+                  pathname: ROUTE_PATH.POOL,
+                  state: {
+                    from: history.location.pathname,
+                  },
+                });
+              }
+            }}
+          />
+          <div>
+            <Dropdown
+              className="create-new-pool-lp-fee-tier"
+              title={lpFeeTier.value}
+              activeKey={lpFeeTier.index}
+              onSelect={(eventKey: any) => {
+                setLpFeeTier({ value: lpFeeTiers[eventKey], index: eventKey });
+              }}
+            >
+              {lpFeeTiers.map((feeTier, i: number) => {
+                return (
+                  <Dropdown.Item key={i} eventKey={i}>
+                    {feeTier}
+                  </Dropdown.Item>
+                );
+              })}
+            </Dropdown>
+          </div>
+        </div>
         <div>
           <div className="create-new-pool-main">
             <div
@@ -412,6 +450,7 @@ export const CreateNewPool: React.FC = () => {
               className="create-new-pool-button"
             />
           </div>
+
           <AssetListModal
             show={showPair1AssetListModal}
             selectedAsset={selectedPair1Asset}
@@ -419,6 +458,9 @@ export const CreateNewPool: React.FC = () => {
               setShowPair1AssetListModal(false);
             }}
             onSelectAsset={(asset) => {
+              if (selectedPair2Asset?.assetHash === asset.assetHash) {
+                setSelectedPair2Asset(undefined);
+              }
               setSelectedPair1Asset(asset);
               setShowPair1AssetListModal(false);
             }}
@@ -431,6 +473,9 @@ export const CreateNewPool: React.FC = () => {
             }}
             selectedAsset={selectedPair2Asset}
             onSelectAsset={(asset) => {
+              if (selectedPair1Asset?.assetHash === asset.assetHash) {
+                setSelectedPair1Asset(undefined);
+              }
               setSelectedPair2Asset(asset);
               setShowPair2AssetListModal(false);
             }}

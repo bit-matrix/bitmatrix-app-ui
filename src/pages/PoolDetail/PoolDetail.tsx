@@ -1,52 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePoolChartDataContext, usePoolContext, useSettingsContext } from '../../context';
+import { usePoolContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { calculateChartData } from '../../components/utils/utils';
+import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { quoteAmountRound } from '../../helper';
-import { TabMenu } from '../../components/TabMenu/TabMenu';
+import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
-import LbtcIcon from '../../components/base/Svg/Icons/Lbtc';
-import TetherIcon from '../../components/base/Svg/Icons/Tether';
-// import { CustomPopover } from '../../components/CustomPopover/CustomPopover';
-// import info from '../../images/info2.png';
+import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import { Loading } from '../../components/base/Loading/Loading';
+import { useChartsContext } from '../../context/charts';
 import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(true);
 
-  const { poolsContext } = usePoolContext();
-  const { poolChartDataContext } = usePoolChartDataContext();
+  const { pools } = usePoolContext();
   const { settingsContext } = useSettingsContext();
+
+  const { charts } = useChartsContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
+  const chartData = charts.find((chart) => chart.poolId === id);
+
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
-    }
-  }, [poolsContext]);
-
-  useEffect(() => {
-    setTimeout(() => {
       setLoading(false);
+    }
+    setTimeout(() => {
+      setChartLoading(false);
     }, 200);
-  }, []);
+  }, [id, pools]);
 
-  const renderChart = (allData: any) => {
-    let data: ChartData[] = [
+  const renderChart = () => {
+    const defaultData: ChartData[] | undefined = [
       {
         date: '',
         close: 0,
@@ -54,19 +55,22 @@ export const PoolDetail: React.FC = () => {
     ];
 
     let key = '';
+    let data: ChartData[] = [];
 
-    if (selectedTab === POOL_DETAIL_TABS.PRICE) {
-      key = 'price';
-      data = allData.allPriceData;
-    } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
-      key = 'volume';
-      data = allData.allVolumeData;
-    } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
-      key = 'liquidity';
-      data = allData.allTvlData;
-    } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
-      key = 'fees';
-      data = allData.allFeeData;
+    if (pool) {
+      if (selectedTab === POOL_DETAIL_TABS.PRICE) {
+        key = 'price';
+        data = chartData?.price.allPriceData || defaultData;
+      } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
+        key = 'volume';
+        data = chartData?.volume.allVolumeData || defaultData;
+      } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
+        key = 'liquidity';
+        data = chartData?.tvl.allTvlData || defaultData;
+      } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
+        key = 'fees';
+        data = chartData?.fees.allFeesData || defaultData;
+      }
     }
 
     return (
@@ -76,10 +80,17 @@ export const PoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || poolChartDataContext === undefined) {
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading width="2rem" height="2rem" />
+      </div>
+    );
+  }
+
+  if (pool === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
-    const data = calculateChartData(poolChartDataContext, pool);
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -111,7 +122,7 @@ export const PoolDetail: React.FC = () => {
             </div>
           </div>
           <div className="pool-detail-content">
-            <div className="pool-detail-content-right desktop-hidden">{!loading && renderChart(data)}</div>
+            <div className="pool-detail-content-right desktop-hidden">{!loading && renderChart()}</div>
             <div className="pool-detail-content-left mobile-hidden">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
@@ -126,14 +137,14 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
-                    <LbtcIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.quote} />
                     {quoteAmountRound(Number(pool.quote.value) / settingsContext.preferred_unit.value)}
                   </div>
                 </div>
 
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
-                    <TetherIcon className="pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.token} />
                     {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
                 </div>
@@ -153,24 +164,24 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-metrics">
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
-                    <div>{pool.quote.ticker} Price</div>
-                    <div className="pool-detail-table-text">${data.todayPrice.toLocaleString()}</div>
+                    <div>{pool.token.ticker} Price</div>
+                    <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
-                      {data.priceRate.icon}
-                      <span className={`pool-detail-table-arrow-${data.priceRate.direction}-text`}>
-                        {data.priceRate.value}%
+                      {arrowIconDirection(chartData?.price.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.price.rate.direction}-text`}>
+                        {chartData?.price.rate.value}%
                       </span>
                     </div>
                   </div>
                   <div className="pool-metrics-item">
                     <div>Volume 24h</div>
                     <div className="pool-detail-table-text">
-                      ${Numeral(data.todayVolumeData.close).format('(0.00a)')}
+                      ${Numeral(chartData?.volume.todayValue).format('(0.00a)')}
                     </div>
                     <div className="pool-detail-icon-content">
-                      {data.volumeRate.icon}
-                      <span className={`pool-detail-table-arrow-${data.volumeRate.direction}-text`}>
-                        {data.volumeRate.value}%
+                      {arrowIconDirection(chartData?.volume.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.volume.rate.direction}-text`}>
+                        {chartData?.volume.rate.value}%
                       </span>
                     </div>
                   </div>
@@ -178,21 +189,25 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>TVL</div>
-                    <div className="pool-detail-table-text">${Numeral(data.todayTvlData).format('(0.00a)')}</div>
+                    <div className="pool-detail-table-text">
+                      ${Numeral(chartData?.tvl.todayValue).format('(0.00a)')}
+                    </div>
                     <div className="pool-detail-icon-content">
-                      {data.tvlRate.icon}
-                      <span className={`pool-detail-table-arrow-${data.tvlRate.direction}-text`}>
-                        {data.tvlRate.value}%
+                      {arrowIconDirection(chartData?.tvl.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.tvl.rate.direction}-text`}>
+                        {chartData?.tvl.rate.value}%
                       </span>
                     </div>
                   </div>
                   <div className="pool-metrics-item">
                     <div>Fees 24h</div>
-                    <div className="pool-detail-table-text">${Numeral(data.todayFeeData.close).format('(0.00a)')}</div>
+                    <div className="pool-detail-table-text">
+                      ${Numeral(chartData?.fees.todayValue).format('(0.00a)')}
+                    </div>
                     <div className="pool-detail-icon-content">
-                      {data.feeRate.icon}
-                      <span className={`pool-detail-table-arrow-${data.feeRate.direction}-text`}>
-                        {data.feeRate.value}%
+                      {arrowIconDirection(chartData?.fees.rate.direction)}
+                      <span className={`pool-detail-table-arrow-${chartData?.fees.rate.direction}-text`}>
+                        {chartData?.fees.rate.value}%
                       </span>
                     </div>
                   </div>
@@ -213,7 +228,7 @@ export const PoolDetail: React.FC = () => {
                 Add Liquidity
               </Button>
             </div>
-            <div className="pool-detail-content-right mobile-hidden">{!loading && renderChart(data)}</div>
+            <div className="pool-detail-content-right mobile-hidden">{!chartLoading && renderChart()}</div>
           </div>
         </div>
       </div>

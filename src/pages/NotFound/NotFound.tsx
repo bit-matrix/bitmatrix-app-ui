@@ -14,7 +14,7 @@ export const NotFound = (): JSX.Element => {
         },
       });
     }, 5000);
-  }, []);
+  }, [history]);
 
   return <h1>Page not found</h1>;
 };

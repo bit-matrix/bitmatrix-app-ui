@@ -7,7 +7,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useSettingsContext } from '../../context';
 import Numeral from 'numeral';
-import { Loading } from '../Loading/Loading';
+import { Loading } from '../base/Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
 import ExchangeIcon from '../base/Svg/Icons/Exchange';
@@ -19,10 +19,11 @@ import BananaGif from '../../images/banana.gif';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { EXPLORER } from '../../enum/EXPLORER';
 import ExportIcon from '../base/Svg/Icons/Export';
+import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const { settingsContext } = useSettingsContext();
 
@@ -30,6 +31,16 @@ export const InfoCard: React.FC = () => {
 
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
     let messageBody: JSX.Element | undefined;
+    let quoteAsset: string;
+    let quoteAmount: number;
+
+    if (cs.quoteAsset === SWAP_ASSET.LBTC) {
+      quoteAsset = `tL-${settingsContext.preferred_unit.text}`;
+      quoteAmount = cs.quoteAmount / settingsContext.preferred_unit.value;
+    } else {
+      quoteAsset = cs.quoteAsset;
+      quoteAmount = cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC;
+    }
 
     if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
       messageBody = (
@@ -44,8 +55,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
-            {`tL-${settingsContext.preferred_unit.text}`} for {cs.tokenAsset} (min{' '}
+            Swap {quoteAmountRound(quoteAmount)} {quoteAsset} for {cs.tokenAsset} (min{' '}
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
           </div>
         </>
@@ -66,8 +76,7 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {`tL-${settingsContext.preferred_unit.text}`} (min{' '}
-            {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)})
+            {quoteAsset} (min {quoteAmountRound(quoteAmount)})
           </div>
         </>
       );
@@ -84,8 +93,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
-            {`tL-${settingsContext.preferred_unit.text}`} and&nbsp;
+            Add {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -103,8 +111,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {quoteAmountRound(cs.quoteAmount / settingsContext.preferred_unit.value)}{' '}
-            {`tL-${settingsContext.preferred_unit.text}`} and&nbsp;
+            Remove {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
             {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
           </div>
         </>
@@ -113,9 +120,9 @@ export const InfoCard: React.FC = () => {
 
     const txStatus = (cs: CommitmentStore): JSX.Element => {
       if (cs.completed) {
-        if (cs.isOutOfSlippage) {
+        if (cs.errorMessage) {
           return (
-            <CustomPopover placement="right" title="" content="Out of slippage">
+            <CustomPopover placement="right" title="" content={cs.errorMessage}>
               <div>
                 <ExclamationIcon width="1.5rem" height="1.5rem" />
               </div>

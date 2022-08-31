@@ -4,7 +4,7 @@ import { useWalletContext } from '../../context';
 import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import BananaGif from '../../images/banana.gif';
-import { Loading } from '../Loading/Loading';
+import { Loading } from '../base/Loading/Loading';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
 

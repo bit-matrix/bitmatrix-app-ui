@@ -26,7 +26,7 @@ export const NumericalInput: React.FC<Props> = ({ onChange, inputValue, classNam
   const onFocus = () => {
     if (walletContext && walletContext.isEnabled) {
       walletContext.marina.getBalances().then((balances) => {
-        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances });
+        setWalletContext({ marina: walletContext.marina, isEnabled: true, balances, coins: walletContext.coins });
       });
     }
   };

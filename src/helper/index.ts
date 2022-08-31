@@ -1,7 +1,14 @@
-import { BmConfig } from '@bitmatrix/models';
+import { useEffect, useRef } from 'react';
+import { esplora } from '@bitmatrix/lib';
+import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
+import { Utxo } from 'marina-provider';
 import Numeral from 'numeral';
+import { ChartData } from '../components/AreaChart/AreaChart';
+import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
+import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
+import { TESTNET_ASSET_ID } from '../lib/liquid-dev/ASSET_ID';
 
 export const timeDifference = (time: number): string => {
   const now = new Date().valueOf();
@@ -106,4 +113,252 @@ export const poolShareRound = (amount: number): string => {
 
 export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
+};
+
+// export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
+//   const assetList: PAsset[] = [];
+//   pools.forEach((pool: Pool) => {
+//     assetList.push(pool.token);
+//     assetList.push(pool.quote);
+//   });
+
+//   const uniqueList: string[] = [];
+//   const uniqueAssetList: PAsset[] = [];
+//   assetList.map((al) => {
+//     if (!uniqueList.includes(al.ticker)) {
+//       uniqueList.push(al.ticker);
+//       uniqueAssetList.push({
+//         assetHash: al.assetHash,
+//         ticker: al.ticker,
+//         name: al.name,
+//         precision: 8,
+//       });
+//     }
+//   });
+//   return uniqueAssetList;
+// };
+
+export const uniqueQuoteAssetList = (pools: Pool[]): PAsset[] => {
+  const quoteList: PAsset[] = [];
+
+  pools.forEach((pool: Pool) => {
+    quoteList.push(pool.quote);
+  });
+
+  const uniqueQuoteList: string[] = [];
+  const uniqueQuoteAssetList: PAsset[] = [];
+  quoteList.forEach((ql) => {
+    if (!uniqueQuoteList.includes(ql.assetHash)) {
+      uniqueQuoteList.push(ql.assetHash);
+      uniqueQuoteAssetList.push({
+        assetHash: ql.assetHash,
+        ticker: ql.ticker,
+        name: ql.name,
+        precision: 8,
+        value: '',
+        isQuote: true,
+      });
+    }
+  });
+
+  return uniqueQuoteAssetList;
+};
+
+export const uniqueTokenAssetList = (pools: Pool[], selectedQuote?: PAsset): PAsset[] => {
+  const tokenList: PAsset[] = [];
+
+  const currentPools = pools.filter((pool: Pool) => pool.quote.assetHash === selectedQuote?.assetHash);
+
+  currentPools.forEach((pool: Pool) => {
+    tokenList.push(pool.token);
+  });
+
+  const uniqueTokenList: string[] = [];
+  const uniqueTokenAssetList: PAsset[] = [];
+  tokenList.forEach((tl) => {
+    if (!uniqueTokenList.includes(tl.assetHash)) {
+      uniqueTokenList.push(tl.assetHash);
+      uniqueTokenAssetList.push({
+        assetHash: tl.assetHash,
+        ticker: tl.ticker,
+        name: tl.name,
+        precision: 8,
+        value: '',
+        isQuote: false,
+      });
+    }
+  });
+
+  return uniqueTokenAssetList;
+};
+
+export const uniqueUsdtAssetList = (pools: Pool[]): PAsset[] => {
+  const quoteList: PAsset[] = [];
+  const tokenList: PAsset[] = [];
+
+  const quotePools = pools.filter((pool: Pool) => pool.quote.assetHash === TESTNET_ASSET_ID.USDT);
+  const tokenPools = pools.filter((pool: Pool) => pool.token.assetHash === TESTNET_ASSET_ID.USDT);
+
+  quotePools.forEach((pool: Pool) => {
+    tokenList.push(pool.token);
+  });
+
+  tokenPools.forEach((pool: Pool) => {
+    quoteList.push(pool.quote);
+  });
+
+  const uniqueQuoteList: string[] = [];
+  const uniqueTokenList: string[] = [];
+  const uniqueUsdtAssetList: PAsset[] = [];
+
+  quoteList.forEach((ql) => {
+    if (!uniqueQuoteList.includes(ql.assetHash)) {
+      uniqueQuoteList.push(ql.assetHash);
+      uniqueUsdtAssetList.push({
+        assetHash: ql.assetHash,
+        ticker: ql.ticker,
+        name: ql.name,
+        precision: 8,
+        value: '',
+        isQuote: true,
+      });
+    }
+  });
+
+  tokenList.forEach((tl) => {
+    if (!uniqueTokenList.includes(tl.assetHash)) {
+      uniqueTokenList.push(tl.assetHash);
+      uniqueUsdtAssetList.push({
+        assetHash: tl.assetHash,
+        ticker: tl.ticker,
+        name: tl.name,
+        precision: 8,
+        value: '',
+        isQuote: false,
+      });
+    }
+  });
+
+  return uniqueUsdtAssetList;
+};
+
+export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
+  const quoteList: PAsset[] = [];
+  const tokenList: PAsset[] = [];
+
+  pools.forEach((pool: Pool) => {
+    tokenList.push(pool.token);
+    quoteList.push(pool.quote);
+  });
+
+  const uniqueQuoteList: string[] = [];
+  const uniqueTokenList: string[] = [];
+  const uniqueAssetList: PAsset[] = [];
+
+  quoteList.forEach((ql) => {
+    if (!uniqueQuoteList.includes(ql.assetHash)) {
+      uniqueQuoteList.push(ql.assetHash);
+      uniqueAssetList.push({
+        assetHash: ql.assetHash,
+        ticker: ql.ticker,
+        name: ql.name,
+        precision: 8,
+        value: '',
+        isQuote: true,
+      });
+    }
+  });
+
+  tokenList.forEach((tl) => {
+    if (!uniqueTokenList.includes(tl.assetHash)) {
+      uniqueTokenList.push(tl.assetHash);
+      uniqueAssetList.push({
+        assetHash: tl.assetHash,
+        ticker: tl.ticker,
+        name: tl.name,
+        precision: 8,
+        value: '',
+        isQuote: false,
+      });
+    }
+  });
+
+  return uniqueAssetList;
+};
+
+export const getUnitValue = (asset: PAsset, settings: Settings): number => {
+  if (asset.ticker === SWAP_ASSET.LBTC) {
+    return settings.preferred_unit.value;
+  } else {
+    return PREFERRED_UNIT_VALUE.LBTC;
+  }
+};
+
+export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT): string => {
+  if (!asset) return '';
+  if (asset.ticker === SWAP_ASSET.LBTC) {
+    if (unit === PREFERRED_UNIT.LBTC) {
+      return 'tL-BTC';
+    }
+    if (unit === PREFERRED_UNIT.SAT) {
+      return 'tL-Sats';
+    }
+    if (unit === PREFERRED_UNIT.uBTC) {
+      return 'tL-Bits';
+    }
+    if (unit === PREFERRED_UNIT.mBTC) {
+      return 'tL-mBTC';
+    }
+  }
+  return asset.ticker;
+};
+
+export const padTo2Digits = (num: number): string => {
+  return num.toString().padStart(2, '0');
+};
+
+export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?: string): Promise<ChartData[]> => {
+  if (coins && coins?.length > 0) {
+    const filteredCoins = coins.filter((coin) => coin.asset === assetHash);
+    const outSpendsPromises = filteredCoins.map((coin) => esplora.txDetailPromise(coin.txid));
+    const outSpends = await Promise.all(outSpendsPromises);
+
+    const finalData = filteredCoins.map((coin) => {
+      const spent = outSpends[0][1][coin.vout].spent;
+
+      const date = new Date(outSpends[0][0].status.block_time * 1000);
+
+      const hours = date.getHours();
+      const minutes = date.getMinutes();
+      const seconds = date.getSeconds();
+
+      // Format as hh:mm:ss
+      const time = `${padTo2Digits(hours)}:${padTo2Digits(minutes)}:${padTo2Digits(seconds)}`;
+
+      const year = date.getFullYear();
+      const month = padTo2Digits(date.getMonth() + 1);
+      const day = padTo2Digits(date.getDate());
+
+      const dateTime = `${year}-${month}-${day} ${time}`;
+
+      const d: ChartData = {
+        date: dateTime,
+        close: spent ? (coin.value || 0) * -1 : coin.value || 0,
+      };
+
+      return d;
+    });
+
+    return finalData;
+  }
+
+  return [];
+};
+
+export const usePrevious = <T>(value: T): T | undefined => {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 };

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
@@ -10,240 +11,326 @@ import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { commitmentTx, fundingTx, api, convertion } from '@bitmatrix/lib';
-import { CALL_METHOD, Pool, BmConfig } from '@bitmatrix/models';
+import { convertion, commitmentSign } from '@bitmatrix/lib';
+import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import Decimal from 'decimal.js';
-import { getAssetPrecession } from '../../helper';
+import {
+  getAssetPrecession,
+  getAssetTicker,
+  uniqueQuoteAssetList,
+  uniqueTokenAssetList,
+  uniqueUsdtAssetList,
+  usePrevious,
+} from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { usePoolConfigContext, usePoolContext, useWalletContext, useSettingsContext } from '../../context';
+import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-import { Asset } from '../../model/Asset';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import './Swap.scss';
 
-const pairAssetList: Asset[] = [
-  {
-    assetHash: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
-    name: 'Liquid Bitcoin',
-    precision: 8,
-    ticker: SWAP_ASSET.LBTC,
-  },
-  {
-    assetHash: 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
-    name: 'Tether USD',
-    precision: 8,
-    ticker: SWAP_ASSET.USDT,
-  },
-];
+type Props = {
+  checkTxStatusWithIds: () => void;
+};
 
-export const Swap = (): JSX.Element => {
+export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
+  const [swapWay, setSwapWay] = useState<SWAP_WAY>();
+
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
 
-  const [selectedPairAsset, setSelectedPairAsset] = useState<{
-    from: Asset;
-    to: Asset;
-  }>({ from: pairAssetList[0], to: pairAssetList[1] });
+  const [pairAsset, setPairAsset] = useState<{
+    up?: PAsset;
+    down?: PAsset;
+  }>({ up: lbtcAsset });
 
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
 
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
 
-  const [inputFromAmount, setInputFromAmount] = useState<string>('');
-
-  const [inputToAmount, setInputToAmount] = useState<string>('');
-
   const [amountWithSlippage, setAmountWithSlippage] = useState<number>(0);
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
+  const [currentPool, setCurrentPool] = useState<Pool>();
+
+  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { settingsContext } = useSettingsContext();
+  const { poolConfigContext } = usePoolConfigContext();
 
-  const [swapWay, setSwapWay] = useState<SWAP_WAY>();
+  const [assetList, setAssetList] = useState<{
+    pair1AssetList?: PAsset[];
+    pair2AssetList?: PAsset[];
+  }>({ pair1AssetList: [], pair2AssetList: [] });
+
+  const prevPairAsset = usePrevious(pairAsset);
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && swapWay) {
+    if (prevPairAsset?.up !== pairAsset.up || prevPairAsset?.down !== pairAsset.down) {
+      let pair1AssetList: PAsset[] = [];
+      let pair2AssetList: PAsset[] = [];
+
+      if (pairAsset.up?.assetHash === TESTNET_ASSET_ID.USDT) {
+        pair1AssetList = uniqueQuoteAssetList(pools);
+        pair2AssetList = uniqueUsdtAssetList(pools);
+      } else if (pairAsset.down?.assetHash === TESTNET_ASSET_ID.USDT) {
+        pair1AssetList = uniqueUsdtAssetList(pools);
+        pair2AssetList = uniqueTokenAssetList(pools, pairAsset.up);
+      } else {
+        if (pairAsset.up?.isQuote) {
+          pair1AssetList = uniqueQuoteAssetList(pools);
+          pair2AssetList = uniqueTokenAssetList(pools, pairAsset.up);
+        } else {
+          pair1AssetList = uniqueTokenAssetList(pools, pairAsset.down);
+          pair2AssetList = uniqueQuoteAssetList(pools);
+        }
+      }
+      setAssetList({ pair1AssetList, pair2AssetList });
+    }
+  }, [assetList, pairAsset.down, pairAsset.up, pools, prevPairAsset]);
+
+  // useEffect(() => {
+  //   if (assetList?.quote?.length === 0 && assetList?.token?.length === 0) {
+  //     const quote = uniqueQuoteAssetList(pools);
+  //     const token = uniqueTokenAssetList(pools, pairAsset.up);
+  //     setAssetList({ quote, token });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [pools]);
+
+  useEffect(() => {
+    if (currentPool && poolConfigContext && pairAsset) {
       if (swapWay === SWAP_WAY.FROM) {
-        onChangeFromInput(poolsContext[0], poolConfigContext, inputFromAmount);
+        onChangeFromInput(currentPool, poolConfigContext, pairAsset.up?.value || '');
       } else {
-        onChangeToInput(inputToAmount);
+        onChangeToInput(currentPool, poolConfigContext, pairAsset.down?.value || '');
       }
     }
-  }, [poolsContext, poolConfigContext, inputFromAmount, inputToAmount, selectedFromAmountPercent]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPool, poolConfigContext, swapWay, pairAsset.down?.value, pairAsset.up?.value]);
 
-  const onChangeFromInput = (currentPool: Pool, pool_config: BmConfig, input: string) => {
-    let inputNum = Number(input);
+  const onChangeFromInput = useCallback(
+    (current_pool: Pool, pool_config: BmConfig, input: string) => {
+      let inputNum = Number(input);
 
-    let methodCall;
-
-    if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
-      inputNum = inputNum * settingsContext.preferred_unit.value;
-      methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-    } else {
-      inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-      methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-    }
-
-    const output = convertion.convertForCtx(
-      inputNum,
-      settingsContext.slippage,
-      currentPool,
-      poolConfigContext,
-      methodCall,
-    );
-
-    if (output.amount > 0) {
-      if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
-        setInputToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-      } else {
-        setInputToAmount((output.amount / settingsContext.preferred_unit.value).toString());
-        setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-      }
-    } else {
-      setInputToAmount('');
-      setAmountWithSlippage(0);
-    }
-
-    setInputFromAmount(input);
-  };
-
-  const onChangeToInput = (input: string) => {
-    let inputNum = Number(input);
-
-    if (poolsContext && poolConfigContext) {
       let methodCall;
 
-      if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
-        inputNum = inputNum * settingsContext.preferred_unit.value;
-        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-      } else {
-        inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-      }
-
-      const output = convertion.convertForCtx2(
-        inputNum,
-        settingsContext.slippage,
-        poolsContext[0],
-        poolConfigContext,
-        methodCall,
-      );
-
-      if (output.amount > 0) {
-        if (selectedPairAsset.to?.ticker === SWAP_ASSET.LBTC) {
-          setInputFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+      if (current_pool && pool_config && Number(pairAsset.up?.value) > 0) {
+        if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
+          inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
-          setInputFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
-          setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        }
+
+        if (pairAsset.up && pairAsset.up.isQuote) {
+          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+        }
+
+        const output = convertion.convertForCtx(
+          inputNum,
+          settingsContext.slippage,
+          current_pool,
+          pool_config,
+          methodCall,
+        );
+
+        if (output.amount > 0) {
+          if (pairAsset.up && pairAsset.up.isQuote) {
+            if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
+              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+              setPairAsset({
+                ...pairAsset,
+                down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
+              });
+            } else {
+              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+              setPairAsset({
+                ...pairAsset,
+                down: {
+                  ...pairAsset.down,
+                  value: (output.amount / settingsContext.preferred_unit.value).toString(),
+                } as PAsset,
+              });
+            }
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+            setPairAsset({
+              ...pairAsset,
+              down: {
+                ...pairAsset.down,
+                value: (output.amount / settingsContext.preferred_unit.value).toString(),
+              } as PAsset,
+            });
+          }
+        } else {
+          setPairAsset({
+            ...pairAsset,
+            down: { ...pairAsset.down, value: '' } as PAsset,
+          });
+          setAmountWithSlippage(0);
         }
       } else {
-        setInputFromAmount('');
+        setPairAsset({
+          ...pairAsset,
+          down: { ...pairAsset.down, value: '' } as PAsset,
+        });
         setAmountWithSlippage(0);
       }
-      setInputToAmount(input);
-    }
-  };
-  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
-      setSwapWay(SWAP_WAY.FROM);
+    },
+    [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
+  );
 
-      const currentPool = poolsContext[0];
+  const onChangeToInput = useCallback(
+    (current_pool: Pool, pool_config: BmConfig, input: string) => {
+      let inputNum = Number(input);
 
-      let inputAmount = '';
+      let methodCall;
 
-      const quoteAssetId = currentPool.quote.asset;
-      const quoteTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
-
-      const tokenAssetId = currentPool.token.asset;
-      const tokenTotalAmountInWallet = balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
-
-      const totalFee =
-        poolConfigContext.baseFee.number +
-        poolConfigContext.commitmentTxFee.number +
-        poolConfigContext.defaultOrderingFee.number +
-        poolConfigContext.serviceFee.number +
-        1000;
-
-      if (quoteTotalAmountInWallet) {
-        const quoteAmount = quoteTotalAmountInWallet - totalFee;
-        if (quoteAmount > 0) {
-          if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC && quoteTotalAmountInWallet) {
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
-            }
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-              const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-              inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
-            }
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
-            }
-          } else if (selectedPairAsset.from.ticker === SWAP_ASSET.USDT && tokenTotalAmountInWallet) {
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-              inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-              const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
-              inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-            if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-              inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-            }
-          }
-          setInputFromAmount(inputAmount);
-          setSelectedFromAmountPercent(newFromAmountPercent);
+      if (current_pool && pool_config && Number(pairAsset.down?.value) > 0) {
+        if (pairAsset.down?.ticker === SWAP_ASSET.LBTC) {
+          inputNum = inputNum * settingsContext.preferred_unit.value;
+        } else {
+          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
+
+        if (pairAsset.down && !pairAsset.down.isQuote) {
+          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+        }
+
+        const output = convertion.convertForCtx2(
+          inputNum,
+          settingsContext.slippage,
+          current_pool,
+          pool_config,
+          methodCall,
+        );
+
+        if (output.amount > 0) {
+          if (!pairAsset.up?.isQuote) {
+            if (pairAsset.down?.ticker === SWAP_ASSET.LBTC) {
+              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+              setPairAsset({
+                ...pairAsset,
+                up: { ...pairAsset.up, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
+              });
+            } else {
+              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+              setPairAsset({
+                ...pairAsset,
+                up: {
+                  ...pairAsset.up,
+                  value: (output.amount / settingsContext.preferred_unit.value).toString(),
+                } as PAsset,
+              });
+            }
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+            setPairAsset({
+              ...pairAsset,
+              up: {
+                ...pairAsset.up,
+                value: (output.amount / settingsContext.preferred_unit.value).toString(),
+              } as PAsset,
+            });
+          }
+        } else {
+          setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: '' } as PAsset });
+          setAmountWithSlippage(0);
+        }
+      } else {
+        setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: '' } as PAsset });
+        setAmountWithSlippage(0);
+      }
+    },
+    [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
+  );
+
+  const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
+    if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
+      let inputAmount = '';
+      setSwapWay(SWAP_WAY.FROM);
+      const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === pairAsset.up?.assetHash)?.amount || 0;
+
+      if (totalAmountInWallet > 0) {
+        if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
+          const totalFee =
+            poolConfigContext.baseFee.number +
+            poolConfigContext.commitmentTxFee.number +
+            poolConfigContext.defaultOrderingFee.number +
+            poolConfigContext.serviceFee.number +
+            1000;
+          const quoteAmount = totalAmountInWallet - totalFee;
+
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const quoteAmountHalf = Math.ceil(quoteAmount / 2);
+            inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+          }
+        } else {
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (totalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const tokenAmountInWalletHalf = totalAmountInWallet / 2;
+            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          }
+        }
+
+        setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: inputAmount } as PAsset });
+        setSelectedFromAmountPercent(newFromAmountPercent);
       }
     }
   };
 
-  const inputIsValid = () => {
-    if (poolsContext && poolsContext.length > 0 && poolConfigContext && walletContext) {
+  const inputIsValid = useCallback(() => {
+    if (currentPool && pools.length > 0 && poolConfigContext && walletContext) {
       let inputAmount = 0;
-
-      const inputValue = Number(inputFromAmount);
       let isValid = false;
-      if (inputValue > 0) {
-        const totalFee =
-          poolConfigContext.baseFee.number +
-          poolConfigContext.commitmentTxFee.number +
-          poolConfigContext.defaultOrderingFee.number +
-          poolConfigContext.serviceFee.number +
-          1000;
 
-        const currentPool = poolsContext[0];
+      const inputFromValue = Number(pairAsset.up?.value);
 
-        const quoteAssetId = currentPool.quote.asset;
-        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+      if (inputFromValue > 0) {
+        const pair1AssetHash = pairAsset.up?.assetHash;
+        const pair1AmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === pair1AssetHash)?.amount;
 
-        const tokenAssetId = currentPool.token.asset;
-        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        if (pair1AmountInWallet && pair1AmountInWallet > 0) {
+          if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
+            const totalFee =
+              poolConfigContext.baseFee.number +
+              poolConfigContext.commitmentTxFee.number +
+              poolConfigContext.defaultOrderingFee.number +
+              poolConfigContext.serviceFee.number +
+              1000;
 
-        if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC && quoteAmountInWallet && quoteAmountInWallet > 0) {
-          inputAmount = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
-        } else if (
-          selectedPairAsset.from.ticker === SWAP_ASSET.USDT &&
-          tokenAmountInWallet &&
-          tokenAmountInWallet > 0
-        ) {
-          inputAmount = Number((tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+            inputAmount = (pair1AmountInWallet - totalFee) / settingsContext.preferred_unit.value;
+          } else {
+            inputAmount = Number((pair1AmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+          }
         }
 
-        if (inputValue <= inputAmount && inputAmount > 0) {
+        if (inputFromValue <= inputAmount && inputAmount > 0) {
           isValid = true;
         } else {
           isValid = false;
@@ -252,55 +339,76 @@ export const Swap = (): JSX.Element => {
       }
     }
     return true;
-  };
+  }, [currentPool, pools, poolConfigContext, settingsContext.preferred_unit.value, walletContext, pairAsset]);
 
-  const assetOnChange = (asset: Asset, isFrom = true) => {
-    if (isFrom) {
-      if (asset.ticker === SWAP_ASSET.LBTC) {
-        setSelectedPairAsset({
-          from: asset,
-          to: pairAssetList[1],
-        });
+  const findCurrentPool = useCallback((pools: Pool[], up?: PAsset, down?: PAsset) => {
+    if (up && down) {
+      const filteredPools = pools.filter(
+        (pool) =>
+          (pool.quote.ticker === up.ticker || pool.quote.ticker === down.ticker) &&
+          (pool.token.ticker === up.ticker || pool.token.ticker === down.ticker),
+      );
+
+      if (filteredPools.length === 0) setPairAsset({ up, down: undefined });
+
+      const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
+
+      if (filteredPools.length > 1) {
+        setCurrentPool(sortedPools[0]);
       } else {
-        setSelectedPairAsset({
-          from: asset,
-          to: pairAssetList[0],
-        });
-      }
-    } else {
-      if (asset.ticker === SWAP_ASSET.LBTC) {
-        setSelectedPairAsset({
-          from: pairAssetList[1],
-          to: asset,
-        });
-      } else {
-        setSelectedPairAsset({
-          from: pairAssetList[0],
-          to: asset,
-        });
+        setCurrentPool(filteredPools[0]);
       }
     }
+  }, []);
 
-    setInputFromAmount('');
-    setInputToAmount('');
-    setSelectedFromAmountPercent(undefined);
+  const assetOnChange = (asset: PAsset, isFrom = true) => {
+    // const assetIsQuote = assetList?.quote?.some((q) => q.assetHash === asset.assetHash && q.isQuote === true);
+
+    // Is it necessary?
+    // if (assetIsQuote) {
+    //   const tokenAssetList = uniqueTokenAssetList(pools, asset);
+    //   setAssetList({ ...assetList, token: tokenAssetList });
+    //   console.log('assetOnChange : assetIsQuote');
+    // }
+
+    if (isFrom) {
+      if (pairAsset.up?.ticker !== asset.ticker) {
+        if (pairAsset.down) {
+          if (pairAsset.down?.ticker === asset.ticker) {
+            setPairAsset({ up: { ...asset, value: '' }, down: undefined });
+            findCurrentPool(pools, asset, pairAsset.up);
+          } else {
+            setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
+            findCurrentPool(pools, asset, pairAsset.down);
+          }
+        } else {
+          setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
+        }
+      }
+    } else {
+      if (pairAsset.down?.ticker !== asset.ticker) {
+        if (pairAsset.up) {
+          if (pairAsset.up?.ticker === asset.ticker) {
+            setPairAsset({ up: undefined, down: { ...asset, value: '' } });
+            findCurrentPool(pools, pairAsset.down, asset);
+          } else {
+            setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
+            findCurrentPool(pools, pairAsset.up, asset);
+          }
+        } else {
+          setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
+        }
+      }
+    }
   };
 
   const swapRouteChange = () => {
-    if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
-      setSelectedPairAsset({
-        from: pairAssetList[1],
-        to: pairAssetList[0],
-      });
-    } else {
-      setSelectedPairAsset({
-        from: pairAssetList[0],
-        to: pairAssetList[1],
-      });
-    }
-
-    setInputFromAmount('');
-    setInputToAmount('');
+    setPairAsset({
+      ...pairAsset,
+      up: { ...pairAsset.down, value: '' } as PAsset,
+      down: { ...pairAsset.up, value: '' } as PAsset,
+    });
+    // setAssetList({ quote: assetList?.token, token: assetList?.quote });
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -310,76 +418,62 @@ export const Swap = (): JSX.Element => {
       let numberFromAmount = 0;
       let numberToAmount = 0;
 
-      if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
-        methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
-        numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-      } else {
-        methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-        numberFromAmount = new Decimal(Number(inputFromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-        numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
-      }
-
-      if (poolsContext && poolConfigContext) {
-        const fundingTxInputs = fundingTx(numberFromAmount, poolsContext[0], poolConfigContext, methodCall);
-        let fundingTxId;
-
-        try {
-          setLoading(true);
-          const fundingTx = await walletContext.marina.sendTransaction([
-            {
-              address: fundingTxInputs.fundingOutput1Address,
-              value: fundingTxInputs.fundingOutput1Value,
-              asset: fundingTxInputs.fundingOutput1AssetId,
-            },
-            {
-              address: fundingTxInputs.fundingOutput2Address,
-              value: fundingTxInputs.fundingOutput2Value,
-              asset: fundingTxInputs.fundingOutput2AssetId,
-            },
-          ]);
-
-          fundingTxId = await api.sendRawTransaction(fundingTx.hex);
-        } catch (err: any) {
-          notify(err.toString(), 'Wallet Error : ', 'error');
-          setLoading(false);
-          // payloadData.wallet.marina.reloadCoins();
-          return Promise.reject();
+      if (currentPool && poolConfigContext) {
+        if (pairAsset.up?.isQuote) {
+          if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
+            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+            numberFromAmount = new Decimal(Number(pairAsset.up.value))
+              .mul(settingsContext.preferred_unit.value)
+              .toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+          } else {
+            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+            numberFromAmount = new Decimal(Number(pairAsset.up?.value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
+          }
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+          numberFromAmount = new Decimal(Number(pairAsset.up?.value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+          numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
         }
+
+        setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+        if (addressInformation.publicKey) {
           setSwapWay(undefined);
-          setInputFromAmount('');
-          setInputToAmount('');
+          setPairAsset({
+            up: { ...pairAsset.up, value: '' } as PAsset,
+            down: { ...pairAsset.down, value: '' } as PAsset,
+          });
           setSelectedFromAmountPercent(undefined);
 
-          let commitment: string;
+          let commitmentTxId = '';
 
-          if (selectedPairAsset.from.ticker === SWAP_ASSET.LBTC) {
-            commitment = commitmentTx.quoteToTokenCreateCommitmentTx(
+          console.log(numberToAmount);
+
+          if (pairAsset.up?.isQuote) {
+            commitmentTxId = await commitmentSign.case1(
+              walletContext.marina,
               numberFromAmount,
-              fundingTxId,
-              addressInformation.publicKey,
               numberToAmount,
+              currentPool,
               poolConfigContext,
-              poolsContext[0],
+              addressInformation.publicKey,
             );
           } else {
-            commitment = commitmentTx.tokenToQuoteCreateCommitmentTx(
+            commitmentTxId = await commitmentSign.case2(
+              walletContext.marina,
               numberFromAmount,
-              fundingTxId,
-              addressInformation.publicKey,
               numberToAmount,
+              currentPool,
               poolConfigContext,
-              poolsContext[0],
+              addressInformation.publicKey,
             );
           }
 
-          const commitmentTxId = await api.sendRawTransaction(commitment);
-
-          if (commitmentTxId && commitmentTxId !== '') {
+          if (commitmentTxId !== '') {
             // notify(
             //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
             //     See in Explorer
@@ -391,11 +485,11 @@ export const Swap = (): JSX.Element => {
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
-              quoteAsset: poolsContext[0].quote.ticker,
+              quoteAsset: currentPool.quote.ticker,
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
-              tokenAsset: poolsContext[0].token.ticker,
+              tokenAsset: currentPool.token.ticker,
               timestamp: new Date().valueOf(),
-              isOutOfSlippage: false,
+              errorMessage: undefined,
               completed: false,
               seen: false,
               method: methodCall,
@@ -408,6 +502,8 @@ export const Swap = (): JSX.Element => {
             setLocalData(newStoreData);
 
             setLoading(false);
+
+            checkTxStatusWithIds();
 
             // await sleep(3000);
 
@@ -431,10 +527,17 @@ export const Swap = (): JSX.Element => {
     }
   };
 
-  const infoMessage = (): string => {
-    if (poolConfigContext && poolsContext && poolsContext.length > 0) {
+  const swapButtonDisabled =
+    Number(pairAsset.down?.value) <= 0 ||
+    !inputIsValid() ||
+    assetList?.pair1AssetList?.length === 0 ||
+    assetList?.pair2AssetList?.length === 0 ||
+    !pairAsset.up ||
+    !pairAsset.down;
+
+  const infoMessage = useCallback((): string => {
+    if (poolConfigContext && currentPool && pools.length > 0) {
       const config = poolConfigContext;
-      const currentPool = poolsContext[0];
       const totalFee =
         config.baseFee.number +
         config.commitmentTxFee.number +
@@ -446,10 +549,11 @@ export const Swap = (): JSX.Element => {
         totalFee
       ).toFixed(2);
 
+      // eslint-disable-next-line no-useless-concat
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
-    return '';
-  };
+    return 'Network fee 801 sats';
+  }, [poolConfigContext, currentPool, pools]);
 
   return (
     <div className="swap-page-main">
@@ -469,38 +573,45 @@ export const Swap = (): JSX.Element => {
                   <div className="from-text">From</div>
                   <NumericalInput
                     className="from-input"
-                    inputValue={inputFromAmount}
+                    inputValue={pairAsset.up?.value || ''}
                     onChange={(inputValue) => {
                       if (inputValue === '.') return;
-                      setInputFromAmount(inputValue);
+                      setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: inputValue } as PAsset });
+                      // setInputFromAmount(inputValue);
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
                     decimalLength={getAssetPrecession(
-                      selectedPairAsset.from.ticker as SWAP_ASSET,
+                      pairAsset.up?.ticker as SWAP_ASSET,
                       settingsContext.preferred_unit.text,
                     )}
                   />
                 </div>
-                {/* <SwapAssetList selectedAsset={selectedAsset.from} setSelectedAsset={assetOnChange} /> */}
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${selectedPairAsset?.from && 'asset-button-selected'}`}
+                    className={`asset-button ${pairAsset?.up?.assetHash && 'asset-button-selected'}`}
                     onClick={() => {
                       setShowPair1AssetListModal(true);
                     }}
                   >
-                    <div className="create-new-pool-img-content">
-                      <AssetIcon
-                        asset={selectedPairAsset.from}
-                        className="create-new-pool-lbtc-icon"
-                        width="1.5rem"
-                        height="1.5rem"
-                      />
-                      <div>{selectedPairAsset.from.ticker}</div>
-                      <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
-                    </div>
+                    {pairAsset.up?.assetHash ? (
+                      <div className="create-new-pool-img-content">
+                        <AssetIcon
+                          asset={pairAsset.up}
+                          className="create-new-pool-lbtc-icon"
+                          width="1.5rem"
+                          height="1.5rem"
+                        />
+                        <div>{getAssetTicker(pairAsset.up, settingsContext.preferred_unit.text)}</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    ) : (
+                      <div className="asset-button-default-text-container">
+                        <div className="asset-button-default-text">Select an asset</div>
+                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                      </div>
+                    )}
                   </Button>
                 </div>
               </div>
@@ -514,40 +625,36 @@ export const Swap = (): JSX.Element => {
                   <div className="from-text">To</div>
                   <NumericalInput
                     className="from-input"
-                    inputValue={inputToAmount}
+                    inputValue={pairAsset.down?.value || ''}
                     onChange={(inputValue) => {
                       if (inputValue === '.') return;
-                      setInputToAmount(inputValue);
+                      setPairAsset({ ...pairAsset, down: { ...pairAsset.down, value: inputValue } as PAsset });
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.TO);
                     }}
                     decimalLength={getAssetPrecession(
-                      selectedPairAsset.to.ticker as SWAP_ASSET,
+                      pairAsset.down?.ticker as SWAP_ASSET,
                       settingsContext.preferred_unit.text,
                     )}
                   />
                 </div>
-                {/* <SwapAssetList
-                selectedAsset={selectedAsset.to}
-                setSelectedAsset={(asset: SWAP_ASSET) => assetOnChange(asset, false)}
-              /> */}
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${selectedPairAsset.to && 'asset-button-selected'}`}
+                    className={`asset-button ${pairAsset.down?.assetHash && 'asset-button-selected'}`}
                     onClick={() => {
                       setShowPair2AssetListModal(true);
                     }}
                   >
-                    {selectedPairAsset.to ? (
+                    {pairAsset.down?.assetHash ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={selectedPairAsset.to}
+                          asset={pairAsset.down}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
                         />
-                        <div>{selectedPairAsset.to.ticker}</div>
+                        <div>{getAssetTicker(pairAsset.down, settingsContext.preferred_unit.text)}</div>
                         <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
                       </div>
                     ) : (
@@ -566,36 +673,36 @@ export const Swap = (): JSX.Element => {
                 swapClick();
               }}
               loading={loading}
-              disabled={Number(inputToAmount) <= 0 || !inputIsValid()}
+              // disabled={swapButtonDisabled}
             />
           </div>
         </div>
         <Info content={infoMessage()} />
         <AssetListModal
           show={showPair1AssetListModal}
-          selectedAsset={selectedPairAsset?.from}
+          selectedAsset={pairAsset?.up}
           close={() => {
             setShowPair1AssetListModal(false);
           }}
           onSelectAsset={(asset) => {
-            // setSelectedPairAsset({ ...selectedPairAsset, from: asset! });
+            setPairAsset({ ...pairAsset, up: asset });
             assetOnChange(asset, true);
             setShowPair1AssetListModal(false);
           }}
-          assetList={pairAssetList}
+          assetList={assetList?.pair1AssetList}
         />
         <AssetListModal
           show={showPair2AssetListModal}
           close={() => {
             setShowPair2AssetListModal(false);
           }}
-          selectedAsset={selectedPairAsset.to}
+          selectedAsset={pairAsset.down}
           onSelectAsset={(asset) => {
-            // setSelectedPairAsset({ from: { ...selectedPairAsset?.from }, to: asset });
+            setPairAsset({ ...pairAsset, down: asset });
             assetOnChange(asset, false);
             setShowPair2AssetListModal(false);
           }}
-          assetList={pairAssetList}
+          assetList={assetList?.pair2AssetList}
         />
       </Content>
     </div>

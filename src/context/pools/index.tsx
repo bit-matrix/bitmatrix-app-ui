@@ -15,11 +15,11 @@ const PoolsContext = createContext<IPoolContext>({} as IPoolContext);
 export const usePoolContext = (): IPoolContext => useContext(PoolsContext);
 
 export const PoolsContextProvider: React.FC<Props> = ({ children }: CP): JSX.Element => {
-  const [poolsContext, dispatch] = useReducer(poolsReducer, []);
+  const [pools, dispatch] = useReducer(poolsReducer, []);
 
   const setPoolsContext = (pools: Pool[]): void => {
     setPoolsAction(pools, dispatch);
   };
 
-  return <PoolsContext.Provider value={{ poolsContext, setPoolsContext }}>{children}</PoolsContext.Provider>;
+  return <PoolsContext.Provider value={{ pools, setPoolsContext }}>{children}</PoolsContext.Provider>;
 };

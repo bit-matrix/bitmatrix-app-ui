@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TabMenu } from '../../components/TabMenu/TabMenu';
+import { useState } from 'react';
+import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { SETTINGS_DETAIL_TABS } from '../../enum/SETTINGS_DETAIL_TABS';
 import { Advanced } from './Advanced/Advanced';
@@ -17,16 +17,12 @@ export const Settings = (): JSX.Element => {
     switch (selectedTab) {
       case SETTINGS_DETAIL_TABS.GENERAL:
         return <General />;
-        break;
       case SETTINGS_DETAIL_TABS.PRIVACY:
         return <Privacy />;
-        break;
       case SETTINGS_DETAIL_TABS.THEME:
         return <Theme />;
-        break;
       case SETTINGS_DETAIL_TABS.ADVANCED:
         return <Advanced />;
-        break;
       default:
         return;
     }

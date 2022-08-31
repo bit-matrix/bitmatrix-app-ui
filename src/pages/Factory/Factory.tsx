@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TabMenu } from '../../components/TabMenu/TabMenu';
+import { useState } from 'react';
+import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { FACTORY_TABS } from '../../enum/FACTORY_TABS';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Issuance } from './Issuance/Issuance';

@@ -7,8 +7,8 @@ import MarinaIcon from '../base/Svg/Icons/Marina';
 import AquaIcon from '../base/Svg/Icons/Aqua';
 import JadeIcon from '../base/Svg/Icons/Jade';
 import LedgerIcon from '../base/Svg/Icons/Ledger';
-import './WalletListModal.scss';
 import { Wallet } from '@bitmatrix/lib';
+import './WalletListModal.scss';
 
 type Props = {
   show: boolean;
@@ -35,7 +35,7 @@ export const WalletListModal: React.FC<Props> = ({ show, wallet, close }) => {
             setLoading(false);
             close();
 
-            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [] });
+            setWalletContext({ marina: marinaWallet, isEnabled: true, balances: [], coins: [] });
 
             // wallet.getAddresses().then((addresses) => {
             //   //   console.log("addresses", addresses);

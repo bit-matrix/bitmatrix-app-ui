@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
-import { Loading } from '../Loading/Loading';
+import { Loading } from '../base/Loading/Loading';
 import Svg from '../base/Svg/Svg';
 import TickIcon from '../base/Svg/Icons/Tick';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
@@ -18,9 +18,7 @@ export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
 
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV3');
-  const txHistory = getLocalData();
-  const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
 
   const { settingsContext } = useSettingsContext();
 
@@ -40,7 +38,10 @@ export const Navbar: React.FC = (): JSX.Element => {
     };
   }, [history]);
 
-  const txInfo = (): React.ReactElement => {
+  const txInfo = useCallback(() => {
+    const txHistory = getLocalData();
+    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
         return (
@@ -57,17 +58,46 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     } else {
       if (txHistory && txHistory.length > 0) {
-        if (txHistory[txHistory.length - 1].isOutOfSlippage) {
+        if (txHistory[txHistory.length - 1].errorMessage) {
           return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
           return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         }
       }
     }
-    return <div></div>;
-  };
+    return <div />;
+  }, [getLocalData, settingsContext.exclusiveThemes.length, settingsContext.theme]);
 
-  const infoTab = (): JSX.Element | undefined => {
+  // const txInfo = (): React.ReactElement => {
+  //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
+  //     if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
+  //       return (
+  //         <div>
+  //           <img src={BananaGif} alt="loading..." className="navbar-banana-gif" />
+  //         </div>
+  //       );
+  //     } else {
+  //       return (
+  //         <div>
+  //           <Loading width="1.5rem" height="1.5rem" />
+  //         </div>
+  //       );
+  //     }
+  //   } else {
+  //     if (txHistory && txHistory.length > 0) {
+  //       if (txHistory[txHistory.length - 1].isOutOfSlippage) {
+  //         return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
+  //       } else {
+  //         return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
+  //       }
+  //     }
+  //   }
+  //   return <div />;
+  // };
+
+  const infoTab = () => {
+    const txHistory = getLocalData();
+
     if (txHistory && txHistory.length > 0) {
       if (txHistory[txHistory.length - 1].seen === false) {
         return (
@@ -107,6 +137,47 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     }
   };
+
+  // const infoTab = (): JSX.Element | undefined => {
+  //   if (txHistory && txHistory.length > 0) {
+  //     if (txHistory[txHistory.length - 1].seen === false) {
+  //       return (
+  //         <li className="navbar-item mobile-hidden">
+  //           <div
+  //             tabIndex={0}
+  //             className="navbar-item-circle-div"
+  //             onBlur={() => {
+  //               if (txHistory && txHistory.length > 0) {
+  //                 const completedTxs = txHistory.filter((txh) => txh.completed === true);
+  //                 if (completedTxs.length > 0) {
+  //                   const newTxHistory = [...txHistory];
+  //                   completedTxs.forEach((tx) => {
+  //                     const txIndex = newTxHistory.findIndex((newTxH) => newTxH.txId === tx.txId);
+  //                     if (txIndex > -1) {
+  //                       newTxHistory[txIndex].seen = true;
+  //                     }
+  //                   });
+  //                   setLocalData(newTxHistory);
+  //                 }
+  //               }
+  //             }}
+  //           >
+  //             <ButtonToolbar>
+  //               <Whisper
+  //                 placement="bottom"
+  //                 trigger="click"
+  //                 speaker={<Popover className="navbar-popover">{<InfoCard />}</Popover>}
+  //                 enterable
+  //               >
+  //                 <div>{txInfo()}</div>
+  //               </Whisper>
+  //             </ButtonToolbar>
+  //           </div>
+  //         </li>
+  //       );
+  //     }
+  //   }
+  // };
 
   return (
     <ul className="navbar-main">

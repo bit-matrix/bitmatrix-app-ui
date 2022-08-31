@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { convertion } from '@bitmatrix/lib';
 import { Pool } from '@bitmatrix/models';
-import { usePoolChartDataContext, usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
+import { usePoolContext, useSettingsContext, useWalletContext } from '../../../context';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 // import { calculateChartData } from '../../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../../components/AreaChart/AreaChart';
-import { TabMenu } from '../../../components/TabMenu/TabMenu';
+import { TabMenu } from '../../../components/base/TabMenu/TabMenu';
 import { MY_POOL_DETAIL_TABS } from '../../../enum/MY_POOL_DETAIL_TABS';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
@@ -16,51 +16,48 @@ import info from '../../../images/info2.png';
 import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
-import LbtcIcon from '../../../components/base/Svg/Icons/Lbtc';
-import TetherIcon from '../../../components/base/Svg/Icons/Tether';
-import { poolShareRound, quoteAmountRound } from '../../../helper';
+import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
+import { getMyPoolsChartData, poolShareRound, quoteAmountRound } from '../../../helper';
+import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
 
 export const MyPoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<MY_POOL_DETAIL_TABS>(MY_POOL_DETAIL_TABS.EARNINGS);
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
+  const [chartLoading, setChartLoading] = useState(true);
+  const [chartData, setChartData] = useState<ChartData[]>();
 
-  const { poolsContext } = usePoolContext();
+  const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolChartDataContext } = usePoolChartDataContext();
 
   const history = useHistory();
 
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (poolsContext && poolsContext.length > 0) {
-      const currentPool = poolsContext.find((pl) => pl.id === id);
-
+    if (pools && pools.length > 0) {
+      const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
-    }
-  }, [poolsContext]);
-
-  useEffect(() => {
-    setTimeout(() => {
       setLoading(false);
-    }, 200);
-  }, []);
+      getMyPoolsChartData(walletContext?.coins, currentPool?.lp.assetHash).then((chartData) => {
+        setChartData(chartData);
+        setChartLoading(false);
+      });
+    }
+  }, [id, pool?.lp.assetHash, pools, walletContext?.coins]);
 
   const calcPooledAssets = () => {
-    if (poolsContext && poolsContext.length > 0 && walletContext) {
-      const currentPool = poolsContext[0];
-
-      const lpAssetId = currentPool.lp.asset;
+    if (pool && walletContext) {
+      const lpAssetId = pool.lp.assetHash;
       const lpAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === lpAssetId)?.amount;
       const lpAmountInWalletN = new Decimal(lpAmountInWallet || 0).ceil().toNumber();
 
-      const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountInWalletN);
+      const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(pool, lpAmountInWalletN);
 
       const recipientValue = convertion.calcAddLiquidityRecipientValue(
-        currentPool,
+        pool,
         quoteTokenRecipients.user_lbtc_received,
         quoteTokenRecipients.user_token_received,
       );
@@ -86,23 +83,22 @@ export const MyPoolDetail: React.FC = () => {
   };
 
   const renderChart = (/*allData: any*/) => {
-    const data: ChartData[] = [
+    const defaultData: ChartData[] | undefined = [
       {
-        date: new Date().toLocaleDateString(),
+        date: '',
         close: 0,
       },
     ];
 
     let key = '';
+    let data: ChartData[] = [];
 
     if (selectedTab === MY_POOL_DETAIL_TABS.EARNINGS) {
       key = 'earnings';
-      data;
-      // data = allData.allPriceData;
+      data = chartData || defaultData;
     } else if (selectedTab === MY_POOL_DETAIL_TABS.SHARE) {
       key = 'share';
-      data;
-      // data = allData.allVolumeData;
+      data = chartData || defaultData;
     }
 
     return (
@@ -112,7 +108,15 @@ export const MyPoolDetail: React.FC = () => {
     );
   };
 
-  if (pool === undefined || poolChartDataContext === undefined) {
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Loading width="2rem" height="2rem" />
+      </div>
+    );
+  }
+
+  if (pool === undefined) {
     return <div className="no-my-pool-text">Pool couldn't found.</div>;
   } else {
     // const data = calculateChartData(payloadData.pool_chart_data, pool);
@@ -149,14 +153,14 @@ export const MyPoolDetail: React.FC = () => {
               <div className="my-pooled-assets-content">
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <LbtcIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.quote} />
                     {calcPooledAssets().pooledQuote}
                   </div>
                 </div>
 
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <TetherIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" />
+                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.token} />
                     {calcPooledAssets().pooledToken}
                   </div>
                 </div>
@@ -217,7 +221,7 @@ export const MyPoolDetail: React.FC = () => {
               </Button>
             </div>
 
-            <div className="my-pool-detail-content-right mobile-hidden">{!loading && renderChart()}</div>
+            <div className="my-pool-detail-content-right mobile-hidden">{!chartLoading && renderChart()}</div>
           </div>
         </div>
       </div>

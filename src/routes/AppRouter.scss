@@ -1,4 +1,4 @@
-@import '../../style/themes/bitmatrix.scss';
+@import '../style/themes/bitmatrix.scss';
 
 .app-router-main {
   background: $bmDeepFir;
@@ -39,6 +39,11 @@
 
   .app-content {
     width: 100%;
+
+    .error-content {
+      text-align: center;
+      font-size: 2rem;
+    }
   }
 }
 
