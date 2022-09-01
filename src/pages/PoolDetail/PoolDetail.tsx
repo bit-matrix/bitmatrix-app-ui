@@ -164,7 +164,7 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-metrics">
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
-                    <div>{pool.quote.ticker} Price</div>
+                    <div>{pool.token.ticker} Price</div>
                     <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.price.rate.direction)}

@@ -20,6 +20,7 @@ import {
   getAssetTicker,
   uniqueQuoteAssetList,
   uniqueTokenAssetList,
+  uniqueUsdtAssetList,
   usePrevious,
 } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
@@ -31,6 +32,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import './Swap.scss';
 
 type Props = {
@@ -65,9 +67,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const { poolConfigContext } = usePoolConfigContext();
 
   const [assetList, setAssetList] = useState<{
-    quote?: PAsset[];
-    token?: PAsset[];
-  }>({ quote: [], token: [] });
+    pair1AssetList?: PAsset[];
+    pair2AssetList?: PAsset[];
+  }>({ pair1AssetList: [], pair2AssetList: [] });
 
   const prevPairAsset = usePrevious(pairAsset);
 
@@ -75,9 +77,25 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   useEffect(() => {
     if (prevPairAsset?.up !== pairAsset.up || prevPairAsset?.down !== pairAsset.down) {
-      const quote = uniqueQuoteAssetList(pools);
-      const token = uniqueTokenAssetList(pools, pairAsset.up);
-      setAssetList({ quote, token });
+      let pair1AssetList: PAsset[] = [];
+      let pair2AssetList: PAsset[] = [];
+
+      if (pairAsset.up?.assetHash === TESTNET_ASSET_ID.USDT) {
+        pair1AssetList = uniqueQuoteAssetList(pools);
+        pair2AssetList = uniqueUsdtAssetList(pools);
+      } else if (pairAsset.down?.assetHash === TESTNET_ASSET_ID.USDT) {
+        pair1AssetList = uniqueUsdtAssetList(pools);
+        pair2AssetList = uniqueTokenAssetList(pools, pairAsset.up);
+      } else {
+        if (pairAsset.up?.isQuote) {
+          pair1AssetList = uniqueQuoteAssetList(pools);
+          pair2AssetList = uniqueTokenAssetList(pools, pairAsset.up);
+        } else {
+          pair1AssetList = uniqueTokenAssetList(pools, pairAsset.down);
+          pair2AssetList = uniqueQuoteAssetList(pools);
+        }
+      }
+      setAssetList({ pair1AssetList, pair2AssetList });
     }
   }, [assetList, pairAsset.down, pairAsset.up, pools, prevPairAsset]);
 
@@ -134,7 +152,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
               setPairAsset({
                 ...pairAsset,
-                down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toString() } as PAsset,
+                down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
               });
             } else {
               setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
@@ -333,7 +351,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       if (filteredPools.length === 0) setPairAsset({ up, down: undefined });
 
-      const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
+      const sortedPools = filteredPools.sort(
+        (a, b) =>
+          (Number(b.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC -
+          (Number(a.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC,
+      );
 
       if (filteredPools.length > 1) {
         setCurrentPool(sortedPools[0]);
@@ -390,9 +412,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       up: { ...pairAsset.down, value: '' } as PAsset,
       down: { ...pairAsset.up, value: '' } as PAsset,
     });
-
-    setAssetList({ quote: assetList?.token, token: assetList?.quote });
-
+    // setAssetList({ quote: assetList?.token, token: assetList?.quote });
     setSelectedFromAmountPercent(undefined);
   };
 
@@ -438,23 +458,31 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           console.log(numberToAmount);
 
           if (pairAsset.up?.isQuote) {
-            commitmentTxId = await commitmentSign.case1(
-              walletContext.marina,
-              numberFromAmount,
-              numberToAmount,
-              currentPool,
-              poolConfigContext,
-              addressInformation.publicKey,
-            );
+            try {
+              commitmentTxId = await commitmentSign.case1(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
           } else {
-            commitmentTxId = await commitmentSign.case2(
-              walletContext.marina,
-              numberFromAmount,
-              numberToAmount,
-              currentPool,
-              poolConfigContext,
-              addressInformation.publicKey,
-            );
+            try {
+              commitmentTxId = await commitmentSign.case2(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
           }
 
           if (commitmentTxId !== '') {
@@ -514,8 +542,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const swapButtonDisabled =
     Number(pairAsset.down?.value) <= 0 ||
     !inputIsValid() ||
-    assetList?.quote?.length === 0 ||
-    assetList?.token?.length === 0 ||
+    assetList?.pair1AssetList?.length === 0 ||
+    assetList?.pair2AssetList?.length === 0 ||
     !pairAsset.up ||
     !pairAsset.down;
 
@@ -673,7 +701,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             assetOnChange(asset, true);
             setShowPair1AssetListModal(false);
           }}
-          assetList={assetList?.quote}
+          assetList={assetList?.pair1AssetList}
         />
         <AssetListModal
           show={showPair2AssetListModal}
@@ -686,7 +714,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             assetOnChange(asset, false);
             setShowPair2AssetListModal(false);
           }}
-          assetList={assetList?.token}
+          assetList={assetList?.pair2AssetList}
         />
       </Content>
     </div>

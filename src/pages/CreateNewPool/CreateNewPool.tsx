@@ -458,6 +458,9 @@ export const CreateNewPool: React.FC = () => {
               setShowPair1AssetListModal(false);
             }}
             onSelectAsset={(asset) => {
+              if (selectedPair2Asset?.assetHash === asset.assetHash) {
+                setSelectedPair2Asset(undefined);
+              }
               setSelectedPair1Asset(asset);
               setShowPair1AssetListModal(false);
             }}
@@ -470,6 +473,9 @@ export const CreateNewPool: React.FC = () => {
             }}
             selectedAsset={selectedPair2Asset}
             onSelectAsset={(asset) => {
+              if (selectedPair1Asset?.assetHash === asset.assetHash) {
+                setSelectedPair1Asset(undefined);
+              }
               setSelectedPair2Asset(asset);
               setShowPair2AssetListModal(false);
             }}
