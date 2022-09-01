@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
@@ -156,7 +156,10 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     }
     return { quoteReceived: '0', tokenReceived: '0' };
   };
-  const quoteTicker = getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
+
+  const quoteTicker = useMemo(() => {
+    if (currentPool) return getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
+  }, [currentPool, settingsContext.preferred_unit.text]);
 
   return (
     <div className="remove-liquidity-page-main">
@@ -252,7 +255,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               <div className="remove-liquidity-page-icon-content">
                 <span className="remove-liquidity-page-footer-line-item-texts">{quoteTicker} You Get</span>
                 {currentPool?.quote && (
-                  <AssetIcon className="liquidity-btc-icon" width="1.5rem" height="1.5rem" asset={currentPool?.quote} />
+                  <AssetIcon
+                    className="liquidity-btc-icon"
+                    width="1.5rem"
+                    height="1.5rem"
+                    asset={currentPool?.quote.assetHash || ''}
+                  />
                 )}
               </div>
               <div className="remove-liquidity-page-footer-line-item-values">{calcLpValues().quoteReceived}</div>
@@ -267,7 +275,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
                     className="liquidity-usdt-icon"
                     width="1.5rem"
                     height="1.5rem"
-                    asset={currentPool?.token}
+                    asset={currentPool?.token.assetHash}
                   />
                 )}
               </div>

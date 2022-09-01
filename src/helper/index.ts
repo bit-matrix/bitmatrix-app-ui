@@ -8,7 +8,13 @@ import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
-import { TESTNET_ASSET_ID } from '../lib/liquid-dev/ASSET_ID';
+import { lbtcAsset } from '../lib/liquid-dev/ASSET';
+
+export type AssetModel = {
+  name: string;
+  hash: string;
+  ticker: string;
+};
 
 export const timeDifference = (time: number): string => {
   const now = new Date().valueOf();
@@ -115,175 +121,25 @@ export const deepCopy = <T>(oldObject: T): T => {
   return JSON.parse(JSON.stringify(oldObject)) as T;
 };
 
-// export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
-//   const assetList: PAsset[] = [];
-//   pools.forEach((pool: Pool) => {
-//     assetList.push(pool.token);
-//     assetList.push(pool.quote);
-//   });
+export const uniqueAssetListAll = (pools: Pool[]): AssetModel[] => {
+  const assetList: AssetModel[] = [];
 
-//   const uniqueList: string[] = [];
-//   const uniqueAssetList: PAsset[] = [];
-//   assetList.map((al) => {
-//     if (!uniqueList.includes(al.ticker)) {
-//       uniqueList.push(al.ticker);
-//       uniqueAssetList.push({
-//         assetHash: al.assetHash,
-//         ticker: al.ticker,
-//         name: al.name,
-//         precision: 8,
-//       });
-//     }
-//   });
-//   return uniqueAssetList;
-// };
-
-export const uniqueQuoteAssetList = (pools: Pool[]): PAsset[] => {
-  const quoteList: PAsset[] = [];
-
-  pools.forEach((pool: Pool) => {
-    quoteList.push(pool.quote);
+  pools.forEach((pool) => {
+    assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
+    assetList.push({ hash: pool.token.assetHash, ticker: pool.token.ticker, name: pool.token.name });
   });
 
-  const uniqueQuoteList: string[] = [];
-  const uniqueQuoteAssetList: PAsset[] = [];
-  quoteList.forEach((ql) => {
-    if (!uniqueQuoteList.includes(ql.assetHash)) {
-      uniqueQuoteList.push(ql.assetHash);
-      uniqueQuoteAssetList.push({
-        assetHash: ql.assetHash,
-        ticker: ql.ticker,
-        name: ql.name,
-        precision: 8,
-        value: '',
-        isQuote: true,
-      });
-    }
-  });
+  const uniqueList = assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
 
-  return uniqueQuoteAssetList;
+  return uniqueList;
 };
 
-export const uniqueTokenAssetList = (pools: Pool[], selectedQuote?: PAsset): PAsset[] => {
-  const tokenList: PAsset[] = [];
+export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string): AssetModel[] => {
+  const currentPools = pools.filter(
+    (pool: Pool) => pool.token.assetHash === selectedAssetHash || pool.quote.assetHash === selectedAssetHash,
+  );
 
-  const currentPools = pools.filter((pool: Pool) => pool.quote.assetHash === selectedQuote?.assetHash);
-
-  currentPools.forEach((pool: Pool) => {
-    tokenList.push(pool.token);
-  });
-
-  const uniqueTokenList: string[] = [];
-  const uniqueTokenAssetList: PAsset[] = [];
-  tokenList.forEach((tl) => {
-    if (!uniqueTokenList.includes(tl.assetHash)) {
-      uniqueTokenList.push(tl.assetHash);
-      uniqueTokenAssetList.push({
-        assetHash: tl.assetHash,
-        ticker: tl.ticker,
-        name: tl.name,
-        precision: 8,
-        value: '',
-        isQuote: false,
-      });
-    }
-  });
-
-  return uniqueTokenAssetList;
-};
-
-export const uniqueUsdtAssetList = (pools: Pool[]): PAsset[] => {
-  const quoteList: PAsset[] = [];
-  const tokenList: PAsset[] = [];
-
-  const quotePools = pools.filter((pool: Pool) => pool.quote.assetHash === TESTNET_ASSET_ID.USDT);
-  const tokenPools = pools.filter((pool: Pool) => pool.token.assetHash === TESTNET_ASSET_ID.USDT);
-
-  quotePools.forEach((pool: Pool) => {
-    tokenList.push(pool.token);
-  });
-
-  tokenPools.forEach((pool: Pool) => {
-    quoteList.push(pool.quote);
-  });
-
-  const uniqueQuoteList: string[] = [];
-  const uniqueTokenList: string[] = [];
-  const uniqueUsdtAssetList: PAsset[] = [];
-
-  quoteList.forEach((ql) => {
-    if (!uniqueQuoteList.includes(ql.assetHash)) {
-      uniqueQuoteList.push(ql.assetHash);
-      uniqueUsdtAssetList.push({
-        assetHash: ql.assetHash,
-        ticker: ql.ticker,
-        name: ql.name,
-        precision: 8,
-        value: '',
-        isQuote: true,
-      });
-    }
-  });
-
-  tokenList.forEach((tl) => {
-    if (!uniqueTokenList.includes(tl.assetHash)) {
-      uniqueTokenList.push(tl.assetHash);
-      uniqueUsdtAssetList.push({
-        assetHash: tl.assetHash,
-        ticker: tl.ticker,
-        name: tl.name,
-        precision: 8,
-        value: '',
-        isQuote: false,
-      });
-    }
-  });
-
-  return uniqueUsdtAssetList;
-};
-
-export const uniqueAssetList = (pools: Pool[]): PAsset[] => {
-  const quoteList: PAsset[] = [];
-  const tokenList: PAsset[] = [];
-
-  pools.forEach((pool: Pool) => {
-    tokenList.push(pool.token);
-    quoteList.push(pool.quote);
-  });
-
-  const uniqueQuoteList: string[] = [];
-  const uniqueTokenList: string[] = [];
-  const uniqueAssetList: PAsset[] = [];
-
-  quoteList.forEach((ql) => {
-    if (!uniqueQuoteList.includes(ql.assetHash)) {
-      uniqueQuoteList.push(ql.assetHash);
-      uniqueAssetList.push({
-        assetHash: ql.assetHash,
-        ticker: ql.ticker,
-        name: ql.name,
-        precision: 8,
-        value: '',
-        isQuote: true,
-      });
-    }
-  });
-
-  tokenList.forEach((tl) => {
-    if (!uniqueTokenList.includes(tl.assetHash)) {
-      uniqueTokenList.push(tl.assetHash);
-      uniqueAssetList.push({
-        assetHash: tl.assetHash,
-        ticker: tl.ticker,
-        name: tl.name,
-        precision: 8,
-        value: '',
-        isQuote: false,
-      });
-    }
-  });
-
-  return uniqueAssetList;
+  return uniqueAssetListAll(currentPools).filter((cp) => cp.hash !== selectedAssetHash);
 };
 
 export const getUnitValue = (asset: PAsset, settings: Settings): number => {
@@ -294,9 +150,8 @@ export const getUnitValue = (asset: PAsset, settings: Settings): number => {
   }
 };
 
-export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT): string => {
-  if (!asset) return '';
-  if (asset.ticker === SWAP_ASSET.LBTC) {
+export const getAssetTicker = (asset: AssetModel | PAsset, unit: PREFERRED_UNIT): string => {
+  if (asset.ticker === lbtcAsset.ticker) {
     if (unit === PREFERRED_UNIT.LBTC) {
       return 'tL-BTC';
     }
@@ -310,6 +165,7 @@ export const getAssetTicker = (asset: PAsset | undefined, unit: PREFERRED_UNIT):
       return 'tL-mBTC';
     }
   }
+
   return asset.ticker;
 };
 

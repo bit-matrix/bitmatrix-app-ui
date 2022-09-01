@@ -13,10 +13,9 @@ import { useSettingsContext, useWalletContext, usePoolContext } from '../../cont
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { getAssetPrecession } from '../../helper';
+import { AssetModel, getAssetPrecession } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
-import { PAsset } from '@bitmatrix/models';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
@@ -27,10 +26,10 @@ export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [pair1Amount, setPair1Amount] = useState<string>('');
   const [pair2Amount, setPair2Amount] = useState<string>('');
-  const [selectedPair1Asset, setSelectedPair1Asset] = useState<PAsset>();
-  const [selectedPair2Asset, setSelectedPair2Asset] = useState<PAsset>();
-  const [pair1AssetList, setPair1AssetList] = useState<PAsset[]>([]);
-  const [pair2AssetList, setPair2AssetList] = useState<PAsset[]>([]);
+  const [selectedPair1Asset, setSelectedPair1Asset] = useState<AssetModel>();
+  const [selectedPair2Asset, setSelectedPair2Asset] = useState<AssetModel>();
+  const [pair1AssetList, setPair1AssetList] = useState<AssetModel[]>([]);
+  const [pair2AssetList, setPair2AssetList] = useState<AssetModel[]>([]);
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
   const [lpFeeTier, setLpFeeTier] = useState<{ value: number; index: number }>({ value: 500, index: 2 });
@@ -46,25 +45,13 @@ export const CreateNewPool: React.FC = () => {
       const filteredPair1AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
         .map((balance) => {
-          const asset: PAsset = {
-            ticker: balance.asset.ticker || '',
-            name: balance.asset.name || '',
-            precision: balance.asset.precision,
-            assetHash: balance.asset.assetHash,
-          };
-          return asset;
+          return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
         });
 
       const filteredPair2AssetList = walletContext?.balances
         .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
         .map((balance) => {
-          const asset: PAsset = {
-            ticker: balance.asset.ticker || '',
-            name: balance.asset.name || '',
-            precision: balance.asset.precision,
-            assetHash: balance.asset.assetHash,
-          };
-          return asset;
+          return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
         });
 
       setPair1AssetList(filteredPair1AssetList);
@@ -88,10 +75,10 @@ export const CreateNewPool: React.FC = () => {
       if ((parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) && selectedPair1Asset && selectedPair2Asset) {
         const totalFee = 1000;
 
-        const quoteAssetId = selectedPair1Asset?.assetHash;
+        const quoteAssetId = selectedPair1Asset?.hash;
         const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
 
-        const tokenAssetId = selectedPair2Asset?.assetHash;
+        const tokenAssetId = selectedPair2Asset?.hash;
         const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
 
         let quoteAmountWallet = 0;
@@ -162,12 +149,12 @@ export const CreateNewPool: React.FC = () => {
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: pair1AmountN,
-            asset: selectedPair1Asset.assetHash,
+            asset: selectedPair1Asset.hash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: pair2AmountN,
-            asset: selectedPair2Asset.assetHash,
+            asset: selectedPair2Asset.hash,
           },
         ]);
 
@@ -188,8 +175,8 @@ export const CreateNewPool: React.FC = () => {
 
         const newPool = poolDeployment.poolDeploy(
           fundingTxId,
-          selectedPair1Asset.assetHash,
-          selectedPair2Asset.assetHash,
+          selectedPair1Asset.hash,
+          selectedPair2Asset.hash,
           pair1AmountN,
           pair2AmountN,
           addressInformation.publicKey,
@@ -326,7 +313,7 @@ export const CreateNewPool: React.FC = () => {
                     {selectedPair1Asset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={selectedPair1Asset}
+                          asset={selectedPair1Asset.hash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -397,7 +384,7 @@ export const CreateNewPool: React.FC = () => {
                     {selectedPair2Asset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={selectedPair2Asset}
+                          asset={selectedPair2Asset.hash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -453,12 +440,16 @@ export const CreateNewPool: React.FC = () => {
 
           <AssetListModal
             show={showPair1AssetListModal}
-            selectedAsset={selectedPair1Asset}
+            selectedAsset={{
+              hash: selectedPair1Asset?.hash || '',
+              name: selectedPair1Asset?.name || '',
+              ticker: selectedPair1Asset?.ticker || '',
+            }}
             close={() => {
               setShowPair1AssetListModal(false);
             }}
             onSelectAsset={(asset) => {
-              if (selectedPair2Asset?.assetHash === asset.assetHash) {
+              if (selectedPair2Asset?.hash === asset.hash) {
                 setSelectedPair2Asset(undefined);
               }
               setSelectedPair1Asset(asset);
@@ -473,7 +464,7 @@ export const CreateNewPool: React.FC = () => {
             }}
             selectedAsset={selectedPair2Asset}
             onSelectAsset={(asset) => {
-              if (selectedPair1Asset?.assetHash === asset.assetHash) {
+              if (selectedPair1Asset?.hash === asset.hash) {
                 setSelectedPair1Asset(undefined);
               }
               setSelectedPair2Asset(asset);

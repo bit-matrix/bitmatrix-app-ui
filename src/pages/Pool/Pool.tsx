@@ -13,9 +13,9 @@ import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
-import { uniqueQuoteAssetList } from '../../helper';
 import './Pool.scss';
 import { useChartsContext } from '../../context/charts';
+import { uniqueAssetListAll } from '../../helper';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
@@ -35,7 +35,7 @@ export const PoolPage: React.FC = () => {
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
-  const poolFilterOptions = uniqueQuoteAssetList(pools);
+  const poolFilterOptions = uniqueAssetListAll(pools);
 
   useEffect(() => {
     const prevPage = history.location.state;

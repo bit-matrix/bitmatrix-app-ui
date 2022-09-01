@@ -5,7 +5,6 @@ import { TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
 import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
-import { Swap } from '../pages/Swap/Swap';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
 import { Home } from '../pages/Home/Home';
@@ -28,6 +27,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
 import { testnetConfig } from '../config/testnet';
 import './AppRouter.scss';
+import { Swap } from '../pages/Swap/Swap';
 
 declare global {
   interface Window {
