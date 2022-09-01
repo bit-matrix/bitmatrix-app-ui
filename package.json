@@ -4,6 +4,10 @@
   "homepage": "https://multi.bitmatrix.app",
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "^7.18.10",
+    "@babel/preset-react": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@babel/register": "^7.18.9",
     "@bitmatrix/lib": "^0.0.84",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.5",
@@ -11,7 +15,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^28.1.7",
     "@types/node": "^12.0.0",
-    "@types/react": "^18.0.17",
+    "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@visx/curve": "^2.1.0",
     "@visx/event": "^2.6.0",
@@ -25,6 +29,8 @@
     "@visx/tooltip": "^2.10.0",
     "@visx/xychart": "^2.12.2",
     "decimal.js": "^10.4.0",
+    "express": "^4.18.1",
+    "ignore-styles": "^5.0.1",
     "ldk": "^0.5.0",
     "marina-provider": "^1.5.0",
     "numeral": "^2.0.6",
@@ -38,15 +44,16 @@
     "rsuite": "^5.6.0",
     "sass": "^1.54.4",
     "socket.io-client": "^4.5.1",
-    "typescript": "^4.1.2",
     "tiny-secp256k1": "^1.1.6",
+    "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "PUBLIC_URL=https://multi.bitmatrix.app react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "ssr": "react-scripts build && node server/index.js"
   },
   "browserslist": [
     ">0.2%",
@@ -58,13 +65,13 @@
     "@types/d3-time-format": "^4.0.0",
     "@types/numeral": "^2.0.2",
     "@types/react-router-dom": "^5.1.7",
+    "@types/tiny-secp256k1": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.27.0",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "prettier": "^2.3.1",
-    "react-error-overlay": "6.0.11",
-    "@types/tiny-secp256k1": "^2.0.1"
+    "react-error-overlay": "6.0.11"
   }
 }
