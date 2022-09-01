@@ -351,7 +351,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       if (filteredPools.length === 0) setPairAsset({ up, down: undefined });
 
-      const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
+      const sortedPools = filteredPools.sort(
+        (a, b) =>
+          (Number(b.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC -
+          (Number(a.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC,
+      );
 
       if (filteredPools.length > 1) {
         setCurrentPool(sortedPools[0]);
