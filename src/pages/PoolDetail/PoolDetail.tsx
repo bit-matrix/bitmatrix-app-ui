@@ -137,14 +137,24 @@ export const PoolDetail: React.FC = () => {
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
-                    <AssetIcon className="pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.quote} />
+                    <AssetIcon
+                      className="pool-detail-img"
+                      width="1.5rem"
+                      height="1.5rem"
+                      asset={pool.quote.assetHash}
+                    />
                     {quoteAmountRound(Number(pool.quote.value) / settingsContext.preferred_unit.value)}
                   </div>
                 </div>
 
                 <div className="pool-detail-amount-item">
                   <div className="pool-detail-img-content">
-                    <AssetIcon className="pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.token} />
+                    <AssetIcon
+                      className="pool-detail-img"
+                      width="1.5rem"
+                      height="1.5rem"
+                      asset={pool.token.assetHash}
+                    />
                     {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
                   </div>
                 </div>

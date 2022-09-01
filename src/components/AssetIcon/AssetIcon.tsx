@@ -1,20 +1,20 @@
 import React from 'react';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
-import { PAsset } from '@bitmatrix/models';
+
 import LbtcIcon from '../base/Svg/Icons/Lbtc';
 import TetherIcon from '../base/Svg/Icons/Tether';
 import UnknownIcon from '../base/Svg/Icons/Unknown';
 import fusd from '../../images/fusd.png';
 
 type Props = {
-  asset: PAsset;
+  asset: string;
   width?: string;
   height?: string;
   className?: string;
 };
 
 export const AssetIcon: React.FC<Props> = ({ asset, className, width = '1.75rem', height = '1.75rem' }) => {
-  switch (asset.assetHash) {
+  switch (asset) {
     case TESTNET_ASSET_ID.LBTC:
       return <LbtcIcon className={className} width={width} height={height} />;
 

@@ -153,14 +153,24 @@ export const MyPoolDetail: React.FC = () => {
               <div className="my-pooled-assets-content">
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.quote} />
+                    <AssetIcon
+                      className="my-pool-detail-img"
+                      width="1.5rem"
+                      height="1.5rem"
+                      asset={pool.quote.assetHash}
+                    />
                     {calcPooledAssets().pooledQuote}
                   </div>
                 </div>
 
                 <div className="my-pooled-assets-item">
                   <div className="my-pool-detail-img-content">
-                    <AssetIcon className="my-pool-detail-img" width="1.5rem" height="1.5rem" asset={pool.token} />
+                    <AssetIcon
+                      className="my-pool-detail-img"
+                      width="1.5rem"
+                      height="1.5rem"
+                      asset={pool.token.assetHash}
+                    />
                     {calcPooledAssets().pooledToken}
                   </div>
                 </div>
