@@ -27,7 +27,7 @@ import { useLocalStorage } from '../hooks/useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
 import { testnetConfig } from '../config/testnet';
 import './AppRouter.scss';
-import { Swap2 } from '../pages/Swap/Swap2';
+import { Swap } from '../pages/Swap/Swap';
 
 declare global {
   interface Window {
@@ -166,7 +166,7 @@ export const AppRouter = (): JSX.Element => {
                   <Switch component={Fader}>
                     <Route exact path={ROUTE_PATH.HOME} component={Home} />
                     <Route exact path={ROUTE_PATH.SWAP}>
-                      <Swap2 checkTxStatusWithIds={checkTxStatusWithIds}></Swap2>
+                      <Swap checkTxStatusWithIds={checkTxStatusWithIds}></Swap>
                     </Route>
                     <Route exact path={ROUTE_PATH.POOL} component={PoolPage} />
                     <Route exact path={ROUTE_PATH.POOL_DETAIL} component={PoolDetail} />

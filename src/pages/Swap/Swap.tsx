@@ -1,7 +1,4 @@
-/* eslint-disable no-useless-concat */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
@@ -13,7 +10,7 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { convertion, commitmentSign } from '@bitmatrix/lib';
-import { CALL_METHOD, Pool, BmConfig, PAsset } from '@bitmatrix/models';
+import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
@@ -22,7 +19,6 @@ import {
   getAssetTicker,
   uniqueAssetListAll,
   uniqueMatchingAssetList,
-  usePrevious,
 } from '../../helper';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
@@ -34,13 +30,14 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
+import { PAIR_1_LIST } from '../../env';
 import './Swap.scss';
 
 type Props = {
   checkTxStatusWithIds: () => void;
 };
 
-export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
+export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
   const [swapWay, setSwapWay] = useState<SWAP_WAY>();
   const [selectedFromAmountPercent, setSelectedFromAmountPercent] = useState<FROM_AMOUNT_PERCENT>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -73,7 +70,6 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     let unmounted = false;
 
     if (!unmounted) {
-      console.log('kaç kez');
       const fromAssetListAll = uniqueAssetListAll(pools);
       const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
 
@@ -87,195 +83,156 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     };
   }, [pools]);
 
-  // const findCurrentPool = useCallback((pools: Pool[], up?: PAsset, down?: PAsset) => {
-  //   if (up && down) {
-  //     const filteredPools = pools.filter(
-  //       (pool) =>
-  //         (pool.quote.ticker === up.ticker || pool.quote.ticker === down.ticker) &&
-  //         (pool.token.ticker === up.ticker || pool.token.ticker === down.ticker),
-  //     );
+  useEffect(() => {
+    if (fromAsset && toAsset) {
+      const findPair1 = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
 
-  //     if (filteredPools.length === 0) setPairAsset({ up, down: undefined });
+      let filteredPools: Pool[] = [];
 
-  //     const sortedPools = filteredPools.sort((a, b) => b.tokenPrice - a.tokenPrice);
+      if (findPair1) {
+        filteredPools = pools.filter(
+          (pool) => pool.quote.assetHash === fromAsset.hash && pool.token.assetHash === toAsset.hash,
+        );
+      } else {
+        filteredPools = pools.filter(
+          (pool) => pool.token.assetHash === fromAsset.hash && pool.quote.assetHash === toAsset.hash,
+        );
+      }
 
-  //     if (filteredPools.length > 1) {
-  //       setCurrentPool(sortedPools[0]);
-  //     } else {
-  //       setCurrentPool(filteredPools[0]);
-  //     }
-  //   }
-  // }, []);
+      const sortedPools = filteredPools.sort(
+        (a, b) =>
+          (Number(b.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC -
+          (Number(a.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC,
+      );
 
-  // useEffect(() => {
-  //   if (prevPairAsset?.up !== pairAsset.up || prevPairAsset?.down !== pairAsset.down) {
-  //     let pair1AssetList = [];
-  //     let pair2AssetList = [];
+      setCurrentPool(sortedPools[0]);
+    }
+  }, [fromAsset, pools, toAsset]);
 
-  //     if (pairAsset.up?.hash === TESTNET_ASSET_ID.USDT) {
-  //       pair1AssetList = uniqueAssetListAll(pools);
-  //       pair2AssetList = uniqueAssetListAll(pools);
-  //     } else if (pairAsset.down?.hash === TESTNET_ASSET_ID.USDT) {
-  //       pair1AssetList = uniqueAssetListAll(pools);
-  //       pair2AssetList = uniqueMatchingAssetList(pools, pairAsset.up?.hash || '');
-  //     } else {
-  //       pair1AssetList = uniqueMatchingAssetList(pools, pairAsset.down?.hash || '');
-  //       pair2AssetList = uniqueAssetListAll(pools);
-  //     }
-  //     setAssetList({ pair1AssetList, pair2AssetList });
-  //   }
-  // }, [assetList, pairAsset.down, pairAsset.up, pools, prevPairAsset]);
+  const onChangeFromInput = useCallback(
+    (input: string) => {
+      if (input.length === 0) setToAmount('');
 
-  // useEffect(() => {
-  //   if (currentPool && poolConfigContext && pairAsset) {
-  //     if (swapWay === SWAP_WAY.FROM) {
-  //       onChangeFromInput(currentPool, poolConfigContext, pairAsset.up?.value || '');
-  //     } else {
-  //       onChangeToInput(currentPool, poolConfigContext, pairAsset.down?.value || '');
-  //     }
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [currentPool, poolConfigContext, swapWay, pairAsset.down?.value, pairAsset.up?.value]);
+      let inputNum = Number(input);
 
-  // const onChangeFromInput = useCallback(
-  //   (current_pool: Pool, pool_config: BmConfig, input: string) => {
-  //     let inputNum = Number(input);
+      let methodCall;
 
-  //     let methodCall;
+      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset) {
+        if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+          inputNum = inputNum * settingsContext.preferred_unit.value;
+        } else {
+          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        }
 
-  //     if (current_pool && pool_config && Number(pairAsset.up?.value) > 0) {
-  //       if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
-  //         inputNum = inputNum * settingsContext.preferred_unit.value;
-  //       } else {
-  //         inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-  //       }
+        const findPair1 = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
 
-  //       if (pairAsset.up && pairAsset.up.isQuote) {
-  //         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //       } else {
-  //         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  //       }
+        if (findPair1) {
+          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+        }
 
-  //       const output = convertion.convertForCtx(
-  //         inputNum,
-  //         settingsContext.slippage,
-  //         current_pool,
-  //         pool_config,
-  //         methodCall,
-  //       );
+        const output = convertion.convertForCtx(
+          inputNum,
+          settingsContext.slippage,
+          currentPool,
+          poolConfigContext,
+          methodCall,
+        );
 
-  //       if (output.amount > 0) {
-  //         if (pairAsset.up && pairAsset.up.isQuote) {
-  //           if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
-  //             setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-  //             setPairAsset({
-  //               ...pairAsset,
-  //               down: { ...pairAsset.down, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
-  //             });
-  //           } else {
-  //             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-  //             setPairAsset({
-  //               ...pairAsset,
-  //               down: {
-  //                 ...pairAsset.down,
-  //                 value: (output.amount / settingsContext.preferred_unit.value).toString(),
-  //               } as PAsset,
-  //             });
-  //           }
-  //         } else {
-  //           setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-  //           setPairAsset({
-  //             ...pairAsset,
-  //             down: {
-  //               ...pairAsset.down,
-  //               value: (output.amount / settingsContext.preferred_unit.value).toString(),
-  //             } as PAsset,
-  //           });
-  //         }
-  //       } else {
-  //         setPairAsset({
-  //           ...pairAsset,
-  //           down: { ...pairAsset.down, value: '' } as PAsset,
-  //         });
-  //         setAmountWithSlippage(0);
-  //       }
-  //     } else {
-  //       setPairAsset({
-  //         ...pairAsset,
-  //         down: { ...pairAsset.down, value: '' } as PAsset,
-  //       });
-  //       setAmountWithSlippage(0);
-  //     }
-  //   },
-  //   [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
-  // );
+        if (output.amount > 0) {
+          if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
+            if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+              setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+            } else {
+              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+              setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+            }
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+            setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+          }
+        } else {
+          setAmountWithSlippage(0);
+        }
+      } else {
+        setAmountWithSlippage(0);
+      }
+    },
+    [
+      currentPool,
+      fromAmount,
+      fromAsset,
+      poolConfigContext,
+      settingsContext.preferred_unit.value,
+      settingsContext.slippage,
+    ],
+  );
 
-  // const onChangeToInput = useCallback(
-  //   (current_pool: Pool, pool_config: BmConfig, input: string) => {
-  //     let inputNum = Number(input);
+  const onChangeToInput = useCallback(
+    (input: string) => {
+      if (input.length === 0) setFromAmount('');
 
-  //     let methodCall;
+      let inputNum = Number(input);
 
-  //     if (current_pool && pool_config && Number(pairAsset.down?.value) > 0) {
-  //       if (pairAsset.down?.ticker === SWAP_ASSET.LBTC) {
-  //         inputNum = inputNum * settingsContext.preferred_unit.value;
-  //       } else {
-  //         inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-  //       }
+      let methodCall;
 
-  //       if (pairAsset.down && !pairAsset.down.isQuote) {
-  //         methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //       } else {
-  //         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  //       }
+      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset) {
+        if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
+          inputNum = inputNum * settingsContext.preferred_unit.value;
+        } else {
+          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
+        }
 
-  //       const output = convertion.convertForCtx2(
-  //         inputNum,
-  //         settingsContext.slippage,
-  //         current_pool,
-  //         pool_config,
-  //         methodCall,
-  //       );
+        const findPair2 = PAIR_1_LIST.find((p1) => p1 === toAsset.hash);
 
-  //       if (output.amount > 0) {
-  //         if (!pairAsset.up?.isQuote) {
-  //           if (pairAsset.down?.ticker === SWAP_ASSET.LBTC) {
-  //             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-  //             setPairAsset({
-  //               ...pairAsset,
-  //               up: { ...pairAsset.up, value: (output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2) } as PAsset,
-  //             });
-  //           } else {
-  //             setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-  //             setPairAsset({
-  //               ...pairAsset,
-  //               up: {
-  //                 ...pairAsset.up,
-  //                 value: (output.amount / settingsContext.preferred_unit.value).toString(),
-  //               } as PAsset,
-  //             });
-  //           }
-  //         } else {
-  //           setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-  //           setPairAsset({
-  //             ...pairAsset,
-  //             up: {
-  //               ...pairAsset.up,
-  //               value: (output.amount / settingsContext.preferred_unit.value).toString(),
-  //             },
-  //           });
-  //         }
-  //       } else {
-  //         setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: '' } as PAsset });
-  //         setAmountWithSlippage(0);
-  //       }
-  //     } else {
-  //       setPairAsset({ ...pairAsset, up: { ...pairAsset.up, value: '' } as PAsset });
-  //       setAmountWithSlippage(0);
-  //     }
-  //   },
-  //   [pairAsset, settingsContext.preferred_unit.value, settingsContext.slippage],
-  // );
+        if (findPair2) {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+        } else {
+          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+        }
+
+        const output = convertion.convertForCtx2(
+          inputNum,
+          settingsContext.slippage,
+          currentPool,
+          poolConfigContext,
+          methodCall,
+        );
+
+        if (output.amount > 0) {
+          if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
+            if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
+              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+              setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+            } else {
+              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+              setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
+            }
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
+          }
+        } else {
+          setAmountWithSlippage(0);
+        }
+      } else {
+        setAmountWithSlippage(0);
+      }
+    },
+    [currentPool, poolConfigContext, settingsContext.preferred_unit.value, settingsContext.slippage, toAmount, toAsset],
+  );
+
+  useEffect(() => {
+    if (currentPool && poolConfigContext && fromAsset) {
+      if (swapWay === SWAP_WAY.FROM) {
+        onChangeFromInput(fromAmount);
+      } else {
+        onChangeToInput(toAmount);
+      }
+    }
+  }, [currentPool, fromAmount, fromAsset, onChangeFromInput, onChangeToInput, poolConfigContext, swapWay, toAmount]);
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
@@ -284,7 +241,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.hash)?.amount || 0;
 
       if (totalAmountInWallet > 0) {
-        if (fromAsset?.ticker === SWAP_ASSET.LBTC) {
+        if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
           const totalFee =
             poolConfigContext.baseFee.number +
             poolConfigContext.commitmentTxFee.number +
@@ -334,7 +291,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const pair1AmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === pair1AssetHash)?.amount;
 
         if (pair1AmountInWallet && pair1AmountInWallet > 0) {
-          if (fromAsset?.ticker === SWAP_ASSET.LBTC) {
+          if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
             const totalFee =
               poolConfigContext.baseFee.number +
               poolConfigContext.commitmentTxFee.number +
@@ -364,167 +321,129 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     walletContext,
     fromAmount,
     fromAsset?.hash,
-    fromAsset?.ticker,
     settingsContext.preferred_unit.value,
   ]);
-
-  // const assetOnChange = (asset: PAsset, isFrom = true) => {
-  //   if (isFrom) {
-  //     if (pairAsset.up?.ticker !== asset.ticker) {
-  //       if (pairAsset.down) {
-  //         if (pairAsset.down?.ticker === asset.ticker) {
-  //           setPairAsset({ up: { ...asset, value: '' }, down: undefined });
-  //           findCurrentPool(pools, asset, pairAsset.up);
-  //         } else {
-  //           setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
-  //           findCurrentPool(pools, asset, pairAsset.down);
-  //         }
-  //       } else {
-  //         setPairAsset({ ...pairAsset, up: { ...asset, value: '' } });
-  //       }
-  //     }
-  //   } else {
-  //     if (pairAsset.down?.ticker !== asset.ticker) {
-  //       if (pairAsset.up) {
-  //         if (pairAsset.up?.ticker === asset.ticker) {
-  //           setPairAsset({ up: undefined, down: { ...asset, value: '' } });
-  //           findCurrentPool(pools, pairAsset.down, asset);
-  //         } else {
-  //           setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
-  //           findCurrentPool(pools, pairAsset.up, asset);
-  //         }
-  //       } else {
-  //         setPairAsset({ ...pairAsset, down: { ...asset, value: '' } });
-  //       }
-  //     }
-  //   }
-  // };
 
   const swapRouteChange = () => {
     setFromAsset(toAsset);
     setToAsset(fromAsset);
 
-    // setAssetList({ quote: assetList?.token, token: assetList?.quote });
     setSelectedFromAmountPercent(undefined);
   };
 
-  // const swapClick = async () => {
-  //   if (walletContext?.marina) {
-  //     let methodCall;
-  //     let numberFromAmount = 0;
-  //     let numberToAmount = 0;
+  const swapClick = async () => {
+    if (walletContext?.marina) {
+      let methodCall;
+      let numberFromAmount = 0;
+      let numberToAmount = 0;
 
-  //     if (currentPool && poolConfigContext) {
-  //       if (pairAsset.up?.isQuote) {
-  //         if (pairAsset.up?.ticker === SWAP_ASSET.LBTC) {
-  //           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //           numberFromAmount = new Decimal(Number(pairAsset.up.value))
-  //             .mul(settingsContext.preferred_unit.value)
-  //             .toNumber();
-  //           numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-  //         } else {
-  //           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-  //           numberFromAmount = new Decimal(Number(pairAsset.up?.value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-  //           numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
-  //         }
-  //       } else {
-  //         methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-  //         numberFromAmount = new Decimal(Number(pairAsset.up?.value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-  //         numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
-  //       }
+      if (currentPool && poolConfigContext && toAsset && fromAsset) {
+        const fromIsQuote = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
 
-  //       setLoading(true);
+        if (fromIsQuote) {
+          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+            numberFromAmount = new Decimal(Number(fromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+          } else {
+            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+            numberFromAmount = new Decimal(Number(fromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
+          }
+        } else {
+          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+          numberFromAmount = new Decimal(Number(fromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+          numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
+        }
 
-  //       const addressInformation = await walletContext.marina.getNextChangeAddress();
+        setLoading(true);
 
-  //       if (addressInformation.publicKey) {
-  //         setSwapWay(undefined);
-  //         setPairAsset({
-  //           up: { ...pairAsset.up, value: '' } as PAsset,
-  //           down: { ...pairAsset.down, value: '' } as PAsset,
-  //         });
-  //         setSelectedFromAmountPercent(undefined);
+        const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-  //         let commitmentTxId = '';
+        if (addressInformation.publicKey) {
+          setSwapWay(undefined);
+          setFromAmount('');
+          setToAmount('');
+          setSelectedFromAmountPercent(undefined);
 
-  //         console.log(numberToAmount);
+          let commitmentTxId = '';
 
-  //         if (pairAsset.up?.isQuote) {
-  //           try {
-  //             commitmentTxId = await commitmentSign.case1(
-  //               walletContext.marina,
-  //               numberFromAmount,
-  //               numberToAmount,
-  //               currentPool,
-  //               poolConfigContext,
-  //               addressInformation.publicKey,
-  //             );
-  //           } catch (error) {
-  //             setLoading(false);
-  //           }
-  //         } else {
-  //           try {
-  //             commitmentTxId = await commitmentSign.case2(
-  //               walletContext.marina,
-  //               numberFromAmount,
-  //               numberToAmount,
-  //               currentPool,
-  //               poolConfigContext,
-  //               addressInformation.publicKey,
-  //             );
-  //           } catch (error) {
-  //             setLoading(false);
-  //           }
-  //         }
+          if (fromIsQuote) {
+            try {
+              commitmentTxId = await commitmentSign.case1(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
+          } else {
+            try {
+              commitmentTxId = await commitmentSign.case2(
+                walletContext.marina,
+                numberFromAmount,
+                numberToAmount,
+                currentPool,
+                poolConfigContext,
+                addressInformation.publicKey,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
+          }
 
-  //         if (commitmentTxId !== '') {
-  //           const tempTxData: CommitmentStore = {
-  //             txId: commitmentTxId,
-  //             quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
-  //             quoteAsset: currentPool.quote.ticker,
-  //             tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
-  //             tokenAsset: currentPool.token.ticker,
-  //             timestamp: new Date().valueOf(),
-  //             errorMessage: undefined,
-  //             completed: false,
-  //             seen: false,
-  //             method: methodCall,
-  //           };
+          if (commitmentTxId !== '') {
+            const tempTxData: CommitmentStore = {
+              txId: commitmentTxId,
+              quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
+              quoteAsset: currentPool.quote.ticker,
+              tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
+              tokenAsset: currentPool.token.ticker,
+              timestamp: new Date().valueOf(),
+              errorMessage: undefined,
+              completed: false,
+              seen: false,
+              method: methodCall,
+            };
 
-  //           const storeOldData = getLocalData() || [];
+            const storeOldData = getLocalData() || [];
 
-  //           const newStoreData = [...storeOldData, tempTxData];
+            const newStoreData = [...storeOldData, tempTxData];
 
-  //           setLocalData(newStoreData);
+            setLocalData(newStoreData);
 
-  //           setLoading(false);
+            setLoading(false);
 
-  //           checkTxStatusWithIds();
-  //         } else {
-  //           notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
-  //           setLoading(false);
-  //         }
-  //       } else {
-  //         notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
-  //         setLoading(false);
-  //       }
-  //     } else {
-  //       notify('Pool Error', 'Error : ', 'error');
-  //       setLoading(false);
-  //     }
-  //   } else {
-  //     notify('Wallet Error', 'Error : ', 'error');
-  //     setLoading(false);
-  //   }
-  // };
+            checkTxStatusWithIds();
+          } else {
+            notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
+            setLoading(false);
+          }
+        } else {
+          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
+        }
+      } else {
+        notify('Pool Error', 'Error : ', 'error');
+        setLoading(false);
+      }
+    } else {
+      notify('Wallet Error', 'Error : ', 'error');
+      setLoading(false);
+    }
+  };
 
-  // const swapButtonDisabled =
-  //   Number(pairAsset.down?.value) <= 0 ||
-  //   !inputIsValid() ||
-  //   assetList?.pair1AssetList?.length === 0 ||
-  //   assetList?.pair2AssetList?.length === 0 ||
-  //   !pairAsset.up ||
-  //   !pairAsset.down;
+  const swapButtonDisabled =
+    Number(toAmount) <= 0 ||
+    !inputIsValid() ||
+    fromAssetList?.length === 0 ||
+    toAssetList?.length === 0 ||
+    !fromAmount ||
+    !toAmount;
 
   const infoMessage = useCallback((): string => {
     if (poolConfigContext && currentPool && pools.length > 0) {
@@ -540,6 +459,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         totalFee
       ).toFixed(2);
 
+      // eslint-disable-next-line no-useless-concat
       return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
     }
 
@@ -634,6 +554,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                     onChange={(inputValue) => {
                       if (inputValue === '.') return;
                       setSelectedFromAmountPercent(undefined);
+                      setToAmount(inputValue);
                       setSwapWay(SWAP_WAY.TO);
                     }}
                     decimalLength={getAssetPrecession(
@@ -673,10 +594,10 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             <WalletButton
               text="Swap"
               onClick={() => {
-                // swapClick();
+                swapClick();
               }}
               loading={loading}
-              // disabled={swapButtonDisabled}
+              disabled={swapButtonDisabled}
             />
           </div>
         </div>
