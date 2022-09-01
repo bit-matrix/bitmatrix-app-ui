@@ -75,7 +75,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (!unmounted) {
       console.log('kaç kez');
       const fromAssetListAll = uniqueAssetListAll(pools);
-      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash, true);
+      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
 
       setFromAsset(lbtcAsset);
       setFromAssetList(fromAssetListAll);
@@ -556,7 +556,7 @@ export const Swap2: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
   const toAssetListClick = () => {
     setShowPair2AssetListModal(true);
-    if (fromAsset && toAsset) {
+    if (fromAsset) {
       const toAssetListAll = uniqueMatchingAssetList(pools, fromAsset.hash);
       setToAssetList(toAssetListAll);
     }

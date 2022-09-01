@@ -134,26 +134,12 @@ export const uniqueAssetListAll = (pools: Pool[]): AssetModel[] => {
   return uniqueList;
 };
 
-export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string, isQuote = false): AssetModel[] => {
-  const assetList: AssetModel[] = [];
+export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string): AssetModel[] => {
+  const currentPools = pools.filter(
+    (pool: Pool) => pool.token.assetHash === selectedAssetHash || pool.quote.assetHash === selectedAssetHash,
+  );
 
-  if (isQuote) {
-    const currentPools = pools.filter((pool: Pool) => pool.quote.assetHash === selectedAssetHash);
-
-    currentPools.forEach((pool) => {
-      assetList.push({ hash: pool.token.assetHash, ticker: pool.token.ticker, name: pool.token.name });
-    });
-
-    return assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
-  }
-
-  const currentPools = pools.filter((pool: Pool) => pool.token.assetHash === selectedAssetHash);
-
-  currentPools.forEach((pool) => {
-    assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
-  });
-
-  return assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
+  return uniqueAssetListAll(currentPools).filter((cp) => cp.hash !== selectedAssetHash);
 };
 
 export const getUnitValue = (asset: PAsset, settings: Settings): number => {
