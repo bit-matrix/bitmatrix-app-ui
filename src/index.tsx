@@ -1,7 +1,6 @@
+import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './style/global.scss';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
@@ -12,10 +11,15 @@ import {
   WalletContextProvider,
   PoolConfigContextProvider,
 } from './context';
+import './style/global.scss';
+import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const container = document.getElementById('root') as HTMLElement;
 
-root.render(
+if (!container) throw new Error('Failed to find the root element');
+
+const root = ReactDOM.hydrateRoot(
+  container,
   <AppContextProvider
     providers={[
       ChartsContextProvider,
