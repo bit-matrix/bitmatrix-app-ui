@@ -202,7 +202,7 @@ export const CreateNewPool: React.FC = () => {
     if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
       const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
 
-      if (selectedPair1Asset?.ticker === 'L-BTC') {
+      if (selectedPair1Asset?.hash === LBTC_ASSET) {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           50,
           Number(pair1Amount) * settingsContext.preferred_unit.value,
