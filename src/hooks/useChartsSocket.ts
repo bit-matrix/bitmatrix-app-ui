@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import io, { Socket } from 'socket.io-client';
 import { TxStatus } from '@bitmatrix/models';
-import { API_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { useChartsContext } from '../context/charts';
 import { useLocalStorage } from './useLocalStorage';
 import { CommitmentStore } from '../model/CommitmentStore';
+import { API_SOCKET_SERVER_URL } from '../env';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import { DB_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { usePoolContext } from '../context';
+import { DB_SOCKET_SERVER_URL } from '../env';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePoolsSocket = () => {
