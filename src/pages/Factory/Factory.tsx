@@ -16,13 +16,10 @@ export const Factory = (): JSX.Element => {
     switch (selectedTab) {
       case FACTORY_TABS.ISSUANCE:
         return <Issuance />;
-        break;
       case FACTORY_TABS.PEG_IN:
         return <PegIn />;
-        break;
       case FACTORY_TABS.PEG_OUT:
         return <PegOut />;
-        break;
       default:
         return;
     }
