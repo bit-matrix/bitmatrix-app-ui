@@ -231,6 +231,7 @@
     }
 
     .create-new-pool-lp-fee-tier {
+      min-width: 5rem !important;
       button {
         position: relative;
         z-index: 5;
