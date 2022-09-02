@@ -9,7 +9,6 @@ import { Button, Content, Slider } from 'rsuite';
 import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
@@ -17,6 +16,7 @@ import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
+import { LBTC_ASSET } from '../../../env';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -97,7 +97,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.ticker === SWAP_ASSET.LBTC
+                (currentPool.quote.assetHash === LBTC_ASSET
                   ? settingsContext.preferred_unit.value
                   : PREFERRED_UNIT_VALUE.LBTC),
               quoteAsset: currentPool.quote.ticker,
@@ -147,7 +147,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       return {
         quoteReceived: (
           Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.ticker === SWAP_ASSET.LBTC
+          (currentPool.quote.assetHash === LBTC_ASSET
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC)
         ).toString(),
