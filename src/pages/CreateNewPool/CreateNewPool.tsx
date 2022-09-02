@@ -21,6 +21,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import './CreateNewPool.scss';
+import { LBTC_ASSET, USDT_ASSET } from '../../env';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,13 +44,13 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
+        .filter((balance) => balance.asset.assetHash === LBTC_ASSET || balance.asset.assetHash === USDT_ASSET)
         .map((balance) => {
           return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
         });
 
       const filteredPair2AssetList = walletContext?.balances
-        .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
+        .filter((balance) => balance.asset.assetHash !== LBTC_ASSET && balance.asset.precision === 8)
         .map((balance) => {
           return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
         });
@@ -122,7 +123,7 @@ export const CreateNewPool: React.FC = () => {
 
   const createNewPoolClick = async () => {
     if (walletContext?.marina && selectedPair1Asset && selectedPair2Asset) {
-      const pair1IsLbtc = selectedPair1Asset.ticker === 'L-BTC' ? true : false;
+      const pair1IsLbtc = selectedPair1Asset.hash === LBTC_ASSET ? true : false;
 
       const pair1AmountN = new Decimal(Number(pair1Amount))
         .mul(pair1IsLbtc ? settingsContext.preferred_unit.value : PREFERRED_UNIT_VALUE.LBTC)
@@ -139,12 +140,12 @@ export const CreateNewPool: React.FC = () => {
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+            asset: LBTC_ASSET,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+            asset: LBTC_ASSET,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
