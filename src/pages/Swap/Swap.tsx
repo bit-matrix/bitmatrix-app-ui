@@ -32,6 +32,7 @@ import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import { PAIR_1_LIST } from '../../env';
 import './Swap.scss';
+import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -109,7 +110,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset) {
+      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
         if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
@@ -127,17 +128,12 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
-          if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-            if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
-              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-              setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-            } else {
-              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-              setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
-            }
-          } else {
+          if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
             setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+            setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
           }
         } else {
           setAmountWithSlippage(0);
@@ -153,6 +149,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       poolConfigContext,
       settingsContext.preferred_unit.value,
       settingsContext.slippage,
+      toAsset,
     ],
   );
 
@@ -164,7 +161,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset) {
+      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
         if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
@@ -179,20 +176,15 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         }
 
-        const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
+        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
 
         if (output.amount > 0) {
-          if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-            if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
-              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-              setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-            } else {
-              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-              setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
-            }
+          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
           } else {
             setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
+            setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
           }
         } else {
           setAmountWithSlippage(0);
@@ -201,7 +193,15 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value, settingsContext.slippage, toAmount, toAsset],
+    [
+      currentPool,
+      fromAsset,
+      poolConfigContext,
+      settingsContext.preferred_unit.value,
+      settingsContext.slippage,
+      toAmount,
+      toAsset,
+    ],
   );
 
   useEffect(() => {
