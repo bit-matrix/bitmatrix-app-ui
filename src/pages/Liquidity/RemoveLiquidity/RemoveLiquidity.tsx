@@ -118,7 +118,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
             checkTxStatusWithIds();
           } else {
-            notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
+            notify('User canceled the transaction.', 'Bitmatrix Error : ', 'info');
             setLoading(false);
           }
           // notify(
