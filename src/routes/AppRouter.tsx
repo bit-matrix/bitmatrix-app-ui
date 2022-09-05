@@ -91,10 +91,11 @@ export const AppRouter = (): JSX.Element => {
         const currentTxIndex = newLocalStorageData.findIndex((lt) => lt.txId === ts.txId);
         const currentData = newLocalStorageData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
-        currentData.completed = ts.status === TX_STATUS.SUCCESS || ts.status === TX_STATUS.FAILED ? true : false;
+        if (ts.status === TX_STATUS.FAILED || ts.status === TX_STATUS.SUCCESS) {
+          currentData.completed = true;
+        }
         if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
-
       setLocalData(newLocalStorageData);
     }
   }, [getLocalData, setLocalData, txStatuses]);

@@ -40,7 +40,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const txInfo = useCallback(() => {
     const txHistory = getLocalData();
-    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false || !utx.completed);
 
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
@@ -97,9 +97,11 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const infoTab = () => {
     const txHistory = getLocalData();
-
     if (txHistory && txHistory.length > 0) {
-      if (txHistory[txHistory.length - 1].seen === false) {
+      if (
+        txHistory[txHistory.length - 1].seen === false ||
+        txHistory.some((tx) => tx.completed === false || !tx.completed)
+      ) {
         return (
           <li className="navbar-item mobile-hidden">
             <div
