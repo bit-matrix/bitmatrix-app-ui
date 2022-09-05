@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet } from '@bitmatrix/lib';
 import { TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
-import { useWalletContext, useSettingsContext, usePoolConfigContext } from '../context';
+import { useWalletContext, useSettingsContext, usePoolConfigContext, useTxHistoryContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
@@ -23,8 +23,6 @@ import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
-import { useLocalStorage } from '../hooks/useLocalStorage';
-import { CommitmentStore } from '../model/CommitmentStore';
 import { testnetConfig } from '../config/testnet';
 import './AppRouter.scss';
 import { Swap } from '../pages/Swap/Swap';
@@ -44,7 +42,7 @@ export const AppRouter = (): JSX.Element => {
   const { setPoolConfigContext } = usePoolConfigContext();
   const { poolsLoading, isPoolsConnected } = usePoolsSocket();
   const { chartsLoading, isChartsConnected, txStatuses, txStatusesLoading, checkTxStatusWithIds } = useChartsSocket();
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   useEffect(() => {
     fetchData();
@@ -82,13 +80,12 @@ export const AppRouter = (): JSX.Element => {
   }, [walletContext?.marina]);
 
   useEffect(() => {
-    const localStorageData = getLocalData();
-
-    if (localStorageData && localStorageData.length > 0 && txStatuses) {
-      const newLocalStorageData = [...localStorageData];
+    if (txHistoryContext && txHistoryContext.length > 0 && txStatuses) {
+      const newLocalStorageData = [...txHistoryContext];
 
       txStatuses.forEach((ts) => {
         const currentTxIndex = newLocalStorageData.findIndex((lt) => lt.txId === ts.txId);
+
         const currentData = newLocalStorageData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
         if (ts.status === TX_STATUS.FAILED || ts.status === TX_STATUS.SUCCESS) {
@@ -96,9 +93,11 @@ export const AppRouter = (): JSX.Element => {
         }
         if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
-      setLocalData(newLocalStorageData);
+
+      setTxHistoryContext(newLocalStorageData);
     }
-  }, [getLocalData, setLocalData, txStatuses]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [txStatuses]);
 
   const fetchBalances = async (wall: Wallet) => {
     if (walletContext && walletContext.isEnabled) {

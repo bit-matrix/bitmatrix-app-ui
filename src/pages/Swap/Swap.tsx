@@ -11,7 +11,6 @@ import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { convertion, commitmentSign } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
   AssetModel,
@@ -24,7 +23,13 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../../context';
+import {
+  usePoolContext,
+  useWalletContext,
+  useSettingsContext,
+  usePoolConfigContext,
+  useTxHistoryContext,
+} from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
@@ -57,7 +62,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   const [currentPool, setCurrentPool] = useState<Pool>();
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
@@ -412,11 +417,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               method: methodCall,
             };
 
-            const storeOldData = getLocalData() || [];
-
-            const newStoreData = [...storeOldData, tempTxData];
-
-            setLocalData(newStoreData);
+            const newStoreData = [...txHistoryContext, tempTxData];
+            setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
