@@ -28,6 +28,7 @@ import { CommitmentStore } from '../model/CommitmentStore';
 import { testnetConfig } from '../config/testnet';
 import './AppRouter.scss';
 import { Swap } from '../pages/Swap/Swap';
+import { BANANA_THEME_ASSET } from '../env';
 
 declare global {
   interface Window {
@@ -35,7 +36,7 @@ declare global {
   }
 }
 
-const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
+const exclusiveThemeAssets = [BANANA_THEME_ASSET];
 
 export const AppRouter = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(true);
