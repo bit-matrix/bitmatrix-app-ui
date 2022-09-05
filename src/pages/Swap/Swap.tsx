@@ -9,7 +9,7 @@ import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { convertion, commitmentSign } from '@bitmatrix/lib';
+import { commitmentSign, validatePoolTx } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
@@ -32,6 +32,7 @@ import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import { PAIR_1_LIST } from '../../env';
 import './Swap.scss';
+import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -85,19 +86,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   useEffect(() => {
     if (fromAsset && toAsset) {
-      const findPair1 = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
-
-      let filteredPools: Pool[] = [];
-
-      if (findPair1) {
-        filteredPools = pools.filter(
-          (pool) => pool.quote.assetHash === fromAsset.hash && pool.token.assetHash === toAsset.hash,
-        );
-      } else {
-        filteredPools = pools.filter(
-          (pool) => pool.token.assetHash === fromAsset.hash && pool.quote.assetHash === toAsset.hash,
-        );
-      }
+      const filteredPools = pools.filter(
+        (pool) =>
+          (pool.quote.assetHash === fromAsset.hash && pool.token.assetHash === toAsset.hash) ||
+          (pool.quote.assetHash === toAsset.hash && pool.token.assetHash === fromAsset.hash),
+      );
 
       const sortedPools = filteredPools.sort(
         (a, b) =>
@@ -117,14 +110,14 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset) {
+      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
         if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        const findPair1 = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
+        const findPair1 = currentPool.quote.assetHash === fromAsset.hash;
 
         if (findPair1) {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -132,26 +125,15 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
         }
 
-        const output = convertion.convertForCtx(
-          inputNum,
-          settingsContext.slippage,
-          currentPool,
-          poolConfigContext,
-          methodCall,
-        );
+        const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
-          if (methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
-            if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
-              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-              setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-            } else {
-              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-              setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
-            }
-          } else {
+          if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
             setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
+          } else {
+            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
+            setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
           }
         } else {
           setAmountWithSlippage(0);
@@ -167,6 +149,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       poolConfigContext,
       settingsContext.preferred_unit.value,
       settingsContext.slippage,
+      toAsset,
     ],
   );
 
@@ -178,41 +161,30 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset) {
+      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
         if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        const findPair2 = PAIR_1_LIST.find((p1) => p1 === toAsset.hash);
+        const findPair1 = currentPool.quote.assetHash === toAsset.hash;
 
-        if (findPair2) {
+        if (findPair1) {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
         } else {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         }
 
-        const output = convertion.convertForCtx2(
-          inputNum,
-          settingsContext.slippage,
-          currentPool,
-          poolConfigContext,
-          methodCall,
-        );
+        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
 
         if (output.amount > 0) {
-          if (methodCall === CALL_METHOD.SWAP_TOKEN_FOR_QUOTE) {
-            if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
-              setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-              setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-            } else {
-              setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-              setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
-            }
+          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
+            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
           } else {
             setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
+            setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
           }
         } else {
           setAmountWithSlippage(0);
@@ -221,18 +193,26 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value, settingsContext.slippage, toAmount, toAsset],
+    [
+      currentPool,
+      fromAsset,
+      poolConfigContext,
+      settingsContext.preferred_unit.value,
+      settingsContext.slippage,
+      toAmount,
+      toAsset,
+    ],
   );
 
   useEffect(() => {
-    if (currentPool && poolConfigContext && fromAsset) {
+    if (currentPool && poolConfigContext) {
       if (swapWay === SWAP_WAY.FROM) {
         onChangeFromInput(fromAmount);
       } else {
         onChangeToInput(toAmount);
       }
     }
-  }, [currentPool, fromAmount, fromAsset, onChangeFromInput, onChangeToInput, poolConfigContext, swapWay, toAmount]);
+  }, [currentPool, fromAmount, onChangeFromInput, onChangeToInput, poolConfigContext, swapWay, toAmount]);
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
     if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
@@ -329,6 +309,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     setToAsset(fromAsset);
     setFromAmount('');
     setToAmount('');
+
+    if (swapWay === SWAP_WAY.FROM) setSwapWay(SWAP_WAY.TO);
+    else setSwapWay(SWAP_WAY.FROM);
 
     setSelectedFromAmountPercent(undefined);
   };
