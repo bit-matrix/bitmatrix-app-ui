@@ -327,6 +327,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const swapRouteChange = () => {
     setFromAsset(toAsset);
     setToAsset(fromAsset);
+    setFromAmount('');
+    setToAmount('');
 
     setSelectedFromAmountPercent(undefined);
   };
