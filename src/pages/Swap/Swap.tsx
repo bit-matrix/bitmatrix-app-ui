@@ -69,7 +69,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   useEffect(() => {
     let unmounted = false;
 
-    if (!unmounted) {
+    if (!unmounted && !currentPool) {
       const fromAssetListAll = uniqueAssetListAll(pools);
       const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
 
@@ -81,7 +81,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     return () => {
       unmounted = true;
     };
-  }, [pools]);
+  }, [currentPool, pools]);
 
   useEffect(() => {
     if (fromAsset && toAsset) {
