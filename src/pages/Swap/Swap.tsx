@@ -30,9 +30,8 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
-import { PAIR_1_LIST } from '../../env';
-import './Swap.scss';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
+import './Swap.scss';
 
 type Props = {
   checkTxStatusWithIds: () => void;
