@@ -323,7 +323,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let numberToAmount = 0;
 
       if (currentPool && poolConfigContext && toAsset && fromAsset) {
-        const fromIsQuote = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
+        const fromIsQuote = currentPool.quote.assetHash === fromAsset.hash;
 
         if (fromIsQuote) {
           if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
