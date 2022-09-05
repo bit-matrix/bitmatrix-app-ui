@@ -126,7 +126,7 @@ export const uniqueAssetListAll = (pools: Pool[]): AssetModel[] => {
 
   pools.forEach((pool) => {
     assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
-    assetList.push({ hash: pool.token.assetHash, ticker: pool.token.ticker, name: pool.token.name });
+    // assetList.push({ hash: pool.token.assetHash, ticker: pool.token.ticker, name: pool.token.name });
   });
 
   const uniqueList = assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
