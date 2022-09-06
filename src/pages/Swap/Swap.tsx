@@ -427,7 +427,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     fromAssetList?.length === 0 ||
     toAssetList?.length === 0 ||
     !fromAmount ||
-    !toAmount;
+    !toAmount ||
+    loading;
 
   const infoMessage = useCallback((): string => {
     if (poolConfigContext && currentPool && pools.length > 0) {
