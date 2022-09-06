@@ -10,6 +10,7 @@ import {
   SettingsContextProvider,
   WalletContextProvider,
   PoolConfigContextProvider,
+  TxHistoryContextProvider,
 } from './context';
 import './style/global.scss';
 
@@ -23,6 +24,7 @@ root.render(
       SettingsContextProvider,
       WalletContextProvider,
       PoolConfigContextProvider,
+      TxHistoryContextProvider,
     ]}
   >
     <CustomProvider theme="dark">
