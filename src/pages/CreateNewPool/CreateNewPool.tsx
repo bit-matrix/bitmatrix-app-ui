@@ -190,6 +190,8 @@ export const CreateNewPool: React.FC = () => {
         console.log(poolTxId);
 
         setLoading(false);
+
+        notify(poolTxId, 'New Pool Creation Successfully', 'info');
       } else {
         notify('Pool could not be created.', 'Wallet Error : ', 'error');
         setLoading(false);
