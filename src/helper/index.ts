@@ -134,6 +134,18 @@ export const uniqueAssetListAll = (pools: Pool[]): AssetModel[] => {
   return uniqueList;
 };
 
+export const uniqueQuoteAssetList = (pools: Pool[]): AssetModel[] => {
+  const assetList: AssetModel[] = [];
+
+  pools.forEach((pool) => {
+    assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
+  });
+
+  const uniqueList = assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
+
+  return uniqueList;
+};
+
 export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string): AssetModel[] => {
   const currentPools = pools.filter(
     (pool: Pool) => pool.token.assetHash === selectedAssetHash || pool.quote.assetHash === selectedAssetHash,

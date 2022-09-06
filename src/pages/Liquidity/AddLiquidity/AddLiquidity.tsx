@@ -1,12 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
-import { usePoolContext, useSettingsContext, useWalletContext, usePoolConfigContext } from '../../../context';
+import {
+  usePoolContext,
+  useSettingsContext,
+  useWalletContext,
+  usePoolConfigContext,
+  useTxHistoryContext,
+} from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
 import Decimal from 'decimal.js';
-import { useLocalStorage } from '../../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
@@ -42,8 +47,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
-
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const history = useHistory();
   const { id } = useParams<{ id: string }>();
@@ -301,9 +305,10 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               seen: false,
               method: CALL_METHOD.ADD_LIQUIDITY,
             };
-            const storeOldData = getLocalData() || [];
-            const newStoreData = [...storeOldData, tempTxData];
-            setLocalData(newStoreData);
+
+            const newStoreData = [...txHistoryContext, tempTxData];
+            setTxHistoryContext(newStoreData);
+
             setLoading(false);
 
             checkTxStatusWithIds();

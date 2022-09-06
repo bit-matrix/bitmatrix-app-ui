@@ -3,8 +3,7 @@ import io, { Socket } from 'socket.io-client';
 import { TxStatus } from '@bitmatrix/models';
 import { notify } from '../components/utils/utils';
 import { useChartsContext } from '../context/charts';
-import { useLocalStorage } from './useLocalStorage';
-import { CommitmentStore } from '../model/CommitmentStore';
+import { useTxHistoryContext } from '../context';
 import { API_SOCKET_SERVER_URL } from '../env';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -17,7 +16,7 @@ export const useChartsSocket = () => {
 
   const [socketInstance, setSocketInstance] = useState<Socket>();
 
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext } = useTxHistoryContext();
 
   console.log('socket id', socketInstance?.id);
 
@@ -43,10 +42,8 @@ export const useChartsSocket = () => {
       }
     });
 
-    const txHistory = getLocalData();
-
-    if (txHistory && txHistory.length > 0) {
-      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+    if (txHistoryContext && txHistoryContext.length > 0) {
+      const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
 
       if (unconfirmedTxs.length > 0) {
         const txIds = unconfirmedTxs.map((tx) => tx.txId);
@@ -76,10 +73,8 @@ export const useChartsSocket = () => {
 
   const checkTxStatusWithIds = () => {
     if (socketInstance) {
-      const txHistory = getLocalData();
-
-      if (txHistory && txHistory.length > 0) {
-        const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+      if (txHistoryContext && txHistoryContext.length > 0) {
+        const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
 
         if (unconfirmedTxs.length > 0) {
           const txIds = unconfirmedTxs.map((tx) => tx.txId);
