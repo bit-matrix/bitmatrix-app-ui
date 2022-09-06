@@ -1,10 +1,9 @@
-import ReactDOM from 'react-dom/client';
-import './style/global.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
+import { createRoot } from 'react-dom/client';
 import {
   ChartsContextProvider,
   PoolsContextProvider,
@@ -12,8 +11,9 @@ import {
   WalletContextProvider,
   PoolConfigContextProvider,
 } from './context';
+import './style/global.scss';
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const root = createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
   <AppContextProvider
