@@ -29,6 +29,7 @@ import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
+import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -55,21 +56,6 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     const pl = pools.find((p) => p.id === id);
     setCurrentPool(pl);
   }, [id, pools]);
-
-  // useEffect(() => {
-  //   if (currentPool) {
-  //     setQuote({
-  //       ticker: currentPool.quote.ticker,
-  //       name: currentPool.quote.name,
-  //       hash: currentPool.quote.assetHash,
-  //     });
-  //     setToken({
-  //       ticker: currentPool.token.ticker,
-  //       name: currentPool.token.name,
-  //       hash: currentPool.token.assetHash,
-  //     });
-  //   }
-  // }, [currentPool]);
 
   const onChangeQuoteAmount = useCallback(
     (input: string) => {
@@ -138,7 +124,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           const quoteAmount = quoteTotalAmountInWallet - totalFee;
 
           if (quoteAmount > 0) {
-            if (currentPool.quote.ticker === SWAP_ASSET.LBTC) {
+            if (currentPool.quote.assetHash === lbtcAsset.hash) {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
                 inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
               }
@@ -212,7 +198,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
         let quoteAmountWallet = 0;
         if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-          if (currentPool.quote?.ticker === SWAP_ASSET.LBTC) {
+          if (currentPool.quote?.assetHash === lbtcAsset.hash) {
             const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
             const totalFee =
@@ -255,7 +241,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (walletContext?.marina) {
       const quoteAmountN = new Decimal(Number(pair1Value))
         .mul(
-          currentPool?.quote.ticker === SWAP_ASSET.LBTC
+          currentPool?.quote.assetHash === lbtcAsset.hash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC,
         )
@@ -312,19 +298,8 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
             checkTxStatusWithIds();
           }
-          // notify(
-          //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-          //     See in Explorer
-          //   </a>,
-          //   'Commitment Tx created successfully!',
-          //   'success',
-          // );
-
-          // await sleep(3000);
-          // payloadData.wallet.marina.reloadCoins();
         } else {
           notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-          // payloadData.wallet.marina.reloadCoins();
           setLoading(false);
         }
       }
@@ -335,7 +310,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool && pair1Value !== '' && pair2Value !== '') {
       const quoteAmountN = new Decimal(Number(pair1Value))
         .mul(
-          currentPool.quote.ticker === SWAP_ASSET.LBTC
+          currentPool.quote.assetHash === lbtcAsset.hash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC,
         )
