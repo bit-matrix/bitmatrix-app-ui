@@ -14,7 +14,6 @@ import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
