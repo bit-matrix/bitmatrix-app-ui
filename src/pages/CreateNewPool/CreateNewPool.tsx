@@ -13,7 +13,7 @@ import { useSettingsContext, useWalletContext, usePoolContext } from '../../cont
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import SWAP_ASSET from '../../enum/SWAP_ASSET';
-import { AssetModel, getAssetPrecession } from '../../helper';
+import { AssetModel, getAssetPrecession, testnetPair1AssetList } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
@@ -21,6 +21,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import './CreateNewPool.scss';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,16 +47,24 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => balance.asset.ticker === 'L-BTC' || balance.asset.ticker === 'USDt')
+        .filter((balance) => testnetPair1AssetList.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
         .map((balance) => {
-          return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
+          return {
+            name: balance.asset.name || '',
+            hash: balance.asset.assetHash,
+            ticker: balance.asset.ticker || '',
+            precision: balance.asset.precision,
+          };
         });
 
-      const filteredPair2AssetList = walletContext?.balances
-        .filter((balance) => balance.asset.ticker !== 'L-BTC' && balance.asset.precision === 8)
-        .map((balance) => {
-          return { name: balance.asset.name || '', hash: balance.asset.assetHash, ticker: balance.asset.ticker || '' };
-        });
+      const filteredPair2AssetList = walletContext.balances.map((balance) => {
+        return {
+          name: balance.asset.name || '',
+          hash: balance.asset.assetHash,
+          ticker: balance.asset.ticker || '',
+          precision: balance.asset.precision,
+        };
+      });
 
       setPair1AssetList(filteredPair1AssetList);
       setPair2AssetList(filteredPair2AssetList);
@@ -123,9 +132,40 @@ export const CreateNewPool: React.FC = () => {
     );
   };
 
+  const pair1CoefficientCalculation = () => {
+    let pair1Coefficient = 1;
+    if (selectedPair1Asset) {
+      const pair1IsLbtc = selectedPair1Asset.hash === lbtcAsset.hash ? true : false;
+
+      if (pair1IsLbtc) {
+        pair1Coefficient = 50;
+      } else {
+        const assetPrecision = selectedPair1Asset.precision;
+
+        if (assetPrecision === 0 || assetPrecision === 1 || assetPrecision === 2) {
+          pair1Coefficient = 1;
+        } else if (assetPrecision === 3) {
+          pair1Coefficient = 10;
+        } else if (assetPrecision === 4) {
+          pair1Coefficient = 100;
+        } else if (assetPrecision === 5) {
+          pair1Coefficient = 1000;
+        } else if (assetPrecision === 6) {
+          pair1Coefficient = 10000;
+        } else if (assetPrecision === 7) {
+          pair1Coefficient = 100000;
+        } else if (assetPrecision === 8) {
+          pair1Coefficient = 1000000;
+        }
+      }
+    }
+
+    return pair1Coefficient;
+  };
+
   const createNewPoolClick = async () => {
     if (walletContext?.marina && selectedPair1Asset && selectedPair2Asset) {
-      const pair1IsLbtc = selectedPair1Asset.ticker === 'L-BTC' ? true : false;
+      const pair1IsLbtc = selectedPair1Asset.hash === lbtcAsset.hash ? true : false;
 
       const pair1AmountN = new Decimal(Number(pair1Amount))
         .mul(pair1IsLbtc ? settingsContext.preferred_unit.value : PREFERRED_UNIT_VALUE.LBTC)
@@ -184,7 +224,7 @@ export const CreateNewPool: React.FC = () => {
           pair2AmountN,
           addressInformation.publicKey,
           1,
-          pair1IsLbtc ? 50 : 1000000,
+          pair1CoefficientCalculation(),
           lpFeeTier.index,
         );
 
@@ -203,12 +243,12 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const calcLpValues = () => {
-    if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0) {
+    if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0 && selectedPair1Asset) {
       const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
 
-      if (selectedPair1Asset?.ticker === 'L-BTC') {
+      if (selectedPair1Asset?.hash === lbtcAsset.hash) {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
-          50,
+          pair1CoefficientCalculation(),
           Number(pair1Amount) * settingsContext.preferred_unit.value,
         );
 
@@ -225,8 +265,8 @@ export const CreateNewPool: React.FC = () => {
         };
       } else {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
-          1000000,
-          Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC,
+          pair1CoefficientCalculation(),
+          Number(pair1Amount) * Math.pow(10, selectedPair1Asset.precision),
         );
 
         const initialTVL = Number(pair1Amount) * 2;
@@ -451,6 +491,7 @@ export const CreateNewPool: React.FC = () => {
               hash: selectedPair1Asset?.hash || '',
               name: selectedPair1Asset?.name || '',
               ticker: selectedPair1Asset?.ticker || '',
+              precision: selectedPair1Asset?.precision || 0,
             }}
             close={() => {
               setShowPair1AssetListModal(false);
