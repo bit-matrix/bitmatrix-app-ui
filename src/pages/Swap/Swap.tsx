@@ -11,7 +11,6 @@ import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { commitmentSign, validatePoolTx } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
   AssetModel,
@@ -24,15 +23,20 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { notify } from '../../components/utils/utils';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import ArrowDownIcon from '../../components/base/Svg/Icons/ArrowDown';
-import { usePoolContext, useWalletContext, useSettingsContext, usePoolConfigContext } from '../../context';
+import {
+  usePoolContext,
+  useWalletContext,
+  useSettingsContext,
+  usePoolConfigContext,
+  useTxHistoryContext,
+} from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
-import { PAIR_1_LIST } from '../../env';
-import './Swap.scss';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
+import './Swap.scss';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -58,7 +62,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   const [currentPool, setCurrentPool] = useState<Pool>();
 
-  const { setLocalData, getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
@@ -70,7 +74,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   useEffect(() => {
     let unmounted = false;
 
-    if (!unmounted) {
+    if (!unmounted && !currentPool) {
       const fromAssetListAll = uniqueAssetListAll(pools);
       const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
 
@@ -82,7 +86,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     return () => {
       unmounted = true;
     };
-  }, [pools]);
+  }, [currentPool, pools]);
 
   useEffect(() => {
     if (fromAsset && toAsset) {
@@ -323,7 +327,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let numberToAmount = 0;
 
       if (currentPool && poolConfigContext && toAsset && fromAsset) {
-        const fromIsQuote = PAIR_1_LIST.find((p1) => p1 === fromAsset.hash);
+        const fromIsQuote = currentPool.quote.assetHash === fromAsset.hash;
 
         if (fromIsQuote) {
           if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
@@ -395,11 +399,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               method: methodCall,
             };
 
-            const storeOldData = getLocalData() || [];
-
-            const newStoreData = [...storeOldData, tempTxData];
-
-            setLocalData(newStoreData);
+            const newStoreData = [...txHistoryContext, tempTxData];
+            setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
