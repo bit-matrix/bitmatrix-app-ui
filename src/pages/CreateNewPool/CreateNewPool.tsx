@@ -375,29 +375,6 @@ export const CreateNewPool: React.FC = () => {
                       </div>
                     )}
                   </Button>
-
-                  {/* <Dropdown
-                    className="create-new-pool-dropdown"
-                    title={selectedPair1Asset ? selectedPair1Asset.ticker : 'Select an asset'}
-                    activeKey={selectedPair1Asset?.ticker}
-                  >
-                    {pair1AssetList?.map((asset, i: number) => {
-                      return (
-                        <Dropdown.Item
-                          key={i}
-                          className="custom-dropdown-item"
-                          eventKey={asset.ticker}
-                          onSelect={(eventKey: any) => {
-                            const selectedAsset = pair1AssetList.find((asl) => asl.ticker === eventKey);
-
-                            setSelectedPair1Asset(selectedAsset);
-                          }}
-                        >
-                          {asset.ticker}
-                        </Dropdown.Item>
-                      );
-                    })}
-                  </Dropdown> */}
                 </div>
               </div>
             </div>
