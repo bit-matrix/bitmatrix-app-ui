@@ -11,6 +11,7 @@ import {
   SettingsContextProvider,
   WalletContextProvider,
   PoolConfigContextProvider,
+  TxHistoryContextProvider,
 } from './context';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -23,6 +24,7 @@ root.render(
       SettingsContextProvider,
       WalletContextProvider,
       PoolConfigContextProvider,
+      TxHistoryContextProvider,
     ]}
   >
     <CustomProvider theme="dark">
