@@ -20,6 +20,7 @@ import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
+import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
 import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
@@ -33,6 +34,7 @@ export const CreateNewPool: React.FC = () => {
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
   const [lpFeeTier, setLpFeeTier] = useState<{ value: number; index: number }>({ value: 500, index: 2 });
+  const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
@@ -307,7 +309,7 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className={`asset-button ${selectedPair1Asset && 'asset-button-selected'}`}
                     onClick={() => {
-                      setShowPair1AssetListModal(true);
+                      walletContext?.isEnabled ? setShowPair1AssetListModal(true) : setShowWalletList(true);
                     }}
                   >
                     {selectedPair1Asset ? (
@@ -378,7 +380,7 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className={`asset-button ${selectedPair2Asset && 'asset-button-selected'}`}
                     onClick={() => {
-                      setShowPair2AssetListModal(true);
+                      walletContext?.isEnabled ? setShowPair2AssetListModal(true) : setShowWalletList(true);
                     }}
                   >
                     {selectedPair2Asset ? (
@@ -438,6 +440,11 @@ export const CreateNewPool: React.FC = () => {
             />
           </div>
 
+          <WalletListModal
+            show={showWalletList}
+            wallet={walletContext?.marina}
+            close={() => setShowWalletList(false)}
+          />
           <AssetListModal
             show={showPair1AssetListModal}
             selectedAsset={{
