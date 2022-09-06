@@ -32,7 +32,10 @@ export const CreateNewPool: React.FC = () => {
   const [pair2AssetList, setPair2AssetList] = useState<AssetModel[]>([]);
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
-  const [lpFeeTier, setLpFeeTier] = useState<{ value: number; index: number }>({ value: 500, index: 2 });
+  const [lpFeeTier, setLpFeeTier] = useState<{ value: string; index: number }>({
+    value: '%0.20',
+    index: 2,
+  });
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
@@ -190,6 +193,8 @@ export const CreateNewPool: React.FC = () => {
         console.log(poolTxId);
 
         setLoading(false);
+
+        notify(poolTxId, 'New Pool Creation Successfully', 'info');
       } else {
         notify('Pool could not be created.', 'Wallet Error : ', 'error');
         setLoading(false);
@@ -270,10 +275,12 @@ export const CreateNewPool: React.FC = () => {
               title={lpFeeTier.value}
               activeKey={lpFeeTier.index}
               onSelect={(eventKey: any) => {
-                setLpFeeTier({ value: lpFeeTiers[eventKey], index: eventKey });
+                const lpFeeTiersKeys = Object.keys(lpFeeTiers);
+
+                setLpFeeTier({ value: lpFeeTiersKeys[eventKey], index: eventKey });
               }}
             >
-              {lpFeeTiers.map((feeTier, i: number) => {
+              {Object.keys(lpFeeTiers).map((feeTier, i: number) => {
                 return (
                   <Dropdown.Item key={i} eventKey={i}>
                     {feeTier}
