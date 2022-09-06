@@ -115,7 +115,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let methodCall;
 
       if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
-        if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+        if (fromAsset.hash === lbtcAsset.hash) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
@@ -132,7 +132,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
-          if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
+          if (toAsset.hash === lbtcAsset.hash) {
             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
             setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
           } else {
@@ -224,8 +224,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       setSwapWay(SWAP_WAY.FROM);
       const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.hash)?.amount || 0;
 
-      if (totalAmountInWallet > 0) {
-        if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
+      if (totalAmountInWallet > 0 && fromAsset) {
+        if (fromAsset.hash === lbtcAsset.hash) {
           const totalFee =
             poolConfigContext.baseFee.number +
             poolConfigContext.commitmentTxFee.number +
@@ -275,7 +275,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const pair1AmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === pair1AssetHash)?.amount;
 
         if (pair1AmountInWallet && pair1AmountInWallet > 0) {
-          if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
+          if (fromAsset?.hash === lbtcAsset.hash) {
             const totalFee =
               poolConfigContext.baseFee.number +
               poolConfigContext.commitmentTxFee.number +
@@ -330,7 +330,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const fromIsQuote = currentPool.quote.assetHash === fromAsset.hash;
 
         if (fromIsQuote) {
-          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+          if (fromAsset.hash === lbtcAsset.hash) {
             methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
             numberFromAmount = new Decimal(Number(fromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
             numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
