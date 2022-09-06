@@ -22,6 +22,7 @@ import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
+import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -101,7 +102,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.ticker === SWAP_ASSET.LBTC
+                (currentPool.quote.assetHash === lbtcAsset.hash
                   ? settingsContext.preferred_unit.value
                   : PREFERRED_UNIT_VALUE.LBTC),
               quoteAsset: currentPool.quote.ticker,
@@ -152,7 +153,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       return {
         quoteReceived: (
           Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.ticker === SWAP_ASSET.LBTC
+          (currentPool.quote.assetHash === lbtcAsset.hash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC)
         ).toString(),
