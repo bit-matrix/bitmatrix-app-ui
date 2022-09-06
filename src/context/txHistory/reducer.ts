@@ -5,7 +5,7 @@ import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { SetTxHistoryAction, SET_TX_HISTORY } from './types';
 
-const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV5');
 const localHistoryData: CommitmentStore[] | undefined = getLocalData();
 const history: CommitmentStore[] | undefined = deepCopy(localHistoryData || []);
 
