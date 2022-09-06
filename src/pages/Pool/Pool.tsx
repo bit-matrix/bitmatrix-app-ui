@@ -253,7 +253,7 @@ export const PoolPage: React.FC = () => {
   return (
     <div className="pool-page-main">
       <div className="no-pool-content">
-        <div>There are no pools</div>
+        <div>There are no pools.</div>
         <div className="no-pool-button-div">
           <Button
             appearance="default"
