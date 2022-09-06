@@ -3,9 +3,8 @@ import React from 'react';
 import { CALL_METHOD } from '@bitmatrix/models';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { quoteAmountRound, timeDifference } from '../../helper';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { CommitmentStore } from '../../model/CommitmentStore';
-import { useSettingsContext } from '../../context';
+import { useSettingsContext, useTxHistoryContext } from '../../context';
 import Numeral from 'numeral';
 import { Loading } from '../base/Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
@@ -23,11 +22,8 @@ import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import './InfoCard.scss';
 
 export const InfoCard: React.FC = () => {
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
-
+  const { txHistoryContext } = useTxHistoryContext();
   const { settingsContext } = useSettingsContext();
-
-  const data = getLocalData();
 
   const message = (cs: CommitmentStore): JSX.Element | undefined => {
     let messageBody: JSX.Element | undefined;
@@ -176,11 +172,11 @@ export const InfoCard: React.FC = () => {
     );
   };
 
-  if (data) {
+  if (txHistoryContext) {
     return (
       <div className="info-card-main">
         <div className="info-card-content">
-          {data
+          {txHistoryContext
             .sort((a, b) => b.timestamp - a.timestamp)
             .map((dt) => {
               return message(dt);
