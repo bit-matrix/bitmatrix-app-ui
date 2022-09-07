@@ -9,7 +9,7 @@ import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
-import { useSettingsContext, useWalletContext, usePoolContext } from '../../context';
+import { useSettingsContext, useWalletContext, usePoolContext, useBtcPriceContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { AssetModel, getAssetPrecession, testnetPair1AssetList } from '../../helper';
@@ -33,13 +33,14 @@ export const CreateNewPool: React.FC = () => {
   const [showPair1AssetListModal, setShowPair1AssetListModal] = useState<boolean>(false);
   const [showPair2AssetListModal, setShowPair2AssetListModal] = useState<boolean>(false);
   const [lpFeeTier, setLpFeeTier] = useState<{ value: string; index: number }>({
-    value: '%0.20',
-    index: 2,
+    value: '%0.25',
+    index: 3,
   });
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
   const { pools } = usePoolContext();
+  const { btcPrice } = useBtcPriceContext();
 
   const history = useHistory();
 
@@ -247,24 +248,22 @@ export const CreateNewPool: React.FC = () => {
   // todo
   const calcLpValues = () => {
     if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0 && selectedPair1Asset) {
-      const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
-
       if (selectedPair1Asset?.assetHash === lbtcAsset.assetHash) {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           pair1CoefficientCalculation(),
           Number(pair1Amount) * settingsContext.preferred_unit.value,
         );
 
-        const initialTVL = Number(pair1Amount) * currentLBtcPrice * 2;
+        const initialTVL = Number(pair1Amount) * btcPrice * 2;
 
         const initialAssetPrice =
-          (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) /
-          (Number(pair1Amount) * settingsContext.preferred_unit.value);
+          (Number(pair1Amount) * settingsContext.preferred_unit.value) /
+          ((Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) / btcPrice);
 
         return {
           initialLPCirculation,
-          initialTVL: initialTVL.toFixed(2),
-          initialAssetPrice: initialAssetPrice.toFixed(2),
+          initialTVL: '$' + initialTVL.toFixed(2),
+          initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };
       } else {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
@@ -340,7 +339,7 @@ export const CreateNewPool: React.FC = () => {
                 !inputsIsValid()?.pair1IsValid ? 'create-new-pool-invalid-content' : ''
               }`}
             >
-              <div className="create-new-pool-text">Base Pair</div>
+              <div className="create-new-pool-text">Base Pair : </div>
               <div className="create-new-pool-item-content">
                 <div>
                   <NumericalInput
@@ -391,7 +390,7 @@ export const CreateNewPool: React.FC = () => {
                 !inputsIsValid()?.pair2IsValid ? 'create-new-pool-invalid-content' : ''
               }`}
             >
-              <div className="create-new-pool-text">Asset Pair</div>
+              <div className="create-new-pool-text">Asset Pair : </div>
               <div className="create-new-pool-item-content">
                 <div>
                   <NumericalInput
@@ -452,7 +451,9 @@ export const CreateNewPool: React.FC = () => {
             </div>
             <div className="create-new-pool-page-footer-line-item-third">
               <div className="create-new-pool-text-icon-content">
-                <span className="create-new-pool-page-footer-line-item-texts">Initial asset price</span>
+                <span className="create-new-pool-page-footer-line-item-texts">
+                  Initial {selectedPair2Asset?.ticker || 'asset'} price
+                </span>
                 <PriceIcon className="create-new-pool-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="create-new-pool-page-footer-line-item-values">{calcLpValues().initialAssetPrice}</div>
