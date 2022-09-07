@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
 import {
+  BtcPriceContextProvider,
   ChartsContextProvider,
   PoolsContextProvider,
   SettingsContextProvider,
@@ -19,6 +20,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 root.render(
   <AppContextProvider
     providers={[
+      BtcPriceContextProvider,
       ChartsContextProvider,
       PoolsContextProvider,
       SettingsContextProvider,
