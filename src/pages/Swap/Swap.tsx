@@ -94,11 +94,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           (pool.quote.assetHash === toAsset.assetHash && pool.token.assetHash === fromAsset.assetHash),
       );
 
-      const sortedPools = filteredPools.sort(
-        (a, b) =>
-          (Number(b.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC -
-          (Number(a.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC,
-      );
+      const sortedPools = filteredPools.sort((a, b) => Number(b.token.value) - Number(a.token.value));
 
       setCurrentPool(sortedPools[0]);
     }
