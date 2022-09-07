@@ -18,7 +18,6 @@ import { SwapFromTab } from '../../../components/SwapFromTab/SwapFromTab';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getAssetPrecession, getPrimaryPoolConfig, getAssetTicker, poolShareRound } from '../../../helper';
 import FROM_AMOUNT_PERCENT from '../../../enum/FROM_AMOUNT_PERCENT';
-import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import plus from '../../../images/plus.png';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
@@ -28,8 +27,8 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import { Balance } from 'marina-provider';
-import './AddLiquidity.scss';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
+import './AddLiquidity.scss';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -62,15 +61,22 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const output = convertion.convertForLiquidityCtx(inputNum * settingsContext.preferred_unit.value, currentPool);
+        const output = convertion.convertForLiquidityCtx(
+          inputNum * Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
+          currentPool,
+        );
 
         setPair1Value(input);
 
-        setPair2Value((output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+        setPair2Value(
+          (
+            output / Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text))
+          ).toString(),
+        );
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, settingsContext.preferred_unit.text],
   );
 
   const onChangeTokenAmount = useCallback(
@@ -78,20 +84,24 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       const inputNum = Number(input);
 
       if (currentPool && poolConfigContext && input !== '.') {
-        const output = convertion.convertForLiquidityCtx(inputNum * PREFERRED_UNIT_VALUE.LBTC, currentPool, true);
-
-        if (currentPool.quote.ticker === SWAP_ASSET.LBTC) {
-          setPair1Value((output / settingsContext.preferred_unit.value).toString());
-        } else {
-          setPair1Value((output / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-        }
+        const output = convertion.convertForLiquidityCtx(
+          inputNum * Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
+          currentPool,
+          true,
+        );
 
         setPair2Value(input);
+
+        setPair1Value(
+          (
+            output / Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text))
+          ).toString(),
+        );
 
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.value],
+    [currentPool, poolConfigContext, settingsContext.preferred_unit.text],
   );
 
   const calcAmountPercent = useCallback(
@@ -191,41 +201,39 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
       if ((pair1Value && parseFloat(pair1Value) > 0) || (pair2Value && parseFloat(pair2Value) > 0)) {
         const quoteAssetId = currentPool.quote.assetHash;
-        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        let quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount || 0;
 
         const tokenAssetId = currentPool.token.assetHash;
-        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        let quoteAmountWallet = 0;
-        if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-          if (currentPool.quote?.assetHash === lbtcAsset.assetHash) {
-            const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
-            const totalFee =
-              primaryPoolConfig.baseFee.number +
-              primaryPoolConfig.commitmentTxFee.number +
-              primaryPoolConfig.defaultOrderingFee.number +
-              primaryPoolConfig.serviceFee.number +
-              1000;
+        const totalFee =
+          primaryPoolConfig.baseFee.number +
+          primaryPoolConfig.commitmentTxFee.number +
+          primaryPoolConfig.defaultOrderingFee.number +
+          primaryPoolConfig.serviceFee.number +
+          1000;
 
-            quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
-          } else {
-            quoteAmountWallet = quoteAmountInWallet / PREFERRED_UNIT_VALUE.LBTC;
-          }
+        if (quoteAssetId === lbtcAsset.assetHash) {
+          quoteAmountInWallet = quoteAmountInWallet - totalFee;
+        } else if (tokenAssetId === lbtcAsset.assetHash) {
+          tokenAmountInWallet = tokenAmountInWallet - totalFee;
         }
 
-        let tokenAmountWallet = '';
-        if (tokenAmountInWallet && tokenAmountInWallet > 0) {
-          tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
+        const finalPair1Value =
+          Number(pair1Value) * Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text));
 
-        if (Number(pair1Value) <= quoteAmountWallet && quoteAmountWallet > 0) {
+        const finalPair2Value =
+          Number(pair2Value) * Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text));
+
+        if (finalPair1Value <= quoteAmountInWallet && quoteAmountInWallet > 0) {
           quoteIsValid = true;
         } else {
           quoteIsValid = false;
         }
 
-        if (Number(pair2Value) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
+        if (finalPair2Value <= Number(tokenAmountInWallet) && Number(tokenAmountInWallet) > 0) {
           tokenIsValid = true;
         } else {
           tokenIsValid = false;
@@ -234,19 +242,18 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         return { tokenIsValid, quoteIsValid };
       }
     }
+
     return { tokenIsValid: true, quoteIsValid: true };
-  }, [currentPool, pair1Value, pair2Value, poolConfigContext, settingsContext.preferred_unit.value, walletContext]);
+  }, [currentPool, pair1Value, pair2Value, poolConfigContext, settingsContext.preferred_unit.text, walletContext]);
 
   const addLiquidityClick = async () => {
-    if (walletContext?.marina) {
+    if (walletContext?.marina && currentPool) {
       const quoteAmountN = new Decimal(Number(pair1Value))
-        .mul(
-          currentPool?.quote.assetHash === lbtcAsset.assetHash
-            ? settingsContext.preferred_unit.value
-            : PREFERRED_UNIT_VALUE.LBTC,
-        )
+        .mul(Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)))
         .toNumber();
-      const tokenAmountN = new Decimal(Number(pair2Value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const tokenAmountN = new Decimal(Number(pair2Value))
+        .mul(Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)))
+        .toNumber();
 
       if (currentPool && poolConfigContext) {
         setLoading(true);
