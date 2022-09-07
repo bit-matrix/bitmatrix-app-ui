@@ -47,7 +47,6 @@ export const useChartsSocket = () => {
 
       if (unconfirmedTxs.length > 0) {
         const txIds = unconfirmedTxs.map((tx) => tx.txId);
-
         socket.emit('checkTxStatus', `${txIds}`);
       } else {
         setTxStatusesLoading(false);
@@ -71,17 +70,9 @@ export const useChartsSocket = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const checkTxStatusWithIds = () => {
+  const checkTxStatusWithIds = (txIds: string[]) => {
     if (socketInstance) {
-      if (txHistoryContext && txHistoryContext.length > 0) {
-        const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
-
-        if (unconfirmedTxs.length > 0) {
-          const txIds = unconfirmedTxs.map((tx) => tx.txId);
-
-          socketInstance.emit('checkTxStatus', `${txIds}`);
-        }
-      }
+      socketInstance.emit('checkTxStatus', `${txIds}`);
     }
   };
 

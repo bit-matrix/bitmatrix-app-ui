@@ -31,7 +31,7 @@ import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
 
 type Props = {
-  checkTxStatusWithIds: () => void;
+  checkTxStatusWithIds: (txIds: string[]) => void;
 };
 
 const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
@@ -306,11 +306,13 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             };
 
             const newStoreData = [...txHistoryContext, tempTxData];
+            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+            const txIds = unconfirmedTxs.map((tx) => tx.txId);
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
-            checkTxStatusWithIds();
+            checkTxStatusWithIds(txIds);
           }
           // notify(
           //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
