@@ -12,7 +12,6 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { useSettingsContext, useWalletContext, usePoolContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { AssetModel, getAssetPrecession, testnetPair1AssetList } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
@@ -51,7 +50,7 @@ export const CreateNewPool: React.FC = () => {
         .map((balance) => {
           return {
             name: balance.asset.name || '',
-            hash: balance.asset.assetHash,
+            assetHash: balance.asset.assetHash,
             ticker: balance.asset.ticker || '',
             precision: balance.asset.precision,
           };
@@ -60,7 +59,7 @@ export const CreateNewPool: React.FC = () => {
       const filteredPair2AssetList = walletContext.balances.map((balance) => {
         return {
           name: balance.asset.name || '',
-          hash: balance.asset.assetHash,
+          assetHash: balance.asset.assetHash,
           ticker: balance.asset.ticker || '',
           precision: balance.asset.precision,
         };
@@ -87,29 +86,32 @@ export const CreateNewPool: React.FC = () => {
       if ((parseFloat(pair1Amount) > 0 || parseFloat(pair2Amount) > 0) && selectedPair1Asset && selectedPair2Asset) {
         const totalFee = 1000;
 
-        const quoteAssetId = selectedPair1Asset?.hash;
-        const quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount;
+        const quoteAssetId = selectedPair1Asset?.assetHash;
+        let quoteAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === quoteAssetId)?.amount || 0;
 
-        const tokenAssetId = selectedPair2Asset?.hash;
-        const tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount;
+        const tokenAssetId = selectedPair2Asset?.assetHash;
+        let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        let quoteAmountWallet = 0;
-        if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-          quoteAmountWallet = (quoteAmountInWallet - totalFee) / settingsContext.preferred_unit.value;
+        if (quoteAssetId === lbtcAsset.assetHash) {
+          quoteAmountInWallet = quoteAmountInWallet - totalFee;
+        } else if (tokenAssetId === lbtcAsset.assetHash) {
+          tokenAmountInWallet = tokenAmountInWallet - totalFee;
         }
 
-        let tokenAmountWallet = '';
-        if (tokenAmountInWallet && tokenAmountInWallet > 0) {
-          tokenAmountWallet = (tokenAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-        }
+        const finalPair1Value =
+          Number(pair1Amount) *
+          Math.pow(10, getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text));
 
-        if (Number(pair1Amount) <= quoteAmountWallet && quoteAmountWallet > 0) {
+        const finalPair2Value =
+          Number(pair2Amount) *
+          Math.pow(10, getAssetPrecession(selectedPair2Asset, settingsContext.preferred_unit.text));
+
+        if (quoteAmountInWallet && finalPair1Value <= quoteAmountInWallet && quoteAmountInWallet > 0) {
           pair1IsValid = true;
         } else {
           pair1IsValid = false;
         }
-
-        if (Number(pair2Amount) <= Number(tokenAmountWallet) && Number(tokenAmountWallet) > 0) {
+        if (tokenAmountInWallet && finalPair2Value <= tokenAmountInWallet && tokenAmountInWallet > 0) {
           pair2IsValid = true;
         } else {
           pair2IsValid = false;
@@ -135,7 +137,7 @@ export const CreateNewPool: React.FC = () => {
   const pair1CoefficientCalculation = () => {
     let pair1Coefficient = 1;
     if (selectedPair1Asset) {
-      const pair1IsLbtc = selectedPair1Asset.hash === lbtcAsset.hash ? true : false;
+      const pair1IsLbtc = selectedPair1Asset.assetHash === lbtcAsset.assetHash ? true : false;
 
       if (pair1IsLbtc) {
         pair1Coefficient = 50;
@@ -165,13 +167,13 @@ export const CreateNewPool: React.FC = () => {
 
   const createNewPoolClick = async () => {
     if (walletContext?.marina && selectedPair1Asset && selectedPair2Asset) {
-      const pair1IsLbtc = selectedPair1Asset.hash === lbtcAsset.hash ? true : false;
-
       const pair1AmountN = new Decimal(Number(pair1Amount))
-        .mul(pair1IsLbtc ? settingsContext.preferred_unit.value : PREFERRED_UNIT_VALUE.LBTC)
+        .mul(Math.pow(10, getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text)))
         .toNumber();
 
-      const pair2AmountN = new Decimal(pair2Amount).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const pair2AmountN = new Decimal(Number(pair2Amount))
+        .mul(Math.pow(10, getAssetPrecession(selectedPair2Asset, settingsContext.preferred_unit.text)))
+        .toNumber();
 
       let fundingTxId;
 
@@ -182,22 +184,22 @@ export const CreateNewPool: React.FC = () => {
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+            asset: lbtcAsset.assetHash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+            asset: lbtcAsset.assetHash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: pair1AmountN,
-            asset: selectedPair1Asset.hash,
+            asset: selectedPair1Asset.assetHash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: pair2AmountN,
-            asset: selectedPair2Asset.hash,
+            asset: selectedPair2Asset.assetHash,
           },
         ]);
 
@@ -218,8 +220,8 @@ export const CreateNewPool: React.FC = () => {
 
         const newPool = poolDeployment.poolDeploy(
           fundingTxId,
-          selectedPair1Asset.hash,
-          selectedPair2Asset.hash,
+          selectedPair1Asset.assetHash,
+          selectedPair2Asset.assetHash,
           pair1AmountN,
           pair2AmountN,
           addressInformation.publicKey,
@@ -242,11 +244,12 @@ export const CreateNewPool: React.FC = () => {
     }
   };
 
+  // todo
   const calcLpValues = () => {
     if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0 && selectedPair1Asset) {
       const currentLBtcPrice = Number(pools[0].token.value) / Number(pools[0].quote.value);
 
-      if (selectedPair1Asset?.hash === lbtcAsset.hash) {
+      if (selectedPair1Asset?.assetHash === lbtcAsset.assetHash) {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           pair1CoefficientCalculation(),
           Number(pair1Amount) * settingsContext.preferred_unit.value,
@@ -346,7 +349,9 @@ export const CreateNewPool: React.FC = () => {
                     onChange={(inputValue) => {
                       onChangePair1Amount(inputValue);
                     }}
-                    decimalLength={getAssetPrecession(SWAP_ASSET.LBTC, settingsContext.preferred_unit.text)}
+                    decimalLength={
+                      selectedPair1Asset && getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text)
+                    }
                   />
                 </div>
                 <div>
@@ -360,7 +365,7 @@ export const CreateNewPool: React.FC = () => {
                     {selectedPair1Asset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={selectedPair1Asset.hash}
+                          asset={selectedPair1Asset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -395,6 +400,9 @@ export const CreateNewPool: React.FC = () => {
                     onChange={(inputValue) => {
                       onChangePair2Amount(inputValue);
                     }}
+                    decimalLength={
+                      selectedPair2Asset && getAssetPrecession(selectedPair2Asset, settingsContext.preferred_unit.text)
+                    }
                   />
                 </div>
                 <div>
@@ -408,7 +416,7 @@ export const CreateNewPool: React.FC = () => {
                     {selectedPair2Asset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={selectedPair2Asset.hash}
+                          asset={selectedPair2Asset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -465,7 +473,7 @@ export const CreateNewPool: React.FC = () => {
           <AssetListModal
             show={showPair1AssetListModal}
             selectedAsset={{
-              hash: selectedPair1Asset?.hash || '',
+              assetHash: selectedPair1Asset?.assetHash || '',
               name: selectedPair1Asset?.name || '',
               ticker: selectedPair1Asset?.ticker || '',
               precision: selectedPair1Asset?.precision || 0,
@@ -474,7 +482,7 @@ export const CreateNewPool: React.FC = () => {
               setShowPair1AssetListModal(false);
             }}
             onSelectAsset={(asset) => {
-              if (selectedPair2Asset?.hash === asset.hash) {
+              if (selectedPair2Asset?.assetHash === asset.assetHash) {
                 setSelectedPair2Asset(undefined);
               }
               setSelectedPair1Asset(asset);
@@ -489,7 +497,7 @@ export const CreateNewPool: React.FC = () => {
             }}
             selectedAsset={selectedPair2Asset}
             onSelectAsset={(asset) => {
-              if (selectedPair1Asset?.hash === asset.hash) {
+              if (selectedPair1Asset?.assetHash === asset.assetHash) {
                 setSelectedPair1Asset(undefined);
               }
               setSelectedPair2Asset(asset);

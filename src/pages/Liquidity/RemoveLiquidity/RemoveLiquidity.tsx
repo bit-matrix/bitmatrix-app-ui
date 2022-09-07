@@ -101,7 +101,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.assetHash === lbtcAsset.hash
+                (currentPool.quote.assetHash === lbtcAsset.assetHash
                   ? settingsContext.preferred_unit.value
                   : PREFERRED_UNIT_VALUE.LBTC),
               quoteAsset: currentPool.quote.ticker,
@@ -152,7 +152,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       return {
         quoteReceived: (
           Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.assetHash === lbtcAsset.hash
+          (currentPool.quote.assetHash === lbtcAsset.assetHash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC)
         ).toString(),

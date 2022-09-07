@@ -6,7 +6,6 @@ import { Balance } from 'marina-provider';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
-import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { commitmentSign, validatePoolTx } from '@bitmatrix/lib';
@@ -76,7 +75,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
     if (!unmounted && !currentPool) {
       const fromAssetListAll = uniqueAssetListAll(pools);
-      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
+      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.assetHash);
 
       setFromAsset(lbtcAsset);
       setFromAssetList(fromAssetListAll);
@@ -92,8 +91,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     if (fromAsset && toAsset) {
       const filteredPools = pools.filter(
         (pool) =>
-          (pool.quote.assetHash === fromAsset.hash && pool.token.assetHash === toAsset.hash) ||
-          (pool.quote.assetHash === toAsset.hash && pool.token.assetHash === fromAsset.hash),
+          (pool.quote.assetHash === fromAsset.assetHash && pool.token.assetHash === toAsset.assetHash) ||
+          (pool.quote.assetHash === toAsset.assetHash && pool.token.assetHash === fromAsset.assetHash),
       );
 
       const sortedPools = filteredPools.sort(
@@ -115,13 +114,13 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let methodCall;
 
       if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
-        if (fromAsset.hash === lbtcAsset.hash) {
+        if (fromAsset.assetHash === lbtcAsset.assetHash) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        const findPair1 = currentPool.quote.assetHash === fromAsset.hash;
+        const findPair1 = currentPool.quote.assetHash === fromAsset.assetHash;
 
         if (findPair1) {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -132,7 +131,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
-          if (toAsset.hash === lbtcAsset.hash) {
+          if (toAsset.assetHash === lbtcAsset.assetHash) {
             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
             setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
           } else {
@@ -166,13 +165,13 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let methodCall;
 
       if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
-        if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
+        if (toAsset.assetHash === TESTNET_ASSET_ID.LBTC) {
           inputNum = inputNum * settingsContext.preferred_unit.value;
         } else {
           inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
         }
 
-        const findPair1 = currentPool.quote.assetHash === toAsset.hash;
+        const findPair1 = currentPool.quote.assetHash === toAsset.assetHash;
 
         if (findPair1) {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
@@ -183,7 +182,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
 
         if (output.amount > 0) {
-          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
+          if (fromAsset.assetHash === lbtcAsset.assetHash) {
             setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
             setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
           } else {
@@ -222,10 +221,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       let inputAmount = '';
       setSwapWay(SWAP_WAY.FROM);
-      const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.hash)?.amount || 0;
+      const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.assetHash)?.amount || 0;
 
       if (totalAmountInWallet > 0 && fromAsset) {
-        if (fromAsset.hash === lbtcAsset.hash) {
+        if (fromAsset.assetHash === lbtcAsset.assetHash) {
           const totalFee =
             poolConfigContext.baseFee.number +
             poolConfigContext.commitmentTxFee.number +
@@ -271,11 +270,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       const inputFromValue = Number(fromAmount);
 
       if (inputFromValue > 0) {
-        const pair1AssetHash = fromAsset?.hash || '';
+        const pair1AssetHash = fromAsset?.assetHash || '';
         const pair1AmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === pair1AssetHash)?.amount;
 
         if (pair1AmountInWallet && pair1AmountInWallet > 0) {
-          if (fromAsset?.hash === lbtcAsset.hash) {
+          if (fromAsset?.assetHash === lbtcAsset.assetHash) {
             const totalFee =
               poolConfigContext.baseFee.number +
               poolConfigContext.commitmentTxFee.number +
@@ -304,7 +303,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     poolConfigContext,
     walletContext,
     fromAmount,
-    fromAsset?.hash,
+    fromAsset?.assetHash,
     settingsContext.preferred_unit.value,
   ]);
 
@@ -327,10 +326,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let numberToAmount = 0;
 
       if (currentPool && poolConfigContext && toAsset && fromAsset) {
-        const fromIsQuote = currentPool.quote.assetHash === fromAsset.hash;
+        const fromIsQuote = currentPool.quote.assetHash === fromAsset.assetHash;
 
         if (fromIsQuote) {
-          if (fromAsset.hash === lbtcAsset.hash) {
+          if (fromAsset.assetHash === lbtcAsset.assetHash) {
             methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
             numberFromAmount = new Decimal(Number(fromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
             numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
@@ -456,7 +455,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const fromAssetListClick = () => {
     setShowPair1AssetListModal(true);
     if (toAsset) {
-      const fromAssetListAll = uniqueMatchingAssetList(pools, toAsset.hash);
+      const fromAssetListAll = uniqueMatchingAssetList(pools, toAsset.assetHash);
       setFromAssetList(fromAssetListAll);
     }
   };
@@ -464,7 +463,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const toAssetListClick = () => {
     setShowPair2AssetListModal(true);
     if (fromAsset) {
-      const toAssetListAll = uniqueMatchingAssetList(pools, fromAsset.hash);
+      const toAssetListAll = uniqueMatchingAssetList(pools, fromAsset.assetHash);
       setToAssetList(toAssetListAll);
     }
   };
@@ -493,22 +492,19 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={getAssetPrecession(
-                      fromAsset?.ticker as SWAP_ASSET,
-                      settingsContext.preferred_unit.text,
-                    )}
+                    decimalLength={fromAsset && getAssetPrecession(fromAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${fromAsset?.hash && 'asset-button-selected'}`}
+                    className={`asset-button ${fromAsset?.assetHash && 'asset-button-selected'}`}
                     onClick={fromAssetListClick}
                   >
                     {fromAsset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={fromAsset.hash}
+                          asset={fromAsset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -544,22 +540,19 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                       setToAmount(inputValue);
                       setSwapWay(SWAP_WAY.TO);
                     }}
-                    decimalLength={getAssetPrecession(
-                      toAsset?.ticker as SWAP_ASSET,
-                      settingsContext.preferred_unit.text,
-                    )}
+                    decimalLength={toAsset && getAssetPrecession(toAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${toAsset?.hash && 'asset-button-selected'}`}
+                    className={`asset-button ${toAsset?.assetHash && 'asset-button-selected'}`}
                     onClick={toAssetListClick}
                   >
                     {toAsset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={toAsset.hash}
+                          asset={toAsset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"

@@ -124,7 +124,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           const quoteAmount = quoteTotalAmountInWallet - totalFee;
 
           if (quoteAmount > 0) {
-            if (currentPool.quote.assetHash === lbtcAsset.hash) {
+            if (currentPool.quote.assetHash === lbtcAsset.assetHash) {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
                 inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
               }
@@ -198,7 +198,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
 
         let quoteAmountWallet = 0;
         if (quoteAmountInWallet && quoteAmountInWallet > 0) {
-          if (currentPool.quote?.assetHash === lbtcAsset.hash) {
+          if (currentPool.quote?.assetHash === lbtcAsset.assetHash) {
             const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
 
             const totalFee =
@@ -241,7 +241,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (walletContext?.marina) {
       const quoteAmountN = new Decimal(Number(pair1Value))
         .mul(
-          currentPool?.quote.assetHash === lbtcAsset.hash
+          currentPool?.quote.assetHash === lbtcAsset.assetHash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC,
         )
@@ -310,7 +310,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool && pair1Value !== '' && pair2Value !== '') {
       const quoteAmountN = new Decimal(Number(pair1Value))
         .mul(
-          currentPool.quote.assetHash === lbtcAsset.hash
+          currentPool.quote.assetHash === lbtcAsset.assetHash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC,
         )
@@ -389,9 +389,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                       setQuotePercent(undefined);
                     }}
                     decimalLength={
-                      currentPool?.quote.ticker === SWAP_ASSET.LBTC
-                        ? getAssetPrecession(SWAP_ASSET.LBTC, settingsContext.preferred_unit.text)
-                        : 2
+                      currentPool?.quote && getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)
                     }
                   />
                 </div>
@@ -431,6 +429,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                       onChangeTokenAmount(inputValue);
                       setTokenPercent(undefined);
                     }}
+                    decimalLength={
+                      currentPool?.token && getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)
+                    }
                   />
                 </div>
               </div>
