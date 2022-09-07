@@ -13,7 +13,7 @@ export const notify = (
   header?: string,
   type?: MessageType,
   placement: PlacementType = 'topEnd',
-  duration = 3000,
+  duration = 5000,
 ): any => {
   toaster.push(
     <CustomNotify header={header} type={type}>
