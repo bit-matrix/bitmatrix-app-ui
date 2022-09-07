@@ -32,17 +32,20 @@ export const usePoolsSocket = () => {
       if (data) {
         setPoolsContext(data);
 
-        const filteredPools = data.filter((pl) => {
-          return pl.token.assetHash === lbtcAsset.assetHash && pl.quote.assetHash === TESTNET_ASSET_ID.USDT;
-        });
+        if (data.length > 0) {
+          const filteredPools = data.filter((pl) => {
+            return pl.token.assetHash === lbtcAsset.assetHash && pl.quote.assetHash === TESTNET_ASSET_ID.USDT;
+          });
 
-        const tvlSort = filteredPools.sort((a, b) => Number(b.quote.value) - Number(a.quote.value));
-        const bestPool = tvlSort[0];
-        console.log(bestPool);
+          const tvlSort = filteredPools.sort((a, b) => Number(b.quote.value) - Number(a.quote.value));
+          const bestPool = tvlSort[0];
+          console.log(bestPool);
 
-        const price = Math.floor(Number(bestPool.quote.value) / Number(bestPool.token.value));
+          const price = Math.floor(Number(bestPool.quote.value) / Number(bestPool.token.value));
 
-        setBtcPriceContext(price);
+          setBtcPriceContext(price);
+        }
+
         setPoolsLoading(false);
       }
     });
