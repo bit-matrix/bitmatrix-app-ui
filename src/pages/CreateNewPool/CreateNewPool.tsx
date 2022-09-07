@@ -279,8 +279,8 @@ export const CreateNewPool: React.FC = () => {
 
         return {
           initialLPCirculation,
-          initialTVL: initialTVL.toFixed(2),
-          initialAssetPrice: initialAssetPrice.toFixed(2),
+          initialTVL: '$' + initialTVL.toFixed(2),
+          initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };
       }
     }
@@ -340,7 +340,7 @@ export const CreateNewPool: React.FC = () => {
                 !inputsIsValid()?.pair1IsValid ? 'create-new-pool-invalid-content' : ''
               }`}
             >
-              <div className="create-new-pool-text">Pool Pair 1</div>
+              <div className="create-new-pool-text">Base Pair</div>
               <div className="create-new-pool-item-content">
                 <div>
                   <NumericalInput
@@ -391,7 +391,7 @@ export const CreateNewPool: React.FC = () => {
                 !inputsIsValid()?.pair2IsValid ? 'create-new-pool-invalid-content' : ''
               }`}
             >
-              <div className="create-new-pool-text">Pool Pair 2</div>
+              <div className="create-new-pool-text">Asset Pair</div>
               <div className="create-new-pool-item-content">
                 <div>
                   <NumericalInput
