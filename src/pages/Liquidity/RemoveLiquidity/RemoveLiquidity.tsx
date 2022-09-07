@@ -17,7 +17,7 @@ import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
+import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
@@ -101,11 +101,11 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.assetHash === lbtcAsset.assetHash
-                  ? settingsContext.preferred_unit.value
-                  : PREFERRED_UNIT_VALUE.LBTC),
+                Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
               quoteAsset: currentPool.quote.ticker,
-              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
+              tokenAmount:
+                new Decimal(calcLpAmounts.tokenReceived).toNumber() *
+                Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
               tokenAsset: currentPool.token.ticker,
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
