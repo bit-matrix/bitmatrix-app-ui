@@ -162,6 +162,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             setQuotePercent(quotePercent);
           }
         }
+
         if (tokenPercent && tokenTotalAmountInWallet) {
           if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
             inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
