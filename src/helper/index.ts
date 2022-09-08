@@ -12,8 +12,9 @@ import { lbtcAsset } from '../lib/liquid-dev/ASSET';
 
 export type AssetModel = {
   name: string;
-  hash: string;
+  assetHash: string;
   ticker: string;
+  precision: number;
 };
 
 export const timeDifference = (time: number): string => {
@@ -54,8 +55,8 @@ export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
 
 export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
-export const getAssetPrecession = (asset: SWAP_ASSET, preferred_unit: PREFERRED_UNIT): number => {
-  if (asset === SWAP_ASSET.LBTC) {
+export const getAssetPrecession = (asset: AssetModel | PAsset, preferred_unit: PREFERRED_UNIT): number => {
+  if (asset.assetHash === lbtcAsset.assetHash) {
     switch (preferred_unit) {
       case PREFERRED_UNIT.LBTC:
         return 8;
@@ -69,7 +70,7 @@ export const getAssetPrecession = (asset: SWAP_ASSET, preferred_unit: PREFERRED_
         return 2;
     }
   } else {
-    return 2;
+    return asset.precision;
   }
 };
 
@@ -125,11 +126,23 @@ export const uniqueAssetListAll = (pools: Pool[]): AssetModel[] => {
   const assetList: AssetModel[] = [];
 
   pools.forEach((pool) => {
-    assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
-    assetList.push({ hash: pool.token.assetHash, ticker: pool.token.ticker, name: pool.token.name });
+    assetList.push({
+      assetHash: pool.quote.assetHash,
+      ticker: pool.quote.ticker,
+      name: pool.quote.name,
+      precision: pool.quote.precision,
+    });
+    assetList.push({
+      assetHash: pool.token.assetHash,
+      ticker: pool.token.ticker,
+      name: pool.token.name,
+      precision: pool.token.precision,
+    });
   });
 
-  const uniqueList = assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
+  const uniqueList = assetList.filter(
+    (value, index, self) => index === self.findIndex((t) => t.assetHash === value.assetHash),
+  );
 
   return uniqueList;
 };
@@ -138,10 +151,17 @@ export const uniqueQuoteAssetList = (pools: Pool[]): AssetModel[] => {
   const assetList: AssetModel[] = [];
 
   pools.forEach((pool) => {
-    assetList.push({ hash: pool.quote.assetHash, ticker: pool.quote.ticker, name: pool.quote.name });
+    assetList.push({
+      assetHash: pool.quote.assetHash,
+      ticker: pool.quote.ticker,
+      name: pool.quote.name,
+      precision: pool.quote.precision,
+    });
   });
 
-  const uniqueList = assetList.filter((value, index, self) => index === self.findIndex((t) => t.hash === value.hash));
+  const uniqueList = assetList.filter(
+    (value, index, self) => index === self.findIndex((t) => t.assetHash === value.assetHash),
+  );
 
   return uniqueList;
 };
@@ -151,7 +171,7 @@ export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string
     (pool: Pool) => pool.token.assetHash === selectedAssetHash || pool.quote.assetHash === selectedAssetHash,
   );
 
-  return uniqueAssetListAll(currentPools).filter((cp) => cp.hash !== selectedAssetHash);
+  return uniqueAssetListAll(currentPools).filter((cp) => cp.assetHash !== selectedAssetHash);
 };
 
 export const getUnitValue = (asset: PAsset, settings: Settings): number => {
@@ -230,3 +250,16 @@ export const usePrevious = <T>(value: T): T | undefined => {
   });
   return ref.current;
 };
+
+export const testnetPair1AssetList = [
+  '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49',
+  'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958',
+  'ac3e0ff248c5051ffd61e00155b7122e5ebc04fd397a0ecbdd4f4e4a56232926',
+  '0d86b2f6a8c3b02a8c7c8836b83a081e68b7e2b4bcdfc58981fc5486f59f7518',
+];
+
+export const mainnetPair1AssetList = [
+  '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d',
+  'ce091c998b83c78bb71a632313ba3760f1763d9cfcffae02258ffa9865a37bd2',
+  '0e99c1a6da379d1f4151fb9df90449d40d0608f6cb33a5bcbfc8c265f42bab0a',
+];

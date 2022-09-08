@@ -5,6 +5,7 @@ import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
 import { createRoot } from 'react-dom/client';
 import {
+  BtcPriceContextProvider,
   ChartsContextProvider,
   PoolsContextProvider,
   SettingsContextProvider,
@@ -19,6 +20,7 @@ const root = createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <AppContextProvider
     providers={[
+      BtcPriceContextProvider,
       ChartsContextProvider,
       PoolsContextProvider,
       SettingsContextProvider,
