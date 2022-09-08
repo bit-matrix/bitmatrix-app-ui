@@ -33,7 +33,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
               <div className={`token-item pool-card-${chartSummary?.price.rate.direction}-text`}>
-                ${pool?.tokenPrice ? pool.tokenPrice.toLocaleString() : '0.0'}
+                ${chartSummary?.price.todayValue ? chartSummary?.price.todayValue.toLocaleString() : '0.0'}
               </div>
             </li>
             <li className="column-1-item percent">
