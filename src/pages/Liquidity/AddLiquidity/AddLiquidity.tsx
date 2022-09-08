@@ -288,9 +288,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: quoteAmountN,
-              quoteAsset: currentPool.quote.ticker,
+              quoteAsset: currentPool.quote,
               tokenAmount: tokenAmountN,
-              tokenAsset: currentPool.token.ticker,
+              tokenAsset: currentPool.token,
               lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),

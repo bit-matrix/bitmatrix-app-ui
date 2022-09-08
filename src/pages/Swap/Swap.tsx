@@ -361,9 +361,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
-              quoteAsset: currentPool.quote.ticker,
+              quoteAsset: currentPool.quote,
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
-              tokenAsset: currentPool.token.ticker,
+              tokenAsset: currentPool.token,
               timestamp: new Date().valueOf(),
               errorMessage: undefined,
               completed: false,
