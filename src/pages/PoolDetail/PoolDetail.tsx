@@ -6,12 +6,11 @@ import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
-import { quoteAmountRound } from '../../helper';
+import { getAssetPrecession, quoteAmountRound } from '../../helper';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
-import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
@@ -143,7 +142,10 @@ export const PoolDetail: React.FC = () => {
                       height="1.5rem"
                       asset={pool.quote.assetHash}
                     />
-                    {quoteAmountRound(Number(pool.quote.value) / settingsContext.preferred_unit.value)}
+                    {quoteAmountRound(
+                      Number(pool.quote.value) /
+                        Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
+                    )}
                   </div>
                 </div>
 
@@ -155,7 +157,10 @@ export const PoolDetail: React.FC = () => {
                       height="1.5rem"
                       asset={pool.token.assetHash}
                     />
-                    {Numeral(Number(pool.token.value) / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')}
+                    {Numeral(
+                      Number(pool.token.value) /
+                        Math.pow(10, getAssetPrecession(pool.token, settingsContext.preferred_unit.text)),
+                    ).format('(0.00a)')}
                   </div>
                 </div>
               </div>
@@ -175,7 +180,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>{pool.token.ticker} Price</div>
-                    <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
+                    <div className="pool-detail-table-text">${pool.tokenPrice.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.price.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.price.rate.direction}-text`}>
