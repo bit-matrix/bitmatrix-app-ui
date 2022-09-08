@@ -180,7 +180,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>{pool.token.ticker} Price</div>
-                    <div className="pool-detail-table-text">${pool.tokenPrice.toLocaleString()}</div>
+                    <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.price.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.price.rate.direction}-text`}>
