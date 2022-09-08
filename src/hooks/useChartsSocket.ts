@@ -18,8 +18,6 @@ export const useChartsSocket = () => {
 
   const { txHistoryContext } = useTxHistoryContext();
 
-  console.log('socket id', socketInstance?.id);
-
   useEffect(() => {
     const socket = io(API_SOCKET_SERVER_URL);
     setSocketInstance(socket);

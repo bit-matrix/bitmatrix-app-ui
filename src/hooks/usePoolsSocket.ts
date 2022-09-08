@@ -40,7 +40,6 @@ export const usePoolsSocket = () => {
           if (filteredPools.length > 0) {
             const tvlSort = filteredPools.sort((a, b) => Number(b.quote.value) - Number(a.quote.value));
             const bestPool = tvlSort[0];
-            console.log(bestPool);
 
             const price = Math.floor(Number(bestPool.quote.value) / Number(bestPool.token.value));
 
