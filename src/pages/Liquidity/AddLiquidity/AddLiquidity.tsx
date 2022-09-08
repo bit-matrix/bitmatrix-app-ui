@@ -29,6 +29,7 @@ import { NumericalInput } from '../../../components/NumericalInput/NumericalInpu
 import { Balance } from 'marina-provider';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 import './AddLiquidity.scss';
+import { lpFeeTiers } from '@bitmatrix/lib/pool';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -458,7 +459,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 <span className="add-liquidity-page-footer-line-item-texts">LP rewards</span>
                 <RewardIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
-              <div className="add-liquidity-page-footer-line-item-values">% 0.2</div>
+              <div className="add-liquidity-page-footer-line-item-values">
+                {Object.keys(lpFeeTiers)[currentPool?.lpFeeTierIndex.number || 0]}
+              </div>
             </div>
             <div className="add-liquidity-page-footer-line-item-third">
               <div className="add-liquidity-text-icon-content">

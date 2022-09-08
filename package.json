@@ -4,7 +4,7 @@
   "homepage": "https://multi.bitmatrix.app",
   "private": true,
   "dependencies": {
-    "@bitmatrix/lib": "^0.0.92",
+    "@bitmatrix/lib": "^0.0.93",
     "@bitmatrix/models": "^0.1.40",
     "@rsuite/icons": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.5",
