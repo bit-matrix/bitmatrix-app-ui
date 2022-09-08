@@ -322,10 +322,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          setSwapWay(undefined);
-          setFromAmount('');
-          setToAmount('');
-          setSelectedFromAmountPercent(undefined);
+          // setSwapWay(undefined);
+          // setFromAmount('');
+          // setToAmount('');
+          // setSelectedFromAmountPercent(undefined);
 
           let commitmentTxId = '';
 
