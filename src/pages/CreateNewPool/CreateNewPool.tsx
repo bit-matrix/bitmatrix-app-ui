@@ -233,8 +233,6 @@ export const CreateNewPool: React.FC = () => {
 
         const poolTxId = await api.sendRawTransaction(newPool);
 
-        console.log(poolTxId);
-
         setLoading(false);
 
         notify(poolTxId, 'New Pool Creation Successfully', 'info');
