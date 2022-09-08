@@ -32,7 +32,7 @@ import './AddLiquidity.scss';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 
 type Props = {
-  checkTxStatusWithIds: () => void;
+  checkTxStatusWithIds: (txIds: string[]) => void;
 };
 
 const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
@@ -301,11 +301,13 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             };
 
             const newStoreData = [...txHistoryContext, tempTxData];
+            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+            const txIds = unconfirmedTxs.map((tx) => tx.txId);
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
-            checkTxStatusWithIds();
+            checkTxStatusWithIds(txIds);
           }
         } else {
           notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');

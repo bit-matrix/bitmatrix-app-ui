@@ -106,7 +106,7 @@ export const PoolPage: React.FC = () => {
       });
     } else if (selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       if (myPools.length === 0) {
-        return <div className="no-pool-text">No pool found.</div>;
+        return <div className="no-my-pool-content">No pool found.</div>;
       }
       if (selectedFilterOption) {
         poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
@@ -253,7 +253,7 @@ export const PoolPage: React.FC = () => {
   return (
     <div className="pool-page-main">
       <div className="no-pool-content">
-        <div>There are no pools</div>
+        <div>There are no pools.</div>
         <div className="no-pool-button-div">
           <Button
             appearance="default"

@@ -17,7 +17,7 @@ export const txHistoryReducer: Reducer<CommitmentStore[], SetTxHistoryAction> = 
 ): CommitmentStore[] => {
   switch (action.type) {
     case SET_TX_HISTORY:
-      const txHistory = deepCopy(action.payload);
+      const txHistory = action.payload;
       setLocalData(txHistory);
       return txHistory;
 

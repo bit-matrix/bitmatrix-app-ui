@@ -24,7 +24,7 @@ import './RemoveLiquidity.scss';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
-  checkTxStatusWithIds: () => void;
+  checkTxStatusWithIds: (txIds: string[]) => void;
 };
 
 enum SELECTED_PERCENTAGE {
@@ -117,11 +117,14 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             };
 
             const newStoreData = [...txHistoryContext, tempTxData];
+            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+            const txIds = unconfirmedTxs.map((tx) => tx.txId);
+
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
-            checkTxStatusWithIds();
+            checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
             setLoading(false);
