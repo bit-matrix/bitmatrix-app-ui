@@ -323,10 +323,13 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         .mul(
           currentPool.quote.assetHash === lbtcAsset.assetHash
             ? settingsContext.preferred_unit.value
-            : PREFERRED_UNIT_VALUE.LBTC,
+            : Math.pow(10, currentPool.quote.precision),
         )
         .toNumber();
-      const tokenAmountN = new Decimal(Number(pair2Value)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
+      const tokenAmountN = new Decimal(Number(pair2Value))
+        .mul(Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)))
+        .toNumber();
+
       const recipientValue = convertion.calcAddLiquidityRecipientValue(currentPool, quoteAmountN, tokenAmountN);
 
       return {
@@ -335,7 +338,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       };
     }
     return { lpReceived: '0', poolRate: '0' };
-  }, [currentPool, pair1Value, pair2Value, settingsContext.preferred_unit.value]);
+  }, [currentPool, pair1Value, pair2Value, settingsContext.preferred_unit.text, settingsContext.preferred_unit.value]);
 
   const quoteTicker = useMemo(() => {
     if (currentPool) return getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
@@ -484,7 +487,8 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 Number(pair1Value) <= 0 ||
                 Number(pair2Value) <= 0 ||
                 !inputsIsValid()?.tokenIsValid ||
-                !inputsIsValid()?.quoteIsValid
+                !inputsIsValid()?.quoteIsValid ||
+                Number(calcLpValues().lpReceived) <= 0
               }
               className="add-liquidity-button"
             />
