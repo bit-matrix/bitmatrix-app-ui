@@ -93,10 +93,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const infoTab = () => {
     if (txHistoryContext && txHistoryContext.length > 0) {
-      if (
-        txHistoryContext[txHistoryContext.length - 1].seen === false ||
-        txHistoryContext.some((tx) => tx.completed === false || !tx.completed)
-      ) {
+      if (txHistoryContext[txHistoryContext.length - 1].seen === false) {
         return (
           <li className="navbar-item mobile-hidden">
             <div

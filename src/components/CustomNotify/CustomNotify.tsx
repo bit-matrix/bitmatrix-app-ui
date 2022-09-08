@@ -9,10 +9,12 @@ type Props = {
   children?: ReactNode;
 };
 
-export const CustomNotify: React.FC<Props> = ({ type = 'info', header = type, children }) => {
-  return (
-    <Notification className="custom-notify" type={type} header={header} closable>
-      {children}
-    </Notification>
-  );
-};
+export const CustomNotify = React.forwardRef<HTMLDivElement | null, Props>(
+  ({ type = 'info', header = type, children }, ref) => {
+    return (
+      <Notification ref={ref} className="custom-notify" type={type} header={header} closable>
+        {children}
+      </Notification>
+    );
+  },
+);

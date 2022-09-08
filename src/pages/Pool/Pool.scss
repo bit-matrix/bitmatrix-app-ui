@@ -15,7 +15,10 @@
   margin: 0 auto;
   min-height: 27rem;
 
-  .no-pool-text {
+  .no-pool-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
     vertical-align: middle;
     line-height: 90px;
@@ -198,13 +201,14 @@
 
 .pm-add-button {
   width: 100%;
+  min-width: 15rem;
   height: 3rem;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
   background: var(--theme-color) !important;
   border-width: 0 !important;
   opacity: 0.9;
-  border-radius: 1rem;
+  border-radius: 1rem !important;
   &:hover {
     opacity: 1;
   }
@@ -240,6 +244,19 @@
     margin: 0 auto;
     position: relative;
   }
+}
+
+.no-my-pool-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 90px;
+  font-size: 1.5rem;
+  height: 100%;
+  justify-content: center;
+  transform: translateY(-10%);
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
