@@ -21,7 +21,6 @@ import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
-import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -152,14 +151,16 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     if (currentPool) {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
+      const tokenPrecision = getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text);
+      const quotePrecision = getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text);
       return {
-        quoteReceived: (
-          Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.assetHash === lbtcAsset.assetHash
-            ? settingsContext.preferred_unit.value
-            : PREFERRED_UNIT_VALUE.LBTC)
-        ).toString(),
-        tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / Math.pow(10, quotePrecision)).toFixed(
+          quotePrecision,
+        ),
+
+        tokenReceived: (Number(recipientValue.user_token_received) / Math.pow(10, tokenPrecision)).toFixed(
+          tokenPrecision,
+        ),
       };
     }
     return { quoteReceived: '0', tokenReceived: '0' };
