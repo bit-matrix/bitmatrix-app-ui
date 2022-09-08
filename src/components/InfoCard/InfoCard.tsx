@@ -1,8 +1,6 @@
 import React from 'react';
-// import { Icon } from 'rsuite';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
-import { quoteAmountRound, timeDifference } from '../../helper';
+import { getAssetPrecession, quoteAmountRound, timeDifference } from '../../helper';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useSettingsContext, useTxHistoryContext } from '../../context';
 import Numeral from 'numeral';
@@ -18,8 +16,8 @@ import BananaGif from '../../images/banana.gif';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { EXPLORER } from '../../enum/EXPLORER';
 import ExportIcon from '../base/Svg/Icons/Export';
-import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import './InfoCard.scss';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 
 export const InfoCard: React.FC = () => {
   const { txHistoryContext } = useTxHistoryContext();
@@ -30,12 +28,13 @@ export const InfoCard: React.FC = () => {
     let quoteAsset: string;
     let quoteAmount: number;
 
-    if (cs.quoteAsset === SWAP_ASSET.LBTC) {
+    if (cs.quoteAsset.assetHash === lbtcAsset.assetHash) {
       quoteAsset = `tL-${settingsContext.preferred_unit.text}`;
       quoteAmount = cs.quoteAmount / settingsContext.preferred_unit.value;
     } else {
-      quoteAsset = cs.quoteAsset;
-      quoteAmount = cs.quoteAmount / PREFERRED_UNIT_VALUE.LBTC;
+      quoteAsset = cs.quoteAsset.ticker;
+      quoteAmount =
+        cs.quoteAmount / Math.pow(10, getAssetPrecession(cs.quoteAsset, settingsContext.preferred_unit.text));
     }
 
     if (cs.method === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN) {
@@ -51,8 +50,11 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {quoteAmountRound(quoteAmount)} {quoteAsset} for {cs.tokenAsset} (min{' '}
-            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')})
+            Swap {quoteAmountRound(quoteAmount)} {quoteAsset} for {cs.tokenAsset.ticker} (min{' '}
+            {Numeral(
+              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
+            ).format('(0.00a)')}
+            )
           </div>
         </>
       );
@@ -71,8 +73,11 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset} for{' '}
-            {quoteAsset} (min {quoteAmountRound(quoteAmount)})
+            Swap{' '}
+            {Numeral(
+              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
+            ).format('(0.00a)')}{' '}
+            {cs.tokenAsset.ticker} for {quoteAsset} (min {quoteAmountRound(quoteAmount)})
           </div>
         </>
       );
@@ -90,7 +95,10 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Add {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
-            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
+            {Numeral(
+              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
+            ).format('(0.00a)')}{' '}
+            {cs.tokenAsset.ticker}
           </div>
         </>
       );
@@ -108,7 +116,10 @@ export const InfoCard: React.FC = () => {
             }}
           >
             Remove {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
-            {Numeral(cs.tokenAmount / PREFERRED_UNIT_VALUE.LBTC).format('(0.00a)')} {cs.tokenAsset}
+            {Numeral(
+              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
+            ).format('(0.00a)')}{' '}
+            {cs.tokenAsset.assetHash}
           </div>
         </>
       );

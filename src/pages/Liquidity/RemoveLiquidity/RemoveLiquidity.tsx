@@ -14,14 +14,14 @@ import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Button, Content, Slider } from 'rsuite';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
-import SWAP_ASSET from '../../../enum/SWAP_ASSET';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
+import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
+import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
   checkTxStatusWithIds: () => void;
@@ -101,12 +101,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.ticker === SWAP_ASSET.LBTC
-                  ? settingsContext.preferred_unit.value
-                  : PREFERRED_UNIT_VALUE.LBTC),
-              quoteAsset: currentPool.quote.ticker,
-              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
-              tokenAsset: currentPool.token.ticker,
+                Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
+              quoteAsset: currentPool.quote,
+              tokenAmount:
+                new Decimal(calcLpAmounts.tokenReceived).toNumber() *
+                Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
+              tokenAsset: currentPool.token,
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
@@ -152,7 +152,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       return {
         quoteReceived: (
           Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.ticker === SWAP_ASSET.LBTC
+          (currentPool.quote.assetHash === lbtcAsset.assetHash
             ? settingsContext.preferred_unit.value
             : PREFERRED_UNIT_VALUE.LBTC)
         ).toString(),
