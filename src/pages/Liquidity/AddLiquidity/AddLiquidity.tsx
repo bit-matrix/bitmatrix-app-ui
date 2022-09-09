@@ -344,6 +344,10 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool) return getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
 
+  const tokenTicker = useMemo(() => {
+    if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
+  }, [currentPool, settingsContext.preferred_unit.text]);
+
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
@@ -426,7 +430,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{currentPool?.token.ticker} Liquidity</div>
+                    <div className="add-liquidity-text">{tokenTicker} Liquidity</div>
                     {currentPool?.token && (
                       <AssetIcon
                         className="add-liquidity-input-icons"
@@ -478,7 +482,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add ${quoteTicker} and ${currentPool?.token.ticker}`}
+              text={`Add ${quoteTicker} and ${tokenTicker}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();
