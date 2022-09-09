@@ -196,6 +196,8 @@ export const getAssetTicker = (asset: AssetModel | PAsset, unit: PREFERRED_UNIT)
     if (unit === PREFERRED_UNIT.mBTC) {
       return 'tL-mBTC';
     }
+  } else {
+    return asset.ticker;
   }
 
   return asset.ticker;
