@@ -5,6 +5,8 @@ import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
 import { XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { calculateUsdtPrice } from '../../helper';
 
 type Props = {
   rank: number;
@@ -12,13 +14,19 @@ type Props = {
   chartSummary?: ChartSummary;
   onClick: (poolId: string) => void;
   showDetail?: boolean;
+  btcPrice?: number;
 };
 
-export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, showDetail = true }) => {
+export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, showDetail = true, btcPrice }) => {
   if (pool === undefined) {
     return <span>Something went wrong.</span>;
   } else {
     const chartColor = chartSummary?.price.rate.direction === 'up' ? '#4caf50' : '#f44336';
+    const price =
+      pool.quote.assetHash === lbtcAsset.assetHash
+        ? calculateUsdtPrice(btcPrice || 0, chartSummary?.price.todayValue || 0)
+        : chartSummary?.price.todayValue || 0;
+
     return (
       <div className="pool-card-main" onClick={() => onClick(pool.id)}>
         <div className={`pool-card-column ${!showDetail && 'pool-card-modal-column-1'}`}>
@@ -33,7 +41,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
                 {pool.quote.ticker} / {pool.token.ticker}
               </div>
               <div className={`token-item pool-card-${chartSummary?.price.rate.direction}-text`}>
-                ${chartSummary?.price.todayValue ? chartSummary?.price.todayValue.toLocaleString() : '0.0'}
+                ${price > 0 ? price.toLocaleString() : '0.0'}
               </div>
             </li>
             <li className="column-1-item percent">

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { usePoolContext, useSettingsContext } from '../../context';
+import { useBtcPriceContext, usePoolContext, useSettingsContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
-import { getAssetPrecession, quoteAmountRound } from '../../helper';
+import { calculateUsdtPrice, getAssetPrecession, quoteAmountRound } from '../../helper';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
@@ -16,6 +16,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
 import { useChartsContext } from '../../context/charts';
 import './PoolDetail.scss';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -25,6 +26,7 @@ export const PoolDetail: React.FC = () => {
 
   const { pools } = usePoolContext();
   const { settingsContext } = useSettingsContext();
+  const { btcPrice } = useBtcPriceContext();
 
   const { charts } = useChartsContext();
 
@@ -90,6 +92,11 @@ export const PoolDetail: React.FC = () => {
   if (pool === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
+    const price =
+      pool.quote.assetHash === lbtcAsset.assetHash
+        ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || 0)
+        : chartData?.price.todayValue || 0;
+
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -180,7 +187,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>{pool.token.ticker} Price</div>
-                    <div className="pool-detail-table-text">${chartData?.price.todayValue.toLocaleString()}</div>
+                    <div className="pool-detail-table-text">${price.toLocaleString()}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.price.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.price.rate.direction}-text`}>

@@ -3,7 +3,6 @@ import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
-import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
@@ -13,6 +12,7 @@ import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
   AssetModel,
+  calculateUsdtPrice,
   getAssetPrecession,
   getAssetTicker,
   uniqueAssetListAll,
@@ -28,12 +28,14 @@ import {
   useSettingsContext,
   usePoolConfigContext,
   useTxHistoryContext,
+  useBtcPriceContext,
 } from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import './Swap.scss';
 
 type Props = {
@@ -66,6 +68,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
+  const { btcPrice } = useBtcPriceContext();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
@@ -407,25 +410,18 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     loading;
 
   const infoMessage = useCallback((): string => {
-    if (poolConfigContext && currentPool && pools.length > 0) {
-      const config = poolConfigContext;
-      const totalFee =
-        config.baseFee.number +
-        config.commitmentTxFee.number +
-        config.defaultOrderingFee.number +
-        config.serviceFee.number;
+    const config = poolConfigContext;
+    const totalFee =
+      config.baseFee.number +
+      config.commitmentTxFee.number +
+      config.defaultOrderingFee.number +
+      config.serviceFee.number;
 
-      const currentUsdtPrice = (
-        (Number(currentPool.token.value) / Number(currentPool.quote.value) / PREFERRED_UNIT_VALUE.LBTC) *
-        totalFee
-      ).toFixed(2);
+    const currentFeeUsdtPrice = calculateUsdtPrice(btcPrice, totalFee).toFixed(2);
 
-      // eslint-disable-next-line no-useless-concat
-      return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
-    }
-
-    return 'Network fee 801 sats';
-  }, [poolConfigContext, currentPool, pools]);
+    // eslint-disable-next-line no-useless-concat
+    return 'Network fee ' + totalFee + ' sats ' + '($' + currentFeeUsdtPrice + ')';
+  }, [poolConfigContext, btcPrice]);
 
   const fromAssetListClick = () => {
     setShowPair1AssetListModal(true);

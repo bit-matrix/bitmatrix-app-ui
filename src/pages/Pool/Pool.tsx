@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { usePoolContext, useWalletContext } from '../../context';
+import { useBtcPriceContext, usePoolContext, useWalletContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
@@ -28,6 +28,7 @@ export const PoolPage: React.FC = () => {
   const { charts } = useChartsContext();
   const { walletContext } = useWalletContext();
   const { pools } = usePoolContext();
+  const { btcPrice } = useBtcPriceContext();
 
   const history = useHistory();
 
@@ -92,6 +93,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={() =>
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/' + pool.id,
@@ -120,6 +122,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={(poolId: string) => {
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/my-pool/' + poolId,
@@ -202,6 +205,7 @@ export const PoolPage: React.FC = () => {
                     pool={pool}
                     chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
+                    btcPrice={btcPrice}
                     onClick={() => {
                       history.push({
                         pathname: 'pool/' + pool.id + '/add-liquidity',
