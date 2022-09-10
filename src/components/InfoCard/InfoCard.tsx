@@ -105,7 +105,6 @@ export const InfoCard: React.FC = () => {
     }
 
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
-      console.log(cs);
       messageBody = (
         <>
           <LiquidityRemoveIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
