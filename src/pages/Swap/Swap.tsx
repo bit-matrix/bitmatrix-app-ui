@@ -34,9 +34,8 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
-import './Swap.scss';
-import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
+import './Swap.scss';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
