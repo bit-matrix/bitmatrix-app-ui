@@ -12,6 +12,7 @@ import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
   AssetModel,
+  calculateUsdtPrice,
   getAssetPrecession,
   getAssetTicker,
   uniqueAssetListAll,
@@ -416,7 +417,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       config.defaultOrderingFee.number +
       config.serviceFee.number;
 
-    const currentFeeUsdtPrice = ((btcPrice / PREFERRED_UNIT_VALUE.LBTC) * totalFee).toFixed(2);
+    const currentFeeUsdtPrice = calculateUsdtPrice(btcPrice, totalFee).toFixed(2);
 
     // eslint-disable-next-line no-useless-concat
     return 'Network fee ' + totalFee + ' sats ' + '($' + currentFeeUsdtPrice + ')';
