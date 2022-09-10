@@ -105,6 +105,7 @@ export const InfoCard: React.FC = () => {
     }
 
     if (cs.method === CALL_METHOD.REMOVE_LIQUIDITY) {
+      console.log(cs);
       messageBody = (
         <>
           <LiquidityRemoveIcon className="info-card-item-icon" width="1.25rem" height="1.25rem" />
@@ -119,7 +120,7 @@ export const InfoCard: React.FC = () => {
             {Numeral(
               cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
             ).format('(0.00a)')}{' '}
-            {cs.tokenAsset.assetHash}
+            {cs.tokenAsset.ticker}
           </div>
         </>
       );
