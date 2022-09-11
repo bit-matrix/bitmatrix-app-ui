@@ -165,16 +165,34 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
 
         if (tokenPercent && tokenTotalAmountInWallet) {
-          if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
-            inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          const tokenAmount = tokenTotalAmountInWallet - totalFee;
+
+          if (tokenAmount > 0) {
+            if (currentPool.token.assetHash === lbtcAsset.assetHash) {
+              if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
+                inputAmount = (tokenAmount / settingsContext.preferred_unit.value).toString();
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
+                const tokenAmountInWalletHalf = Math.ceil(tokenAmount / 2);
+                inputAmount = (tokenAmountInWalletHalf / settingsContext.preferred_unit.value).toString();
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
+                inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              }
+            } else {
+              if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
+                inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
+                const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
+                inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
+                inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+            }
           }
-          if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
-            const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
-            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
-          if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
+
           onChangeTokenAmount(inputAmount);
           setQuotePercent(undefined);
           setTokenPercent(tokenPercent);
