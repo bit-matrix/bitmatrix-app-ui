@@ -165,16 +165,34 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
 
         if (tokenPercent && tokenTotalAmountInWallet) {
-          if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
-            inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+          const tokenAmount = tokenTotalAmountInWallet - totalFee;
+
+          if (tokenAmount > 0) {
+            if (currentPool.token.assetHash === lbtcAsset.assetHash) {
+              if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
+                inputAmount = (tokenAmount / settingsContext.preferred_unit.value).toString();
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
+                const tokenAmountInWalletHalf = Math.ceil(tokenAmount / 2);
+                inputAmount = (tokenAmountInWalletHalf / settingsContext.preferred_unit.value).toString();
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
+                inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+              }
+            } else {
+              if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
+                inputAmount = (tokenTotalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
+                const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
+                inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+              if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
+                inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+              }
+            }
           }
-          if (tokenPercent === FROM_AMOUNT_PERCENT.HALF) {
-            const tokenAmountInWalletHalf = tokenTotalAmountInWallet / 2;
-            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
-          if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
+
           onChangeTokenAmount(inputAmount);
           setQuotePercent(undefined);
           setTokenPercent(tokenPercent);
@@ -344,6 +362,10 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool) return getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
 
+  const tokenTicker = useMemo(() => {
+    if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
+  }, [currentPool, settingsContext.preferred_unit.text]);
+
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
@@ -426,7 +448,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               <div className="add-liquidity-item-content">
                 <div className="add-liquidity-input-div">
                   <div className="add-liquidity-input-content">
-                    <div className="add-liquidity-text">{currentPool?.token.ticker} Liquidity</div>
+                    <div className="add-liquidity-text">{tokenTicker} Liquidity</div>
                     {currentPool?.token && (
                       <AssetIcon
                         className="add-liquidity-input-icons"
@@ -478,7 +500,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           </div>
           <div className="add-liquidity-button-content">
             <WalletButton
-              text={`Add ${quoteTicker} and ${currentPool?.token.ticker}`}
+              text={`Add ${quoteTicker} and ${tokenTicker}`}
               loading={loading}
               onClick={() => {
                 addLiquidityClick();
@@ -488,7 +510,8 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 Number(pair2Value) <= 0 ||
                 !inputsIsValid()?.tokenIsValid ||
                 !inputsIsValid()?.quoteIsValid ||
-                Number(calcLpValues().lpReceived) <= 0
+                Number(calcLpValues().lpReceived) <= 0 ||
+                loading
               }
               className="add-liquidity-button"
             />

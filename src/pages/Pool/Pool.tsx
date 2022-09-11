@@ -261,7 +261,7 @@ export const PoolPage: React.FC = () => {
         <div className="no-pool-button-div">
           <Button
             appearance="default"
-            className="pm-add-button"
+            className="pm-add-button no-pool-add-button"
             onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
           >
             Create New Pool
