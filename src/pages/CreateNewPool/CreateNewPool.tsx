@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { api, poolDeployment } from '@bitmatrix/lib';
+import { poolDeployment } from '@bitmatrix/lib';
 import { Button, Content, Dropdown } from 'rsuite';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
@@ -21,6 +21,7 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './CreateNewPool.scss';
+import { sendRawTransaction } from '../../lib/api/sendRawTransaction';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -205,7 +206,7 @@ export const CreateNewPool: React.FC = () => {
           },
         ]);
 
-        fundingTxId = await api.sendRawTransaction(fundingTx.hex);
+        fundingTxId = await sendRawTransaction(fundingTx.hex);
       } catch (err: any) {
         notify(err.toString(), 'Wallet Error : ', 'error');
         setLoading(false);
@@ -232,7 +233,7 @@ export const CreateNewPool: React.FC = () => {
           lpFeeTier.index,
         );
 
-        const poolTxId = await api.sendRawTransaction(newPool);
+        const poolTxId = await sendRawTransaction(newPool);
 
         setLoading(false);
 
