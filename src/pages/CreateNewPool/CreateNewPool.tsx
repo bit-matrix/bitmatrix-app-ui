@@ -12,14 +12,14 @@ import { WalletButton } from '../../components/WalletButton/WalletButton';
 import { useSettingsContext, useWalletContext, usePoolContext, useBtcPriceContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { AssetModel, getAssetPrecession, getAssetTicker, testnetPair1AssetList } from '../../helper';
+import { AssetModel, getAssetPrecession, getAssetTicker } from '../../helper';
 import plus from '../../images/plus.png';
 import { notify } from '../../components/utils/utils';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
-import { LBTC_ASSET } from '../../env';
+import { FUNDING_ADDRESS, LBTC_ASSET, PAIR1_ASSET_LIST } from '../../env';
 import './CreateNewPool.scss';
 import { sendRawTransaction } from '../../lib/api/sendRawTransaction';
 
@@ -48,7 +48,7 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => testnetPair1AssetList.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
+        .filter((balance) => PAIR1_ASSET_LIST.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
         .map((balance) => {
           return {
             name: balance.asset.name || '',
@@ -185,22 +185,22 @@ export const CreateNewPool: React.FC = () => {
 
         const fundingTx = await walletContext.marina.sendTransaction([
           {
-            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            address: FUNDING_ADDRESS,
             value: 500,
             asset: LBTC_ASSET.assetHash,
           },
           {
-            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            address: FUNDING_ADDRESS,
             value: 500,
             asset: LBTC_ASSET.assetHash,
           },
           {
-            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            address: FUNDING_ADDRESS,
             value: pair1AmountN,
             asset: selectedPair1Asset.assetHash,
           },
           {
-            address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
+            address: FUNDING_ADDRESS,
             value: pair2AmountN,
             asset: selectedPair2Asset.assetHash,
           },

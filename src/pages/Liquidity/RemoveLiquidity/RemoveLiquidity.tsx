@@ -21,6 +21,7 @@ import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
+import { IS_TESTNET } from '../../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -89,7 +90,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               currentPool,
               primaryPoolConfig,
               addressInformation.publicKey,
-              true,
+              IS_TESTNET,
             );
           } catch (error) {
             setLoading(false);

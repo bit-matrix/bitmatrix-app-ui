@@ -29,7 +29,7 @@ import { NumericalInput } from '../../../components/NumericalInput/NumericalInpu
 import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
-import { LBTC_ASSET } from '../../../env';
+import { IS_TESTNET, LBTC_ASSET } from '../../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -297,7 +297,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               currentPool,
               primaryPoolConfig,
               addressInformation.publicKey,
-              true,
+              IS_TESTNET,
             );
           } catch (error) {
             setLoading(false);

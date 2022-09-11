@@ -35,7 +35,7 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 import './Swap.scss';
-import { LBTC_ASSET } from '../../env';
+import { IS_TESTNET, LBTC_ASSET } from '../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -340,7 +340,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
-                true,
+                IS_TESTNET,
               );
             } catch (error) {
               setLoading(false);
@@ -354,7 +354,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
-                true,
+                IS_TESTNET,
               );
             } catch (error) {
               setLoading(false);
