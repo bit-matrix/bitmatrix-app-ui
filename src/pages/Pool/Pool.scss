@@ -201,7 +201,6 @@
 
 .pm-add-button {
   width: 100%;
-  min-width: 15rem;
   height: 3rem;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
@@ -212,6 +211,10 @@
   &:hover {
     opacity: 1;
   }
+}
+
+.no-pool-add-button {
+  min-width: 15rem;
 }
 
 .pm-add-liquidity {
