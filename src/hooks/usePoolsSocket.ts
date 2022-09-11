@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { notify } from '../components/utils/utils';
 import { useBtcPriceContext, usePoolContext } from '../context';
-import { DB_SOCKET_SERVER_URL } from '../env';
+import { DB_SOCKET_SERVER_URL, LBTC_ASSET } from '../env';
 import { Pool } from '@bitmatrix/models';
-import { lbtcAsset } from '../lib/liquid-dev/ASSET';
 import { TESTNET_ASSET_ID } from '../lib/liquid-dev/ASSET_ID';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -34,7 +33,7 @@ export const usePoolsSocket = () => {
 
         if (data.length > 0) {
           const filteredPools = data.filter((pl) => {
-            return pl.token.assetHash === lbtcAsset.assetHash && pl.quote.assetHash === TESTNET_ASSET_ID.USDT;
+            return pl.token.assetHash === LBTC_ASSET.assetHash && pl.quote.assetHash === TESTNET_ASSET_ID.USDT;
           });
 
           if (filteredPools.length > 0) {

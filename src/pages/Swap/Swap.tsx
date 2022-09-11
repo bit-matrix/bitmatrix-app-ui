@@ -33,9 +33,9 @@ import {
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 import './Swap.scss';
+import { LBTC_ASSET } from '../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -76,9 +76,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
     if (!unmounted && !currentPool) {
       const fromAssetListAll = uniqueAssetListAll(pools);
-      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.assetHash);
+      const toAssetListAll = uniqueMatchingAssetList(pools, LBTC_ASSET.assetHash);
 
-      setFromAsset(lbtcAsset);
+      setFromAsset(LBTC_ASSET);
       setFromAssetList(fromAssetListAll);
       setToAssetList(toAssetListAll);
     }
@@ -217,7 +217,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         let quoteAmount = totalAmountInWallet;
 
-        if (fromAsset.assetHash === lbtcAsset.assetHash) {
+        if (fromAsset.assetHash === LBTC_ASSET.assetHash) {
           quoteAmount = quoteAmount - (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL ? totalFee : 0);
         }
 
@@ -253,7 +253,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         if (pair1AmountInWallet && pair1AmountInWallet > 0 && fromAsset) {
           const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
-          if (fromAsset.assetHash === lbtcAsset.assetHash) {
+          if (fromAsset.assetHash === LBTC_ASSET.assetHash) {
             const totalFee =
               poolConfigContext.baseFee.number +
               poolConfigContext.commitmentTxFee.number +

@@ -20,7 +20,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import './CreateNewPool.scss';
-import { LBTC_ASSET, USDT_ASSET } from '../../env';
+import { LBTC_ASSET } from '../../env';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -93,9 +93,9 @@ export const CreateNewPool: React.FC = () => {
         const tokenAssetId = selectedPair2Asset?.assetHash;
         let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        if (quoteAssetId === lbtcAsset.assetHash) {
+        if (quoteAssetId === LBTC_ASSET.assetHash) {
           quoteAmountInWallet = quoteAmountInWallet - totalFee;
-        } else if (tokenAssetId === lbtcAsset.assetHash) {
+        } else if (tokenAssetId === LBTC_ASSET.assetHash) {
           tokenAmountInWallet = tokenAmountInWallet - totalFee;
         }
 
@@ -138,7 +138,7 @@ export const CreateNewPool: React.FC = () => {
   const pair1CoefficientCalculation = () => {
     let pair1Coefficient = 1;
     if (selectedPair1Asset) {
-      const pair1IsLbtc = selectedPair1Asset.assetHash === lbtcAsset.assetHash ? true : false;
+      const pair1IsLbtc = selectedPair1Asset.assetHash === LBTC_ASSET.assetHash ? true : false;
 
       if (pair1IsLbtc) {
         pair1Coefficient = 50;
@@ -185,12 +185,12 @@ export const CreateNewPool: React.FC = () => {
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: LBTC_ASSET,
+            asset: LBTC_ASSET.assetHash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
             value: 500,
-            asset: LBTC_ASSET,
+            asset: LBTC_ASSET.assetHash,
           },
           {
             address: 'tex1qft5p2uhsdcdc3l2ua4ap5qqfg4pjaqlp250x7us7a8qqhrxrxfsqh7creg',
@@ -246,7 +246,7 @@ export const CreateNewPool: React.FC = () => {
   // todo
   const calcLpValues = () => {
     if (pools && pools.length > 0 && Number(pair1Amount) > 0 && Number(pair2Amount) > 0 && selectedPair1Asset) {
-      if (selectedPair1Asset?.assetHash === lbtcAsset.assetHash) {
+      if (selectedPair1Asset?.assetHash === LBTC_ASSET.assetHash) {
         const initialLPCirculation = poolDeployment.calculateInitialLpCirculation(
           pair1CoefficientCalculation(),
           Number(pair1Amount) * settingsContext.preferred_unit.value,

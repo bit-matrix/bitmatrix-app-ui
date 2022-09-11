@@ -27,7 +27,6 @@ import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import { Balance } from 'marina-provider';
-import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 import './AddLiquidity.scss';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import { LBTC_ASSET } from '../../../env';
@@ -136,7 +135,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           const quoteAmount = quoteTotalAmountInWallet - totalFee;
 
           if (quoteAmount > 0) {
-            if (currentPool.quote.assetHash === lbtcAsset.assetHash) {
+            if (currentPool.quote.assetHash === LBTC_ASSET.assetHash) {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
                 inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
               }
@@ -218,9 +217,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           primaryPoolConfig.serviceFee.number +
           1000;
 
-        if (quoteAssetId === lbtcAsset.assetHash) {
+        if (quoteAssetId === LBTC_ASSET.assetHash) {
           quoteAmountInWallet = quoteAmountInWallet - totalFee;
-        } else if (tokenAssetId === lbtcAsset.assetHash) {
+        } else if (tokenAssetId === LBTC_ASSET.assetHash) {
           tokenAmountInWallet = tokenAmountInWallet - totalFee;
         }
 
@@ -322,7 +321,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool && pair1Value !== '' && pair2Value !== '') {
       const quoteAmountN = new Decimal(Number(pair1Value))
         .mul(
-          currentPool.quote.assetHash === lbtcAsset.assetHash
+          currentPool.quote.assetHash === LBTC_ASSET.assetHash
             ? settingsContext.preferred_unit.value
             : Math.pow(10, currentPool.quote.precision),
         )

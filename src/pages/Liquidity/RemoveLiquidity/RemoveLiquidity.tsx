@@ -21,7 +21,6 @@ import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
-import { LBTC_ASSET } from '../../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;

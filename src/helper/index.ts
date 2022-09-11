@@ -8,7 +8,7 @@ import { Settings } from '../context/settings/types';
 import { PREFERRED_UNIT } from '../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../enum/PREFERRED_UNIT_VALUE';
 import SWAP_ASSET from '../enum/SWAP_ASSET';
-import { lbtcAsset } from '../lib/liquid-dev/ASSET';
+import { LBTC_ASSET } from '../env';
 
 export type AssetModel = {
   name: string;
@@ -56,7 +56,7 @@ export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
 export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 export const getAssetPrecession = (asset: AssetModel | PAsset, preferred_unit: PREFERRED_UNIT): number => {
-  if (asset.assetHash === lbtcAsset.assetHash) {
+  if (asset.assetHash === LBTC_ASSET.assetHash) {
     switch (preferred_unit) {
       case PREFERRED_UNIT.LBTC:
         return 8;
@@ -183,7 +183,7 @@ export const getUnitValue = (asset: PAsset, settings: Settings): number => {
 };
 
 export const getAssetTicker = (asset: AssetModel | PAsset, unit: PREFERRED_UNIT): string => {
-  if (asset.ticker === lbtcAsset.ticker) {
+  if (asset.assetHash === LBTC_ASSET.assetHash) {
     if (unit === PREFERRED_UNIT.LBTC) {
       return 'tL-BTC';
     }

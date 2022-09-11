@@ -5,8 +5,8 @@ import { AssetIcon } from '../AssetIcon/AssetIcon';
 import { Tag } from 'rsuite';
 import { XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
-import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { calculateUsdtPrice } from '../../helper';
+import { LBTC_ASSET } from '../../env';
 
 type Props = {
   rank: number;
@@ -23,7 +23,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
   } else {
     const chartColor = chartSummary?.price.rate.direction === 'up' ? '#4caf50' : '#f44336';
     const price =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartSummary?.price.todayValue || 0)
         : chartSummary?.price.todayValue || 0;
 

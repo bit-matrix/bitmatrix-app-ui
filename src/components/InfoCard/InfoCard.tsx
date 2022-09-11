@@ -17,7 +17,7 @@ import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { EXPLORER } from '../../enum/EXPLORER';
 import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
-import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { LBTC_ASSET } from '../../env';
 
 export const InfoCard: React.FC = () => {
   const { txHistoryContext } = useTxHistoryContext();
@@ -28,7 +28,7 @@ export const InfoCard: React.FC = () => {
     let quoteAsset: string;
     let quoteAmount: number;
 
-    if (cs.quoteAsset.assetHash === lbtcAsset.assetHash) {
+    if (cs.quoteAsset.assetHash === LBTC_ASSET.assetHash) {
       quoteAsset = `tL-${settingsContext.preferred_unit.text}`;
       quoteAmount = cs.quoteAmount / settingsContext.preferred_unit.value;
     } else {

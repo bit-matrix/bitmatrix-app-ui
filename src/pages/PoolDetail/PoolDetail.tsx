@@ -16,7 +16,7 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
 import { useChartsContext } from '../../context/charts';
 import './PoolDetail.scss';
-import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { LBTC_ASSET } from '../../env';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -93,7 +93,7 @@ export const PoolDetail: React.FC = () => {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
     const price =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || 0)
         : chartData?.price.todayValue || 0;
 
