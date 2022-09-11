@@ -340,6 +340,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                true,
               );
             } catch (error) {
               setLoading(false);
@@ -353,6 +354,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                true,
               );
             } catch (error) {
               setLoading(false);
