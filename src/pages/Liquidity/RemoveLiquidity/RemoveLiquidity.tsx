@@ -170,6 +170,10 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     if (currentPool) return getAssetTicker(currentPool?.quote, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
 
+  const tokenTicker = useMemo(() => {
+    if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
+  }, [currentPool, settingsContext.preferred_unit.text]);
+
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
@@ -276,9 +280,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             </div>
             <div className="remove-liquidity-page-footer-line-item-second mobile-hidden">
               <div className="remove-liquidity-page-icon-content">
-                <span className="remove-liquidity-page-footer-line-item-texts">
-                  {currentPool?.token.ticker} You Get
-                </span>
+                <span className="remove-liquidity-page-footer-line-item-texts">{tokenTicker} You Get</span>
                 {currentPool?.token && (
                   <AssetIcon
                     className="liquidity-usdt-icon"
@@ -303,12 +305,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
         </div>
         <div className="remove-liquidity-button-content">
           <WalletButton
-            text={`Remove ${quoteTicker} and ${currentPool?.token.ticker}`}
+            text={`Remove ${quoteTicker} and ${tokenTicker}`}
             loading={loading}
             onClick={() => {
               removeLiquidityClick();
             }}
-            disabled={calcLpTokenAmount <= 0}
+            disabled={calcLpTokenAmount <= 0 || loading}
             className="remove-liquidity-button"
           />
         </div>
