@@ -168,7 +168,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           const tokenAmount = tokenTotalAmountInWallet - totalFee;
 
           if (tokenAmount > 0) {
-            if (currentPool.token.assetHash === lbtcAsset.assetHash) {
+            if (currentPool.token.assetHash === LBTC_ASSET.assetHash) {
               if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
                 inputAmount = (tokenAmount / settingsContext.preferred_unit.value).toString();
               }
