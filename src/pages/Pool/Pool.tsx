@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { usePoolContext, useWalletContext } from '../../context';
+import { useBtcPriceContext, usePoolContext, useWalletContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
@@ -28,6 +28,7 @@ export const PoolPage: React.FC = () => {
   const { charts } = useChartsContext();
   const { walletContext } = useWalletContext();
   const { pools } = usePoolContext();
+  const { btcPrice } = useBtcPriceContext();
 
   const history = useHistory();
 
@@ -92,6 +93,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={() =>
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/' + pool.id,
@@ -106,7 +108,7 @@ export const PoolPage: React.FC = () => {
       });
     } else if (selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       if (myPools.length === 0) {
-        return <div className="no-pool-text">No pool found.</div>;
+        return <div className="no-my-pool-content">No pool found.</div>;
       }
       if (selectedFilterOption) {
         poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
@@ -120,6 +122,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={(poolId: string) => {
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/my-pool/' + poolId,
@@ -202,6 +205,7 @@ export const PoolPage: React.FC = () => {
                     pool={pool}
                     chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
+                    btcPrice={btcPrice}
                     onClick={() => {
                       history.push({
                         pathname: 'pool/' + pool.id + '/add-liquidity',
@@ -253,7 +257,7 @@ export const PoolPage: React.FC = () => {
   return (
     <div className="pool-page-main">
       <div className="no-pool-content">
-        <div>There are no pools</div>
+        <div>There are no pools.</div>
         <div className="no-pool-button-div">
           <Button
             appearance="default"

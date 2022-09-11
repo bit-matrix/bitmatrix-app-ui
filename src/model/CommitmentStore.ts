@@ -1,11 +1,12 @@
 import { CALL_METHOD } from '@bitmatrix/models';
+import { AssetModel } from '../helper';
 
 export type CommitmentStore = {
   txId: string;
   tokenAmount: number;
-  tokenAsset: string;
+  tokenAsset: AssetModel;
   quoteAmount: number;
-  quoteAsset: string;
+  quoteAsset: AssetModel;
   lpAmount?: number;
   lpAsset?: string;
   timestamp: number;

@@ -34,7 +34,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
         return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
       });
 
-      const searchAssetID: AssetModel[] = assetList.filter((asset) => asset.hash === input.trim());
+      const searchAssetID: AssetModel[] = assetList.filter((asset) => asset.assetHash === input.trim());
 
       if (searchTicker.length > 0) {
         currentAssetList = searchTicker;
@@ -78,18 +78,23 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
               {filteredAssetList?.map((asset) => {
                 return (
                   <li
-                    key={asset.hash}
+                    key={asset.assetHash}
                     onClick={() => {
                       onSelectAsset(asset);
                     }}
-                    className={`asset-list-item ${selectedAsset?.hash === asset.hash && 'selected-asset-item'}`}
+                    className={`asset-list-item ${
+                      selectedAsset?.assetHash === asset.assetHash && 'selected-asset-item'
+                    }`}
                   >
                     <div className="asset-list-ticker-div">
-                      <AssetIcon asset={asset.hash} width="2rem" height="2rem" />
+                      <AssetIcon asset={asset.assetHash} width="2rem" height="2rem" />
                       <div className="asset-ticker">{asset.name}</div>
                     </div>
                     <div className="asset-list-hash">
-                      {'0x' + asset.hash.substring(0, 4) + '..' + asset.hash.substring(asset.hash.length - 4)}
+                      {'0x' +
+                        asset.assetHash.substring(0, 4) +
+                        '..' +
+                        asset.assetHash.substring(asset.assetHash.length - 4)}
                     </div>
                   </li>
                 );

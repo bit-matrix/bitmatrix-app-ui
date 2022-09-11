@@ -93,10 +93,7 @@ export const Navbar: React.FC = (): JSX.Element => {
 
   const infoTab = () => {
     if (txHistoryContext && txHistoryContext.length > 0) {
-      if (
-        txHistoryContext[txHistoryContext.length - 1].seen === false ||
-        txHistoryContext.some((tx) => tx.completed === false || !tx.completed)
-      ) {
+      if (txHistoryContext.some((txc) => !txc.seen)) {
         return (
           <li className="navbar-item mobile-hidden">
             <div
@@ -104,7 +101,8 @@ export const Navbar: React.FC = (): JSX.Element => {
               className="navbar-item-circle-div"
               onBlur={() => {
                 if (txHistoryContext && txHistoryContext.length > 0) {
-                  const completedTxs = txHistoryContext.filter((txh) => txh.completed === true);
+                  const completedTxs = txHistoryContext.filter((txh) => txh.completed === true && !txh.seen);
+
                   if (completedTxs.length > 0) {
                     const newTxHistory = [...txHistoryContext];
                     completedTxs.forEach((tx) => {

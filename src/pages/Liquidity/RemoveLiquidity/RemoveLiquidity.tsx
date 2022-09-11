@@ -17,14 +17,14 @@ import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
 import { WalletButton } from '../../../components/WalletButton/WalletButton';
-import { getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
+import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
 import { LBTC_ASSET } from '../../../env';
 
 type Props = {
-  checkTxStatusWithIds: () => void;
+  checkTxStatusWithIds: (txIds: string[]) => void;
 };
 
 enum SELECTED_PERCENTAGE {
@@ -101,12 +101,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               txId: commitmentTxId,
               quoteAmount:
                 new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                (currentPool.quote.assetHash === LBTC_ASSET
-                  ? settingsContext.preferred_unit.value
-                  : PREFERRED_UNIT_VALUE.LBTC),
-              quoteAsset: currentPool.quote.ticker,
-              tokenAmount: new Decimal(calcLpAmounts.tokenReceived).toNumber() * PREFERRED_UNIT_VALUE.LBTC,
-              tokenAsset: currentPool.token.ticker,
+                Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
+              quoteAsset: currentPool.quote,
+              tokenAmount:
+                new Decimal(calcLpAmounts.tokenReceived).toNumber() *
+                Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
+              tokenAsset: currentPool.token,
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
               timestamp: new Date().valueOf(),
@@ -117,11 +117,14 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             };
 
             const newStoreData = [...txHistoryContext, tempTxData];
+            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+            const txIds = unconfirmedTxs.map((tx) => tx.txId);
+
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
-            checkTxStatusWithIds();
+            checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
             setLoading(false);
@@ -149,14 +152,16 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     if (currentPool) {
       const lpAmountN = new Decimal(calcLpTokenAmount).toNumber();
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
+      const tokenPrecision = getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text);
+      const quotePrecision = getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text);
       return {
-        quoteReceived: (
-          Number(recipientValue.user_lbtc_received) /
-          (currentPool.quote.assetHash === LBTC_ASSET
-            ? settingsContext.preferred_unit.value
-            : PREFERRED_UNIT_VALUE.LBTC)
-        ).toString(),
-        tokenReceived: (Number(recipientValue.user_token_received) / PREFERRED_UNIT_VALUE.LBTC).toFixed(2),
+        quoteReceived: (Number(recipientValue.user_lbtc_received) / Math.pow(10, quotePrecision)).toFixed(
+          quotePrecision,
+        ),
+
+        tokenReceived: (Number(recipientValue.user_token_received) / Math.pow(10, tokenPrecision)).toFixed(
+          tokenPrecision,
+        ),
       };
     }
     return { quoteReceived: '0', tokenReceived: '0' };

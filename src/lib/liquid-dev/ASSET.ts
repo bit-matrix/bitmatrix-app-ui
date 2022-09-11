@@ -6,4 +6,5 @@ export const lbtcAsset: AssetModel = {
   hash: LBTC_ASSET,
   name: 'Liquid Bitcoin',
   ticker: SWAP_ASSET.LBTC,
+  precision: 8,
 };

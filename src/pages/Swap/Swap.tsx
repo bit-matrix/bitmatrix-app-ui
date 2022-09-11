@@ -3,10 +3,8 @@ import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
-import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
-import SWAP_ASSET from '../../enum/SWAP_ASSET';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
 import { commitmentSign, validatePoolTx } from '@bitmatrix/lib';
@@ -14,6 +12,7 @@ import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
   AssetModel,
+  calculateUsdtPrice,
   getAssetPrecession,
   getAssetTicker,
   uniqueAssetListAll,
@@ -29,17 +28,17 @@ import {
   useSettingsContext,
   usePoolConfigContext,
   useTxHistoryContext,
+  useBtcPriceContext,
 } from '../../context';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
-import { TESTNET_ASSET_ID } from '../../lib/liquid-dev/ASSET_ID';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 import './Swap.scss';
 
 type Props = {
-  checkTxStatusWithIds: () => void;
+  checkTxStatusWithIds: (txIds: string[]) => void;
 };
 
 export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => {
@@ -68,6 +67,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
   const { poolConfigContext } = usePoolConfigContext();
+  const { btcPrice } = useBtcPriceContext();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
 
@@ -76,7 +76,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
     if (!unmounted && !currentPool) {
       const fromAssetListAll = uniqueAssetListAll(pools);
-      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.hash);
+      const toAssetListAll = uniqueMatchingAssetList(pools, lbtcAsset.assetHash);
 
       setFromAsset(lbtcAsset);
       setFromAssetList(fromAssetListAll);
@@ -92,15 +92,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     if (fromAsset && toAsset) {
       const filteredPools = pools.filter(
         (pool) =>
-          (pool.quote.assetHash === fromAsset.hash && pool.token.assetHash === toAsset.hash) ||
-          (pool.quote.assetHash === toAsset.hash && pool.token.assetHash === fromAsset.hash),
+          (pool.quote.assetHash === fromAsset.assetHash && pool.token.assetHash === toAsset.assetHash) ||
+          (pool.quote.assetHash === toAsset.assetHash && pool.token.assetHash === fromAsset.assetHash),
       );
 
-      const sortedPools = filteredPools.sort(
-        (a, b) =>
-          (Number(b.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC -
-          (Number(a.token.value) * 2) / PREFERRED_UNIT_VALUE.LBTC,
-      );
+      const sortedPools = filteredPools.sort((a, b) => Number(b.token.value) - Number(a.token.value));
 
       setCurrentPool(sortedPools[0]);
     }
@@ -115,13 +111,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let methodCall;
 
       if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
-        if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
-          inputNum = inputNum * settingsContext.preferred_unit.value;
-        } else {
-          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-        }
+        inputNum = inputNum * Math.pow(10, getAssetPrecession(fromAsset, settingsContext.preferred_unit.text));
 
-        const findPair1 = currentPool.quote.assetHash === fromAsset.hash;
+        const findPair1 = currentPool.quote.assetHash === fromAsset.assetHash;
 
         if (findPair1) {
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
@@ -132,13 +124,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = validatePoolTx(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
-          if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
-            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-            setToAmount((output.amount / settingsContext.preferred_unit.value).toString());
-          } else {
-            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-            setToAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          }
+          const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
+
+          setAmountWithSlippage(output.amountWithSlipapge / Math.pow(10, assetPrecision));
+          setToAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
         }
@@ -151,7 +140,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       fromAmount,
       fromAsset,
       poolConfigContext,
-      settingsContext.preferred_unit.value,
+      settingsContext.preferred_unit.text,
       settingsContext.slippage,
       toAsset,
     ],
@@ -166,13 +155,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let methodCall;
 
       if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
-        if (toAsset.hash === TESTNET_ASSET_ID.LBTC) {
-          inputNum = inputNum * settingsContext.preferred_unit.value;
-        } else {
-          inputNum = inputNum * PREFERRED_UNIT_VALUE.LBTC;
-        }
+        inputNum = inputNum * Math.pow(10, getAssetPrecession(toAsset, settingsContext.preferred_unit.text));
 
-        const findPair1 = currentPool.quote.assetHash === toAsset.hash;
+        const findPair1 = currentPool.quote.assetHash === toAsset.assetHash;
 
         if (findPair1) {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
@@ -183,13 +168,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
 
         if (output.amount > 0) {
-          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
-            setAmountWithSlippage(output.amountWithSlipapge / settingsContext.preferred_unit.value);
-            setFromAmount((output.amount / settingsContext.preferred_unit.value).toString());
-          } else {
-            setAmountWithSlippage(output.amountWithSlipapge / PREFERRED_UNIT_VALUE.LBTC);
-            setFromAmount((output.amount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
-          }
+          const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
+
+          setAmountWithSlippage(output.amountWithSlipapge / Math.pow(10, assetPrecision));
+          setFromAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
         }
@@ -201,7 +183,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       currentPool,
       fromAsset,
       poolConfigContext,
-      settingsContext.preferred_unit.value,
+      settingsContext.preferred_unit.text,
       settingsContext.slippage,
       toAmount,
       toAsset,
@@ -222,39 +204,34 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
       let inputAmount = '';
       setSwapWay(SWAP_WAY.FROM);
-      const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.hash)?.amount || 0;
 
-      if (totalAmountInWallet > 0) {
-        if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
-          const totalFee =
-            poolConfigContext.baseFee.number +
-            poolConfigContext.commitmentTxFee.number +
-            poolConfigContext.defaultOrderingFee.number +
-            poolConfigContext.serviceFee.number +
-            1000;
-          const quoteAmount = totalAmountInWallet - totalFee;
+      const totalAmountInWallet = balances.find((bl) => bl.asset.assetHash === fromAsset?.assetHash)?.amount || 0;
 
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-            inputAmount = (quoteAmount / settingsContext.preferred_unit.value).toString();
-          }
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-            const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-            inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
-          }
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
-          }
-        } else {
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-            inputAmount = (totalAmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-            const tokenAmountInWalletHalf = totalAmountInWallet / 2;
-            inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
-          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
-          }
+      if (totalAmountInWallet > 0 && fromAsset) {
+        const totalFee =
+          poolConfigContext.baseFee.number +
+          poolConfigContext.commitmentTxFee.number +
+          poolConfigContext.defaultOrderingFee.number +
+          poolConfigContext.serviceFee.number +
+          1000;
+
+        let quoteAmount = totalAmountInWallet;
+
+        if (fromAsset.assetHash === lbtcAsset.assetHash) {
+          quoteAmount = quoteAmount - (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL ? totalFee : 0);
+        }
+
+        const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+          inputAmount = (quoteAmount / Math.pow(10, assetPrecision)).toString();
+        }
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+          const quoteAmountHalf = Math.ceil(quoteAmount / 2);
+          inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
+        }
+        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+          inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
         }
 
         setFromAmount(inputAmount);
@@ -271,11 +248,12 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       const inputFromValue = Number(fromAmount);
 
       if (inputFromValue > 0) {
-        const pair1AssetHash = fromAsset?.hash || '';
+        const pair1AssetHash = fromAsset?.assetHash || '';
         const pair1AmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === pair1AssetHash)?.amount;
 
-        if (pair1AmountInWallet && pair1AmountInWallet > 0) {
-          if (fromAsset?.hash === TESTNET_ASSET_ID.LBTC) {
+        if (pair1AmountInWallet && pair1AmountInWallet > 0 && fromAsset) {
+          const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+          if (fromAsset.assetHash === lbtcAsset.assetHash) {
             const totalFee =
               poolConfigContext.baseFee.number +
               poolConfigContext.commitmentTxFee.number +
@@ -283,9 +261,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               poolConfigContext.serviceFee.number +
               1000;
 
-            inputAmount = (pair1AmountInWallet - totalFee) / settingsContext.preferred_unit.value;
+            inputAmount = (pair1AmountInWallet - totalFee) / Math.pow(10, assetPrecision);
           } else {
-            inputAmount = Number((pair1AmountInWallet / PREFERRED_UNIT_VALUE.LBTC).toFixed(2));
+            inputAmount = pair1AmountInWallet / Math.pow(10, assetPrecision);
           }
         }
 
@@ -304,8 +282,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     poolConfigContext,
     walletContext,
     fromAmount,
-    fromAsset?.hash,
-    settingsContext.preferred_unit.value,
+    fromAsset,
+    settingsContext.preferred_unit.text,
   ]);
 
   const swapRouteChange = () => {
@@ -327,22 +305,18 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let numberToAmount = 0;
 
       if (currentPool && poolConfigContext && toAsset && fromAsset) {
-        const fromIsQuote = currentPool.quote.assetHash === fromAsset.hash;
+        const fromIsQuote = currentPool.quote.assetHash === fromAsset.assetHash;
+        const pair1Precision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+        const pair2Precision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
 
         if (fromIsQuote) {
-          if (fromAsset.hash === TESTNET_ASSET_ID.LBTC) {
-            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-            numberFromAmount = new Decimal(Number(fromAmount)).mul(settingsContext.preferred_unit.value).toNumber();
-            numberToAmount = new Decimal(amountWithSlippage).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-          } else {
-            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-            numberFromAmount = new Decimal(Number(fromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-            numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
-          }
+          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+          numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
+          numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
         } else {
           methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-          numberFromAmount = new Decimal(Number(fromAmount)).mul(PREFERRED_UNIT_VALUE.LBTC).toNumber();
-          numberToAmount = new Decimal(amountWithSlippage).mul(settingsContext.preferred_unit.value).toNumber();
+          numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
+          numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
         }
 
         setLoading(true);
@@ -350,10 +324,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          setSwapWay(undefined);
-          setFromAmount('');
-          setToAmount('');
-          setSelectedFromAmountPercent(undefined);
+          // setSwapWay(undefined);
+          // setFromAmount('');
+          // setToAmount('');
+          // setSelectedFromAmountPercent(undefined);
 
           let commitmentTxId = '';
 
@@ -389,9 +363,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
               quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
-              quoteAsset: currentPool.quote.ticker,
+              quoteAsset: currentPool.quote,
               tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
-              tokenAsset: currentPool.token.ticker,
+              tokenAsset: currentPool.token,
               timestamp: new Date().valueOf(),
               errorMessage: undefined,
               completed: false,
@@ -400,11 +374,13 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             };
 
             const newStoreData = [...txHistoryContext, tempTxData];
+            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+            const txIds = unconfirmedTxs.map((tx) => tx.txId);
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
 
-            checkTxStatusWithIds();
+            checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
             setLoading(false);
@@ -429,33 +405,27 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     fromAssetList?.length === 0 ||
     toAssetList?.length === 0 ||
     !fromAmount ||
-    !toAmount;
+    !toAmount ||
+    loading;
 
   const infoMessage = useCallback((): string => {
-    if (poolConfigContext && currentPool && pools.length > 0) {
-      const config = poolConfigContext;
-      const totalFee =
-        config.baseFee.number +
-        config.commitmentTxFee.number +
-        config.defaultOrderingFee.number +
-        config.serviceFee.number;
+    const config = poolConfigContext;
+    const totalFee =
+      config.baseFee.number +
+      config.commitmentTxFee.number +
+      config.defaultOrderingFee.number +
+      config.serviceFee.number;
 
-      const currentUsdtPrice = (
-        (Number(currentPool.token.value) / Number(currentPool.quote.value) / PREFERRED_UNIT_VALUE.LBTC) *
-        totalFee
-      ).toFixed(2);
+    const currentFeeUsdtPrice = calculateUsdtPrice(btcPrice, totalFee).toFixed(2);
 
-      // eslint-disable-next-line no-useless-concat
-      return 'Network fee ' + totalFee + ' sats ' + '($' + currentUsdtPrice + ')';
-    }
-
-    return 'Network fee 801 sats';
-  }, [poolConfigContext, currentPool, pools]);
+    // eslint-disable-next-line no-useless-concat
+    return 'Network fee ' + totalFee + ' sats ' + '($' + currentFeeUsdtPrice + ')';
+  }, [poolConfigContext, btcPrice]);
 
   const fromAssetListClick = () => {
     setShowPair1AssetListModal(true);
     if (toAsset) {
-      const fromAssetListAll = uniqueMatchingAssetList(pools, toAsset.hash);
+      const fromAssetListAll = uniqueMatchingAssetList(pools, toAsset.assetHash);
       setFromAssetList(fromAssetListAll);
     }
   };
@@ -463,7 +433,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const toAssetListClick = () => {
     setShowPair2AssetListModal(true);
     if (fromAsset) {
-      const toAssetListAll = uniqueMatchingAssetList(pools, fromAsset.hash);
+      const toAssetListAll = uniqueMatchingAssetList(pools, fromAsset.assetHash);
       setToAssetList(toAssetListAll);
     }
   };
@@ -492,22 +462,19 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                       setSelectedFromAmountPercent(undefined);
                       setSwapWay(SWAP_WAY.FROM);
                     }}
-                    decimalLength={getAssetPrecession(
-                      fromAsset?.ticker as SWAP_ASSET,
-                      settingsContext.preferred_unit.text,
-                    )}
+                    decimalLength={fromAsset && getAssetPrecession(fromAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${fromAsset?.hash && 'asset-button-selected'}`}
+                    className={`asset-button ${fromAsset?.assetHash && 'asset-button-selected'}`}
                     onClick={fromAssetListClick}
                   >
                     {fromAsset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={fromAsset.hash}
+                          asset={fromAsset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
@@ -543,22 +510,19 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                       setToAmount(inputValue);
                       setSwapWay(SWAP_WAY.TO);
                     }}
-                    decimalLength={getAssetPrecession(
-                      toAsset?.ticker as SWAP_ASSET,
-                      settingsContext.preferred_unit.text,
-                    )}
+                    decimalLength={toAsset && getAssetPrecession(toAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
                 <div>
                   <Button
                     appearance="default"
-                    className={`asset-button ${toAsset?.hash && 'asset-button-selected'}`}
+                    className={`asset-button ${toAsset?.assetHash && 'asset-button-selected'}`}
                     onClick={toAssetListClick}
                   >
                     {toAsset ? (
                       <div className="create-new-pool-img-content">
                         <AssetIcon
-                          asset={toAsset.hash}
+                          asset={toAsset.assetHash}
                           className="create-new-pool-lbtc-icon"
                           width="1.5rem"
                           height="1.5rem"
