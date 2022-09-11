@@ -131,7 +131,8 @@ export const CreateNewPool: React.FC = () => {
       !inputsIsValid()?.pair1IsValid ||
       !inputsIsValid()?.pair2IsValid ||
       !selectedPair1Asset ||
-      !selectedPair2Asset
+      !selectedPair2Asset ||
+      loading
     );
   };
 

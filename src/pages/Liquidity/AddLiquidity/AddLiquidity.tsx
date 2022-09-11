@@ -510,7 +510,8 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 Number(pair2Value) <= 0 ||
                 !inputsIsValid()?.tokenIsValid ||
                 !inputsIsValid()?.quoteIsValid ||
-                Number(calcLpValues().lpReceived) <= 0
+                Number(calcLpValues().lpReceived) <= 0 ||
+                loading
               }
               className="add-liquidity-button"
             />

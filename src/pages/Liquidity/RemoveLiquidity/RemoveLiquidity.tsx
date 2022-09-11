@@ -310,7 +310,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             onClick={() => {
               removeLiquidityClick();
             }}
-            disabled={calcLpTokenAmount <= 0}
+            disabled={calcLpTokenAmount <= 0 || loading}
             className="remove-liquidity-button"
           />
         </div>
