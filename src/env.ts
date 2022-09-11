@@ -16,8 +16,6 @@ export const BITMATRIX_RPC_URL = 'https://rpc.basebitmatrix.com/';
 
 export const LBTC_ASSET_HASH = '144c654344aa716d6f3abcc1ca90e5641e4e2a7f633bc09fe3baf64585819a49';
 
-export const USDT_ASSET = 'f3d1ec678811398cd2ae277cbe3849c6f6dbd72c74bc542f7c4b11ff0e820958';
-
 export const BANANA_THEME_ASSET = '657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56';
 
 export const LBTC_ASSET: AssetModel = {
