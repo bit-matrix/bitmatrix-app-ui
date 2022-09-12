@@ -218,24 +218,25 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         let quoteAmount = totalAmountInWallet;
 
         if (fromAsset.assetHash === lbtcAsset.assetHash) {
-          quoteAmount = quoteAmount - (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL ? totalFee : 0);
+          quoteAmount = quoteAmount - totalFee;
         }
+        if (quoteAmount > 0) {
+          const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
 
-        const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (quoteAmount / Math.pow(10, assetPrecision)).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const quoteAmountHalf = Math.ceil(quoteAmount / 2);
+            inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
+          }
 
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (quoteAmount / Math.pow(10, assetPrecision)).toString();
+          setFromAmount(inputAmount);
+          setSelectedFromAmountPercent(newFromAmountPercent);
         }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-          inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
-        }
-
-        setFromAmount(inputAmount);
-        setSelectedFromAmountPercent(newFromAmountPercent);
       }
     }
   };
@@ -340,6 +341,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                true,
               );
             } catch (error) {
               setLoading(false);
@@ -353,6 +355,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                true,
               );
             } catch (error) {
               setLoading(false);
@@ -379,7 +382,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
-
+            setSelectedFromAmountPercent(undefined);
             checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
@@ -562,6 +565,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setFromAsset(asset);
             setFromAmount('');
             setToAmount('');
+            setSelectedFromAmountPercent(undefined);
             setShowPair1AssetListModal(false);
           }}
           assetList={fromAssetList}
