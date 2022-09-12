@@ -381,7 +381,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
-
+            setSelectedFromAmountPercent(undefined);
             checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
@@ -564,6 +564,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setFromAsset(asset);
             setFromAmount('');
             setToAmount('');
+            setSelectedFromAmountPercent(undefined);
             setShowPair1AssetListModal(false);
           }}
           assetList={fromAssetList}
