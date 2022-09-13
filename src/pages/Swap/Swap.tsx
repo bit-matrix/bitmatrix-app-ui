@@ -154,7 +154,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
+      if (currentPool && Number(toAmount) > 0 && toAsset && fromAsset) {
         inputNum = inputNum * Math.pow(10, getAssetPrecession(toAsset, settingsContext.preferred_unit.text));
 
         const findPair1 = currentPool.quote.assetHash === toAsset.assetHash;
@@ -165,7 +165,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         }
 
-        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
+        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
           const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
@@ -179,15 +179,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [
-      currentPool,
-      fromAsset,
-      poolConfigContext,
-      settingsContext.preferred_unit.text,
-      settingsContext.slippage,
-      toAmount,
-      toAsset,
-    ],
+    [currentPool, fromAsset, settingsContext.preferred_unit.text, settingsContext.slippage, toAmount, toAsset],
   );
 
   useEffect(() => {
