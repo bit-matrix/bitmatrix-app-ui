@@ -41,14 +41,15 @@ export const useChartsSocket = () => {
     });
 
     if (txHistoryContext && txHistoryContext.length > 0) {
-      const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
+      // const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
 
-      if (unconfirmedTxs.length > 0) {
-        const txIds = unconfirmedTxs.map((tx) => tx.txId);
-        socket.emit('checkTxStatus', `${txIds}`);
-      } else {
-        setTxStatusesLoading(false);
-      }
+      // if (unconfirmedTxs.length > 0) {
+      //   const txIds = unconfirmedTxs.map((tx) => tx.txId);
+      const txIds = txHistoryContext.map((tx) => tx.txId);
+      socket.emit('checkTxStatus', `${txIds}`);
+      // } else {
+      //   setTxStatusesLoading(false);
+      // }
     } else {
       setTxStatusesLoading(false);
     }
