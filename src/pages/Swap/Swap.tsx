@@ -460,7 +460,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                     decimalLength={fromAsset && getAssetPrecession(fromAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
-                <div>
+                <div className="asset-button-content">
                   <Button
                     appearance="default"
                     className={`asset-button ${fromAsset?.assetHash && 'asset-button-selected'}`}
@@ -508,7 +508,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                     decimalLength={toAsset && getAssetPrecession(toAsset, settingsContext.preferred_unit.text)}
                   />
                 </div>
-                <div>
+                <div className="asset-button-content">
                   <Button
                     appearance="default"
                     className={`asset-button ${toAsset?.assetHash && 'asset-button-selected'}`}
