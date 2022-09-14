@@ -21,6 +21,7 @@ import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
 import './RemoveLiquidity.scss';
+import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -89,6 +90,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               currentPool,
               primaryPoolConfig,
               addressInformation.publicKey,
+              lbtcAsset.assetHash,
               true,
             );
           } catch (error) {
