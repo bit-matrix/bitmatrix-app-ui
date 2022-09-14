@@ -154,7 +154,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(toAmount) > 0 && toAsset && fromAsset) {
+      if (currentPool && Number(toAmount) > 0 && toAsset && fromAsset) {
         inputNum = inputNum * Math.pow(10, getAssetPrecession(toAsset, settingsContext.preferred_unit.text));
 
         const findPair1 = currentPool.quote.assetHash === toAsset.assetHash;
@@ -165,7 +165,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         }
 
-        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, poolConfigContext, methodCall);
+        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
           const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
@@ -179,15 +179,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setAmountWithSlippage(0);
       }
     },
-    [
-      currentPool,
-      fromAsset,
-      poolConfigContext,
-      settingsContext.preferred_unit.text,
-      settingsContext.slippage,
-      toAmount,
-      toAsset,
-    ],
+    [currentPool, fromAsset, settingsContext.preferred_unit.text, settingsContext.slippage, toAmount, toAsset],
   );
 
   useEffect(() => {
@@ -218,24 +210,25 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         let quoteAmount = totalAmountInWallet;
 
         if (fromAsset.assetHash === LBTC_ASSET.assetHash) {
-          quoteAmount = quoteAmount - (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL ? totalFee : 0);
+          quoteAmount = quoteAmount - totalFee;
         }
+        if (quoteAmount > 0) {
+          const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
 
-        const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
+            inputAmount = (quoteAmount / Math.pow(10, assetPrecision)).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
+            const quoteAmountHalf = Math.ceil(quoteAmount / 2);
+            inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
+          }
+          if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
+            inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
+          }
 
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.ALL) {
-          inputAmount = (quoteAmount / Math.pow(10, assetPrecision)).toString();
+          setFromAmount(inputAmount);
+          setSelectedFromAmountPercent(newFromAmountPercent);
         }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.HALF) {
-          const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-          inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
-        }
-        if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-          inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
-        }
-
-        setFromAmount(inputAmount);
-        setSelectedFromAmountPercent(newFromAmountPercent);
       }
     }
   };
@@ -381,7 +374,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
-
+            setSelectedFromAmountPercent(undefined);
             checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
@@ -564,6 +557,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setFromAsset(asset);
             setFromAmount('');
             setToAmount('');
+            setSelectedFromAmountPercent(undefined);
             setShowPair1AssetListModal(false);
           }}
           assetList={fromAssetList}

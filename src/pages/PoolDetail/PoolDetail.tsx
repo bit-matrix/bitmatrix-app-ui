@@ -97,6 +97,21 @@ export const PoolDetail: React.FC = () => {
         ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || 0)
         : chartData?.price.todayValue || 0;
 
+    const tvl =
+      pool.quote.assetHash === lbtcAsset.assetHash
+        ? calculateUsdtPrice(btcPrice || 0, chartData?.tvl.todayValue || 0)
+        : chartData?.tvl.todayValue || 0;
+
+    const fees =
+      pool.quote.assetHash === lbtcAsset.assetHash
+        ? calculateUsdtPrice(btcPrice || 0, chartData?.fees.todayValue || 0)
+        : chartData?.fees.todayValue || 0;
+
+    const volume =
+      pool.quote.assetHash === lbtcAsset.assetHash
+        ? calculateUsdtPrice(btcPrice || 0, chartData?.volume.todayValue || 0)
+        : chartData?.volume.todayValue || 0;
+
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -197,9 +212,7 @@ export const PoolDetail: React.FC = () => {
                   </div>
                   <div className="pool-metrics-item">
                     <div>Volume 24h</div>
-                    <div className="pool-detail-table-text">
-                      ${Numeral(chartData?.volume.todayValue).format('(0.00a)')}
-                    </div>
+                    <div className="pool-detail-table-text">${Numeral(volume).format('(0.00a)')}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.volume.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.volume.rate.direction}-text`}>
@@ -211,9 +224,7 @@ export const PoolDetail: React.FC = () => {
                 <div className="pool-metrics-content">
                   <div className="pool-metrics-item">
                     <div>TVL</div>
-                    <div className="pool-detail-table-text">
-                      ${Numeral(chartData?.tvl.todayValue).format('(0.00a)')}
-                    </div>
+                    <div className="pool-detail-table-text">${Numeral(tvl).format('(0.00a)')}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.tvl.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.tvl.rate.direction}-text`}>
@@ -223,9 +234,7 @@ export const PoolDetail: React.FC = () => {
                   </div>
                   <div className="pool-metrics-item">
                     <div>Fees 24h</div>
-                    <div className="pool-detail-table-text">
-                      ${Numeral(chartData?.fees.todayValue).format('(0.00a)')}
-                    </div>
+                    <div className="pool-detail-table-text">${Numeral(fees).format('(0.00a)')}</div>
                     <div className="pool-detail-icon-content">
                       {arrowIconDirection(chartData?.fees.rate.direction)}
                       <span className={`pool-detail-table-arrow-${chartData?.fees.rate.direction}-text`}>
