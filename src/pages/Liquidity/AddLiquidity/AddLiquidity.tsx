@@ -297,6 +297,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               currentPool,
               primaryPoolConfig,
               addressInformation.publicKey,
+              lbtcAsset.assetHash,
               true,
             );
           } catch (error) {
