@@ -230,7 +230,7 @@ export const CreateNewPool: React.FC = () => {
           addressInformation.publicKey,
           1,
           pair1CoefficientCalculation(),
-          lbtcAsset.assetHash,
+          LBTC_ASSET.assetHash,
           lpFeeTier.index,
         );
 

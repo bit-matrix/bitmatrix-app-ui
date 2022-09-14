@@ -28,17 +28,17 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
         : chartSummary?.price.todayValue || 0;
 
     const tvl =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartSummary?.tvl.todayValue || 0)
         : chartSummary?.tvl.todayValue || 0;
 
     const fees =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartSummary?.fees.todayValue || 0)
         : chartSummary?.fees.todayValue || 0;
 
     const volume =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartSummary?.volume.todayValue || 0)
         : chartSummary?.volume.todayValue || 0;
 

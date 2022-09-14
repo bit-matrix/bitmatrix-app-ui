@@ -98,17 +98,17 @@ export const PoolDetail: React.FC = () => {
         : chartData?.price.todayValue || 0;
 
     const tvl =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartData?.tvl.todayValue || 0)
         : chartData?.tvl.todayValue || 0;
 
     const fees =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartData?.fees.todayValue || 0)
         : chartData?.fees.todayValue || 0;
 
     const volume =
-      pool.quote.assetHash === lbtcAsset.assetHash
+      pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartData?.volume.todayValue || 0)
         : chartData?.volume.todayValue || 0;
 
