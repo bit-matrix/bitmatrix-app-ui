@@ -63,7 +63,8 @@ export const MyPoolDetail: React.FC = () => {
       );
 
       const pooledQuote = quoteAmountRound(
-        Number(pool.quote.value) / Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
+        Number(quoteTokenRecipients.user_lbtc_received) /
+          Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
       );
 
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
