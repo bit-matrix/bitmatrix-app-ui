@@ -161,6 +161,13 @@ export const PoolPage: React.FC = () => {
             >
               Create New Pool
             </Button>
+            <Button
+              appearance="default"
+              className="pm-add-button pm-issuance-asset"
+              onClick={() => window.open('https://assets.blockstream.com/asset-issuance', '_blank')}
+            >
+              Issuance Asset
+            </Button>
           </div>
         </div>
       </>

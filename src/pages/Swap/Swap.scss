@@ -82,7 +82,9 @@
     margin-left: 0.5rem;
   }
 }
-
+.asset-button-content {
+  margin-left: 0.5rem;
+}
 .asset-button {
   width: 100%;
   height: 2.75rem;
@@ -133,7 +135,7 @@
 }
 
 .from-input {
-  width: 9.25rem;
+  width: 100%;
   // height: 2rem;
   background: $bmBlack;
   border-width: 0px;
