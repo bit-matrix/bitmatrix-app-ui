@@ -44,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
   padding: 0 1.25rem;
 }
 
@@ -79,7 +79,7 @@
 }
 
 .pool-page-card {
-  margin: 1rem 0;
+  margin: 0.9rem 0;
 }
 
 .pool-page-button {
@@ -201,7 +201,7 @@
 
 .pm-add-button {
   width: 100%;
-  height: 3rem;
+  height: 2.8rem;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
   background: var(--theme-color) !important;
@@ -218,18 +218,27 @@
 }
 
 .pm-add-liquidity {
-  border-top-right-radius: 1.25rem !important;
-  border-top-left-radius: 1.25rem !important;
-  border-bottom-left-radius: 0.75rem !important;
-  border-bottom-right-radius: 0.75rem !important;
+  border-top-right-radius: 1rem !important;
+  border-top-left-radius:1rem !important;
+  border-bottom-left-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
   margin-bottom: 0.35rem !important;
 }
 
 .pm-create-new-pool {
-  border-top-right-radius: 0.75rem !important;
-  border-top-left-radius: 0.75rem !important;
-  border-bottom-left-radius: 1.25rem !important;
-  border-bottom-right-radius: 1.25rem !important;
+  border-top-right-radius: 0.5rem !important;
+  border-top-left-radius: 0.5rem !important;
+  border-bottom-left-radius: 0.5rem !important;
+  border-bottom-right-radius: 0.5rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.pm-issuance-asset {
+  border-top-right-radius: 0.5rem !important;
+  border-top-left-radius: 0.5rem !important;
+  border-bottom-left-radius: 1rem !important;
+  border-bottom-right-radius: 1rem !important;
+
 }
 
 .pool-list-modal {

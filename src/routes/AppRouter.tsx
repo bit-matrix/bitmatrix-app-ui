@@ -24,8 +24,8 @@ import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { testnetConfig } from '../config/testnet';
-import './AppRouter.scss';
 import { Swap } from '../pages/Swap/Swap';
+import './AppRouter.scss';
 import { BANANA_THEME_ASSET } from '../env';
 
 declare global {
@@ -89,13 +89,14 @@ export const AppRouter = (): JSX.Element => {
 
         const currentData = newLocalStorageData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
+        currentData.txStatus = ts.status;
         if (ts.status === TX_STATUS.FAILED || ts.status === TX_STATUS.SUCCESS) {
           currentData.completed = true;
         }
         if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
-
-      setTxHistoryContext(newLocalStorageData);
+      const sortedHistoryData = newLocalStorageData.sort((a, b) => a.timestamp - b.timestamp);
+      setTxHistoryContext(sortedHistoryData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [txStatuses]);
