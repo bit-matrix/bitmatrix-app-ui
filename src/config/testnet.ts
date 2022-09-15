@@ -1,6 +1,6 @@
 export const testnetConfig = {
   minRemainingSupply: 1000,
-  minTokenValue: 50000000,
+  minTokenValue: 10000000,
   baseFee: {
     number: 550,
     hex: '',
