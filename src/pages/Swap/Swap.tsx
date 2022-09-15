@@ -130,9 +130,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setToAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
+          setToAmount('');
         }
       } else {
         setAmountWithSlippage(0);
+        setToAmount('');
       }
     },
     [
@@ -174,9 +176,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setFromAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
+          setFromAmount('');
         }
       } else {
         setAmountWithSlippage(0);
+        setFromAmount('');
       }
     },
     [currentPool, fromAsset, settingsContext.preferred_unit.text, settingsContext.slippage, toAmount, toAsset],
@@ -212,6 +216,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         if (fromAsset.assetHash === LBTC_ASSET.assetHash) {
           quoteAmount = quoteAmount - totalFee;
         }
+
         if (quoteAmount > 0) {
           const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
 
@@ -223,7 +228,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             inputAmount = (quoteAmountHalf / Math.pow(10, assetPrecision)).toString();
           }
           if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
-            inputAmount = (poolConfigContext.minRemainingSupply / Math.pow(10, assetPrecision)).toString();
+            inputAmount = (
+              (fromAsset.assetHash === lbtcAsset.assetHash
+                ? poolConfigContext.minRemainingSupply
+                : poolConfigContext.minTokenValue) / Math.pow(10, assetPrecision)
+            ).toString();
           }
 
           setFromAmount(inputAmount);
