@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import { DB_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
-import { usePoolContext } from '../context';
+import { useBtcPriceContext, usePoolContext } from '../context';
+import { Pool } from '@bitmatrix/models';
+import { lbtcAsset } from '../lib/liquid-dev/ASSET';
+import { TESTNET_ASSET_ID } from '../lib/liquid-dev/ASSET_ID';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePoolsSocket = () => {
   const [isPoolsConnected, setIsPoolsConnected] = useState<boolean>(false);
   const [poolsLoading, setPoolsLoading] = useState<boolean>(true);
   const { setPoolsContext } = usePoolContext();
+  const { setBtcPriceContext } = useBtcPriceContext();
 
   useEffect(() => {
     const socket = io(DB_SOCKET_SERVER_URL);
@@ -24,9 +28,25 @@ export const usePoolsSocket = () => {
       setIsPoolsConnected(false);
     });
 
-    socket.on('pools', (data) => {
+    socket.on('pools', (data: Pool[]) => {
       if (data) {
         setPoolsContext(data);
+
+        if (data.length > 0) {
+          const filteredPools = data.filter((pl) => {
+            return pl.token.assetHash === lbtcAsset.assetHash && pl.quote.assetHash === TESTNET_ASSET_ID.USDT;
+          });
+
+          if (filteredPools.length > 0) {
+            const tvlSort = filteredPools.sort((a, b) => Number(b.quote.value) - Number(a.quote.value));
+            const bestPool = tvlSort[0];
+
+            const price = Math.floor(Number(bestPool.quote.value) / Number(bestPool.token.value));
+
+            setBtcPriceContext(price);
+          }
+        }
+
         setPoolsLoading(false);
       }
     });

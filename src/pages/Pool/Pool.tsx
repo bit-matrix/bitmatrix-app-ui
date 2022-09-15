@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { usePoolContext, useWalletContext } from '../../context';
+import { useBtcPriceContext, usePoolContext, useWalletContext } from '../../context';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
@@ -13,9 +13,9 @@ import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
-import './Pool.scss';
 import { useChartsContext } from '../../context/charts';
-import { uniqueAssetListAll } from '../../helper';
+import { uniqueQuoteAssetList } from '../../helper';
+import './Pool.scss';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
@@ -28,6 +28,7 @@ export const PoolPage: React.FC = () => {
   const { charts } = useChartsContext();
   const { walletContext } = useWalletContext();
   const { pools } = usePoolContext();
+  const { btcPrice } = useBtcPriceContext();
 
   const history = useHistory();
 
@@ -35,7 +36,7 @@ export const PoolPage: React.FC = () => {
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
-  const poolFilterOptions = uniqueAssetListAll(pools);
+  const poolFilterOptions = uniqueQuoteAssetList(pools);
 
   useEffect(() => {
     const prevPage = history.location.state;
@@ -92,6 +93,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={() =>
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/' + pool.id,
@@ -106,7 +108,7 @@ export const PoolPage: React.FC = () => {
       });
     } else if (selectedTab === POOL_MANAGEMENT_TABS.MY_POOLS) {
       if (myPools.length === 0) {
-        return <div className="no-pool-text">No pool found.</div>;
+        return <div className="no-my-pool-content">No pool found.</div>;
       }
       if (selectedFilterOption) {
         poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
@@ -120,6 +122,7 @@ export const PoolPage: React.FC = () => {
               pool={pool}
               chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
               rank={index + 1}
+              btcPrice={btcPrice}
               onClick={(poolId: string) => {
                 history.push({
                   pathname: ROUTE_PATH.POOL + '/my-pool/' + poolId,
@@ -157,6 +160,13 @@ export const PoolPage: React.FC = () => {
               onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
             >
               Create New Pool
+            </Button>
+            <Button
+              appearance="default"
+              className="pm-add-button pm-issuance-asset"
+              onClick={() => window.open('https://assets.blockstream.com/asset-issuance', '_blank')}
+            >
+              Issuance Asset
             </Button>
           </div>
         </div>
@@ -202,6 +212,7 @@ export const PoolPage: React.FC = () => {
                     pool={pool}
                     chartSummary={charts?.find((cs) => cs.poolId === pool.id)}
                     rank={index + 1}
+                    btcPrice={btcPrice}
                     onClick={() => {
                       history.push({
                         pathname: 'pool/' + pool.id + '/add-liquidity',
@@ -253,11 +264,11 @@ export const PoolPage: React.FC = () => {
   return (
     <div className="pool-page-main">
       <div className="no-pool-content">
-        <div>There are no pools</div>
+        <div>There are no pools.</div>
         <div className="no-pool-button-div">
           <Button
             appearance="default"
-            className="pm-add-button"
+            className="pm-add-button no-pool-add-button"
             onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
           >
             Create New Pool

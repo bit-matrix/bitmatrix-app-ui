@@ -1,11 +1,13 @@
 import { CALL_METHOD } from '@bitmatrix/models';
+import { AssetModel } from '../helper';
+import { TX_STATUS } from '@bitmatrix/models';
 
 export type CommitmentStore = {
   txId: string;
   tokenAmount: number;
-  tokenAsset: string;
+  tokenAsset: AssetModel;
   quoteAmount: number;
-  quoteAsset: string;
+  quoteAsset: AssetModel;
   lpAmount?: number;
   lpAsset?: string;
   timestamp: number;
@@ -14,4 +16,5 @@ export type CommitmentStore = {
   method: CALL_METHOD;
   poolTxId?: string;
   errorMessage?: string;
+  txStatus?: TX_STATUS;
 };

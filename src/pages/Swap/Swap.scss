@@ -82,14 +82,16 @@
     margin-left: 0.5rem;
   }
 }
-
+.asset-button-content {
+  margin-left: 0.5rem;
+}
 .asset-button {
   width: 100%;
   height: 2.75rem;
   border-radius: 1rem !important;
   font-weight: 600 !important;
   color: $bmDeepFir !important;
-  background-color: var(--theme-color);
+  background-color: var(--theme-color) !important;
   border-width: 0 !important;
   opacity: 0.9;
   min-width: 5.625rem;
@@ -133,7 +135,7 @@
 }
 
 .from-input {
-  width: 9.25rem;
+  width: 100%;
   // height: 2rem;
   background: $bmBlack;
   border-width: 0px;

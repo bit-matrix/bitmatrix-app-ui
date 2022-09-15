@@ -4,8 +4,7 @@ import { TxStatus } from '@bitmatrix/models';
 import { API_SOCKET_SERVER_URL } from '../config';
 import { notify } from '../components/utils/utils';
 import { useChartsContext } from '../context/charts';
-import { useLocalStorage } from './useLocalStorage';
-import { CommitmentStore } from '../model/CommitmentStore';
+import { useTxHistoryContext } from '../context';
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useChartsSocket = () => {
@@ -17,9 +16,7 @@ export const useChartsSocket = () => {
 
   const [socketInstance, setSocketInstance] = useState<Socket>();
 
-  const { getLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
-
-  console.log('socket id', socketInstance?.id);
+  const { txHistoryContext } = useTxHistoryContext();
 
   useEffect(() => {
     const socket = io(API_SOCKET_SERVER_URL);
@@ -43,14 +40,11 @@ export const useChartsSocket = () => {
       }
     });
 
-    const txHistory = getLocalData();
-
-    if (txHistory && txHistory.length > 0) {
-      const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
+    if (txHistoryContext && txHistoryContext.length > 0) {
+      const unconfirmedTxs = txHistoryContext.filter((utx) => utx.completed === false);
 
       if (unconfirmedTxs.length > 0) {
         const txIds = unconfirmedTxs.map((tx) => tx.txId);
-
         socket.emit('checkTxStatus', `${txIds}`);
       } else {
         setTxStatusesLoading(false);
@@ -74,19 +68,9 @@ export const useChartsSocket = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const checkTxStatusWithIds = () => {
+  const checkTxStatusWithIds = (txIds: string[]) => {
     if (socketInstance) {
-      const txHistory = getLocalData();
-
-      if (txHistory && txHistory.length > 0) {
-        const unconfirmedTxs = txHistory.filter((utx) => utx.completed === false);
-
-        if (unconfirmedTxs.length > 0) {
-          const txIds = unconfirmedTxs.map((tx) => tx.txId);
-
-          socketInstance.emit('checkTxStatus', `${txIds}`);
-        }
-      }
+      socketInstance.emit('checkTxStatus', `${txIds}`);
     }
   };
 

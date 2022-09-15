@@ -4,12 +4,15 @@ import App from './App';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
+import { createRoot } from 'react-dom/client';
 import {
+  BtcPriceContextProvider,
   ChartsContextProvider,
   PoolsContextProvider,
   SettingsContextProvider,
   WalletContextProvider,
   PoolConfigContextProvider,
+  TxHistoryContextProvider,
 } from './context';
 import './style/global.scss';
 import reportWebVitals from './reportWebVitals';
@@ -22,11 +25,13 @@ const root = ReactDOM.hydrateRoot(
   container,
   <AppContextProvider
     providers={[
+      BtcPriceContextProvider,
       ChartsContextProvider,
       PoolsContextProvider,
       SettingsContextProvider,
       WalletContextProvider,
       PoolConfigContextProvider,
+      TxHistoryContextProvider,
     ]}
   >
     <CustomProvider theme="dark">

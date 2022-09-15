@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ButtonToolbar, Popover, Whisper } from 'rsuite';
-import { CommitmentStore } from '../../model/CommitmentStore';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { useHistory } from 'react-router';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { InfoCard } from '../InfoCard/InfoCard';
@@ -9,7 +7,7 @@ import { Loading } from '../base/Loading/Loading';
 import Svg from '../base/Svg/Svg';
 import TickIcon from '../base/Svg/Icons/Tick';
 import ExclamationIcon from '../base/Svg/Icons/Exclamation';
-import { useSettingsContext } from '../../context';
+import { useSettingsContext, useTxHistoryContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import BananaGif from '../../images/banana.gif';
 import './Navbar.scss';
@@ -17,8 +15,7 @@ import './Navbar.scss';
 export const Navbar: React.FC = (): JSX.Element => {
   const [selectedTab, setSelectedTab] = useState<ROUTE_PATH>(ROUTE_PATH.HOME);
   const history = useHistory();
-
-  const { getLocalData, setLocalData } = useLocalStorage<CommitmentStore[]>('BmTxV4');
+  const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const { settingsContext } = useSettingsContext();
 
@@ -39,8 +36,7 @@ export const Navbar: React.FC = (): JSX.Element => {
   }, [history]);
 
   const txInfo = useCallback(() => {
-    const txHistory = getLocalData();
-    const unconfirmedTxs = txHistory?.filter((utx) => utx.completed === false);
+    const unconfirmedTxs = txHistoryContext?.filter((utx) => utx.completed === false || !utx.completed);
 
     if (unconfirmedTxs && unconfirmedTxs.length > 0) {
       if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
@@ -57,8 +53,8 @@ export const Navbar: React.FC = (): JSX.Element => {
         );
       }
     } else {
-      if (txHistory && txHistory.length > 0) {
-        if (txHistory[txHistory.length - 1].errorMessage) {
+      if (txHistoryContext && txHistoryContext.length > 0) {
+        if (txHistoryContext[txHistoryContext.length - 1].errorMessage) {
           return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
           return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
@@ -66,7 +62,7 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     }
     return <div />;
-  }, [getLocalData, settingsContext.exclusiveThemes.length, settingsContext.theme]);
+  }, [txHistoryContext, settingsContext.exclusiveThemes.length, settingsContext.theme]);
 
   // const txInfo = (): React.ReactElement => {
   //   if (unconfirmedTxs && unconfirmedTxs.length > 0) {
@@ -96,27 +92,26 @@ export const Navbar: React.FC = (): JSX.Element => {
   // };
 
   const infoTab = () => {
-    const txHistory = getLocalData();
-
-    if (txHistory && txHistory.length > 0) {
-      if (txHistory[txHistory.length - 1].seen === false) {
+    if (txHistoryContext && txHistoryContext.length > 0) {
+      if (txHistoryContext.some((txc) => !txc.seen)) {
         return (
           <li className="navbar-item mobile-hidden">
             <div
               tabIndex={0}
               className="navbar-item-circle-div"
               onBlur={() => {
-                if (txHistory && txHistory.length > 0) {
-                  const completedTxs = txHistory.filter((txh) => txh.completed === true);
+                if (txHistoryContext && txHistoryContext.length > 0) {
+                  const completedTxs = txHistoryContext.filter((txh) => txh.completed === true && !txh.seen);
+
                   if (completedTxs.length > 0) {
-                    const newTxHistory = [...txHistory];
+                    const newTxHistory = [...txHistoryContext];
                     completedTxs.forEach((tx) => {
                       const txIndex = newTxHistory.findIndex((newTxH) => newTxH.txId === tx.txId);
                       if (txIndex > -1) {
                         newTxHistory[txIndex].seen = true;
                       }
                     });
-                    setLocalData(newTxHistory);
+                    setTxHistoryContext(newTxHistory);
                   }
                 }
               }}
