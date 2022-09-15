@@ -184,12 +184,12 @@ export default withTooltip<AreaProps, TooltipData>(
         </svg>
         {tooltipData && (
           <div>
-            <TooltipWithBounds key={Math.random()} top={tooltipTop - 12} left={tooltipLeft + 12} style={tooltipStyles}>
+            <TooltipWithBounds key={Math.random()} top={tooltipTop - 42} left={tooltipLeft} style={tooltipStyles}>
               {`$${getStockValue(tooltipData)}`}
             </TooltipWithBounds>
             <Tooltip
               top={innerHeight + margin.top - 14}
-              left={tooltipLeft}
+              left={tooltipLeft - 9}
               style={{
                 ...defaultStyles,
                 minWidth: 72,
