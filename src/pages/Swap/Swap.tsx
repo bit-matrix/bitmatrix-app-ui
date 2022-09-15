@@ -333,6 +333,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                lbtcAsset.assetHash,
                 true,
               );
             } catch (error) {
@@ -347,6 +348,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 currentPool,
                 poolConfigContext,
                 addressInformation.publicKey,
+                lbtcAsset.assetHash,
                 true,
               );
             } catch (error) {
