@@ -148,14 +148,16 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               }
             } else {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
-                inputAmount = (quoteAmount / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+                inputAmount = (quoteAmount / PREFERRED_UNIT_VALUE.LBTC).toFixed(currentPool.quote.precision);
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.HALF) {
                 const quoteAmountHalf = Math.ceil(quoteAmount / 2);
-                inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+                inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(currentPool.quote.precision);
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toFixed(
+                  currentPool.quote.precision,
+                );
               }
             }
             onChangeQuoteAmount(inputAmount);
