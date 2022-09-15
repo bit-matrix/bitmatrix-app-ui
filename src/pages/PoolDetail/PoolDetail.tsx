@@ -98,8 +98,8 @@ export const PoolDetail: React.FC = () => {
         : chartData?.price.todayValue || 0;
 
     const tvl =
-      pool.quote.assetHash === lbtcAsset.assetHash
-        ? calculateUsdtPrice(btcPrice || 0, chartData?.tvl.todayValue || 0)
+      pool.quote.assetHash === lbtcAsset.assetHash && chartData
+        ? btcPrice * chartData.tvl.todayValue
         : chartData?.tvl.todayValue || 0;
 
     const fees =
