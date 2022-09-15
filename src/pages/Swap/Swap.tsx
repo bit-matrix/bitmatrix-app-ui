@@ -130,9 +130,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setToAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
+          setToAmount('');
         }
       } else {
         setAmountWithSlippage(0);
+        setToAmount('');
       }
     },
     [
@@ -174,9 +176,11 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setFromAmount((output.amount / Math.pow(10, assetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
+          setFromAmount('');
         }
       } else {
         setAmountWithSlippage(0);
+        setFromAmount('');
       }
     },
     [currentPool, fromAsset, settingsContext.preferred_unit.text, settingsContext.slippage, toAmount, toAsset],
