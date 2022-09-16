@@ -177,6 +177,36 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
 
+  const removeLiquidityButtonDisabled = () => {
+    if (calcLpTokenAmount <= 0 || loading) return true;
+
+    if (currentPool) {
+      if (currentPool.quote.assetHash === lbtcAsset.assetHash || currentPool.token.assetHash === lbtcAsset.assetHash) {
+        if (
+          Number(currentPool.quote.value) -
+            Number(calcLpValues().quoteReceived) * settingsContext.preferred_unit.value <
+            450 ||
+          Number(currentPool.token.value) -
+            Number(calcLpValues().tokenReceived) * settingsContext.preferred_unit.value <
+            450
+        ) {
+          return true;
+        } else return false;
+      } else {
+        if (
+          (Number(currentPool.token.value) - Number(calcLpValues().tokenReceived)) /
+            Math.pow(10, currentPool.token.precision) <
+            1 ||
+          (Number(currentPool.quote.value) - Number(calcLpValues().quoteReceived)) /
+            Math.pow(10, currentPool.quote.precision) <
+            1
+        ) {
+          return true;
+        } else return false;
+      }
+    }
+  };
+
   return (
     <div className="remove-liquidity-page-main">
       <Content className="remove-liquidity-page-content">
@@ -313,7 +343,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             onClick={() => {
               removeLiquidityClick();
             }}
-            disabled={calcLpTokenAmount <= 0 || loading}
+            disabled={removeLiquidityButtonDisabled()}
             className="remove-liquidity-button"
           />
         </div>
