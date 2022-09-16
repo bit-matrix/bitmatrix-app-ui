@@ -1,0 +1,24 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+const router = (): JSX.Element => {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/" />
+        <Route path="/swap" />
+        <Route path="/pool" />
+        <Route path="/pool/:id" />
+        <Route path="/create-new-pool" />
+        <Route path="/settings" />
+        <Route path="/pool/:id/add-liquidity" />
+        <Route path="/pool/:id/remove-liquidity" />
+        <Route path="/factory" />
+        <Route path="/factory/issue-token" />
+        <Route path="*" />
+      </Switch>
+    </Router>
+  );
+};
+
+export default router;
