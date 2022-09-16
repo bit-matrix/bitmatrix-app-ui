@@ -25,6 +25,7 @@ import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { testnetConfig } from '../config/testnet';
 import { Swap } from '../pages/Swap/Swap';
+import { Helmet } from 'react-helmet';
 import './AppRouter.scss';
 
 declare global {
@@ -152,6 +153,33 @@ export const AppRouter = (): JSX.Element => {
 
   return (
     <Router>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
+        <meta name="author" content="https://www.linkedin.com/company/bitmatrix/" />
+        <meta name="robots" content="nofollow, noindex" />
+        <meta
+          property="og:title"
+          content="A Step-by-Step Guide to Setting Up Selenium-webdriver with Node.js"
+          data-rh="true"
+        />
+        <meta
+          property="og:description"
+          content="A dummies guide to getting up and running with selenium-webdriver"
+          data-rh="true"
+        />
+        <meta
+          property="og:image"
+          content="https://miro.medium.com/max/812/1*1xhuVp8f2WFUGUByHS8VTg.png"
+          data-rh="true"
+        />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.ico" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XH7VQK0DKJ"></script>
+        <link rel="manifest" crossOrigin="use-credentials" href="%PUBLIC_URL%/manifest.json" />
+      </Helmet>
       <ErrorBoundary>
         <Content className="app-router-main">
           <div className="secret-top-div" />
