@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import { useHistory } from 'react-router-dom';
+import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 
 export const NotFound = (): JSX.Element => {
   document.title = 'Not Found';
@@ -16,5 +18,12 @@ export const NotFound = (): JSX.Element => {
     }, 5000);
   }, [history]);
 
-  return <h1>Page not found</h1>;
+  return (
+    <div>
+      <Helmet>
+        <title>{ROUTE_PATH_TITLE.NOT_FOUND}</title>
+      </Helmet>
+      <h1 style={{ top: '50%', left: '50%' }}>Page not found</h1>
+    </div>
+  );
 };

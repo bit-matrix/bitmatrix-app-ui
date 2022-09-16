@@ -15,6 +15,7 @@ import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
 import { useChartsContext } from '../../context/charts';
 import { uniqueQuoteAssetList } from '../../helper';
+import { Helmet } from 'react-helmet';
 import './Pool.scss';
 
 export const PoolPage: React.FC = () => {
@@ -32,7 +33,7 @@ export const PoolPage: React.FC = () => {
 
   const history = useHistory();
 
-  document.title = ROUTE_PATH_TITLE.POOL;
+  //document.title = ROUTE_PATH_TITLE.POOL;
 
   const [poolContainerClasses, setPoolContainerClasses] = useState(['pool-page-main']);
 
@@ -262,17 +263,22 @@ export const PoolPage: React.FC = () => {
   }
 
   return (
-    <div className="pool-page-main">
-      <div className="no-pool-content">
-        <div>There are no pools.</div>
-        <div className="no-pool-button-div">
-          <Button
-            appearance="default"
-            className="pm-add-button no-pool-add-button"
-            onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
-          >
-            Create New Pool
-          </Button>
+    <div>
+      <Helmet>
+        <title>{ROUTE_PATH_TITLE.POOL}</title>
+      </Helmet>
+      <div className="pool-page-main">
+        <div className="no-pool-content">
+          <div>There are no pools.</div>
+          <div className="no-pool-button-div">
+            <Button
+              appearance="default"
+              className="pm-add-button no-pool-add-button"
+              onClick={() => history.push(ROUTE_PATH.CREATE_NEW_POOL)}
+            >
+              Create New Pool
+            </Button>
+          </div>
         </div>
       </div>
     </div>

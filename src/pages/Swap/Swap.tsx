@@ -35,6 +35,7 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
+import { Helmet } from 'react-helmet';
 import './Swap.scss';
 
 type Props = {
@@ -69,7 +70,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const { poolConfigContext } = usePoolConfigContext();
   const { btcPrice } = useBtcPriceContext();
 
-  document.title = ROUTE_PATH_TITLE.SWAP;
+  //document.title = ROUTE_PATH_TITLE.SWAP;
 
   useEffect(() => {
     let unmounted = false;
@@ -445,149 +446,154 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   };
 
   return (
-    <div className="swap-page-main">
-      <Content className="swap-page-main-content">
-        <div className="swap-page-layout">
-          <div className="swap-page-content">
-            <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
-              <SwapFromTab
-                selectedFromAmountPercent={selectedFromAmountPercent}
-                setselectedFromAmountPercent={calcAmountPercent}
+    <div>
+      <Helmet>
+        <title>{ROUTE_PATH_TITLE.SWAP}</title>
+      </Helmet>
+      <div className="swap-page-main">
+        <Content className="swap-page-main-content">
+          <div className="swap-page-layout">
+            <div className="swap-page-content">
+              <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
+                <SwapFromTab
+                  selectedFromAmountPercent={selectedFromAmountPercent}
+                  setselectedFromAmountPercent={calcAmountPercent}
+                />
+
+                <div className="from-input-content">
+                  <div className="from-amount-div">
+                    <div className="from-text">From</div>
+                    <NumericalInput
+                      className="from-input"
+                      inputValue={fromAmount}
+                      onChange={(inputValue) => {
+                        if (inputValue === '.') return;
+
+                        setFromAmount(inputValue);
+                        setSelectedFromAmountPercent(undefined);
+                        setSwapWay(SWAP_WAY.FROM);
+                      }}
+                      decimalLength={fromAsset && getAssetPrecession(fromAsset, settingsContext.preferred_unit.text)}
+                    />
+                  </div>
+                  <div className="asset-button-content">
+                    <Button
+                      appearance="default"
+                      className={`asset-button ${fromAsset?.assetHash && 'asset-button-selected'}`}
+                      onClick={fromAssetListClick}
+                    >
+                      {fromAsset ? (
+                        <div className="create-new-pool-img-content">
+                          <AssetIcon
+                            asset={fromAsset.assetHash}
+                            className="create-new-pool-lbtc-icon"
+                            width="1.5rem"
+                            height="1.5rem"
+                          />
+                          <div>{getAssetTicker(fromAsset, settingsContext.preferred_unit.text)}</div>
+                          <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                        </div>
+                      ) : (
+                        <div className="asset-button-default-text-container">
+                          <div className="asset-button-default-text">Select an asset</div>
+                          <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="swap-arrow-icon" onClick={swapRouteChange}>
+                <ArrowDownIcon width="1.25rem" height="1.25rem" />
+              </div>
+
+              <div className="from-content">
+                <div className="from-input-content">
+                  <div className="from-amount-div">
+                    <div className="from-text">To</div>
+                    <NumericalInput
+                      className="from-input"
+                      inputValue={toAmount}
+                      onChange={(inputValue) => {
+                        if (inputValue === '.') return;
+                        setSelectedFromAmountPercent(undefined);
+                        setToAmount(inputValue);
+                        setSwapWay(SWAP_WAY.TO);
+                      }}
+                      decimalLength={toAsset && getAssetPrecession(toAsset, settingsContext.preferred_unit.text)}
+                    />
+                  </div>
+                  <div className="asset-button-content">
+                    <Button
+                      appearance="default"
+                      className={`asset-button ${toAsset?.assetHash && 'asset-button-selected'}`}
+                      onClick={toAssetListClick}
+                    >
+                      {toAsset ? (
+                        <div className="create-new-pool-img-content">
+                          <AssetIcon
+                            asset={toAsset.assetHash}
+                            className="create-new-pool-lbtc-icon"
+                            width="1.5rem"
+                            height="1.5rem"
+                          />
+                          <div>{getAssetTicker(toAsset, settingsContext.preferred_unit.text)}</div>
+                          <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                        </div>
+                      ) : (
+                        <div className="asset-button-default-text-container">
+                          <div className="asset-button-default-text">Select an asset</div>
+                          <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
+                        </div>
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <WalletButton
+                text="Swap"
+                onClick={() => {
+                  swapClick();
+                }}
+                loading={loading}
+                disabled={swapButtonDisabled}
               />
-
-              <div className="from-input-content">
-                <div className="from-amount-div">
-                  <div className="from-text">From</div>
-                  <NumericalInput
-                    className="from-input"
-                    inputValue={fromAmount}
-                    onChange={(inputValue) => {
-                      if (inputValue === '.') return;
-
-                      setFromAmount(inputValue);
-                      setSelectedFromAmountPercent(undefined);
-                      setSwapWay(SWAP_WAY.FROM);
-                    }}
-                    decimalLength={fromAsset && getAssetPrecession(fromAsset, settingsContext.preferred_unit.text)}
-                  />
-                </div>
-                <div className="asset-button-content">
-                  <Button
-                    appearance="default"
-                    className={`asset-button ${fromAsset?.assetHash && 'asset-button-selected'}`}
-                    onClick={fromAssetListClick}
-                  >
-                    {fromAsset ? (
-                      <div className="create-new-pool-img-content">
-                        <AssetIcon
-                          asset={fromAsset.assetHash}
-                          className="create-new-pool-lbtc-icon"
-                          width="1.5rem"
-                          height="1.5rem"
-                        />
-                        <div>{getAssetTicker(fromAsset, settingsContext.preferred_unit.text)}</div>
-                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
-                      </div>
-                    ) : (
-                      <div className="asset-button-default-text-container">
-                        <div className="asset-button-default-text">Select an asset</div>
-                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              </div>
             </div>
-
-            <div className="swap-arrow-icon" onClick={swapRouteChange}>
-              <ArrowDownIcon width="1.25rem" height="1.25rem" />
-            </div>
-
-            <div className="from-content">
-              <div className="from-input-content">
-                <div className="from-amount-div">
-                  <div className="from-text">To</div>
-                  <NumericalInput
-                    className="from-input"
-                    inputValue={toAmount}
-                    onChange={(inputValue) => {
-                      if (inputValue === '.') return;
-                      setSelectedFromAmountPercent(undefined);
-                      setToAmount(inputValue);
-                      setSwapWay(SWAP_WAY.TO);
-                    }}
-                    decimalLength={toAsset && getAssetPrecession(toAsset, settingsContext.preferred_unit.text)}
-                  />
-                </div>
-                <div className="asset-button-content">
-                  <Button
-                    appearance="default"
-                    className={`asset-button ${toAsset?.assetHash && 'asset-button-selected'}`}
-                    onClick={toAssetListClick}
-                  >
-                    {toAsset ? (
-                      <div className="create-new-pool-img-content">
-                        <AssetIcon
-                          asset={toAsset.assetHash}
-                          className="create-new-pool-lbtc-icon"
-                          width="1.5rem"
-                          height="1.5rem"
-                        />
-                        <div>{getAssetTicker(toAsset, settingsContext.preferred_unit.text)}</div>
-                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
-                      </div>
-                    ) : (
-                      <div className="asset-button-default-text-container">
-                        <div className="asset-button-default-text">Select an asset</div>
-                        <ArrowDownIcon2 className="asset-arrow-icon" width="0.75rem" height="0.75rem" />
-                      </div>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <WalletButton
-              text="Swap"
-              onClick={() => {
-                swapClick();
-              }}
-              loading={loading}
-              disabled={swapButtonDisabled}
-            />
           </div>
-        </div>
-        <Info content={infoMessage()} />
-        <AssetListModal
-          show={showPair1AssetListModal}
-          selectedAsset={fromAsset}
-          close={() => {
-            setShowPair1AssetListModal(false);
-          }}
-          onSelectAsset={(asset) => {
-            setFromAsset(asset);
-            setFromAmount('');
-            setToAmount('');
-            setSelectedFromAmountPercent(undefined);
-            setShowPair1AssetListModal(false);
-          }}
-          assetList={fromAssetList}
-        />
-        <AssetListModal
-          show={showPair2AssetListModal}
-          close={() => {
-            setShowPair2AssetListModal(false);
-          }}
-          selectedAsset={toAsset}
-          onSelectAsset={(asset) => {
-            setToAsset(asset);
-            setToAmount('');
-            setFromAmount('');
-            setShowPair2AssetListModal(false);
-          }}
-          assetList={toAssetList}
-        />
-      </Content>
+          <Info content={infoMessage()} />
+          <AssetListModal
+            show={showPair1AssetListModal}
+            selectedAsset={fromAsset}
+            close={() => {
+              setShowPair1AssetListModal(false);
+            }}
+            onSelectAsset={(asset) => {
+              setFromAsset(asset);
+              setFromAmount('');
+              setToAmount('');
+              setSelectedFromAmountPercent(undefined);
+              setShowPair1AssetListModal(false);
+            }}
+            assetList={fromAssetList}
+          />
+          <AssetListModal
+            show={showPair2AssetListModal}
+            close={() => {
+              setShowPair2AssetListModal(false);
+            }}
+            selectedAsset={toAsset}
+            onSelectAsset={(asset) => {
+              setToAsset(asset);
+              setToAmount('');
+              setFromAmount('');
+              setShowPair2AssetListModal(false);
+            }}
+            assetList={toAssetList}
+          />
+        </Content>
+      </div>
     </div>
   );
 };
