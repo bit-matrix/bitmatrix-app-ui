@@ -4,4 +4,5 @@ export enum ROUTE_PATH_TITLE {
   POOL = 'Bitmatrix - Pool',
   SETTINGS = 'Bitmatrix - Settings',
   FACTORY = 'Bitmatrix - Factory',
+  NOT_FOUND = 'Bitmatrix - Not Found',
 }
