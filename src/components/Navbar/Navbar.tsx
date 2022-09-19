@@ -207,7 +207,7 @@ export const Navbar: React.FC = (): JSX.Element => {
             });
           }}
         >
-          Swap
+          <h1>Swap</h1>
         </Button>
       </li>
 
@@ -225,7 +225,7 @@ export const Navbar: React.FC = (): JSX.Element => {
             });
           }}
         >
-          Pool
+          <h1>Pool</h1>
         </Button>
       </li>
 
@@ -257,7 +257,7 @@ export const Navbar: React.FC = (): JSX.Element => {
             });
           }}
         >
-          Settings
+          <h1>Settings</h1>
         </Button>
       </li>
 

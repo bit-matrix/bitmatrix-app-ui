@@ -211,7 +211,9 @@ export const AppRouter = (): JSX.Element => {
                     <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
                   </Switch>
                 ) : (
-                  <div className="error-content">Socket connection error</div>
+                  <div className="error-content">
+                    <h1>Socket connection error</h1>
+                  </div>
                 )}
               </div>
             )}

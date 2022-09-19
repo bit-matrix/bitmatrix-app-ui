@@ -13,9 +13,17 @@
   top: 2rem;
   z-index: 5;
   margin: 0 !important;
+
   .active {
     background: $bmDeepFir !important;
     color: var(--theme-color) !important;
+  }
+
+  .navbar-item {
+    h1 {
+      font-size: 14px;
+      font-weight: 400;
+    }
   }
 }
 
