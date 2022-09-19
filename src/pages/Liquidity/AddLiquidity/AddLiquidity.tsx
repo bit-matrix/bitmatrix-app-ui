@@ -24,6 +24,7 @@ import { Balance } from 'marina-provider';
 import './AddLiquidity.scss';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import { IS_TESTNET, LBTC_ASSET } from '../../../env';
+import { testnetConfig } from '../../../config/testnet';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;

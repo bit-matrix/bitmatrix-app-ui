@@ -14,8 +14,9 @@ import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
-import './RemoveLiquidity.scss';
 import { IS_TESTNET, LBTC_ASSET } from '../../../env';
+import { testnetConfig } from '../../../config/testnet';
+import './RemoveLiquidity.scss';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -174,7 +175,10 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       const poolQuoteValue = Number(currentPool.quote.value);
       const poolTokenValue = Number(currentPool.token.value);
 
-      if (currentPool.quote.assetHash === lbtcAsset.assetHash || currentPool.token.assetHash === lbtcAsset.assetHash) {
+      if (
+        currentPool.quote.assetHash === LBTC_ASSET.assetHash ||
+        currentPool.token.assetHash === LBTC_ASSET.assetHash
+      ) {
         if (
           poolQuoteValue - calculations.quoteReceivedNum < 450 ||
           poolTokenValue - calculations.quoteReceivedNum < 450
