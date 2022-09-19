@@ -162,9 +162,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         if (output.amount > 0) {
           const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
+          const fromAssetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
 
           setAmountWithSlippage(output.amountWithSlipapge / Math.pow(10, assetPrecision));
-          setFromAmount((output.amount / Math.pow(10, assetPrecision)).toString());
+          setFromAmount((output.amount / Math.pow(10, fromAssetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
           setFromAmount('');
