@@ -4,7 +4,6 @@ import App from './App';
 // import 'rsuite/dist/styles/rsuite-dark.css';
 import { CustomProvider } from 'rsuite';
 import { AppContextProvider } from './context/utils/combineProviders';
-import { createRoot } from 'react-dom/client';
 import {
   BtcPriceContextProvider,
   ChartsContextProvider,
@@ -21,7 +20,7 @@ const container = document.getElementById('root') as HTMLElement;
 
 if (!container) throw new Error('Failed to find the root element');
 
-const root = ReactDOM.hydrateRoot(
+ReactDOM.hydrateRoot(
   container,
   <AppContextProvider
     providers={[
