@@ -15,12 +15,12 @@ type Props = {
 };
 
 export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
-  const [filteredAssetList, setFilteredAssetLİst] = useState<AssetModel[]>();
+  const [filteredAssetList, setFilteredAssetList] = useState<AssetModel[]>();
 
   const history = useHistory();
 
   useEffect(() => {
-    setFilteredAssetLİst(assetList);
+    setFilteredAssetList(assetList);
   }, [assetList]);
 
   const assetSearch = (input: string) => {
@@ -46,7 +46,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
         currentAssetList = [];
       }
 
-      setFilteredAssetLİst(currentAssetList);
+      setFilteredAssetList(currentAssetList);
     }
   };
 
@@ -81,6 +81,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
                     key={asset.assetHash}
                     onClick={() => {
                       onSelectAsset(asset);
+                      assetSearch('');
                     }}
                     className={`asset-list-item ${
                       selectedAsset?.assetHash === asset.assetHash && 'selected-asset-item'
