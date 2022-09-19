@@ -10,7 +10,6 @@ import {
   PoolsContextProvider,
   SettingsContextProvider,
   WalletContextProvider,
-  PoolConfigContextProvider,
   TxHistoryContextProvider,
 } from './context';
 import './style/global.scss';
@@ -25,7 +24,6 @@ root.render(
       PoolsContextProvider,
       SettingsContextProvider,
       WalletContextProvider,
-      PoolConfigContextProvider,
       TxHistoryContextProvider,
     ]}
   >
