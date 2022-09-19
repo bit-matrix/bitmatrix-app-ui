@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import {
-  usePoolContext,
-  useSettingsContext,
-  useWalletContext,
-  usePoolConfigContext,
-  useTxHistoryContext,
-} from '../../../context';
+import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import Decimal from 'decimal.js';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
@@ -20,8 +14,9 @@ import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
-import './RemoveLiquidity.scss';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
+import { testnetConfig } from '../../../config/testnet';
+import './RemoveLiquidity.scss';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -44,7 +39,6 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const history = useHistory();
@@ -74,12 +68,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
   const removeLiquidityClick = async () => {
     if (walletContext?.marina) {
-      if (currentPool && poolConfigContext) {
+      if (currentPool) {
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
         if (addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
 
           let commitmentTxId = '';
 
