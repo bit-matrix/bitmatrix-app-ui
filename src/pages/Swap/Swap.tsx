@@ -229,7 +229,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           }
           if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
             inputAmount = (
-              (fromAsset.assetHash === lbtcAsset.assetHash
+              (fromAsset.assetHash === LBTC_ASSET.assetHash
                 ? poolConfigContext.minRemainingSupply
                 : poolConfigContext.minTokenValue) / Math.pow(10, assetPrecision)
             ).toString();
