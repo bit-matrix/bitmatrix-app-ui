@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
-import {
-  usePoolContext,
-  useSettingsContext,
-  useWalletContext,
-  usePoolConfigContext,
-  useTxHistoryContext,
-} from '../../../context';
+import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
 import { Content } from 'rsuite';
@@ -28,8 +22,9 @@ import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import { Balance } from 'marina-provider';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
-import './AddLiquidity.scss';
 import { lpFeeTiers } from '@bitmatrix/lib/pool';
+import { testnetConfig } from '../../../config/testnet';
+import './AddLiquidity.scss';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -46,7 +41,6 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const history = useHistory();
@@ -61,7 +55,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     (input: string) => {
       const inputNum = Number(input);
 
-      if (currentPool && poolConfigContext && input !== '.') {
+      if (currentPool && input !== '.') {
         const output = convertion.convertForLiquidityCtx(
           inputNum * Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
           currentPool,
@@ -77,14 +71,14 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.text],
+    [currentPool, settingsContext.preferred_unit.text],
   );
 
   const onChangeTokenAmount = useCallback(
     (input: string) => {
       const inputNum = Number(input);
 
-      if (currentPool && poolConfigContext && input !== '.') {
+      if (currentPool && input !== '.') {
         const output = convertion.convertForLiquidityCtx(
           inputNum * Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
           currentPool,
@@ -102,7 +96,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         setQuotePercent(undefined);
       }
     },
-    [currentPool, poolConfigContext, settingsContext.preferred_unit.text],
+    [currentPool, settingsContext.preferred_unit.text],
   );
 
   const calcAmountPercent = useCallback(
@@ -111,7 +105,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
       tokenPercent: FROM_AMOUNT_PERCENT | undefined,
       balances: Balance[],
     ) => {
-      if (currentPool && poolConfigContext && walletContext && balances.length > 0) {
+      if (currentPool && walletContext && balances.length > 0) {
         let inputAmount = '';
 
         const quoteTotalAmountInWallet = balances.find(
@@ -122,7 +116,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           (bl) => bl.asset.assetHash === currentPool.token.assetHash,
         )?.amount;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -144,7 +138,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 inputAmount = (quoteAmountHalf / settingsContext.preferred_unit.value).toString();
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+                inputAmount = (testnetConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
               }
             } else {
               if (quotePercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -155,7 +149,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 inputAmount = (quoteAmountHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(currentPool.quote.precision);
               }
               if (quotePercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toFixed(
+                inputAmount = (testnetConfig.minRemainingSupply / PREFERRED_UNIT_VALUE.LBTC).toFixed(
                   currentPool.quote.precision,
                 );
               }
@@ -179,7 +173,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 inputAmount = (tokenAmountInWalletHalf / settingsContext.preferred_unit.value).toString();
               }
               if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minRemainingSupply / settingsContext.preferred_unit.value).toString();
+                inputAmount = (testnetConfig.minRemainingSupply / settingsContext.preferred_unit.value).toString();
               }
             } else {
               if (tokenPercent === FROM_AMOUNT_PERCENT.ALL) {
@@ -190,7 +184,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 inputAmount = (tokenAmountInWalletHalf / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
               }
               if (tokenPercent === FROM_AMOUNT_PERCENT.MIN) {
-                inputAmount = (poolConfigContext.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
+                inputAmount = (testnetConfig.minTokenValue / PREFERRED_UNIT_VALUE.LBTC).toFixed(2);
               }
             }
           }
@@ -206,18 +200,11 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
       }
     },
-    [
-      currentPool,
-      onChangeQuoteAmount,
-      onChangeTokenAmount,
-      poolConfigContext,
-      settingsContext.preferred_unit.value,
-      walletContext,
-    ],
+    [currentPool, onChangeQuoteAmount, onChangeTokenAmount, settingsContext.preferred_unit.value, walletContext],
   );
 
   const inputsIsValid = useCallback(() => {
-    if (currentPool && poolConfigContext && walletContext) {
+    if (currentPool && walletContext) {
       let tokenIsValid = false;
       let quoteIsValid = false;
 
@@ -228,7 +215,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const tokenAssetId = currentPool.token.assetHash;
         let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -266,7 +253,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     }
 
     return { tokenIsValid: true, quoteIsValid: true };
-  }, [currentPool, pair1Value, pair2Value, poolConfigContext, settingsContext.preferred_unit.text, walletContext]);
+  }, [currentPool, pair1Value, pair2Value, settingsContext.preferred_unit.text, walletContext]);
 
   const addLiquidityClick = async () => {
     if (walletContext?.marina && currentPool) {
@@ -277,7 +264,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         .mul(Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)))
         .toNumber();
 
-      if (currentPool && poolConfigContext) {
+      if (currentPool) {
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
@@ -287,7 +274,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           // setPair2Value('');
           setQuotePercent(undefined);
           setTokenPercent(undefined);
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
 
           let commitmentTxId = '';
 
