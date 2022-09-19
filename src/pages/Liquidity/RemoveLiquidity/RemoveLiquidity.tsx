@@ -101,13 +101,9 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             const calcLpAmounts = calcLpValues();
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount:
-                new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceivedNum).toNumber(),
               quoteAsset: currentPool.quote,
-              tokenAmount:
-                new Decimal(calcLpAmounts.tokenReceived).toNumber() *
-                Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceivedNum).toNumber(),
               tokenAsset: currentPool.token,
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
