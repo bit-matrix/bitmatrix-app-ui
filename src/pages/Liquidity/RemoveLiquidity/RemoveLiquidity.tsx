@@ -1,13 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { commitmentSign, convertion } from '@bitmatrix/lib';
 import { CALL_METHOD } from '@bitmatrix/models';
-import {
-  usePoolContext,
-  useSettingsContext,
-  useWalletContext,
-  usePoolConfigContext,
-  useTxHistoryContext,
-} from '../../../context';
+import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import Decimal from 'decimal.js';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
@@ -44,7 +38,6 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
 
   const history = useHistory();
@@ -74,12 +67,12 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
   const removeLiquidityClick = async () => {
     if (walletContext?.marina) {
-      if (currentPool && poolConfigContext) {
+      if (currentPool) {
         setLoading(true);
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
         if (addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(poolConfigContext);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
 
           let commitmentTxId = '';
 
@@ -101,13 +94,9 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             const calcLpAmounts = calcLpValues();
             const tempTxData: CommitmentStore = {
               txId: commitmentTxId,
-              quoteAmount:
-                new Decimal(calcLpAmounts.quoteReceived).toNumber() *
-                Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)),
+              quoteAmount: new Decimal(calcLpAmounts.quoteReceivedNum).toNumber(),
               quoteAsset: currentPool.quote,
-              tokenAmount:
-                new Decimal(calcLpAmounts.tokenReceived).toNumber() *
-                Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)),
+              tokenAmount: new Decimal(calcLpAmounts.tokenReceivedNum).toNumber(),
               tokenAsset: currentPool.token,
               lpAmount: calcLpTokenAmount,
               lpAsset: currentPool.lp.ticker,
@@ -156,17 +145,17 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       const recipientValue = convertion.calcRemoveLiquidityRecipientValue(currentPool, lpAmountN);
       const tokenPrecision = getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text);
       const quotePrecision = getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text);
-      return {
-        quoteReceived: (Number(recipientValue.user_lbtc_received) / Math.pow(10, quotePrecision)).toFixed(
-          quotePrecision,
-        ),
+      const quoteReceivedCalc = Number(recipientValue.user_lbtc_received);
+      const tokenReceivedCalc = Number(recipientValue.user_token_received);
 
-        tokenReceived: (Number(recipientValue.user_token_received) / Math.pow(10, tokenPrecision)).toFixed(
-          tokenPrecision,
-        ),
+      return {
+        quoteReceived: (quoteReceivedCalc / Math.pow(10, quotePrecision)).toFixed(quotePrecision),
+        quoteReceivedNum: quoteReceivedCalc,
+        tokenReceived: (tokenReceivedCalc / Math.pow(10, tokenPrecision)).toFixed(tokenPrecision),
+        tokenReceivedNum: tokenReceivedCalc,
       };
     }
-    return { quoteReceived: '0', tokenReceived: '0' };
+    return { quoteReceived: '0', tokenReceived: '0', quoteReceivedNum: 0, tokenReceivedNum: 0 };
   };
 
   const quoteTicker = useMemo(() => {
@@ -176,6 +165,32 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
   const tokenTicker = useMemo(() => {
     if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
+
+  const removeLiquidityButtonDisabled = () => {
+    if (calcLpTokenAmount <= 0 || loading) return true;
+    const calculations = calcLpValues();
+
+    if (currentPool) {
+      const poolQuoteValue = Number(currentPool.quote.value);
+      const poolTokenValue = Number(currentPool.token.value);
+
+      if (currentPool.quote.assetHash === lbtcAsset.assetHash || currentPool.token.assetHash === lbtcAsset.assetHash) {
+        if (
+          poolQuoteValue - calculations.quoteReceivedNum < 450 ||
+          poolTokenValue - calculations.quoteReceivedNum < 450
+        )
+          return true;
+      } else {
+        if (
+          poolQuoteValue - calculations.quoteReceivedNum < 100000000 ||
+          poolTokenValue - calculations.tokenReceivedNum < 100000000
+        )
+          return true;
+      }
+    }
+
+    return false;
+  };
 
   return (
     <div className="remove-liquidity-page-main">
@@ -313,7 +328,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
             onClick={() => {
               removeLiquidityClick();
             }}
-            disabled={calcLpTokenAmount <= 0 || loading}
+            disabled={removeLiquidityButtonDisabled()}
             className="remove-liquidity-button"
           />
         </div>
