@@ -116,6 +116,8 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
             setLoading(false);
 
+            setRemovalPercentage(SELECTED_PERCENTAGE.HUNDRED);
+
             checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
@@ -178,7 +180,9 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
       if (currentPool.quote.assetHash === lbtcAsset.assetHash || currentPool.token.assetHash === lbtcAsset.assetHash) {
         if (
           poolQuoteValue - calculations.quoteReceivedNum < 450 ||
-          poolTokenValue - calculations.quoteReceivedNum < 450
+          poolTokenValue - calculations.tokenReceivedNum < 450 ||
+          calculations.quoteReceivedNum < 500 ||
+          calculations.tokenReceivedNum < 500
         )
           return true;
       } else {
