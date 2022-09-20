@@ -17,6 +17,7 @@ import { EXPLORER } from '../../enum/EXPLORER';
 import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { BLOCKSTREAM_EXPOLORER, MEMPOOL_EXPLORER } from '../../env';
 
 export const InfoCard: React.FC = () => {
   const { txHistoryContext } = useTxHistoryContext();
@@ -147,9 +148,9 @@ export const InfoCard: React.FC = () => {
               className="explorer-div"
               onClick={() => {
                 if (settingsContext.explorer === EXPLORER.MEMPOOL) {
-                  window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                  window.open(`${MEMPOOL_EXPLORER}${cs.poolTxId || cs.txId}`, '_blank');
                 } else {
-                  window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                  window.open(`${BLOCKSTREAM_EXPOLORER}${cs.poolTxId || cs.txId}`, '_blank');
                 }
               }}
             >
