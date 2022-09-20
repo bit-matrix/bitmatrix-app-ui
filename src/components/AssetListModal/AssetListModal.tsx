@@ -15,26 +15,29 @@ type Props = {
 };
 
 export const AssetListModal: React.FC<Props> = ({ show, assetList, close, selectedAsset, onSelectAsset }) => {
-  const [filteredAssetList, setFilteredAssetList] = useState<AssetModel[]>();
+  const [filteredAssetList, setFilteredAssetList] = useState<AssetModel[]>(assetList || []);
+  const [query, setQuery] = useState<string>('');
 
   const history = useHistory();
 
   useEffect(() => {
-    setFilteredAssetList(assetList);
-  }, [assetList]);
+    if (show && assetList) {
+      setFilteredAssetList(assetList);
+    }
+  }, [assetList, show]);
 
-  const assetSearch = (input: string) => {
-    if (assetList) {
+  useEffect(() => {
+    if (assetList && query) {
       let currentAssetList = [...assetList];
       const searchName: AssetModel[] = assetList.filter((asset) => {
-        return asset.name?.toLowerCase().match(input.toLowerCase().trim())?.input;
+        return asset.name?.toLowerCase().match(query.toLowerCase().trim())?.input;
       });
 
       const searchTicker: AssetModel[] = assetList.filter((asset) => {
-        return asset.ticker?.toLowerCase().match(input.toLowerCase().trim())?.input;
+        return asset.ticker?.toLowerCase().match(query.toLowerCase().trim())?.input;
       });
 
-      const searchAssetID: AssetModel[] = assetList.filter((asset) => asset.assetHash === input.trim());
+      const searchAssetID: AssetModel[] = assetList.filter((asset) => asset.assetHash === query.trim());
 
       if (searchTicker.length > 0) {
         currentAssetList = searchTicker;
@@ -48,11 +51,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
 
       setFilteredAssetList(currentAssetList);
     }
-  };
-
-  const onChange = (input: string) => {
-    assetSearch(input);
-  };
+  }, [assetList, query]);
 
   return (
     <Modal className="asset-list-modal" size="xs" backdrop={true} open={show} onClose={close}>
@@ -70,7 +69,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
             <Input
               className="asset-modal-input"
               placeholder="Search name,ticker symbol or paste assed ID"
-              onChange={(event) => onChange(event)}
+              onChange={(event) => setQuery(event)}
             />
 
             <hr className="divider" />
@@ -81,7 +80,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
                     key={asset.assetHash}
                     onClick={() => {
                       onSelectAsset(asset);
-                      assetSearch('');
+                      setQuery('');
                     }}
                     className={`asset-list-item ${
                       selectedAsset?.assetHash === asset.assetHash && 'selected-asset-item'
