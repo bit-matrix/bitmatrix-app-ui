@@ -13,6 +13,10 @@
   <priority>0.8</priority> 
 </url>
 <url> 
+  <loc>multi.bitmatrix.app/pool/245b7fc4fdc49fff3a2994b4686256d7698551f68e6f0b49e9f9f5273ecdc0eb</loc> 
+  <priority>0.8</priority>
+</url>
+<url> 
   <loc>multi.bitmatrix.app/create-new-pool</loc>
   <priority>0.6</priority>  
 </url>
