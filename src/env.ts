@@ -39,5 +39,5 @@ export const PAIR1_ASSET_LIST = [
   '0e99c1a6da379d1f4151fb9df90449d40d0608f6cb33a5bcbfc8c265f42bab0a',
 ];
 
-export const BLOCKSTREAM_EXPOLORER = 'https://blockstream.info/liquidtestnet/tx/';
-export const MEMPOOL_EXPLORER = 'https://liquid.network/testnet/tx/';
+export const BLOCKSTREAM_EXPOLORER = 'https://blockstream.info/liquid/tx/';
+export const MEMPOOL_EXPLORER = 'https://liquid.network/tx/';
