@@ -9,10 +9,14 @@ const db_port = process.env.UI_DB_PORT || '8001';
 const db_host = process.env.UI_DB_HOST || base_host;
 const db_url = process.env.UI_DB_URL || `http://${db_host}:${db_port}`;
 
+const bitmatrix_rpc_port = process.env.REACT_APP_BITMATRIX_RPC_PORT || '8888';
+const bitmatrix_rpc_host = process.env.REACT_APP_BITMATRIX_RPC_HOST || base_host;
+const bitmatrix_rpc_url =
+  process.env.REACT_APP_BITMATRIX_RPC_URL || `http://${bitmatrix_rpc_host}:${bitmatrix_rpc_port}`;
+
 export const API_SOCKET_SERVER_URL = api_url + '/';
 export const DB_SOCKET_SERVER_URL = db_url + '/';
-
-export const BITMATRIX_RPC_URL = 'https://rpc.basebitmatrix.com/';
+export const BITMATRIX_RPC_URL = bitmatrix_rpc_url + '/';
 
 export const LBTC_ASSET_HASH = '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d';
 
