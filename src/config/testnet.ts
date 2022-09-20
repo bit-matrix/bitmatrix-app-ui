@@ -1,4 +1,6 @@
-export const testnetConfig = {
+import { BmConfig } from '@bitmatrix/models';
+
+export const testnetConfig: BmConfig = {
   minRemainingSupply: 1000,
   minTokenValue: 10000000,
   baseFee: {

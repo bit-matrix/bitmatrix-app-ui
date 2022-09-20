@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { Wallet } from '@bitmatrix/lib';
 import { TX_STATUS } from '@bitmatrix/models';
 import { usePoolsSocket } from '../hooks/usePoolsSocket';
-import { useWalletContext, useSettingsContext, usePoolConfigContext, useTxHistoryContext } from '../context';
+import { useWalletContext, useSettingsContext, useTxHistoryContext } from '../context';
 import { ROUTE_PATH } from '../enum/ROUTE_PATH';
 import { Footer } from '../components/Footer/Footer';
 import { Navbar } from '../components/Navbar/Navbar';
@@ -23,7 +23,6 @@ import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
-import { testnetConfig } from '../config/testnet';
 import { Swap } from '../pages/Swap/Swap';
 import { Helmet } from 'react-helmet';
 import './AppRouter.scss';
@@ -37,18 +36,11 @@ declare global {
 const exclusiveThemeAssets = ['657447fa93684f04c4bad40c5adfb9aec1531e328371b1c7f2d45f8591dd7b56'];
 
 export const AppRouter = (): JSX.Element => {
-  const [loading, setLoading] = useState<boolean>(true);
   const { walletContext, setWalletContext } = useWalletContext();
   const { settingsContext, setThemeContext, setExclusiveThemesContext } = useSettingsContext();
-  const { setPoolConfigContext } = usePoolConfigContext();
   const { poolsLoading, isPoolsConnected } = usePoolsSocket();
   const { chartsLoading, isChartsConnected, txStatuses, txStatusesLoading, checkTxStatusWithIds } = useChartsSocket();
   const { txHistoryContext, setTxHistoryContext } = useTxHistoryContext();
-
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     detectProvider('marina')
@@ -145,12 +137,6 @@ export const AppRouter = (): JSX.Element => {
     }
   };
 
-  const fetchData = async () => {
-    // const pool_config: BmConfig = await api.getBmConfigs();
-    setPoolConfigContext(testnetConfig);
-    setLoading(false);
-  };
-
   return (
     <Router>
       <Helmet>
@@ -185,7 +171,7 @@ export const AppRouter = (): JSX.Element => {
           <div className="secret-top-div" />
           <Navbar />
           <div className="app-container">
-            {poolsLoading || loading || chartsLoading || txStatusesLoading ? (
+            {poolsLoading || chartsLoading || txStatusesLoading ? (
               <div id="loaderInverseWrapper" style={{ height: 200 }}>
                 <Loader size="md" inverse center content={<span>Loading...</span>} vertical />
               </div>
