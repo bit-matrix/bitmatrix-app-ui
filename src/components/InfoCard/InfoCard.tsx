@@ -1,9 +1,8 @@
 import React from 'react';
 import { CALL_METHOD } from '@bitmatrix/models';
-import { getAssetPrecession, quoteAmountRound, timeDifference } from '../../helper';
+import { getAssetPrecession, amountRound, timeDifference } from '../../helper';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import { useSettingsContext, useTxHistoryContext } from '../../context';
-import Numeral from 'numeral';
 import { Loading } from '../base/Loading/Loading';
 import LiquidityAddIcon from '../base/Svg/Icons/LiquidityAdd';
 import LiquidityRemoveIcon from '../base/Svg/Icons/LiquidityRemove';
@@ -18,6 +17,7 @@ import { EXPLORER } from '../../enum/EXPLORER';
 import ExportIcon from '../base/Svg/Icons/Export';
 import './InfoCard.scss';
 import { LBTC_ASSET } from '../../env';
+import { BLOCKSTREAM_EXPOLORER, MEMPOOL_EXPLORER } from '../../env';
 
 export const InfoCard: React.FC = () => {
   const { txHistoryContext } = useTxHistoryContext();
@@ -27,6 +27,8 @@ export const InfoCard: React.FC = () => {
     let messageBody: JSX.Element | undefined;
     let quoteAsset: string;
     let quoteAmount: number;
+    const tokenAmount =
+      cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text));
 
     if (cs.quoteAsset.assetHash === LBTC_ASSET.assetHash) {
       quoteAsset = `tL-${settingsContext.preferred_unit.text}`;
@@ -50,11 +52,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap {quoteAmountRound(quoteAmount)} {quoteAsset} for {cs.tokenAsset.ticker} (min{' '}
-            {Numeral(
-              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
-            ).format('(0.00a)')}
-            )
+            Swap {amountRound(quoteAmount)} {quoteAsset} for {cs.tokenAsset.ticker} (min {amountRound(tokenAmount)})
           </div>
         </>
       );
@@ -73,11 +71,7 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Swap{' '}
-            {Numeral(
-              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
-            ).format('(0.00a)')}{' '}
-            {cs.tokenAsset.ticker} for {quoteAsset} (min {quoteAmountRound(quoteAmount)})
+            Swap {amountRound(tokenAmount)} {cs.tokenAsset.ticker} for {quoteAsset} (min {amountRound(quoteAmount)})
           </div>
         </>
       );
@@ -94,11 +88,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Add {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
-            {Numeral(
-              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
-            ).format('(0.00a)')}{' '}
-            {cs.tokenAsset.ticker}
+            Add {amountRound(quoteAmount)} {quoteAsset} and&nbsp;
+            {amountRound(tokenAmount)} {cs.tokenAsset.ticker}
           </div>
         </>
       );
@@ -115,11 +106,8 @@ export const InfoCard: React.FC = () => {
               return false;
             }}
           >
-            Remove {quoteAmountRound(quoteAmount)} {quoteAsset} and&nbsp;
-            {Numeral(
-              cs.tokenAmount / Math.pow(10, getAssetPrecession(cs.tokenAsset, settingsContext.preferred_unit.text)),
-            ).format('(0.00a)')}{' '}
-            {cs.tokenAsset.ticker}
+            Remove {amountRound(quoteAmount)} {quoteAsset} and&nbsp;
+            {amountRound(tokenAmount)} {cs.tokenAsset.ticker}
           </div>
         </>
       );
@@ -160,9 +148,9 @@ export const InfoCard: React.FC = () => {
               className="explorer-div"
               onClick={() => {
                 if (settingsContext.explorer === EXPLORER.MEMPOOL) {
-                  window.open(`https://liquid.network/testnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                  window.open(`${MEMPOOL_EXPLORER}${cs.poolTxId || cs.txId}`, '_blank');
                 } else {
-                  window.open(`https://blockstream.info/liquidtestnet/tx/${cs.poolTxId || cs.txId}`, '_blank');
+                  window.open(`${BLOCKSTREAM_EXPOLORER}${cs.poolTxId || cs.txId}`, '_blank');
                 }
               }}
             >

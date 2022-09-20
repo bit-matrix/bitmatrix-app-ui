@@ -1,27 +1,28 @@
-import Decimal from 'decimal.js';
 import React, { useEffect, useState } from 'react';
+import Decimal from 'decimal.js';
 import { useHistory } from 'react-router-dom';
-import { poolDeployment } from '@bitmatrix/lib';
 import { Button, Content, Dropdown } from 'rsuite';
+import { poolDeployment } from '@bitmatrix/lib';
+import { lpFeeTiers } from '@bitmatrix/lib/pool';
+import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
+import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { BackButton } from '../../components/base/BackButton/BackButton';
+import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import LpIcon from '../../components/base/Svg/Icons/Lp';
 import PriceIcon from '../../components/base/Svg/Icons/Price';
 import TVLIcon from '../../components/base/Svg/Icons/TVL';
 import { NumericalInput } from '../../components/NumericalInput/NumericalInput';
 import { WalletButton } from '../../components/WalletButton/WalletButton';
+import { WalletListModal } from '../../components/WalletListModal/WalletListModal';
+import { notify } from '../../components/utils/utils';
 import { useSettingsContext, useWalletContext, usePoolContext, useBtcPriceContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { AssetModel, getAssetPrecession, getAssetTicker } from '../../helper';
 import plus from '../../images/plus.png';
-import { notify } from '../../components/utils/utils';
-import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
-import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
-import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import { FUNDING_ADDRESS, LBTC_ASSET, PAIR1_ASSET_LIST } from '../../env';
-import './CreateNewPool.scss';
 import { sendRawTransaction } from '../../lib/api/sendRawTransaction';
+import './CreateNewPool.scss';
 
 export const CreateNewPool: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,6 +38,7 @@ export const CreateNewPool: React.FC = () => {
     value: '%0.25',
     index: 3,
   });
+  const [showWalletList, setShowWalletList] = useState<boolean>(false);
 
   const { settingsContext } = useSettingsContext();
   const { walletContext } = useWalletContext();
@@ -48,7 +50,7 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => PAIR1_ASSET_LIST.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
+        .filter((balance) => pair1AssetListImport.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
         .map((balance) => {
           return {
             name: balance.asset.name || '',
@@ -359,7 +361,7 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className={`asset-button ${selectedPair1Asset && 'asset-button-selected'}`}
                     onClick={() => {
-                      setShowPair1AssetListModal(true);
+                      walletContext?.isEnabled ? setShowPair1AssetListModal(true) : setShowWalletList(true);
                     }}
                   >
                     {selectedPair1Asset ? (
@@ -410,7 +412,7 @@ export const CreateNewPool: React.FC = () => {
                     appearance="default"
                     className={`asset-button ${selectedPair2Asset && 'asset-button-selected'}`}
                     onClick={() => {
-                      setShowPair2AssetListModal(true);
+                      walletContext?.isEnabled ? setShowPair2AssetListModal(true) : setShowWalletList(true);
                     }}
                   >
                     {selectedPair2Asset ? (
@@ -473,6 +475,11 @@ export const CreateNewPool: React.FC = () => {
             />
           </div>
 
+          <WalletListModal
+            show={showWalletList}
+            wallet={walletContext?.marina}
+            close={() => setShowWalletList(false)}
+          />
           <AssetListModal
             show={showPair1AssetListModal}
             selectedAsset={{

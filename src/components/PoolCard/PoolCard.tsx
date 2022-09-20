@@ -28,8 +28,8 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
         : chartSummary?.price.todayValue || 0;
 
     const tvl =
-      pool.quote.assetHash === LBTC_ASSET.assetHash
-        ? calculateUsdtPrice(btcPrice || 0, chartSummary?.tvl.todayValue || 0)
+      pool.quote.assetHash === LBTC_ASSET.assetHash && chartSummary
+        ? (btcPrice || 0) * chartSummary.tvl.todayValue
         : chartSummary?.tvl.todayValue || 0;
 
     const fees =

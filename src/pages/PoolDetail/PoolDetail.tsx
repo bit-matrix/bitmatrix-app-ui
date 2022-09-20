@@ -6,7 +6,7 @@ import { arrowIconDirection } from '../../components/utils/utils';
 import { Button } from 'rsuite';
 import { ParentSize } from '@visx/responsive';
 import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
-import { calculateUsdtPrice, getAssetPrecession, quoteAmountRound } from '../../helper';
+import { calculateUsdtPrice, getAssetPrecession, amountRound } from '../../helper';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
 import { Pool } from '@bitmatrix/models';
@@ -112,6 +112,8 @@ export const PoolDetail: React.FC = () => {
         ? calculateUsdtPrice(btcPrice || 0, chartData?.volume.todayValue || 0)
         : chartData?.volume.todayValue || 0;
 
+    console.log(pool.token);
+
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
@@ -164,7 +166,7 @@ export const PoolDetail: React.FC = () => {
                       height="1.5rem"
                       asset={pool.quote.assetHash}
                     />
-                    {quoteAmountRound(
+                    {amountRound(
                       Number(pool.quote.value) /
                         Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
                     )}
@@ -179,10 +181,10 @@ export const PoolDetail: React.FC = () => {
                       height="1.5rem"
                       asset={pool.token.assetHash}
                     />
-                    {Numeral(
+                    {amountRound(
                       Number(pool.token.value) /
                         Math.pow(10, getAssetPrecession(pool.token, settingsContext.preferred_unit.text)),
-                    ).format('(0.00a)')}
+                    )}
                   </div>
                 </div>
               </div>
