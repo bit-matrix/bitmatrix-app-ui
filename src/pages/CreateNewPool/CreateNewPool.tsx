@@ -18,7 +18,7 @@ import { notify } from '../../components/utils/utils';
 import { useSettingsContext, useWalletContext, usePoolContext, useBtcPriceContext } from '../../context';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { AssetModel, getAssetPrecession, getAssetTicker, testnetPair1AssetList } from '../../helper';
+import { AssetModel, getAssetPrecession, getAssetTicker, pair1AssetList as pair1AssetListImport } from '../../helper';
 import plus from '../../images/plus.png';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { sendRawTransaction } from '../../lib/api/sendRawTransaction';
@@ -50,7 +50,7 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => testnetPair1AssetList.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
+        .filter((balance) => pair1AssetListImport.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
         .map((balance) => {
           return {
             name: balance.asset.name || '',
@@ -264,7 +264,7 @@ export const CreateNewPool: React.FC = () => {
           ((Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) / btcPrice);
 
         return {
-          initialLPCirculation,
+          initialLPCirculation: initialLPCirculation.toFixed(8),
           initialTVL: '$' + initialTVL.toFixed(2),
           initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };
@@ -280,7 +280,7 @@ export const CreateNewPool: React.FC = () => {
           (Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC) / (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC);
 
         return {
-          initialLPCirculation,
+          initialLPCirculation: initialLPCirculation.toFixed(8),
           initialTVL: '$' + initialTVL.toFixed(2),
           initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };

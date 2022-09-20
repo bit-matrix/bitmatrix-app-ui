@@ -17,7 +17,7 @@ import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import Numeral from 'numeral';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
-import { getAssetPrecession, getMyPoolsChartData, poolShareRound, quoteAmountRound } from '../../../helper';
+import { getAssetPrecession, getMyPoolsChartData, poolShareRound, amountRound } from '../../../helper';
 import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
 
@@ -62,7 +62,7 @@ export const MyPoolDetail: React.FC = () => {
         quoteTokenRecipients.user_token_received,
       );
 
-      const pooledQuote = quoteAmountRound(
+      const pooledQuote = amountRound(
         Number(quoteTokenRecipients.user_lbtc_received) /
           Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
       );

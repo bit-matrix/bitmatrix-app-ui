@@ -38,7 +38,11 @@ export const Advanced = (): JSX.Element => {
       <div className="advance-item">
         <div className="advance-item-first-head">
           <span className="advance-title">Explorer</span>
-          <CustomPopover placement="autoHorizontal" title="Explorer" content="Lorem ipsum">
+          <CustomPopover
+            placement="autoHorizontal"
+            title="Explorer"
+            content="Your preferred explorer choice for viewing ongoing transaction status."
+          >
             <img className="advance-icon" src={info} alt="info" />
           </CustomPopover>
         </div>
@@ -55,7 +59,7 @@ export const Advanced = (): JSX.Element => {
       <div className="advance-item">
         <div className="advance-item-head">
           <span className="advance-title">Network</span>
-          <CustomPopover placement="autoHorizontal" title="Explorer" content="Lorem ipsum">
+          <CustomPopover placement="autoHorizontal" title="Explorer" content="Network environment.">
             <img className="advance-icon" src={info} alt="info" />
           </CustomPopover>
         </div>
@@ -70,7 +74,11 @@ export const Advanced = (): JSX.Element => {
       <div className="advance-item">
         <div className="advance-item-head">
           <span className="advance-title">Wallet Connection</span>
-          <CustomPopover placement="autoHorizontal" title="Wallet Connection" content="Lorem ipsum">
+          <CustomPopover
+            placement="autoHorizontal"
+            title="Wallet Connection"
+            content="Connect/Disconnect your Liquid wallet."
+          >
             <img className="advance-icon" src={info} alt="info" />
           </CustomPopover>
         </div>
