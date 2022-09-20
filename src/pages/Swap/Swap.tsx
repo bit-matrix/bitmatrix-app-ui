@@ -26,7 +26,6 @@ import {
   usePoolContext,
   useWalletContext,
   useSettingsContext,
-  usePoolConfigContext,
   useTxHistoryContext,
   useBtcPriceContext,
 } from '../../context';
@@ -35,6 +34,7 @@ import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { convertForCtx2 } from '@bitmatrix/lib/convertion';
+import { testnetConfig } from '../../config/testnet';
 import './Swap.scss';
 
 type Props = {
@@ -66,7 +66,6 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   const { pools } = usePoolContext();
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
-  const { poolConfigContext } = usePoolConfigContext();
   const { btcPrice } = useBtcPriceContext();
 
   document.title = ROUTE_PATH_TITLE.SWAP;
@@ -110,7 +109,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       let methodCall;
 
-      if (currentPool && poolConfigContext && Number(fromAmount) > 0 && fromAsset && toAsset) {
+      if (currentPool && Number(fromAmount) > 0 && fromAsset && toAsset) {
         inputNum = inputNum * Math.pow(10, getAssetPrecession(fromAsset, settingsContext.preferred_unit.text));
 
         const findPair1 = currentPool.quote.assetHash === fromAsset.assetHash;
@@ -137,15 +136,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         setToAmount('');
       }
     },
-    [
-      currentPool,
-      fromAmount,
-      fromAsset,
-      poolConfigContext,
-      settingsContext.preferred_unit.text,
-      settingsContext.slippage,
-      toAsset,
-    ],
+    [currentPool, fromAmount, fromAsset, settingsContext.preferred_unit.text, settingsContext.slippage, toAsset],
   );
 
   const onChangeToInput = useCallback(
@@ -171,9 +162,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         if (output.amount > 0) {
           const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
+          const fromAssetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
 
           setAmountWithSlippage(output.amountWithSlipapge / Math.pow(10, assetPrecision));
-          setFromAmount((output.amount / Math.pow(10, assetPrecision)).toString());
+          setFromAmount((output.amount / Math.pow(10, fromAssetPrecision)).toString());
         } else {
           setAmountWithSlippage(0);
           setFromAmount('');
@@ -187,17 +179,17 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   );
 
   useEffect(() => {
-    if (currentPool && poolConfigContext) {
+    if (currentPool) {
       if (swapWay === SWAP_WAY.FROM) {
         onChangeFromInput(fromAmount);
       } else {
         onChangeToInput(toAmount);
       }
     }
-  }, [currentPool, fromAmount, onChangeFromInput, onChangeToInput, poolConfigContext, swapWay, toAmount]);
+  }, [currentPool, fromAmount, onChangeFromInput, onChangeToInput, swapWay, toAmount]);
 
   const calcAmountPercent = (newFromAmountPercent: FROM_AMOUNT_PERCENT | undefined, balances: Balance[]) => {
-    if (pools.length > 0 && poolConfigContext && walletContext && balances.length > 0) {
+    if (pools.length > 0 && walletContext && balances.length > 0) {
       let inputAmount = '';
       setSwapWay(SWAP_WAY.FROM);
 
@@ -205,10 +197,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
       if (totalAmountInWallet > 0 && fromAsset) {
         const totalFee =
-          poolConfigContext.baseFee.number +
-          poolConfigContext.commitmentTxFee.number +
-          poolConfigContext.defaultOrderingFee.number +
-          poolConfigContext.serviceFee.number +
+          testnetConfig.baseFee.number +
+          testnetConfig.commitmentTxFee.number +
+          testnetConfig.defaultOrderingFee.number +
+          testnetConfig.serviceFee.number +
           1000;
 
         let quoteAmount = totalAmountInWallet;
@@ -230,8 +222,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           if (newFromAmountPercent === FROM_AMOUNT_PERCENT.MIN) {
             inputAmount = (
               (fromAsset.assetHash === lbtcAsset.assetHash
-                ? poolConfigContext.minRemainingSupply
-                : poolConfigContext.minTokenValue) / Math.pow(10, assetPrecision)
+                ? testnetConfig.minRemainingSupply
+                : testnetConfig.minTokenValue) / Math.pow(10, assetPrecision)
             ).toString();
           }
 
@@ -243,7 +235,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   };
 
   const inputIsValid = useCallback(() => {
-    if (currentPool && pools.length > 0 && poolConfigContext && walletContext) {
+    if (currentPool && pools.length > 0 && walletContext) {
       let inputAmount = 0;
       let isValid = false;
 
@@ -257,10 +249,10 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           const assetPrecision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
           if (fromAsset.assetHash === lbtcAsset.assetHash) {
             const totalFee =
-              poolConfigContext.baseFee.number +
-              poolConfigContext.commitmentTxFee.number +
-              poolConfigContext.defaultOrderingFee.number +
-              poolConfigContext.serviceFee.number +
+              testnetConfig.baseFee.number +
+              testnetConfig.commitmentTxFee.number +
+              testnetConfig.defaultOrderingFee.number +
+              testnetConfig.serviceFee.number +
               1000;
 
             inputAmount = (pair1AmountInWallet - totalFee) / Math.pow(10, assetPrecision);
@@ -278,15 +270,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       }
     }
     return true;
-  }, [
-    currentPool,
-    pools.length,
-    poolConfigContext,
-    walletContext,
-    fromAmount,
-    fromAsset,
-    settingsContext.preferred_unit.text,
-  ]);
+  }, [currentPool, pools.length, walletContext, fromAmount, fromAsset, settingsContext.preferred_unit.text]);
 
   const swapRouteChange = () => {
     setFromAsset(toAsset);
@@ -306,7 +290,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       let numberFromAmount = 0;
       let numberToAmount = 0;
 
-      if (currentPool && poolConfigContext && toAsset && fromAsset) {
+      if (currentPool && toAsset && fromAsset) {
         const fromIsQuote = currentPool.quote.assetHash === fromAsset.assetHash;
         const pair1Precision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
         const pair2Precision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
@@ -340,7 +324,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 numberFromAmount,
                 numberToAmount,
                 currentPool,
-                poolConfigContext,
+                testnetConfig,
                 addressInformation.publicKey,
                 lbtcAsset.assetHash,
                 true,
@@ -355,7 +339,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 numberFromAmount,
                 numberToAmount,
                 currentPool,
-                poolConfigContext,
+                testnetConfig,
                 addressInformation.publicKey,
                 lbtcAsset.assetHash,
                 true,
@@ -415,7 +399,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     loading;
 
   const infoMessage = useCallback((): string => {
-    const config = poolConfigContext;
+    const config = testnetConfig;
     const totalFee =
       config.baseFee.number +
       config.commitmentTxFee.number +
@@ -426,7 +410,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
     // eslint-disable-next-line no-useless-concat
     return 'Network fee ' + totalFee + ' sats ' + '($' + currentFeeUsdtPrice + ')';
-  }, [poolConfigContext, btcPrice]);
+  }, [btcPrice]);
 
   const fromAssetListClick = () => {
     setShowPair1AssetListModal(true);

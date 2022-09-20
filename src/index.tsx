@@ -11,7 +11,6 @@ import {
   PoolsContextProvider,
   SettingsContextProvider,
   WalletContextProvider,
-  PoolConfigContextProvider,
   TxHistoryContextProvider,
 } from './context';
 import './style/global.scss';
@@ -30,7 +29,6 @@ const root = ReactDOM.hydrateRoot(
       PoolsContextProvider,
       SettingsContextProvider,
       WalletContextProvider,
-      PoolConfigContextProvider,
       TxHistoryContextProvider,
     ]}
   >
