@@ -328,9 +328,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         if (addressInformation.publicKey) {
           // setSwapWay(undefined);
-          // setFromAmount('');
-          // setToAmount('');
-          // setSelectedFromAmountPercent(undefined);
+          setFromAmount('');
+          setToAmount('');
+          setSelectedFromAmountPercent(undefined);
 
           let commitmentTxId = '';
 

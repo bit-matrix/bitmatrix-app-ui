@@ -116,6 +116,8 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
             setLoading(false);
 
+            setRemovalPercentage(SELECTED_PERCENTAGE.HUNDRED);
+
             checkTxStatusWithIds(txIds);
           } else {
             notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
