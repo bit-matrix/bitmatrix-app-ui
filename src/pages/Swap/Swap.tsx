@@ -234,7 +234,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     }
   };
 
-  const inputIsValid = useCallback(() => {
+  const fromInputIsValid = useCallback(() => {
     if (currentPool && pools.length > 0 && walletContext) {
       let inputAmount = 0;
       let isValid = false;
@@ -262,7 +262,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         }
 
         if (inputFromValue <= inputAmount && inputAmount > 0) {
-          isValid = true;
+          fromAsset?.assetHash === lbtcAsset.assetHash && inputFromValue * settingsContext.preferred_unit.value < 1000
+            ? (isValid = false)
+            : (isValid = true);
         } else {
           isValid = false;
         }
@@ -270,7 +272,22 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       }
     }
     return true;
-  }, [currentPool, pools.length, walletContext, fromAmount, fromAsset, settingsContext.preferred_unit.text]);
+  }, [
+    currentPool,
+    pools.length,
+    walletContext,
+    fromAmount,
+    fromAsset,
+    settingsContext.preferred_unit.text,
+    settingsContext.preferred_unit.value,
+  ]);
+
+  const toInputIsValid = useCallback(() => {
+    if (toAmount && toAsset?.assetHash === lbtcAsset.assetHash) {
+      return Number(toAmount) * settingsContext.preferred_unit.value < 500 ? false : true;
+    }
+    return true;
+  }, [settingsContext.preferred_unit.value, toAmount, toAsset?.assetHash]);
 
   const swapRouteChange = () => {
     setFromAsset(toAsset);
@@ -391,7 +408,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
   const swapButtonDisabled =
     Number(toAmount) <= 0 ||
-    !inputIsValid() ||
+    !fromInputIsValid() ||
+    !toInputIsValid() ||
     fromAssetList?.length === 0 ||
     toAssetList?.length === 0 ||
     !fromAmount ||
@@ -433,7 +451,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       <Content className="swap-page-main-content">
         <div className="swap-page-layout">
           <div className="swap-page-content">
-            <div className={`from-content pt8 ${!inputIsValid() ? 'invalid-content' : ''}`}>
+            <div className={`from-content pt8 ${!fromInputIsValid() ? 'invalid-content' : ''}`}>
               <SwapFromTab
                 selectedFromAmountPercent={selectedFromAmountPercent}
                 setselectedFromAmountPercent={calcAmountPercent}
@@ -487,7 +505,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
               <ArrowDownIcon width="1.25rem" height="1.25rem" />
             </div>
 
-            <div className="from-content">
+            <div className={`from-content ${!toInputIsValid() ? 'invalid-content' : ''}`}>
               <div className="from-input-content">
                 <div className="from-amount-div">
                   <div className="from-text">To</div>
