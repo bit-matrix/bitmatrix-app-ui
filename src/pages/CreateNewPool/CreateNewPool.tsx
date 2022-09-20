@@ -264,7 +264,7 @@ export const CreateNewPool: React.FC = () => {
           ((Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC) / btcPrice);
 
         return {
-          initialLPCirculation,
+          initialLPCirculation: initialLPCirculation.toFixed(8),
           initialTVL: '$' + initialTVL.toFixed(2),
           initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };
@@ -280,7 +280,7 @@ export const CreateNewPool: React.FC = () => {
           (Number(pair1Amount) * PREFERRED_UNIT_VALUE.LBTC) / (Number(pair2Amount) * PREFERRED_UNIT_VALUE.LBTC);
 
         return {
-          initialLPCirculation,
+          initialLPCirculation: initialLPCirculation.toFixed(8),
           initialTVL: '$' + initialTVL.toFixed(2),
           initialAssetPrice: '$' + initialAssetPrice.toFixed(2),
         };
