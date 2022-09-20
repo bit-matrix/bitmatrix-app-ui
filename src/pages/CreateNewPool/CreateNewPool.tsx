@@ -50,7 +50,7 @@ export const CreateNewPool: React.FC = () => {
   useEffect(() => {
     if (walletContext) {
       const filteredPair1AssetList = walletContext?.balances
-        .filter((balance) => pair1AssetListImport.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
+        .filter((balance) => PAIR1_ASSET_LIST.findIndex((p1) => p1 === balance.asset.assetHash) > -1)
         .map((balance) => {
           return {
             name: balance.asset.name || '',

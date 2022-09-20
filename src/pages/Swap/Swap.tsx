@@ -262,7 +262,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         }
 
         if (inputFromValue <= inputAmount && inputAmount > 0) {
-          fromAsset?.assetHash === lbtcAsset.assetHash && inputFromValue * settingsContext.preferred_unit.value < 1000
+          fromAsset?.assetHash === LBTC_ASSET.assetHash && inputFromValue * settingsContext.preferred_unit.value < 1000
             ? (isValid = false)
             : (isValid = true);
         } else {
@@ -283,7 +283,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   ]);
 
   const toInputIsValid = useCallback(() => {
-    if (toAmount && toAsset?.assetHash === lbtcAsset.assetHash) {
+    if (toAmount && toAsset?.assetHash === LBTC_ASSET.assetHash) {
       return Number(toAmount) * settingsContext.preferred_unit.value < 500 ? false : true;
     }
     return true;

@@ -237,7 +237,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           Number(pair2Value) * Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text));
 
         if (finalPair1Value <= quoteAmountInWallet && quoteAmountInWallet > 0) {
-          if (quoteAssetId === lbtcAsset.assetHash) {
+          if (quoteAssetId === LBTC_ASSET.assetHash) {
             finalPair1Value < 500 ? (quoteIsValid = false) : (quoteIsValid = true);
           } else {
             quoteIsValid = true;
@@ -247,7 +247,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         }
 
         if (finalPair2Value <= Number(tokenAmountInWallet) && Number(tokenAmountInWallet) > 0) {
-          if (tokenAssetId === lbtcAsset.assetHash) {
+          if (tokenAssetId === LBTC_ASSET.assetHash) {
             finalPair2Value < 500 ? (tokenIsValid = false) : (tokenIsValid = true);
           } else {
             tokenIsValid = true;
