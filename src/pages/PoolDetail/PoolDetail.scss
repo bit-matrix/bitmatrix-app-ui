@@ -168,6 +168,11 @@
   }
 }
 
+.no-pool-text{
+  text-align: center;
+  font-size: 2rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .pool-detail-container {
     width: unset;
