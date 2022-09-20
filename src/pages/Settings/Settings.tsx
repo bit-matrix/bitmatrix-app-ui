@@ -47,6 +47,8 @@ export const Settings = (): JSX.Element => {
     <div>
       <Helmet>
         <title>{ROUTE_PATH_TITLE.SETTINGS}</title>
+        <meta name="description" content="Set your slippage tolerance and customize Bitmatrix appearance."></meta>
+        <link type="text/css" href="./Settings.scss" />
       </Helmet>
       <div className="settings-page-main">
         <div className="settings-page-header">

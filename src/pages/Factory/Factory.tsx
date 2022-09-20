@@ -44,6 +44,8 @@ export const Factory = (): JSX.Element => {
     <div>
       <Helmet>
         <title>{ROUTE_PATH_TITLE.FACTORY}</title>
+        <meta name="description" content="factory meta"></meta>
+        <link type="text/css" href="./Factory.scss" />
       </Helmet>
       <div className="factory-page-main">
         <div className="factory-page-header">

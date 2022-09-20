@@ -22,6 +22,7 @@ export const NotFound = (): JSX.Element => {
     <div>
       <Helmet>
         <title>{ROUTE_PATH_TITLE.NOT_FOUND}</title>
+        <meta name="description" content="Page Not Found"></meta>
       </Helmet>
       <h1 style={{ top: '50%', left: '50%' }}>Page not found</h1>
     </div>

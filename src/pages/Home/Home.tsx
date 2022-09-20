@@ -21,6 +21,8 @@ export const Home = (): JSX.Element => {
     <div>
       <Helmet>
         <title>{ROUTE_PATH_TITLE.HOME}</title>
+        <meta name="description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics."></meta>
+        <link type="text/css" href="./Home.scss" />
       </Helmet>
       <div className="home-page-container">
         <div className="home-page-main">

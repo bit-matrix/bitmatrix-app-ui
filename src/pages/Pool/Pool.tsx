@@ -266,6 +266,11 @@ export const PoolPage: React.FC = () => {
     <div>
       <Helmet>
         <title>{ROUTE_PATH_TITLE.POOL}</title>
+        <meta
+          name="description"
+          content="View pool metrics. Add liquidity to an existing pool or deploy your own liquidity pool."
+        ></meta>
+        <link type="text/css" href="./Pool.scss" />
       </Helmet>
       <div className="pool-page-main">
         <div className="no-pool-content">
