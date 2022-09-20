@@ -74,7 +74,7 @@ export const getAssetPrecession = (asset: AssetModel | PAsset, preferred_unit: P
   }
 };
 
-export const quoteAmountRound = (quoteAmount: number): string => {
+export const amountRound = (quoteAmount: number): string => {
   if (quoteAmount < 1) {
     const quoteAmountStr = String(quoteAmount);
     if (quoteAmountStr.includes('.')) {
