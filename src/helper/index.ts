@@ -185,16 +185,16 @@ export const getUnitValue = (asset: PAsset, settings: Settings): number => {
 export const getAssetTicker = (asset: AssetModel | PAsset, unit: PREFERRED_UNIT): string => {
   if (asset.assetHash === LBTC_ASSET.assetHash) {
     if (unit === PREFERRED_UNIT.LBTC) {
-      return 'tL-BTC';
+      return 'L-BTC';
     }
     if (unit === PREFERRED_UNIT.SAT) {
-      return 'tL-Sats';
+      return 'L-Sats';
     }
     if (unit === PREFERRED_UNIT.uBTC) {
-      return 'tL-Bits';
+      return 'L-Bits';
     }
     if (unit === PREFERRED_UNIT.mBTC) {
-      return 'tL-mBTC';
+      return 'L-mBTC';
     }
   } else {
     return asset.ticker;
