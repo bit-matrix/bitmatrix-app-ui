@@ -131,6 +131,11 @@
   margin-right: 0.25rem;
 }
 
+.no-my-pool-text{
+  text-align: center;
+  font-size: 2rem;
+}
+
 @media only screen and (min-width: $mobile-view-breakpoint) {
   .my-pool-detail-container {
     width: unset;
