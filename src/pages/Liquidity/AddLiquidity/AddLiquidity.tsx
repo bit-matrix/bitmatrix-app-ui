@@ -116,7 +116,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           (bl) => bl.asset.assetHash === currentPool.token.assetHash,
         )?.amount;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -215,7 +215,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const tokenAssetId = currentPool.token.assetHash;
         let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -280,7 +280,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         if (addressInformation.publicKey) {
           setQuotePercent(undefined);
           setTokenPercent(undefined);
-          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
           let commitmentTxId = '';
 
