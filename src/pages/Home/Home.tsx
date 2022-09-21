@@ -29,10 +29,10 @@ export const Home = (): JSX.Element => {
       <div className="home-page-container">
         <div className="home-page-main">
           <div className="home-page-desc">
-            <h3 className="home-page-desc-header">
+            <div className="home-page-desc-header">
               <h1>Automated Liquidity</h1>
               <h1>Provision on Liquid is Here!</h1>{' '}
-            </h3>
+            </div>
             <div className="home-page-img-content desktop-hidden">
               <ImgLazy src={mobileHomeIcon} alt="" x={288} y={221} minifyImg={homeMobileBase64} />
             </div>
