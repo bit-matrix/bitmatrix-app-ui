@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { esplora } from '@bitmatrix/lib';
-import { BmConfig, Pool, PAsset } from '@bitmatrix/models';
+import { BmConfig, Pool, PAsset, CALL_METHOD } from '@bitmatrix/models';
 import { Utxo } from 'marina-provider';
 import Numeral from 'numeral';
 import { ChartData } from '../components/AreaChart/AreaChart';
@@ -46,10 +46,11 @@ export const timeDifference = (time: number): string => {
   return '';
 };
 
-export const getPrimaryPoolConfig = (poolConfig: BmConfig): BmConfig => {
+export const getPrimaryPoolConfig = (poolConfig: BmConfig, methodCall: CALL_METHOD): BmConfig => {
   const newPoolConfig = { ...poolConfig };
-
-  newPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' };
+  methodCall === CALL_METHOD.REMOVE_LIQUIDITY
+    ? (newPoolConfig.defaultOrderingFee = { number: 2, hex: '02000000' })
+    : (newPoolConfig.defaultOrderingFee = { number: 3, hex: '03000000' });
   return newPoolConfig;
 };
 
