@@ -328,8 +328,6 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
 
         if (addressInformation.publicKey) {
           // setSwapWay(undefined);
-          setFromAmount('');
-          setToAmount('');
           setSelectedFromAmountPercent(undefined);
 
           let commitmentTxId = '';
@@ -386,6 +384,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
+            setFromAmount('');
+            setToAmount('');
             setSelectedFromAmountPercent(undefined);
             checkTxStatusWithIds(txIds);
           } else {

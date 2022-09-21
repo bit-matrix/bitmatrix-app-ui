@@ -278,8 +278,6 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          setPair1Value('');
-          setPair2Value('');
           setQuotePercent(undefined);
           setTokenPercent(undefined);
           const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
@@ -323,6 +321,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
+
+            setPair1Value('');
+            setPair2Value('');
 
             checkTxStatusWithIds(txIds);
           }
