@@ -235,28 +235,42 @@ export const PoolPage: React.FC = () => {
 
   if (pools && pools.length > 0) {
     return (
-      <div className={poolContainerClasses.join(' ')}>
-        <div className="pool-page-header">
-          <div className="pool-page-button pool-page-icon" onClick={() => setShowFilter(!showFilter)}>
-            <SliderIcon width="1.25rem" height="1.5rem" />
-          </div>
-          <TabMenu
-            menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
-            selectedItem={selectedTab}
-            onClick={(eventKey: any) => setSelectedTab(eventKey)}
-          />
-          <div className="pool-page-button" onClick={() => setShowButtons(!showButtons)}>
-            <AddIcon width="1.5rem" height="1.5rem" />
-          </div>
+      <div>
+        <Helmet>
+          <title>{ROUTE_PATH_TITLE.POOL}</title>
+          <meta
+            name="description"
+            content="View pool metrics. Add liquidity to an existing pool or deploy your own liquidity pool."
+          ></meta>
+          <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, Create Pool, Add Liquidity"></meta>
+          <meta name="robots" content="index, follow" />
+          <link type="text/css" href="./Pool.scss" />
+        </Helmet>
+        <div className={poolContainerClasses.join(' ')}>
+          <div className="pool-page-header">
+            <div className="pool-page-button pool-page-icon" onClick={() => setShowFilter(!showFilter)}>
+              <SliderIcon width="1.25rem" height="1.5rem" />
+            </div>
+            <TabMenu
+              menuItems={[POOL_MANAGEMENT_TABS.TOP_POOLS, POOL_MANAGEMENT_TABS.MY_POOLS]}
+              selectedItem={selectedTab}
+              onClick={(eventKey: any) => setSelectedTab(eventKey)}
+            />
+            <div className="pool-page-button" onClick={() => setShowButtons(!showButtons)}>
+              <AddIcon width="1.5rem" height="1.5rem" />
+            </div>
 
-          {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
+            {/* <PlusIcon  onClick={() => setShowButtons(!showButtons)} /> */}
 
-          {showButtons && addButtons()}
-          {showFilter && poolFilter()}
-          {showPoolListModal && poolListModal()}
-        </div>
-        <div className="pool-page-content">
-          <div className={`${selectedTab === POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>{getPoolData()}</div>
+            {showButtons && addButtons()}
+            {showFilter && poolFilter()}
+            {showPoolListModal && poolListModal()}
+          </div>
+          <div className="pool-page-content">
+            <div className={`${selectedTab === POOL_MANAGEMENT_TABS.TOP_POOLS ? 'tab-1' : 'tab-2'}`}>
+              {getPoolData()}
+            </div>
+          </div>
         </div>
       </div>
     );
