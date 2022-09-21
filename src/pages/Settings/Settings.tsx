@@ -48,6 +48,11 @@ export const Settings = (): JSX.Element => {
       <Helmet>
         <title>{ROUTE_PATH_TITLE.SETTINGS}</title>
         <meta name="description" content="Set your slippage tolerance and customize Bitmatrix appearance."></meta>
+        <meta
+          name="keywords"
+          content="Bitmatrix, Liquid Bitcoin, Liquid Network, Slippage Tolerance, Preffered Unit, Theme, Explorer, Network, Wallet Connection"
+        ></meta>
+        <meta name="robots" content="index, follow" />
         <link type="text/css" href="./Settings.scss" />
       </Helmet>
       <div className="settings-page-main">

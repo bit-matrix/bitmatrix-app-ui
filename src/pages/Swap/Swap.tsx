@@ -434,6 +434,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
       <Helmet>
         <title>{ROUTE_PATH_TITLE.SWAP}</title>
         <meta name="description" content="Easily swap L-BTC, Tether and other Liquid-based digital assets."></meta>
+        <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, L-BTC, USDT, Swap"></meta>
+        <meta name="robots" content="index, follow" />
         <link type="text/css" href="./Swap.scss" />
       </Helmet>
       <div className="swap-page-main">

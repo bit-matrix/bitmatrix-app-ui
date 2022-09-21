@@ -270,6 +270,8 @@ export const PoolPage: React.FC = () => {
           name="description"
           content="View pool metrics. Add liquidity to an existing pool or deploy your own liquidity pool."
         ></meta>
+        <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, Create Pool, Add Liquidity"></meta>
+        <meta name="robots" content="index, follow" />
         <link type="text/css" href="./Pool.scss" />
       </Helmet>
       <div className="pool-page-main">

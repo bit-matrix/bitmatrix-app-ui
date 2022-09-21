@@ -146,7 +146,7 @@ export const AppRouter = (): JSX.Element => {
         <meta name="theme-color" content="#000000" />
         <meta name="description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
         <meta name="author" content="https://www.linkedin.com/company/bitmatrix/" />
-        <meta name="robots" content="nofollow, noindex" />
+        <meta name="robots" content="follow, index" />
         <meta
           property="og:title"
           content="A Step-by-Step Guide to Setting Up Selenium-webdriver with Node.js"
