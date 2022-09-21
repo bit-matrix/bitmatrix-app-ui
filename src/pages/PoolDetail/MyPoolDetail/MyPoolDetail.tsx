@@ -15,9 +15,8 @@ import { CustomPopover } from '../../../components/CustomPopover/CustomPopover';
 import info from '../../../images/info2.png';
 import Decimal from 'decimal.js';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
-import Numeral from 'numeral';
 import { AssetIcon } from '../../../components/AssetIcon/AssetIcon';
-import { getAssetPrecession, getMyPoolsChartData, poolShareRound, quoteAmountRound } from '../../../helper';
+import { getAssetPrecession, getMyPoolsChartData, poolShareRound, amountRound } from '../../../helper';
 import { Loading } from '../../../components/base/Loading/Loading';
 import './MyPoolDetail.scss';
 
@@ -56,22 +55,17 @@ export const MyPoolDetail: React.FC = () => {
 
       const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(pool, lpAmountInWalletN);
 
-      const recipientValue = convertion.calcAddLiquidityRecipientValue(
-        pool,
-        quoteTokenRecipients.user_lbtc_received,
-        quoteTokenRecipients.user_token_received,
-      );
-
-      const pooledQuote = quoteAmountRound(
+      const pooledQuote = amountRound(
         Number(quoteTokenRecipients.user_lbtc_received) /
           Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
       );
 
-      const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
-        '(0.00a)',
+      const pooledToken = amountRound(
+        Number(quoteTokenRecipients.user_token_received) /
+          Math.pow(10, getAssetPrecession(pool.token, settingsContext.preferred_unit.text)),
       );
       const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
-      const poolRate = poolShareRound(Number(recipientValue.poolRate) * 100);
+      const poolRate = poolShareRound(Number(quoteTokenRecipients.poolRate) * 100);
 
       return {
         pooledQuote,

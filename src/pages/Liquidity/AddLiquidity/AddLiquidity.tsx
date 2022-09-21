@@ -116,7 +116,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           (bl) => bl.asset.assetHash === currentPool.token.assetHash,
         )?.amount;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -215,7 +215,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const tokenAssetId = currentPool.token.assetHash;
         let tokenAmountInWallet = walletContext.balances.find((bl) => bl.asset.assetHash === tokenAssetId)?.amount || 0;
 
-        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+        const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
         const totalFee =
           primaryPoolConfig.baseFee.number +
@@ -237,13 +237,21 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
           Number(pair2Value) * Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text));
 
         if (finalPair1Value <= quoteAmountInWallet && quoteAmountInWallet > 0) {
-          quoteIsValid = true;
+          if (quoteAssetId === lbtcAsset.assetHash) {
+            finalPair1Value < 500 ? (quoteIsValid = false) : (quoteIsValid = true);
+          } else {
+            quoteIsValid = true;
+          }
         } else {
           quoteIsValid = false;
         }
 
         if (finalPair2Value <= Number(tokenAmountInWallet) && Number(tokenAmountInWallet) > 0) {
-          tokenIsValid = true;
+          if (tokenAssetId === lbtcAsset.assetHash) {
+            finalPair2Value < 500 ? (tokenIsValid = false) : (tokenIsValid = true);
+          } else {
+            tokenIsValid = true;
+          }
         } else {
           tokenIsValid = false;
         }
@@ -270,11 +278,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
         const addressInformation = await walletContext.marina.getNextChangeAddress();
 
         if (addressInformation.publicKey) {
-          // setPair1Value('');
-          // setPair2Value('');
           setQuotePercent(undefined);
           setTokenPercent(undefined);
-          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
           let commitmentTxId = '';
 
@@ -315,6 +321,9 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
             setTxHistoryContext(newStoreData);
 
             setLoading(false);
+
+            setPair1Value('');
+            setPair2Value('');
 
             checkTxStatusWithIds(txIds);
           }
