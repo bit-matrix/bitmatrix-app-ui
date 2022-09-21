@@ -1,7 +1,7 @@
 {
   "name": "bitmatrix-app",
   "version": "0.6.0",
-  "homepage": "https://multi.bitmatrix.app",
+  "homepage": "https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/",
   "private": true,
   "dependencies": {
     "@bitmatrix/lib": "^0.1.13",
@@ -48,7 +48,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "PUBLIC_URL=https://multi.bitmatrix.app react-scripts build",
+    "build": "PUBLIC_URL=https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/ react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "ssr": "react-scripts build && node server/index.js"

@@ -2,4 +2,4 @@ User-agent: *
 Disallow:
 Allow: /    #all bots can scan all site
 
-Sitemap: multi.bitmatrix.app/sitemap.xml
+Sitemap: https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/sitemap.xml
