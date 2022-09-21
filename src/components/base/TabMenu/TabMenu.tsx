@@ -27,7 +27,7 @@ export const TabMenu: React.FC<Props> = ({ menuItems, selectedItem, onClick }) =
               // onKeyDown={() => {}}
             >
               <div className={menuItemTextClasses.join(' ')}>
-                <h1>{menuItem}</h1>
+                {menuItem === selectedItem ? <h1>{menuItem}</h1> : <div>{menuItem}</div>}
               </div>
             </div>
           );
