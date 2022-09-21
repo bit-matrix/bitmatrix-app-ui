@@ -56,12 +56,6 @@ export const MyPoolDetail: React.FC = () => {
 
       const quoteTokenRecipients = convertion.calcRemoveLiquidityRecipientValue(pool, lpAmountInWalletN);
 
-      const recipientValue = convertion.calcAddLiquidityRecipientValue(
-        pool,
-        quoteTokenRecipients.user_lbtc_received,
-        quoteTokenRecipients.user_token_received,
-      );
-
       const pooledQuote = amountRound(
         Number(quoteTokenRecipients.user_lbtc_received) /
           Math.pow(10, getAssetPrecession(pool.quote, settingsContext.preferred_unit.text)),
@@ -70,8 +64,9 @@ export const MyPoolDetail: React.FC = () => {
       const pooledToken = Numeral(quoteTokenRecipients.user_token_received / PREFERRED_UNIT_VALUE.LBTC).format(
         '(0.00a)',
       );
+
       const pooledLp = (lpAmountInWalletN / PREFERRED_UNIT_VALUE.LBTC).toFixed(8);
-      const poolRate = poolShareRound(Number(recipientValue.poolRate) * 100);
+      const poolRate = poolShareRound(Number(quoteTokenRecipients.poolRate) * 100);
 
       return {
         pooledQuote,
