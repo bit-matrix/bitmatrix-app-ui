@@ -32,7 +32,7 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
       pool.quote.assetHash === lbtcAsset.assetHash && chartSummary
         ? calculateUsdtPrice(
             btcPrice || 0,
-            chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+            chartSummary?.tvl.todayValue || (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2,
           )
         : chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
 

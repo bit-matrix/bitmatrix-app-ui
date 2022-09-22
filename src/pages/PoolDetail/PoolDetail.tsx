@@ -142,8 +142,8 @@ export const PoolDetail: React.FC = () => {
       pool.quote.assetHash === lbtcAsset.assetHash && chartData
         ? calculateUsdtPrice(
             btcPrice,
-            chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
-          )
+            chartData?.tvl.todayValue || Number(pool.quote.value) / Math.pow(10, pool.quote.precision),
+          ) * 2
         : chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
 
     const fees =
