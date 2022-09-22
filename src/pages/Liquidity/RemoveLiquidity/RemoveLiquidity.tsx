@@ -14,8 +14,8 @@ import { WalletButton } from '../../../components/WalletButton/WalletButton';
 import { getAssetPrecession, getAssetTicker, getPrimaryPoolConfig } from '../../../helper';
 import { BackButton } from '../../../components/base/BackButton/BackButton';
 import { notify } from '../../../components/utils/utils';
-import { IS_TESTNET, LBTC_ASSET } from '../../../env';
 import { testnetConfig } from '../../../config/testnet';
+import { IS_TESTNET, LBTC_ASSET } from '../../../env';
 import './RemoveLiquidity.scss';
 
 type Props = {
@@ -126,26 +126,11 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
               notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
               setLoading(false);
             }
-            // notify(
-            //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-            //     See in Explorer
-            //   </a>,
-            //   'Commitment Tx created successfully!',
-            //   'success',
-            // );
-            // setLoading(false);
-            // await sleep(3000);
-            // payloadData.wallet.marina.reloadCoins();
           } else {
             notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-            // payloadData.wallet.marina.reloadCoins();
             setLoading(false);
           }
         }
-      } else {
-        notify('Check your wallet network settings', 'Network Error : ', 'error');
-        setLoading(false);
-      }
       } else {
         notify('Check your wallet network settings', 'Network Error : ', 'error');
         setLoading(false);
