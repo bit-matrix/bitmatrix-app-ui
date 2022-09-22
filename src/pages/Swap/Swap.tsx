@@ -32,9 +32,9 @@ import {
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
-import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 import { testnetConfig } from '../../config/testnet';
 import './Swap.scss';
+import { IS_TESTNET, LBTC_ASSET } from '../../env';
 
 type Props = {
   checkTxStatusWithIds: (txIds: string[]) => void;
@@ -343,8 +343,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                   currentPool,
                   testnetConfig,
                   addressInformation.publicKey,
-                  lbtcAsset.assetHash,
-                  true,
+                  LBTC_ASSET.assetHash,
+                  IS_TESTNET,
                 );
               } catch (error) {
                 setLoading(false);
@@ -358,8 +358,8 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                   currentPool,
                   testnetConfig,
                   addressInformation.publicKey,
-                  lbtcAsset.assetHash,
-                  true,
+                  LBTC_ASSET.assetHash,
+                  IS_TESTNET,
                 );
               } catch (error) {
                 setLoading(false);
