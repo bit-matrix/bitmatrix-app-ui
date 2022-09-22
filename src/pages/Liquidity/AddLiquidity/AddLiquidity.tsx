@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { commitmentSign, convertion } from '@bitmatrix/lib';
+import { commitmentSign, convertion, pool } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
@@ -22,7 +22,6 @@ import { notify } from '../../../components/utils/utils';
 import { NumericalInput } from '../../../components/NumericalInput/NumericalInput';
 import { Balance } from 'marina-provider';
 import { lbtcAsset } from '../../../lib/liquid-dev/ASSET';
-import { lpFeeTiers } from '@bitmatrix/lib/pool';
 import { testnetConfig } from '../../../config/testnet';
 import './AddLiquidity.scss';
 
@@ -487,7 +486,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 <RewardIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="add-liquidity-page-footer-line-item-values">
-                {Object.keys(lpFeeTiers)[currentPool?.lpFeeTierIndex.number || 0]}
+                {Object.keys(pool.lpFeeTiers)[currentPool?.lpFeeTierIndex.number || 0]}
               </div>
             </div>
             <div className="add-liquidity-page-footer-line-item-third">

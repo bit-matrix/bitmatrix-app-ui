@@ -7,7 +7,7 @@ import SWAP_WAY from '../../enum/SWAP_WAY';
 import { SwapFromTab } from '../../components/SwapFromTab/SwapFromTab';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { Info } from '../../components/common/Info/Info';
-import { commitmentSign, validatePoolTx } from '@bitmatrix/lib';
+import { commitmentSign, convertion, validatePoolTx } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { CommitmentStore } from '../../model/CommitmentStore';
 import {
@@ -33,7 +33,6 @@ import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import ArrowDownIcon2 from '../../components/base/Svg/Icons/ArrowDown2';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
-import { convertForCtx2 } from '@bitmatrix/lib/convertion';
 import { testnetConfig } from '../../config/testnet';
 import './Swap.scss';
 
@@ -158,7 +157,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
         }
 
-        const output = convertForCtx2(inputNum, settingsContext.slippage, currentPool, methodCall);
+        const output = convertion.convertForCtx2(inputNum, settingsContext.slippage, currentPool, methodCall);
 
         if (output.amount > 0) {
           const assetPrecision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
@@ -302,106 +301,113 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
   };
 
   const swapClick = async () => {
-    if (walletContext?.marina) {
-      let methodCall;
-      let numberFromAmount = 0;
-      let numberToAmount = 0;
+    if (walletContext) {
+      const network = await walletContext.marina.getNetwork();
 
-      if (currentPool && toAsset && fromAsset) {
-        const fromIsQuote = currentPool.quote.assetHash === fromAsset.assetHash;
-        const pair1Precision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
-        const pair2Precision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
+      if (network === 'testnet') {
+        let methodCall;
+        let numberFromAmount = 0;
+        let numberToAmount = 0;
 
-        if (fromIsQuote) {
-          methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
-          numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
-          numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
-        } else {
-          methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
-          numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
-          numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
-        }
-
-        setLoading(true);
-
-        const addressInformation = await walletContext.marina.getNextChangeAddress();
-
-        if (addressInformation.publicKey) {
-          // setSwapWay(undefined);
-          setSelectedFromAmountPercent(undefined);
-
-          let commitmentTxId = '';
+        if (currentPool && toAsset && fromAsset) {
+          const fromIsQuote = currentPool.quote.assetHash === fromAsset.assetHash;
+          const pair1Precision = getAssetPrecession(fromAsset, settingsContext.preferred_unit.text);
+          const pair2Precision = getAssetPrecession(toAsset, settingsContext.preferred_unit.text);
 
           if (fromIsQuote) {
-            try {
-              commitmentTxId = await commitmentSign.case1(
-                walletContext.marina,
-                numberFromAmount,
-                numberToAmount,
-                currentPool,
-                testnetConfig,
-                addressInformation.publicKey,
-                lbtcAsset.assetHash,
-                true,
-              );
-            } catch (error) {
-              setLoading(false);
-            }
+            methodCall = CALL_METHOD.SWAP_QUOTE_FOR_TOKEN;
+            numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
           } else {
-            try {
-              commitmentTxId = await commitmentSign.case2(
-                walletContext.marina,
-                numberFromAmount,
-                numberToAmount,
-                currentPool,
-                testnetConfig,
-                addressInformation.publicKey,
-                lbtcAsset.assetHash,
-                true,
-              );
-            } catch (error) {
-              setLoading(false);
-            }
+            methodCall = CALL_METHOD.SWAP_TOKEN_FOR_QUOTE;
+            numberFromAmount = new Decimal(Number(fromAmount)).mul(Math.pow(10, pair1Precision)).toNumber();
+            numberToAmount = new Decimal(amountWithSlippage).mul(Math.pow(10, pair2Precision)).toNumber();
           }
 
-          if (commitmentTxId !== '') {
-            const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
-              quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
-              quoteAsset: currentPool.quote,
-              tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
-              tokenAsset: currentPool.token,
-              timestamp: new Date().valueOf(),
-              errorMessage: undefined,
-              completed: false,
-              seen: false,
-              method: methodCall,
-            };
+          setLoading(true);
 
-            const newStoreData = [...txHistoryContext, tempTxData];
-            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
-            const txIds = unconfirmedTxs.map((tx) => tx.txId);
-            setTxHistoryContext(newStoreData);
+          const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-            setLoading(false);
-            setFromAmount('');
-            setToAmount('');
+          if (addressInformation.publicKey) {
+            // setSwapWay(undefined);
             setSelectedFromAmountPercent(undefined);
-            checkTxStatusWithIds(txIds);
+
+            let commitmentTxId = '';
+
+            if (fromIsQuote) {
+              try {
+                commitmentTxId = await commitmentSign.case1(
+                  walletContext.marina,
+                  numberFromAmount,
+                  numberToAmount,
+                  currentPool,
+                  testnetConfig,
+                  addressInformation.publicKey,
+                  lbtcAsset.assetHash,
+                  true,
+                );
+              } catch (error) {
+                setLoading(false);
+              }
+            } else {
+              try {
+                commitmentTxId = await commitmentSign.case2(
+                  walletContext.marina,
+                  numberFromAmount,
+                  numberToAmount,
+                  currentPool,
+                  testnetConfig,
+                  addressInformation.publicKey,
+                  lbtcAsset.assetHash,
+                  true,
+                );
+              } catch (error) {
+                setLoading(false);
+              }
+            }
+
+            if (commitmentTxId !== '') {
+              const tempTxData: CommitmentStore = {
+                txId: commitmentTxId,
+                quoteAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberFromAmount : numberToAmount,
+                quoteAsset: currentPool.quote,
+                tokenAmount: methodCall === CALL_METHOD.SWAP_QUOTE_FOR_TOKEN ? numberToAmount : numberFromAmount,
+                tokenAsset: currentPool.token,
+                timestamp: new Date().valueOf(),
+                errorMessage: undefined,
+                completed: false,
+                seen: false,
+                method: methodCall,
+              };
+
+              const newStoreData = [...txHistoryContext, tempTxData];
+              const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+              const txIds = unconfirmedTxs.map((tx) => tx.txId);
+              setTxHistoryContext(newStoreData);
+
+              setLoading(false);
+              setFromAmount('');
+              setToAmount('');
+              setSelectedFromAmountPercent(undefined);
+              checkTxStatusWithIds(txIds);
+            } else {
+              notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
+              setLoading(false);
+            }
           } else {
-            notify('Commitment transaction could not be created.', 'Bitmatrix Error : ');
+            notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
             setLoading(false);
           }
         } else {
-          notify('Funding transaction could not be created.', 'Wallet Error : ', 'error');
+          notify('Pool Error', 'Error : ', 'error');
           setLoading(false);
         }
       } else {
-        notify('Pool Error', 'Error : ', 'error');
+        notify('Wallet Error', 'Error : ', 'error');
         setLoading(false);
       }
     } else {
-      notify('Wallet Error', 'Error : ', 'error');
+      notify('Check your wallet network settings', 'Network Error : ', 'error');
       setLoading(false);
     }
   };

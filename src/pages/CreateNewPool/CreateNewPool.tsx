@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Dropdown } from 'rsuite';
-import { poolDeployment } from '@bitmatrix/lib';
-import { lpFeeTiers } from '@bitmatrix/lib/pool';
+import { pool, poolDeployment } from '@bitmatrix/lib';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { BackButton } from '../../components/base/BackButton/BackButton';
@@ -320,12 +319,12 @@ export const CreateNewPool: React.FC = () => {
               title={lpFeeTier.value}
               activeKey={lpFeeTier.index}
               onSelect={(eventKey: any) => {
-                const lpFeeTiersKeys = Object.keys(lpFeeTiers);
+                const lpFeeTiersKeys = Object.keys(pool.lpFeeTiers);
 
                 setLpFeeTier({ value: lpFeeTiersKeys[eventKey], index: eventKey });
               }}
             >
-              {Object.keys(lpFeeTiers).map((feeTier, i: number) => {
+              {Object.keys(pool.lpFeeTiers).map((feeTier, i: number) => {
                 return (
                   <Dropdown.Item key={i} eventKey={i}>
                     {feeTier}
