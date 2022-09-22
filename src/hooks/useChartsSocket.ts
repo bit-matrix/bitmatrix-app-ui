@@ -28,13 +28,13 @@ export const useChartsSocket = () => {
     });
 
     socket.on('disconnect', () => {
-      console.log('disconnect api sockets');
       notify('Api sockets socket disconnect.', 'Bitmatrix Error : ');
       setIsChartsConnected(false);
     });
 
     socket.on('poolschart', (data) => {
       if (data) {
+        console.log(data);
         setChartsContext(data);
         setChartsLoading(false);
       }

@@ -86,6 +86,7 @@ export const PoolPage: React.FC = () => {
       } else {
         poolsdata = pools;
       }
+
       return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-1">
@@ -110,11 +111,13 @@ export const PoolPage: React.FC = () => {
       if (myPools.length === 0) {
         return <div className="no-my-pool-content">No pool found.</div>;
       }
+
       if (selectedFilterOption) {
         poolsdata = myPools.filter((pool) => pool.quote.ticker === selectedFilterOption);
       } else {
         poolsdata = myPools;
       }
+
       return poolsdata.map((pool, index) => {
         return (
           <div key={pool.id} className="pool-page-card card-2">
