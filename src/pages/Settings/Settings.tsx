@@ -52,7 +52,6 @@ export const Settings = (): JSX.Element => {
           name="keywords"
           content="Bitmatrix, Liquid Bitcoin, Liquid Network, Slippage Tolerance, Preffered Unit, Theme, Explorer, Network, Wallet Connection"
         ></meta>
-        <meta name="robots" content="index, follow" />
         <link type="text/css" href="./Settings.scss" />
       </Helmet>
       <div className="settings-page-main">

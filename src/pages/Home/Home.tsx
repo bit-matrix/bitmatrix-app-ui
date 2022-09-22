@@ -23,7 +23,6 @@ export const Home = (): JSX.Element => {
         <title>{ROUTE_PATH_TITLE.HOME}</title>
         <meta name="description" content="Swap assets, add liquidity, and view tL-BTC/tL-USDt pool metrics." />
         <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network" />
-        <meta name="robots" content="index, follow" />
         <link type="text/css" href="./Home.scss" />
       </Helmet>
       <div className="home-page-container">
