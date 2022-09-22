@@ -73,7 +73,7 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
 
         const addressInformation = await walletContext.marina.getNextChangeAddress();
         if (addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig);
+          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.REMOVE_LIQUIDITY);
 
           let commitmentTxId = '';
 
