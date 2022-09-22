@@ -406,9 +406,6 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
         notify('Wallet Error', 'Error : ', 'error');
         setLoading(false);
       }
-    } else {
-      notify('Check your wallet network settings', 'Network Error : ', 'error');
-      setLoading(false);
     }
   };
 
