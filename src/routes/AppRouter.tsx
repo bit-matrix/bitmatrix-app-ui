@@ -23,9 +23,10 @@ import { SELECTED_THEME } from '../enum/SELECTED_THEME';
 import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
+import { PoolSummary } from '../components/PoolSummary/PoolSummary';
 import { Swap } from '../pages/Swap/Swap';
-import './AppRouter.scss';
 import { notify } from '../components/utils/utils';
+import './AppRouter.scss';
 
 declare global {
   interface Window {
@@ -178,6 +179,7 @@ export const AppRouter = (): JSX.Element => {
                     <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY}>
                       <RemoveLiquidity checkTxStatusWithIds={checkTxStatusWithIds} />
                     </Route>
+                    <Route exact path={ROUTE_PATH.POOL_SUMMARY} component={PoolSummary} />
                     <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
                   </Switch>
                 ) : (
