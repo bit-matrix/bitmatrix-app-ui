@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { commitmentSign, convertion } from '@bitmatrix/lib';
+import { commitmentSign, convertion, pool } from '@bitmatrix/lib';
 import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
@@ -264,73 +264,80 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
   }, [currentPool, pair1Value, pair2Value, settingsContext.preferred_unit.text, walletContext]);
 
   const addLiquidityClick = async () => {
-    if (walletContext?.marina && currentPool) {
-      const quoteAmountN = new Decimal(Number(pair1Value))
-        .mul(Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)))
-        .toNumber();
-      const tokenAmountN = new Decimal(Number(pair2Value))
-        .mul(Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)))
-        .toNumber();
+    if (walletContext && currentPool) {
+      const network = await walletContext.marina.getNetwork();
 
-      if (currentPool) {
-        setLoading(true);
+      if (network === 'testnet') {
+        const quoteAmountN = new Decimal(Number(pair1Value))
+          .mul(Math.pow(10, getAssetPrecession(currentPool.quote, settingsContext.preferred_unit.text)))
+          .toNumber();
+        const tokenAmountN = new Decimal(Number(pair2Value))
+          .mul(Math.pow(10, getAssetPrecession(currentPool.token, settingsContext.preferred_unit.text)))
+          .toNumber();
 
-        const addressInformation = await walletContext.marina.getNextChangeAddress();
+        if (currentPool) {
+          setLoading(true);
 
-        if (addressInformation.publicKey) {
-          setQuotePercent(undefined);
-          setTokenPercent(undefined);
-          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
+          const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-          let commitmentTxId = '';
+          if (addressInformation.publicKey) {
+            setQuotePercent(undefined);
+            setTokenPercent(undefined);
+            const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.ADD_LIQUIDITY);
 
-          try {
-            commitmentTxId = await commitmentSign.case3(
-              walletContext.marina,
-              quoteAmountN,
-              tokenAmountN,
-              currentPool,
-              primaryPoolConfig,
-              addressInformation.publicKey,
-              LBTC_ASSET.assetHash,
-              IS_TESTNET,
-            );
-          } catch (error) {
+            let commitmentTxId = '';
+
+            try {
+              commitmentTxId = await commitmentSign.case3(
+                walletContext.marina,
+                quoteAmountN,
+                tokenAmountN,
+                currentPool,
+                primaryPoolConfig,
+                addressInformation.publicKey,
+                LBTC_ASSET.assetHash,
+                IS_TESTNET,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
+
+            if (commitmentTxId && commitmentTxId !== '') {
+              const tempTxData: CommitmentStore = {
+                txId: commitmentTxId,
+                quoteAmount: quoteAmountN,
+                quoteAsset: currentPool.quote,
+                tokenAmount: tokenAmountN,
+                tokenAsset: currentPool.token,
+                lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
+                lpAsset: currentPool.lp.ticker,
+                timestamp: new Date().valueOf(),
+                errorMessage: undefined,
+                completed: false,
+                seen: false,
+                method: CALL_METHOD.ADD_LIQUIDITY,
+              };
+
+              const newStoreData = [...txHistoryContext, tempTxData];
+              const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+              const txIds = unconfirmedTxs.map((tx) => tx.txId);
+              setTxHistoryContext(newStoreData);
+
+              setLoading(false);
+
+              setPair1Value('');
+              setPair2Value('');
+
+              checkTxStatusWithIds(txIds);
+            }
+          } else {
+            notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
             setLoading(false);
           }
-
-          if (commitmentTxId && commitmentTxId !== '') {
-            const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
-              quoteAmount: quoteAmountN,
-              quoteAsset: currentPool.quote,
-              tokenAmount: tokenAmountN,
-              tokenAsset: currentPool.token,
-              lpAmount: new Decimal(calcLpValues().lpReceived).toNumber(),
-              lpAsset: currentPool.lp.ticker,
-              timestamp: new Date().valueOf(),
-              errorMessage: undefined,
-              completed: false,
-              seen: false,
-              method: CALL_METHOD.ADD_LIQUIDITY,
-            };
-
-            const newStoreData = [...txHistoryContext, tempTxData];
-            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
-            const txIds = unconfirmedTxs.map((tx) => tx.txId);
-            setTxHistoryContext(newStoreData);
-
-            setLoading(false);
-
-            setPair1Value('');
-            setPair2Value('');
-
-            checkTxStatusWithIds(txIds);
-          }
-        } else {
-          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-          setLoading(false);
         }
+      } else {
+        notify('Check your wallet network settings', 'Network Error : ', 'error');
+        setLoading(false);
       }
     }
   };
@@ -487,7 +494,7 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
                 <RewardIcon className="add-liquidity-input-icons" width="1.5rem" height="1.5rem" />
               </div>
               <div className="add-liquidity-page-footer-line-item-values">
-                {Object.keys(lpFeeTiers)[currentPool?.lpFeeTierIndex.number || 0]}
+                {Object.keys(pool.lpFeeTiers)[currentPool?.lpFeeTierIndex.number || 0]}
               </div>
             </div>
             <div className="add-liquidity-page-footer-line-item-third">

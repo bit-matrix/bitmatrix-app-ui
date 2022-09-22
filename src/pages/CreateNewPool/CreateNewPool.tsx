@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { useHistory } from 'react-router-dom';
 import { Button, Content, Dropdown } from 'rsuite';
-import { poolDeployment } from '@bitmatrix/lib';
-import { lpFeeTiers } from '@bitmatrix/lib/pool';
+import { pool, poolDeployment } from '@bitmatrix/lib';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { AssetListModal } from '../../components/AssetListModal/AssetListModal';
 import { BackButton } from '../../components/base/BackButton/BackButton';
@@ -171,78 +170,84 @@ export const CreateNewPool: React.FC = () => {
   };
 
   const createNewPoolClick = async () => {
-    if (walletContext?.marina && selectedPair1Asset && selectedPair2Asset) {
-      const pair1AmountN = new Decimal(Number(pair1Amount))
-        .mul(Math.pow(10, getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text)))
-        .toNumber();
+    if (walletContext && selectedPair1Asset && selectedPair2Asset) {
+      const network = await walletContext.marina.getNetwork();
+      if (network === 'testnet') {
+        const pair1AmountN = new Decimal(Number(pair1Amount))
+          .mul(Math.pow(10, getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text)))
+          .toNumber();
 
-      const pair2AmountN = new Decimal(Number(pair2Amount))
-        .mul(Math.pow(10, getAssetPrecession(selectedPair2Asset, settingsContext.preferred_unit.text)))
-        .toNumber();
+        const pair2AmountN = new Decimal(Number(pair2Amount))
+          .mul(Math.pow(10, getAssetPrecession(selectedPair2Asset, settingsContext.preferred_unit.text)))
+          .toNumber();
 
-      let fundingTxId;
+        let fundingTxId;
 
-      try {
+        try {
+          setLoading(true);
+
+          const fundingTx = await walletContext.marina.sendTransaction([
+            {
+              address: FUNDING_ADDRESS,
+              value: 500,
+              asset: LBTC_ASSET.assetHash,
+            },
+            {
+              address: FUNDING_ADDRESS,
+              value: 500,
+              asset: LBTC_ASSET.assetHash,
+            },
+            {
+              address: FUNDING_ADDRESS,
+              value: pair1AmountN,
+              asset: selectedPair1Asset.assetHash,
+            },
+            {
+              address: FUNDING_ADDRESS,
+              value: pair2AmountN,
+              asset: selectedPair2Asset.assetHash,
+            },
+          ]);
+
+          fundingTxId = await sendRawTransaction(fundingTx.hex);
+        } catch (err: any) {
+          notify(err.toString(), 'Wallet Error : ', 'error');
+          setLoading(false);
+          return Promise.reject();
+        }
+
         setLoading(true);
 
-        const fundingTx = await walletContext.marina.sendTransaction([
-          {
-            address: FUNDING_ADDRESS,
-            value: 500,
-            asset: LBTC_ASSET.assetHash,
-          },
-          {
-            address: FUNDING_ADDRESS,
-            value: 500,
-            asset: LBTC_ASSET.assetHash,
-          },
-          {
-            address: FUNDING_ADDRESS,
-            value: pair1AmountN,
-            asset: selectedPair1Asset.assetHash,
-          },
-          {
-            address: FUNDING_ADDRESS,
-            value: pair2AmountN,
-            asset: selectedPair2Asset.assetHash,
-          },
-        ]);
+        const addressInformation = await walletContext.marina.getNextChangeAddress();
 
-        fundingTxId = await sendRawTransaction(fundingTx.hex);
-      } catch (err: any) {
-        notify(err.toString(), 'Wallet Error : ', 'error');
-        setLoading(false);
-        return Promise.reject();
-      }
+        if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
+          setPair1Amount('');
+          setPair2Amount('');
 
-      setLoading(true);
+          const newPool = poolDeployment.poolDeploy(
+            fundingTxId,
+            selectedPair1Asset.assetHash,
+            selectedPair2Asset.assetHash,
+            pair1AmountN,
+            pair2AmountN,
+            addressInformation.publicKey,
+            1,
+            pair1CoefficientCalculation(),
+            lbtcAsset.assetHash,
+            lpFeeTier.index,
+          );
 
-      const addressInformation = await walletContext.marina.getNextChangeAddress();
+          const poolTxId = await sendRawTransaction(newPool);
 
-      if (fundingTxId && fundingTxId !== '' && addressInformation.publicKey) {
-        setPair1Amount('');
-        setPair2Amount('');
+          setLoading(false);
 
-        const newPool = poolDeployment.poolDeploy(
-          fundingTxId,
-          selectedPair1Asset.assetHash,
-          selectedPair2Asset.assetHash,
-          pair1AmountN,
-          pair2AmountN,
-          addressInformation.publicKey,
-          1,
-          pair1CoefficientCalculation(),
-          LBTC_ASSET.assetHash,
-          lpFeeTier.index,
-        );
-
-        const poolTxId = await sendRawTransaction(newPool);
-
-        setLoading(false);
-
-        notify(poolTxId, 'New Pool Creation Successfully', 'info');
+          notify(poolTxId, 'New Pool Creation Successfully', 'info');
+        } else {
+          notify('Pool could not be created.', 'Wallet Error : ', 'error');
+          setLoading(false);
+        }
       } else {
-        notify('Pool could not be created.', 'Wallet Error : ', 'error');
+        notify('Check your wallet network settings', 'Network Error : ', 'error');
         setLoading(false);
       }
     }
@@ -320,12 +325,12 @@ export const CreateNewPool: React.FC = () => {
               title={lpFeeTier.value}
               activeKey={lpFeeTier.index}
               onSelect={(eventKey: any) => {
-                const lpFeeTiersKeys = Object.keys(lpFeeTiers);
+                const lpFeeTiersKeys = Object.keys(pool.lpFeeTiers);
 
                 setLpFeeTier({ value: lpFeeTiersKeys[eventKey], index: eventKey });
               }}
             >
-              {Object.keys(lpFeeTiers).map((feeTier, i: number) => {
+              {Object.keys(pool.lpFeeTiers).map((feeTier, i: number) => {
                 return (
                   <Dropdown.Item key={i} eventKey={i}>
                     {feeTier}

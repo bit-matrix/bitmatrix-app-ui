@@ -67,77 +67,88 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
   }, [removalPercentage, lpTokenAmount]);
 
   const removeLiquidityClick = async () => {
-    if (walletContext?.marina) {
-      if (currentPool) {
-        setLoading(true);
+    if (walletContext) {
+      const network = await walletContext.marina.getNetwork();
 
-        const addressInformation = await walletContext.marina.getNextChangeAddress();
-        if (addressInformation.publicKey) {
-          const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.REMOVE_LIQUIDITY);
+      if (network === 'testnet') {
+        if (currentPool) {
+          setLoading(true);
 
-          let commitmentTxId = '';
+          const addressInformation = await walletContext.marina.getNextChangeAddress();
+          if (addressInformation.publicKey) {
+            const primaryPoolConfig = getPrimaryPoolConfig(testnetConfig, CALL_METHOD.REMOVE_LIQUIDITY);
 
-          try {
-            commitmentTxId = await commitmentSign.case4(
-              walletContext.marina,
-              calcLpTokenAmount,
-              currentPool,
-              primaryPoolConfig,
-              addressInformation.publicKey,
-              LBTC_ASSET.assetHash,
-              IS_TESTNET,
-            );
-          } catch (error) {
-            setLoading(false);
-          }
+            let commitmentTxId = '';
 
-          if (commitmentTxId && commitmentTxId !== '') {
-            const calcLpAmounts = calcLpValues();
-            const tempTxData: CommitmentStore = {
-              txId: commitmentTxId,
-              quoteAmount: new Decimal(calcLpAmounts.quoteReceivedNum).toNumber(),
-              quoteAsset: currentPool.quote,
-              tokenAmount: new Decimal(calcLpAmounts.tokenReceivedNum).toNumber(),
-              tokenAsset: currentPool.token,
-              lpAmount: calcLpTokenAmount,
-              lpAsset: currentPool.lp.ticker,
-              timestamp: new Date().valueOf(),
-              errorMessage: undefined,
-              completed: false,
-              seen: false,
-              method: CALL_METHOD.REMOVE_LIQUIDITY,
-            };
+            try {
+              commitmentTxId = await commitmentSign.case4(
+                walletContext.marina,
+                calcLpTokenAmount,
+                currentPool,
+                primaryPoolConfig,
+                addressInformation.publicKey,
+                LBTC_ASSET.assetHash,
+                IS_TESTNET,
+              );
+            } catch (error) {
+              setLoading(false);
+            }
 
-            const newStoreData = [...txHistoryContext, tempTxData];
-            const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
-            const txIds = unconfirmedTxs.map((tx) => tx.txId);
+            if (commitmentTxId && commitmentTxId !== '') {
+              const calcLpAmounts = calcLpValues();
+              const tempTxData: CommitmentStore = {
+                txId: commitmentTxId,
+                quoteAmount: new Decimal(calcLpAmounts.quoteReceivedNum).toNumber(),
+                quoteAsset: currentPool.quote,
+                tokenAmount: new Decimal(calcLpAmounts.tokenReceivedNum).toNumber(),
+                tokenAsset: currentPool.token,
+                lpAmount: calcLpTokenAmount,
+                lpAsset: currentPool.lp.ticker,
+                timestamp: new Date().valueOf(),
+                errorMessage: undefined,
+                completed: false,
+                seen: false,
+                method: CALL_METHOD.REMOVE_LIQUIDITY,
+              };
 
-            setTxHistoryContext(newStoreData);
+              const newStoreData = [...txHistoryContext, tempTxData];
+              const unconfirmedTxs = newStoreData.filter((utx) => utx.completed === false);
+              const txIds = unconfirmedTxs.map((tx) => tx.txId);
 
-            setLoading(false);
+              setTxHistoryContext(newStoreData);
 
-            setRemovalPercentage(SELECTED_PERCENTAGE.HUNDRED);
+              setLoading(false);
 
-            checkTxStatusWithIds(txIds);
+              setRemovalPercentage(SELECTED_PERCENTAGE.HUNDRED);
+
+              checkTxStatusWithIds(txIds);
+            } else {
+              notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
+              setLoading(false);
+            }
+            // notify(
+            //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
+            //     See in Explorer
+            //   </a>,
+            //   'Commitment Tx created successfully!',
+            //   'success',
+            // );
+            // setLoading(false);
+            // await sleep(3000);
+            // payloadData.wallet.marina.reloadCoins();
           } else {
-            notify('Commitment transaction could not be create.', 'Wallet Error : ', 'error');
+            notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
+            // payloadData.wallet.marina.reloadCoins();
             setLoading(false);
           }
-          // notify(
-          //   <a target="_blank" href={`https://blockstream.info/liquidtestnet/tx/${commitmentTxId}`}>
-          //     See in Explorer
-          //   </a>,
-          //   'Commitment Tx created successfully!',
-          //   'success',
-          // );
-          // setLoading(false);
-          // await sleep(3000);
-          // payloadData.wallet.marina.reloadCoins();
-        } else {
-          notify('Commitment transaction could not be created.', 'Wallet Error : ', 'error');
-          // payloadData.wallet.marina.reloadCoins();
-          setLoading(false);
         }
+      } else {
+        notify('Check your wallet network settings', 'Network Error : ', 'error');
+        setLoading(false);
+      }
+      } else {
+        notify('Check your wallet network settings', 'Network Error : ', 'error');
+        setLoading(false);
       }
     }
   };

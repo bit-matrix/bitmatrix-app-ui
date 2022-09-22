@@ -26,6 +26,7 @@ import { useChartsSocket } from '../hooks/useChartsSocket';
 import { Swap } from '../pages/Swap/Swap';
 import './AppRouter.scss';
 import { BANANA_THEME_ASSET } from '../env';
+import { notify } from '../components/utils/utils';
 
 declare global {
   interface Window {
@@ -44,8 +45,13 @@ export const AppRouter = (): JSX.Element => {
 
   useEffect(() => {
     detectProvider('marina')
-      .then((marina) => {
+      .then(async (marina) => {
         const marinaWallet = new Wallet(window.marina);
+
+        const network = await marinaWallet.getNetwork();
+        if (network !== 'testnet') {
+          notify('Please check your network in wallet.', 'Wallet Network Error : ');
+        }
 
         marina.isEnabled().then((enabled) => {
           setWalletContext({ marina: marinaWallet, isEnabled: enabled, balances: [], coins: [] });
@@ -66,6 +72,12 @@ export const AppRouter = (): JSX.Element => {
       walletContext.marina.on('NEW_UTXO', () => {
         if (walletContext?.marina) {
           fetchBalances(walletContext.marina);
+        }
+      });
+
+      walletContext.marina.on('NETWORK', ({ data }) => {
+        if (data !== 'testnet') {
+          notify('Please check your network in wallet.', 'Wallet Network Error : ');
         }
       });
     }

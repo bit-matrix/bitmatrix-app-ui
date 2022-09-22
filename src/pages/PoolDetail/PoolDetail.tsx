@@ -9,7 +9,7 @@ import AreaChart, { ChartData } from '../../components/AreaChart/AreaChart';
 import { calculateUsdtPrice, getAssetPrecession, amountRound } from '../../helper';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import { POOL_DETAIL_TABS } from '../../enum/POOL_DETAIL_TABS';
-import { Pool } from '@bitmatrix/models';
+import { ChartSummary, Pool } from '@bitmatrix/models';
 import Numeral from 'numeral';
 import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
@@ -20,6 +20,41 @@ import { LBTC_ASSET } from '../../env';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
+  const [chartData, setChartData] = useState<ChartSummary>({
+    poolId: '',
+    tvl: {
+      todayValue: 0,
+      rate: {
+        value: '0',
+        direction: '',
+      },
+      allTvlData: [{ close: 0, date: new Date().toISOString() }],
+    },
+    volume: {
+      todayValue: 0,
+      rate: {
+        value: '0',
+        direction: '',
+      },
+      allVolumeData: [{ close: 0, date: new Date().toISOString() }],
+    },
+    fees: {
+      todayValue: 0,
+      rate: {
+        value: '0',
+        direction: '',
+      },
+      allFeesData: [{ close: 0, date: new Date().toISOString() }],
+    },
+    price: {
+      todayValue: 0,
+      rate: {
+        value: '0',
+        direction: '',
+      },
+      allPriceData: [{ close: 0, date: new Date().toISOString() }],
+    },
+  });
   const [pool, setPool] = useState<Pool>();
   const [loading, setLoading] = useState(true);
   const [chartLoading, setChartLoading] = useState(true);
@@ -34,7 +69,13 @@ export const PoolDetail: React.FC = () => {
 
   const { id } = useParams<{ id: string }>();
 
-  const chartData = charts.find((chart) => chart.poolId === id);
+  useEffect(() => {
+    const currentChart = charts.find((chart) => chart.poolId === id);
+
+    if (currentChart) {
+      setChartData(currentChart);
+    }
+  }, [charts, id]);
 
   useEffect(() => {
     if (pools && pools.length > 0) {
@@ -94,13 +135,16 @@ export const PoolDetail: React.FC = () => {
   } else {
     const price =
       pool.quote.assetHash === LBTC_ASSET.assetHash
-        ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || 0)
-        : chartData?.price.todayValue || 0;
+        ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || pool.tokenPrice)
+        : chartData?.price.todayValue || Number(pool.tokenPrice);
 
     const tvl =
       pool.quote.assetHash === LBTC_ASSET.assetHash && chartData
-        ? btcPrice * chartData.tvl.todayValue
-        : chartData?.tvl.todayValue || 0;
+        ? calculateUsdtPrice(
+            btcPrice,
+            chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+          )
+        : chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
 
     const fees =
       pool.quote.assetHash === LBTC_ASSET.assetHash
@@ -111,8 +155,6 @@ export const PoolDetail: React.FC = () => {
       pool.quote.assetHash === LBTC_ASSET.assetHash
         ? calculateUsdtPrice(btcPrice || 0, chartData?.volume.todayValue || 0)
         : chartData?.volume.todayValue || 0;
-
-    console.log(pool.token);
 
     return (
       <div className="pool-detail-container">

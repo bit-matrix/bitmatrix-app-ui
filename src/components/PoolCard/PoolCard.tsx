@@ -22,15 +22,19 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
     return <span>Something went wrong.</span>;
   } else {
     const chartColor = chartSummary?.price.rate.direction === 'up' ? '#4caf50' : '#f44336';
+
     const price =
       pool.quote.assetHash === LBTC_ASSET.assetHash
-        ? calculateUsdtPrice(btcPrice || 0, chartSummary?.price.todayValue || 0)
-        : chartSummary?.price.todayValue || 0;
+        ? calculateUsdtPrice(btcPrice || 0, chartSummary?.price.todayValue || pool.tokenPrice)
+        : chartSummary?.price.todayValue || Number(pool.tokenPrice);
 
     const tvl =
       pool.quote.assetHash === LBTC_ASSET.assetHash && chartSummary
-        ? (btcPrice || 0) * chartSummary.tvl.todayValue
-        : chartSummary?.tvl.todayValue || 0;
+        ? calculateUsdtPrice(
+            btcPrice || 0,
+            chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+          )
+        : chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
 
     const fees =
       pool.quote.assetHash === LBTC_ASSET.assetHash
