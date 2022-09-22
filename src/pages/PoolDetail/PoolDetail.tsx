@@ -112,8 +112,6 @@ export const PoolDetail: React.FC = () => {
         ? calculateUsdtPrice(btcPrice || 0, chartData?.volume.todayValue || 0)
         : chartData?.volume.todayValue || 0;
 
-    console.log(pool.token);
-
     return (
       <div className="pool-detail-container">
         <div className="pool-detail-main">
