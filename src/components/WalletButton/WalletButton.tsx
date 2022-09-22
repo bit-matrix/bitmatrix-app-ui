@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from 'rsuite';
 import { useWalletContext } from '../../context';
 import { useSettingsContext } from '../../context';
@@ -18,8 +18,21 @@ type Props = {
 
 export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
+  const [network, setNetwork] = useState('');
   const { walletContext } = useWalletContext();
   const { settingsContext } = useSettingsContext();
+
+  useEffect(() => {
+    const networkSelection = async () => {
+      if (walletContext) {
+        const currentNetwork = await walletContext.marina.getNetwork();
+
+        setNetwork(currentNetwork);
+      }
+    };
+
+    networkSelection();
+  }, [walletContext]);
 
   const swapLoading = (): React.ReactElement => {
     if (settingsContext.exclusiveThemes.length > 0 && settingsContext.theme === SELECTED_THEME.BANANA) {
@@ -50,7 +63,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
             setShowWalletList(true);
           }
         }}
-        disabled={walletContext?.isEnabled && disabled}
+        disabled={(walletContext?.isEnabled && disabled) || network !== 'testnet'}
       >
         {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>
