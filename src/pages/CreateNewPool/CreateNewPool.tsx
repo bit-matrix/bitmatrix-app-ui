@@ -19,7 +19,7 @@ import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
 import { AssetModel, getAssetPrecession, getAssetTicker } from '../../helper';
 import plus from '../../images/plus.png';
-import { FUNDING_ADDRESS, LBTC_ASSET, PAIR1_ASSET_LIST } from '../../env';
+import { FUNDING_ADDRESS, IS_TESTNET, LBTC_ASSET, PAIR1_ASSET_LIST } from '../../env';
 import { sendRawTransaction } from '../../lib/api/sendRawTransaction';
 import './CreateNewPool.scss';
 
@@ -172,7 +172,7 @@ export const CreateNewPool: React.FC = () => {
   const createNewPoolClick = async () => {
     if (walletContext && selectedPair1Asset && selectedPair2Asset) {
       const network = await walletContext.marina.getNetwork();
-      if (network === 'testnet') {
+      if (IS_TESTNET ? network === 'testnet' : network === 'liquid') {
         const pair1AmountN = new Decimal(Number(pair1Amount))
           .mul(Math.pow(10, getAssetPrecession(selectedPair1Asset, settingsContext.preferred_unit.text)))
           .toNumber();

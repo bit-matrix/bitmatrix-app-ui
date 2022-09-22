@@ -25,7 +25,7 @@ import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { Swap } from '../pages/Swap/Swap';
 import './AppRouter.scss';
-import { BANANA_THEME_ASSET } from '../env';
+import { BANANA_THEME_ASSET, IS_TESTNET } from '../env';
 import { notify } from '../components/utils/utils';
 
 declare global {
@@ -49,7 +49,7 @@ export const AppRouter = (): JSX.Element => {
         const marinaWallet = new Wallet(window.marina);
 
         const network = await marinaWallet.getNetwork();
-        if (network !== 'testnet') {
+        if (IS_TESTNET ? network !== 'testnet' : network !== 'liquid') {
           notify('Please check your network in wallet.', 'Wallet Network Error : ');
         }
 
@@ -76,7 +76,7 @@ export const AppRouter = (): JSX.Element => {
       });
 
       walletContext.marina.on('NETWORK', ({ data }) => {
-        if (data !== 'testnet') {
+        if (IS_TESTNET ? data !== 'testnet' : data !== 'liquid') {
           notify('Please check your network in wallet.', 'Wallet Network Error : ');
         }
       });

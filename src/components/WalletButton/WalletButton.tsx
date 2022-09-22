@@ -3,6 +3,7 @@ import { Button } from 'rsuite';
 import { useWalletContext } from '../../context';
 import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import { IS_TESTNET } from '../../env';
 import BananaGif from '../../images/banana.gif';
 import { Loading } from '../base/Loading/Loading';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
@@ -63,7 +64,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
             setShowWalletList(true);
           }
         }}
-        disabled={(walletContext?.isEnabled && disabled) || network !== 'testnet'}
+        disabled={(walletContext?.isEnabled && disabled) || IS_TESTNET ? network !== 'testnet' : network !== 'liquid'}
       >
         {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>

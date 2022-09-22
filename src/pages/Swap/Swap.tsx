@@ -304,7 +304,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     if (walletContext) {
       const network = await walletContext.marina.getNetwork();
 
-      if (network === 'testnet') {
+      if (IS_TESTNET ? network === 'testnet' : network === 'liquid') {
         let methodCall;
         let numberFromAmount = 0;
         let numberToAmount = 0;
