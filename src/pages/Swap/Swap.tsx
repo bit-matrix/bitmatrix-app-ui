@@ -598,6 +598,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           }}
           onSelectAsset={(asset) => {
             setFromAsset(asset);
+            if (toAsset?.assetHash === asset.assetHash) {
+              setToAsset(undefined);
+            }
             setFromAmount('');
             setToAmount('');
             setSelectedFromAmountPercent(undefined);
@@ -613,6 +616,9 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           selectedAsset={toAsset}
           onSelectAsset={(asset) => {
             setToAsset(asset);
+            if (fromAsset?.assetHash === asset.assetHash) {
+              setFromAsset(undefined);
+            }
             setToAmount('');
             setFromAmount('');
             setShowPair2AssetListModal(false);
