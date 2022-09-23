@@ -3,9 +3,8 @@ import { Button, Tooltip, Whisper } from 'rsuite';
 import { useWalletContext } from '../../context';
 import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
-import { IS_TESTNET } from '../../env';
+import { IS_TESTNET, LBTC_ASSET } from '../../env';
 import BananaGif from '../../images/banana.gif';
-import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { Loading } from '../base/Loading/Loading';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
@@ -67,7 +66,7 @@ export const WalletButton: React.FC<Props> = ({
           return false;
         }
 
-        if (network === 'testnet') {
+        if (IS_TESTNET ? network === 'testnet' : network === 'mainnet') {
           if (disabled) return true;
 
           return false;
@@ -86,7 +85,7 @@ export const WalletButton: React.FC<Props> = ({
       <Whisper
         disabled={
           (!walletContext?.isEnabled ||
-            walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount ||
+            walletContext?.balances.find((bl) => bl.asset.assetHash === LBTC_ASSET.assetHash)?.amount ||
             0) > 1000
         }
         placement="top"
