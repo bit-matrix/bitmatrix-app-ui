@@ -1,21 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useBtcPriceContext, usePoolContext, useWalletContext } from '../../context';
-import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
-import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
 import { Button, Modal } from 'rsuite';
 import { Pool } from '@bitmatrix/models';
-import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import { PoolCard } from '../../components/PoolCard/PoolCard';
 import Backdrop from '../../components/Backdrop/Backdrop';
 import SliderIcon from '../../components/base/Svg/Icons/Slider';
 import { TabMenu } from '../../components/base/TabMenu/TabMenu';
 import AddIcon from '../../components/base/Svg/Icons/Add';
 import { CheckBoxGroup } from '../../components/base/CheckBoxGroup/CheckBoxGroup';
+import { PoolCard } from '../../components/PoolCard/PoolCard';
+import { useBtcPriceContext, usePoolContext, useWalletContext } from '../../context';
 import { useChartsContext } from '../../context/charts';
+import { ROUTE_PATH } from '../../enum/ROUTE_PATH';
+import { POOL_MANAGEMENT_TABS } from '../../enum/POOL_MANAGEMENT_TABS';
+import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 import { uniqueQuoteAssetList } from '../../helper';
+import IssueAssetIcon from '../../images/issueAsset.png';
+
 import './Pool.scss';
+import IssueAsset from '../../components/base/Svg/Icons/IssueAsset';
 
 export const PoolPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_MANAGEMENT_TABS>(POOL_MANAGEMENT_TABS.TOP_POOLS);
@@ -166,7 +169,12 @@ export const PoolPage: React.FC = () => {
               className="pm-add-button pm-issuance-asset"
               onClick={() => window.open('https://assets.blockstream.com/asset-issuance', '_blank')}
             >
-              Issuance Asset
+              <div className="issue-asset-icon-button">
+                <div>Issue Asset</div>
+                <div>
+                  <IssueAsset className="issue-asset-icon" width="0.9rem" height="0.9rem" />
+                </div>
+              </div>
             </Button>
           </div>
         </div>
