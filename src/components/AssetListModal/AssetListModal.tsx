@@ -57,7 +57,14 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
     <Modal className="asset-list-modal" size="xs" backdrop={true} open={show} onClose={close}>
       <Modal.Header className="asset-list-header">
         {assetList && assetList.length > 0 ? (
-          <Modal.Title className="asset-list-title">Select an asset</Modal.Title>
+          <>
+            <Modal.Title className="asset-list-title">Select an asset</Modal.Title>
+            <Input
+              className="asset-modal-input"
+              placeholder="Search name,ticker symbol or paste assed ID"
+              onChange={(event) => setQuery(event)}
+            />
+          </>
         ) : (
           <Modal.Title className="asset-list-title">There are no pools.</Modal.Title>
         )}
@@ -66,13 +73,7 @@ export const AssetListModal: React.FC<Props> = ({ show, assetList, close, select
       <Modal.Body>
         {assetList && assetList.length > 0 ? (
           <>
-            <Input
-              className="asset-modal-input"
-              placeholder="Search name,ticker symbol or paste assed ID"
-              onChange={(event) => setQuery(event)}
-            />
-
-            <hr className="divider" />
+            {/* <hr className="divider" /> */}
             <ul className="asset-list-item-ul">
               {filteredAssetList?.map((asset) => {
                 return (
