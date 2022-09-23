@@ -25,9 +25,9 @@ import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { Swap } from '../pages/Swap/Swap';
 import { Helmet } from 'react-helmet';
-import './AppRouter.scss';
 import { notify } from '../components/utils/utils';
 import { ROUTE_PATH_TITLE } from '../enum/ROUTE_PATH.TITLE';
+import './AppRouter.scss';
 
 declare global {
   interface Window {

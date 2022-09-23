@@ -245,6 +245,13 @@ export const PoolPage: React.FC = () => {
           <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, Create Pool, Add Liquidity"></meta>
           <meta name="robots" content="index, follow" />
           <link type="text/css" href="./Pool.scss" />
+          <meta
+            property="al:web:url"
+            content="https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/pool/10eed85e0e44c2184dab57bbac7e253e9cc1dabe99e82b373b398bba118b4aa9"
+          />
+          <meta property="al:ios:app_store_id" content="12345" />
+          <meta property="al:ios:app_name" content="Example App" />
+          <meta property="og:type" content="website" />
         </Helmet>
         <div className={poolContainerClasses.join(' ')}>
           <div className="pool-page-header">
