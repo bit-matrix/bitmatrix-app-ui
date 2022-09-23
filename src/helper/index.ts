@@ -172,7 +172,7 @@ export const uniqueMatchingAssetList = (pools: Pool[], selectedAssetHash: string
     (pool: Pool) => pool.token.assetHash === selectedAssetHash || pool.quote.assetHash === selectedAssetHash,
   );
 
-  return uniqueAssetListAll(currentPools).filter((cp) => cp.assetHash !== selectedAssetHash);
+  return uniqueAssetListAll(currentPools);
 };
 
 export const getUnitValue = (asset: PAsset, settings: Settings): number => {
