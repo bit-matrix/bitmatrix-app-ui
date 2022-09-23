@@ -17,6 +17,7 @@ import { Loading } from '../../components/base/Loading/Loading';
 import { useChartsContext } from '../../context/charts';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import './PoolDetail.scss';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -142,9 +143,10 @@ export const PoolDetail: React.FC = () => {
       pool.quote.assetHash === lbtcAsset.assetHash && chartData
         ? calculateUsdtPrice(
             btcPrice,
-            chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+            chartData?.tvl.todayValue * PREFERRED_UNIT_VALUE.LBTC ||
+              (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2,
           )
-        : chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
+        : chartData?.tvl.todayValue || (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2;
 
     const fees =
       pool.quote.assetHash === lbtcAsset.assetHash
