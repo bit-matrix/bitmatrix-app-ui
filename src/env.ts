@@ -14,8 +14,8 @@ const bitmatrix_rpc_host = process.env.REACT_APP_BITMATRIX_RPC_HOST || base_host
 const bitmatrix_rpc_url =
   process.env.REACT_APP_BITMATRIX_RPC_URL || `http://${bitmatrix_rpc_host}:${bitmatrix_rpc_port}`;
 
-export const API_SOCKET_SERVER_URL = 'https://db.bitmatrix.voidfile.com' + '/';
-export const DB_SOCKET_SERVER_URL = 'https://api.bitmatrix.voidfile.com' + '/';
+export const API_SOCKET_SERVER_URL = 'https://api.bitmatrix.voidfile.com' + '/';
+export const DB_SOCKET_SERVER_URL = 'https://db.bitmatrix.voidfile.com' + '/';
 export const BITMATRIX_RPC_URL = 'https://rpc.bitmatrix.voidfile.com' + '/';
 
 export const LBTC_ASSET_HASH = '6f0279e9ed041c3d710a9f57d0c02928416460c4b722ae3457a11eec381c526d';
