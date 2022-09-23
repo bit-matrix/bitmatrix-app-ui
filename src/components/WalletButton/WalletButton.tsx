@@ -66,7 +66,7 @@ export const WalletButton: React.FC<Props> = ({
           return false;
         }
 
-        if (IS_TESTNET ? network === 'testnet' : network === 'mainnet') {
+        if (IS_TESTNET ? network === 'testnet' : network === 'liquid') {
           if (disabled) return true;
 
           return false;
