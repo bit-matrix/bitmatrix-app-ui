@@ -131,21 +131,21 @@
   margin-top: 0.125rem;
   font-size: 1.2rem;
 
-  .pool-summary-arrow {
-    svg {
-      height: 1rem;
-      width: 1rem;
-    }
+  svg {
+    height: 1rem;
+    width: 1rem;
   }
 
   .pool-summary-arrow-up-text {
     margin-left: 0.25rem;
-    color: $bmGreen;
+    color: #4caf50;
+    font-size: 1.2rem;
   }
 
   .pool-summary-arrow-down-text {
     margin-left: 0.25rem;
-    color: $bmRed;
+    color: #f44336;
+    font-size: 1.2rem;
   }
 }
 

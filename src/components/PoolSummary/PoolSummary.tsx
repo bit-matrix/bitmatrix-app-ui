@@ -30,6 +30,7 @@ export const PoolSummary = (): JSX.Element => {
     return <div className="no-pool-text">Pool couldn't found.</div>;
   } else {
     const data = charts?.find((cs) => cs.poolId === pool.id);
+
     return (
       <div className="pool-summary-main">
         <div className="pool-summary-container">
@@ -79,7 +80,7 @@ export const PoolSummary = (): JSX.Element => {
               <div className="pool-summary-value">${data?.price.todayValue.toLocaleString()}</div>
               <div className="pool-summary-icon-content">
                 {arrowIconDirection(data?.price.rate.direction)}
-                <span className={`pool-detail-table-arrow-${data?.price.rate.direction}-text`}>
+                <span className={`pool-summary-arrow-${data?.price.rate.direction}-text`}>
                   {data?.price.rate.value}%
                 </span>
               </div>
@@ -93,7 +94,7 @@ export const PoolSummary = (): JSX.Element => {
               <div className="pool-summary-value">${Numeral(data?.volume.todayValue).format('(0.00a)')}</div>
               <div className="pool-summary-icon-content">
                 {arrowIconDirection(data?.volume.rate.direction)}
-                <span className={`pool-detail-table-arrow-${data?.volume.rate.direction}-text`}>
+                <span className={`pool-summary-arrow-${data?.volume.rate.direction}-text`}>
                   {data?.volume.rate.value}%
                 </span>
               </div>
@@ -104,9 +105,7 @@ export const PoolSummary = (): JSX.Element => {
               <div className="pool-summary-value">${Numeral(data?.tvl.todayValue).format('(0.00a)')}</div>
               <div className="pool-summary-icon-content">
                 {arrowIconDirection(data?.tvl.rate.direction)}
-                <span className={`pool-detail-table-arrow-${data?.tvl.rate.direction}-text`}>
-                  {data?.tvl.rate.value}%
-                </span>
+                <span className={`pool-summary-arrow-${data?.tvl.rate.direction}-text`}>{data?.tvl.rate.value}%</span>
               </div>
             </div>
 
@@ -118,9 +117,7 @@ export const PoolSummary = (): JSX.Element => {
               <div className="pool-summary-value">${Numeral(data?.fees.todayValue).format('(0.00a)')}</div>
               <div className="pool-summary-icon-content">
                 {arrowIconDirection(data?.fees.rate.direction)}
-                <span className={`pool-detail-table-arrow-${data?.fees.rate.direction}-text`}>
-                  {data?.fees.rate.value}%
-                </span>
+                <span className={`pool-summary-arrow-${data?.fees.rate.direction}-text`}>{data?.fees.rate.value}%</span>
               </div>
             </div>
           </div>
