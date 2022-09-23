@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'rsuite';
+import { Button, Tooltip, Whisper } from 'rsuite';
 import { useWalletContext } from '../../context';
 import { useSettingsContext } from '../../context';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
 import { IS_TESTNET } from '../../env';
 import BananaGif from '../../images/banana.gif';
+import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { Loading } from '../base/Loading/Loading';
 import { WalletListModal } from '../WalletListModal/WalletListModal';
 import './WalletButton.scss';
@@ -12,12 +13,20 @@ import './WalletButton.scss';
 type Props = {
   text: string;
   onClick: () => void;
+  isDisconnetWallet?: boolean;
   disabled?: boolean;
   className?: string;
   loading?: boolean;
 };
 
-export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
+export const WalletButton: React.FC<Props> = ({
+  text,
+  onClick,
+  isDisconnetWallet = false,
+  disabled = false,
+  className,
+  loading,
+}) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const [network, setNetwork] = useState('');
   const { walletContext } = useWalletContext();
@@ -51,23 +60,54 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
     }
   };
 
+  const buttonDisabled = () => {
+    if (walletContext) {
+      if (walletContext.isEnabled) {
+        if (isDisconnetWallet) {
+          return false;
+        }
+
+        if (network === 'testnet') {
+          if (disabled) return true;
+
+          return false;
+        }
+
+        return true;
+      }
+    }
+
+    return false;
+  };
+
   return (
     <>
       <WalletListModal show={showWalletList} wallet={walletContext?.marina} close={() => setShowWalletList(false)} />
-      <Button
-        appearance="default"
-        className={`wallet-button ${className}`}
-        onClick={() => {
-          if (walletContext?.isEnabled) {
-            onClick();
-          } else {
-            setShowWalletList(true);
-          }
-        }}
-        disabled={(walletContext?.isEnabled && disabled) || IS_TESTNET ? network !== 'testnet' : network !== 'liquid'}
+      <Whisper
+        disabled={
+          (!walletContext?.isEnabled ||
+            walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount ||
+            0) > 1000
+        }
+        placement="top"
+        trigger="hover"
+        speaker={<Tooltip style={{ zIndex: 9999 }}>You must have minimum 1000 sats to cover fees.</Tooltip>}
       >
-        {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
-      </Button>
+        <Button
+          appearance="default"
+          className={`wallet-button ${className}`}
+          onClick={() => {
+            if (walletContext?.isEnabled) {
+              onClick();
+            } else {
+              setShowWalletList(true);
+            }
+          }}
+          disabled={buttonDisabled()}
+        >
+          {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
+        </Button>
+      </Whisper>
     </>
   );
 };
