@@ -11,12 +11,20 @@ import './WalletButton.scss';
 type Props = {
   text: string;
   onClick: () => void;
+  isDisconnetWallet?: boolean;
   disabled?: boolean;
   className?: string;
   loading?: boolean;
 };
 
-export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false, className, loading }) => {
+export const WalletButton: React.FC<Props> = ({
+  text,
+  onClick,
+  isDisconnetWallet = false,
+  disabled = false,
+  className,
+  loading,
+}) => {
   const [showWalletList, setShowWalletList] = useState<boolean>(false);
   const [network, setNetwork] = useState('');
   const { walletContext } = useWalletContext();
@@ -50,6 +58,22 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
     }
   };
 
+  const buttonDisabled = () => {
+    if (walletContext) {
+      if (walletContext.isEnabled) {
+        if (isDisconnetWallet) {
+          return false;
+        }
+
+        if (network !== 'testnet') return true;
+
+        if (disabled) return true;
+      }
+    }
+
+    return false;
+  };
+
   return (
     <>
       <WalletListModal show={showWalletList} wallet={walletContext?.marina} close={() => setShowWalletList(false)} />
@@ -63,7 +87,7 @@ export const WalletButton: React.FC<Props> = ({ text, onClick, disabled = false,
             setShowWalletList(true);
           }
         }}
-        disabled={(walletContext?.isEnabled && disabled) || network !== 'testnet'}
+        disabled={buttonDisabled()}
       >
         {loading ? swapLoading() : walletContext?.isEnabled ? text : 'Connect Wallet'}
       </Button>

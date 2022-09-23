@@ -108,6 +108,7 @@ export const Advanced = (): JSX.Element => {
             onClick={() => {
               setShowConfirmModal(true);
             }}
+            isDisconnetWallet
           />
         </div>
       </div>
