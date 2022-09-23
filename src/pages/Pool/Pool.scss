@@ -239,6 +239,10 @@
   border-bottom-left-radius: 1rem !important;
   border-bottom-right-radius: 1rem !important;
 
+ .issue-asset-icon-button{ display: flex;
+    align-items: center;
+    justify-content: center;}
+
 }
 
 .pool-list-modal {
@@ -269,6 +273,10 @@
   height: 100%;
   justify-content: center;
   transform: translateY(-10%);
+}
+
+.issue-asset-icon{
+  margin: 3px 0 0 7px;
 }
 
 @media only screen and (min-width: $mobile-view-breakpoint) {
