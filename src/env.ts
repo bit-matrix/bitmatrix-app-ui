@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-concat */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { AssetModel } from './helper';
 const base_host = process.env.UI_BASE_HOST || 'localhost';
 
