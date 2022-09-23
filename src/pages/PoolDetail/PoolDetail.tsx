@@ -103,13 +103,33 @@ export const PoolDetail: React.FC = () => {
     if (pool) {
       if (selectedTab === POOL_DETAIL_TABS.PRICE) {
         key = 'price';
-        data = chartData?.price.allPriceData || defaultData;
+
+        if (pool.quote.assetHash === lbtcAsset.assetHash) {
+          data = chartData?.price.allPriceData.map((apd) => {
+            return { close: Number(calculateUsdtPrice(btcPrice, apd.close).toFixed(4)), date: apd.date };
+          });
+        } else {
+          data = chartData?.price.allPriceData || defaultData;
+        }
       } else if (selectedTab === POOL_DETAIL_TABS.VOLUME) {
         key = 'volume';
         data = chartData?.volume.allVolumeData || defaultData;
       } else if (selectedTab === POOL_DETAIL_TABS.LIQUIDITY) {
         key = 'liquidity';
-        data = chartData?.tvl.allTvlData || defaultData;
+
+        if (pool.quote.assetHash === lbtcAsset.assetHash && chartData.volume.allVolumeData) {
+          console.log(chartData);
+          data = chartData.volume.allVolumeData.map((apd) => {
+            return {
+              close: Number(calculateUsdtPrice(btcPrice, apd.close * PREFERRED_UNIT_VALUE.LBTC).toFixed(4)),
+              date: apd.date,
+            };
+          });
+
+          console.log(data);
+        } else {
+          data = chartData?.tvl.allTvlData || defaultData;
+        }
       } else if (selectedTab === POOL_DETAIL_TABS.FEES) {
         key = 'fees';
         data = chartData?.fees.allFeesData || defaultData;
@@ -193,13 +213,6 @@ export const PoolDetail: React.FC = () => {
             <div className="pool-detail-content-left mobile-hidden">
               <div className="pool-detail-content-left-header">
                 <span>Total Pooled Assets</span>
-                {/* <CustomPopover
-                  placement="autoHorizontal"
-                  title="Total Pooled Assets"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
-                >
-                  <img className="general-icon" src={info} alt="info" />
-                </CustomPopover> */}
               </div>
               <div className="pool-detail-amount">
                 <div className="pool-detail-amount-item">
@@ -235,13 +248,6 @@ export const PoolDetail: React.FC = () => {
 
               <div className="pool-detail-content-left-header">
                 <span>Pool Metrics</span>
-                {/* <CustomPopover
-                  placement="autoHorizontal"
-                  title="Pool Metrics"
-                  content="Lorem Ipsum is simply dummy text of the printing and typesetting industry.."
-                >
-                  <img className="general-icon" src={info} alt="info" />
-                </CustomPopover> */}
               </div>
 
               <div className="pool-metrics">
