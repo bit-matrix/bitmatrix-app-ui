@@ -8,7 +8,7 @@
 
 .pool-summary-container {
   position: relative;
-  background: $bmPaleGreen;
+  background: var(--theme-color);
   height: 19rem;
   max-width: 50rem;
   width: 100%;
@@ -35,7 +35,7 @@
       .pool-summary-pooled-asset-palegreen-container {
         width: fit-content;
         border-radius: 2.3rem;
-        background: $bmPaleGreen;
+        background: var(--theme-color);
         height: 100%;
         display: flex;
         align-items: center;
@@ -83,7 +83,7 @@
 
       .pool-summary-palegreen-container {
         position: relative;
-        background: $bmPaleGreen;
+        background: var(--theme-color);
         height: 9.7rem;
         bottom: 1rem;
         border-bottom-left-radius: 4rem;
