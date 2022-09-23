@@ -24,9 +24,9 @@ import { ErrorBoundary } from '../components/ErrorBoundary/ErrorBoundary';
 import { NotFound } from '../pages/NotFound/NotFound';
 import { useChartsSocket } from '../hooks/useChartsSocket';
 import { Swap } from '../pages/Swap/Swap';
-import './AppRouter.scss';
 import { BANANA_THEME_ASSET, IS_TESTNET } from '../env';
 import { notify } from '../components/utils/utils';
+import './AppRouter.scss';
 
 declare global {
   interface Window {

@@ -38,7 +38,10 @@
 }
 
 .asset-list-header {
-  padding: 1.25rem 1.5rem 0 1.5rem;
+  padding-top: 1.25rem;
+  padding-right: 1.5rem !important;
+  padding-bottom: 0rem;
+  padding-left: 1.5rem !important;
   .rs-modal-header-close {
     font-size: 1.2rem !important;
     font-weight: 800;
@@ -48,8 +51,9 @@
 }
 
 .asset-modal-input {
-  width: 22.05rem !important;
-  margin: 0 1.35rem;
+  // width: 22.05rem !important;
+  // margin: 0 1.35rem;
+  margin-top: 20px;
   height: 3rem;
   border-radius: 1rem;
   background-color: $bmBlackRussian !important;

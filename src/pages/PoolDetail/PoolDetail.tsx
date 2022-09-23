@@ -15,8 +15,9 @@ import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
 import { useChartsContext } from '../../context/charts';
-import './PoolDetail.scss';
 import { LBTC_ASSET } from '../../env';
+import './PoolDetail.scss';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -135,16 +136,17 @@ export const PoolDetail: React.FC = () => {
   } else {
     const price =
       pool.quote.assetHash === LBTC_ASSET.assetHash
-        ? calculateUsdtPrice(btcPrice, chartData?.price.todayValue || pool.tokenPrice)
+        ? btcPrice / pool.tokenPrice
         : chartData?.price.todayValue || Number(pool.tokenPrice);
 
     const tvl =
       pool.quote.assetHash === LBTC_ASSET.assetHash && chartData
         ? calculateUsdtPrice(
             btcPrice,
-            chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+            chartData?.tvl.todayValue * PREFERRED_UNIT_VALUE.LBTC ||
+              (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2,
           )
-        : chartData?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
+        : chartData?.tvl.todayValue || (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2;
 
     const fees =
       pool.quote.assetHash === LBTC_ASSET.assetHash
