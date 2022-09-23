@@ -4,7 +4,7 @@ import { CALL_METHOD, Pool } from '@bitmatrix/models';
 import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryContext } from '../../../context';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
-import { Content } from 'rsuite';
+import { Content, Tooltip, Whisper } from 'rsuite';
 import Decimal from 'decimal.js';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
@@ -372,6 +372,34 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
     if (currentPool) return getAssetTicker(currentPool?.token, settingsContext.preferred_unit.text);
   }, [currentPool, settingsContext.preferred_unit.text]);
 
+  const addLiquidityButtonDisabled = () => {
+    const lbtcAmountInWallet = walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount;
+
+    if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+      return true;
+    }
+
+    if (
+      Number(pair1Value) <= 0 ||
+      Number(pair2Value) <= 0 ||
+      !inputsIsValid()?.tokenIsValid ||
+      !inputsIsValid()?.quoteIsValid ||
+      Number(calcLpValues().lpReceived) <= 0 ||
+      loading
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const whisperDisabled = () => {
+    const lbtcAmountInWallet = walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount;
+
+    if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+      return false;
+    } else return true;
+  };
+
   return (
     <div className="add-liquidity-page-main">
       <Content className="add-liquidity-page-content">
@@ -504,23 +532,25 @@ const AddLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element =>
               <div className="add-liquidity-page-footer-line-item-values">% {calcLpValues().poolRate}</div>
             </div>
           </div>
+
           <div className="add-liquidity-button-content">
-            <WalletButton
-              text={`Add ${quoteTicker} and ${tokenTicker}`}
-              loading={loading}
-              onClick={() => {
-                addLiquidityClick();
-              }}
-              disabled={
-                Number(pair1Value) <= 0 ||
-                Number(pair2Value) <= 0 ||
-                !inputsIsValid()?.tokenIsValid ||
-                !inputsIsValid()?.quoteIsValid ||
-                Number(calcLpValues().lpReceived) <= 0 ||
-                loading
-              }
-              className="add-liquidity-button"
-            />
+            <Whisper
+              disabled={whisperDisabled()}
+              followCursor
+              speaker={<Tooltip>You must have minimum 1000 sats to cover fees.</Tooltip>}
+            >
+              <div>
+                <WalletButton
+                  text={`Add ${quoteTicker} and ${tokenTicker}`}
+                  loading={loading}
+                  onClick={() => {
+                    addLiquidityClick();
+                  }}
+                  disabled={addLiquidityButtonDisabled()}
+                  className="add-liquidity-button"
+                />
+              </div>
+            </Whisper>
           </div>
         </div>
       </Content>

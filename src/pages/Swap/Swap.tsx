@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
-import { Button, Content } from 'rsuite';
+import { Button, Content, Tooltip, Whisper } from 'rsuite';
 import FROM_AMOUNT_PERCENT from '../../enum/FROM_AMOUNT_PERCENT';
 import { Balance } from 'marina-provider';
 import SWAP_WAY from '../../enum/SWAP_WAY';
@@ -409,15 +409,35 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
     }
   };
 
-  const swapButtonDisabled =
-    Number(toAmount) <= 0 ||
-    !fromInputIsValid() ||
-    !toInputIsValid() ||
-    fromAssetList?.length === 0 ||
-    toAssetList?.length === 0 ||
-    !fromAmount ||
-    !toAmount ||
-    loading;
+  const swapButtonDisabled = () => {
+    const lbtcAmountInWallet = walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount;
+
+    if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+      return true;
+    }
+
+    if (
+      Number(toAmount) <= 0 ||
+      !fromInputIsValid() ||
+      !toInputIsValid() ||
+      fromAssetList?.length === 0 ||
+      toAssetList?.length === 0 ||
+      !fromAmount ||
+      !toAmount ||
+      loading
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const whisperDisabled = () => {
+    const lbtcAmountInWallet = walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount;
+
+    if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+      return false;
+    } else return true;
+  };
 
   const infoMessage = useCallback((): string => {
     const config = testnetConfig;
@@ -551,15 +571,22 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                 </div>
               </div>
             </div>
-
-            <WalletButton
-              text="Swap"
-              onClick={() => {
-                swapClick();
-              }}
-              loading={loading}
-              disabled={swapButtonDisabled}
-            />
+            <Whisper
+              disabled={whisperDisabled()}
+              followCursor
+              speaker={<Tooltip>You must have minimum 1000 sats to cover fees.</Tooltip>}
+            >
+              <div className="wallet-button-div">
+                <WalletButton
+                  text="Swap"
+                  onClick={() => {
+                    swapClick();
+                  }}
+                  loading={loading}
+                  disabled={swapButtonDisabled()}
+                />
+              </div>
+            </Whisper>
           </div>
         </div>
         <Info content={infoMessage()} />

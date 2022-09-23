@@ -5,7 +5,7 @@ import { usePoolContext, useSettingsContext, useWalletContext, useTxHistoryConte
 import Decimal from 'decimal.js';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTE_PATH } from '../../../enum/ROUTE_PATH';
-import { Button, Content, Slider } from 'rsuite';
+import { Button, Content, Slider, Tooltip, Whisper } from 'rsuite';
 import { CommitmentStore } from '../../../model/CommitmentStore';
 import { PREFERRED_UNIT_VALUE } from '../../../enum/PREFERRED_UNIT_VALUE';
 import LpIcon from '../../../components/base/Svg/Icons/Lp';
@@ -181,6 +181,13 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     const calculations = calcLpValues();
 
     if (currentPool) {
+      const lbtcAmountInWallet = walletContext?.balances.find(
+        (bl) => bl.asset.assetHash === lbtcAsset.assetHash,
+      )?.amount;
+
+      if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+        return true;
+      }
       const poolQuoteValue = Number(currentPool.quote.value);
       const poolTokenValue = Number(currentPool.token.value);
 
@@ -202,6 +209,14 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
     }
 
     return false;
+  };
+
+  const whisperDisabled = () => {
+    const lbtcAmountInWallet = walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount;
+
+    if (currentPool && (!lbtcAmountInWallet || lbtcAmountInWallet < 1000)) {
+      return false;
+    } else return true;
   };
 
   return (
@@ -334,15 +349,25 @@ const RemoveLiquidity: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element
           </div>
         </div>
         <div className="remove-liquidity-button-content">
-          <WalletButton
-            text={`Remove ${quoteTicker} and ${tokenTicker}`}
-            loading={loading}
-            onClick={() => {
-              removeLiquidityClick();
-            }}
-            disabled={removeLiquidityButtonDisabled()}
-            className="remove-liquidity-button"
-          />
+          <Whisper
+            disabled={whisperDisabled()}
+            followCursor
+            trigger="hover"
+            placement="top"
+            speaker={<Tooltip>You must have minimum 1000 sats to cover fees.</Tooltip>}
+          >
+            <div>
+              <WalletButton
+                text={`Remove ${quoteTicker} and ${tokenTicker}`}
+                loading={loading}
+                onClick={() => {
+                  removeLiquidityClick();
+                }}
+                disabled={removeLiquidityButtonDisabled()}
+                className="remove-liquidity-button"
+              />
+            </div>
+          </Whisper>
         </div>
       </Content>
     </div>
