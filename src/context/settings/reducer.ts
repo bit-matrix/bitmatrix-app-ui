@@ -4,6 +4,7 @@ import { EXPLORER } from '../../enum/EXPLORER';
 import { PREFERRED_UNIT } from '../../enum/PREFERRED_UNIT';
 import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 import { SELECTED_THEME } from '../../enum/SELECTED_THEME';
+import { IS_TESTNET } from '../../env';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { SettingsStore } from '../../model/SettingsStore';
 
@@ -26,7 +27,7 @@ export const initialSettingsState: Settings = {
   theme: settings?.theme || SELECTED_THEME.NEON,
   exclusiveThemes: [],
   explorer: settings?.explorer || EXPLORER.MEMPOOL,
-  network: 'testnet',
+  network: IS_TESTNET ? 'testnet' : 'liquid',
 };
 
 export const settingsReducer: Reducer<
