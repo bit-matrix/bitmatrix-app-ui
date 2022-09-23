@@ -7,6 +7,7 @@ import { XyChart } from '../XyChart/XyChart';
 import './PoolCard.scss';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
 import { calculateUsdtPrice } from '../../helper';
+import { PREFERRED_UNIT_VALUE } from '../../enum/PREFERRED_UNIT_VALUE';
 
 type Props = {
   rank: number;
@@ -32,9 +33,10 @@ export const PoolCard: React.FC<Props> = ({ pool, chartSummary, rank, onClick, s
       pool.quote.assetHash === lbtcAsset.assetHash && chartSummary
         ? calculateUsdtPrice(
             btcPrice || 0,
-            chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2,
+            chartSummary?.tvl.todayValue * PREFERRED_UNIT_VALUE.LBTC ||
+              (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2,
           )
-        : chartSummary?.tvl.todayValue || (Number(pool.token.value) / Math.pow(10, pool.token.precision)) * 2;
+        : chartSummary?.tvl.todayValue || (Number(pool.quote.value) / Math.pow(10, pool.quote.precision)) * 2;
 
     const fees =
       pool.quote.assetHash === lbtcAsset.assetHash
