@@ -86,7 +86,7 @@ export const WalletButton: React.FC<Props> = ({
         disabled={
           (!walletContext?.isEnabled ||
             walletContext?.balances.find((bl) => bl.asset.assetHash === lbtcAsset.assetHash)?.amount ||
-            0) > 1000
+            0) > 1000 || isDisconnetWallet
         }
         placement="top"
         trigger="hover"
