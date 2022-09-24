@@ -45,7 +45,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "PUBLIC_URL=https://beta.bitmatrix.app react-scripts build",
-    "build-prod": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
