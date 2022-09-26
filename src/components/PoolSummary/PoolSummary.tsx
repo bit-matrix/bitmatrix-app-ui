@@ -10,6 +10,8 @@ import { AssetIcon } from '../AssetIcon/AssetIcon';
 import domtoimage from 'dom-to-image';
 import { Helmet } from 'react-helmet';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
+import fs from 'browserify-fs';
+import path from 'path';
 import './PoolSummary.scss';
 
 export const PoolSummary = (): JSX.Element => {
@@ -38,11 +40,22 @@ export const PoolSummary = (): JSX.Element => {
     domtoimage
       .toJpeg(ref)
       .then((dataUrl) => {
-        setPreviewLinkImage(dataUrl);
-        const link = document.createElement('a');
-        link.download = 'pool-image.png';
-        link.href = dataUrl;
-        link.click();
+        const data = dataUrl.replace(/^data:image\/png;base64,/, '');
+        const buff = Buffer.from(data, 'base64');
+        const indexPath = path.resolve('./build/assets');
+        fs.mkdir(indexPath, () => {
+          fs.writeFile('./assets/preview-img.png', buff, () => {
+            fs.readFile('./assets/preview-img.png', 'utf-8', (err: any, data: any) => {
+              setPreviewLinkImage(data);
+              // console.log(data);
+            });
+          });
+        });
+        // setPreviewLinkImage(dataUrl);
+        // const link = document.createElement('a');
+        // link.download = 'pool-image.png';
+        // link.href = dataUrl;
+        // link.click();
       })
       .catch((err) => {
         console.log(err);
@@ -65,7 +78,7 @@ export const PoolSummary = (): JSX.Element => {
           <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, Create Pool, Add Liquidity"></meta>
           <meta name="robots" content="index, follow" />
           <link type="text/css" href="./Pool.scss" />
-          <meta property="og:image" content={`decoder.php?data=${previewLinkImage}`} />
+          <meta property="og:image" content={`data:image/jpeg;base64,${previewLinkImage}`} />
         </Helmet>
         <div ref={(newRef) => setRef(newRef)} className="pool-summary-container">
           <div className="pool-summary-pooled-asset">

@@ -9,8 +9,10 @@ import App from '../src/App';
 
 const app = express();
 
+const indexPath = path.resolve('./build/index.html');
+
 app.use('^/$', (req, res, next) => {
-  fs.readFile(path.resolve('./build/index.html'), 'utf-8', (err, data) => {
+  fs.readFile(indexPath, 'utf-8', (err, data) => {
     if (err) {
       return res.status(500).send('Some error happened');
     }
