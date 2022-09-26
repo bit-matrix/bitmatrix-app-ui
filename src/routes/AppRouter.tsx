@@ -27,6 +27,7 @@ import { Swap } from '../pages/Swap/Swap';
 import { Helmet } from 'react-helmet';
 import { notify } from '../components/utils/utils';
 import { ROUTE_PATH_TITLE } from '../enum/ROUTE_PATH.TITLE';
+import { PoolSummary } from '../components/PoolSummary/PoolSummary';
 import './AppRouter.scss';
 
 declare global {
@@ -184,6 +185,7 @@ export const AppRouter = (): JSX.Element => {
                     <Route exact path={ROUTE_PATH.REMOVE_LIQUIDITY}>
                       <RemoveLiquidity checkTxStatusWithIds={checkTxStatusWithIds} />
                     </Route>
+                    <Route exact path={ROUTE_PATH.POOL_SUMMARY} component={PoolSummary} />
                     <Route exact path={ROUTE_PATH.NOT_FOUND} component={NotFound} />
                   </Switch>
                 ) : (

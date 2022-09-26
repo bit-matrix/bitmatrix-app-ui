@@ -10,5 +10,6 @@ export enum ROUTE_PATH {
   REMOVE_LIQUIDITY = '/pool/:id/remove-liquidity',
   FACTORY = '/factory',
   ISSUE_TOKEN = '/factory/issue-token',
+  POOL_SUMMARY = '/preview-link/:id',
   NOT_FOUND = '*',
 }
