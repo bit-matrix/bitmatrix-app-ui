@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Svg from '../base/Svg/Svg';
 import { amountRound, getAssetPrecession } from '../../helper';
 import { Pool } from '@bitmatrix/models';
@@ -7,7 +7,7 @@ import Numeral from 'numeral';
 import { useChartsContext, usePoolContext, useSettingsContext } from '../../context';
 import { arrowIconDirection } from '../utils/utils';
 import { AssetIcon } from '../AssetIcon/AssetIcon';
-
+import domtoimage from 'dom-to-image';
 import './PoolSummary.scss';
 
 export const PoolSummary = (): JSX.Element => {
@@ -19,12 +19,39 @@ export const PoolSummary = (): JSX.Element => {
 
   const { id } = useParams<{ id: string }>();
 
+  // const initialRef = {
+  //   current: document.getElementsByClassName('pool-summary-container'),
+  // } as unknown as HTMLDivElement;
+  const ref = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (pools && pools.length > 0) {
       const currentPool = pools.find((pl) => pl.id === id);
       setPool(currentPool);
     }
   }, [id, pools]);
+
+  useEffect(() => {
+    if (ref.current !== null) {
+      console.log('ref.current === null');
+      domtoimage
+        .toJpeg(ref.current)
+        .then((dataUrl) => {
+          console.log('here');
+
+          const link = document.createElement('a');
+          link.download = 'pool-image.png';
+          link.href = dataUrl;
+          // link.click();
+          console.log('dataUrl', dataUrl);
+
+          console.log('link', link);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [ref.current]);
 
   if (pool === undefined || charts === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
@@ -33,7 +60,7 @@ export const PoolSummary = (): JSX.Element => {
 
     return (
       <div className="pool-summary-main">
-        <div className="pool-summary-container">
+        <div ref={ref} className="pool-summary-container">
           <div className="pool-summary-pooled-asset">
             <div className="pool-summary-pooled-asset-black-container">
               <div className="pool-summary-pooled-asset-palegreen-container">
