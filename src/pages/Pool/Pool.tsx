@@ -247,11 +247,15 @@ export const PoolPage: React.FC = () => {
           <link type="text/css" href="./Pool.scss" />
           <meta
             property="al:web:url"
-            content="https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/pool/10eed85e0e44c2184dab57bbac7e253e9cc1dabe99e82b373b398bba118b4aa9"
+            content="https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/preview-link/10d3b8ed5654a951671856f92ed045c141d938abfb51e6121516aade05b82600"
           />
-          <meta property="al:ios:app_store_id" content="12345" />
-          <meta property="al:ios:app_name" content="Example App" />
           <meta property="og:type" content="website" />
+          {/* Indicates if the web URL should be used as a fallback; defaults to true */}
+          <meta property="al:web:should_fallback" content="true" />
+          <meta
+            property="og:image"
+            content="https://ssrseo.d3rpzdf0vtvn57.amplifyapp.com/preview-link/10d3b8ed5654a951671856f92ed045c141d938abfb51e6121516aade05b82600"
+          />
         </Helmet>
         <div className={poolContainerClasses.join(' ')}>
           <div className="pool-page-header">
