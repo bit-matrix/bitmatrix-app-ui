@@ -88,12 +88,12 @@ export const AppRouter = (): JSX.Element => {
 
   useEffect(() => {
     if (txHistoryContext && txHistoryContext.length > 0 && txStatuses) {
-      const newLocalStorageData = [...txHistoryContext];
+      const newHistoryData = [...txHistoryContext];
 
       txStatuses.forEach((ts) => {
-        const currentTxIndex = newLocalStorageData.findIndex((lt) => lt.txId === ts.txId);
+        const currentTxIndex = newHistoryData.findIndex((lt) => lt.txId === ts.txId);
 
-        const currentData = newLocalStorageData[currentTxIndex];
+        const currentData = newHistoryData[currentTxIndex];
         currentData.poolTxId = ts.poolTxId;
         currentData.txStatus = ts.status;
         if (ts.status === TX_STATUS.FAILED || ts.status === TX_STATUS.SUCCESS) {
@@ -101,7 +101,7 @@ export const AppRouter = (): JSX.Element => {
         }
         if (ts.errorMessages) currentData.errorMessage = ts.errorMessages;
       });
-      const sortedHistoryData = newLocalStorageData.sort((a, b) => a.timestamp - b.timestamp);
+      const sortedHistoryData = newHistoryData.sort((a, b) => a.timestamp - b.timestamp);
       setTxHistoryContext(sortedHistoryData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -54,7 +54,8 @@ export const Navbar: React.FC = (): JSX.Element => {
       }
     } else {
       if (txHistoryContext && txHistoryContext.length > 0) {
-        if (txHistoryContext[txHistoryContext.length - 1].errorMessage) {
+        const sortedHistoryData = txHistoryContext.sort((a, b) => a.timestamp - b.timestamp);
+        if (sortedHistoryData[sortedHistoryData.length - 1].errorMessage) {
           return <ExclamationIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
         } else {
           return <TickIcon className="navbar-item-icon" width="1.5rem" height="1.5rem" />;
