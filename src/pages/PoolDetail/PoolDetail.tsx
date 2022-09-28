@@ -15,8 +15,9 @@ import { BackButton } from '../../components/base/BackButton/BackButton';
 import { AssetIcon } from '../../components/AssetIcon/AssetIcon';
 import { Loading } from '../../components/base/Loading/Loading';
 import { useChartsContext } from '../../context/charts';
-import './PoolDetail.scss';
 import { lbtcAsset } from '../../lib/liquid-dev/ASSET';
+import { PoolSummary } from '../../components/PoolSummary/PoolSummary';
+import './PoolDetail.scss';
 
 export const PoolDetail: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<POOL_DETAIL_TABS>(POOL_DETAIL_TABS.PRICE);
@@ -158,6 +159,9 @@ export const PoolDetail: React.FC = () => {
 
     return (
       <div className="pool-detail-container">
+        <div className="summary">
+          <PoolSummary id={id} />
+        </div>
         <div className="pool-detail-main">
           <div className="pool-detail-header">
             <div className="pool-detail-header-left">

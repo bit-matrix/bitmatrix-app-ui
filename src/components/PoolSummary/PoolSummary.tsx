@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Svg from '../base/Svg/Svg';
 import { amountRound, getAssetPrecession } from '../../helper';
 import { Pool } from '@bitmatrix/models';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import Numeral from 'numeral';
 import { useChartsContext, usePoolContext, useSettingsContext } from '../../context';
 import { arrowIconDirection } from '../utils/utils';
@@ -10,11 +10,15 @@ import { AssetIcon } from '../AssetIcon/AssetIcon';
 import domtoimage from 'dom-to-image';
 import { Helmet } from 'react-helmet';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
-import fs from 'browserify-fs';
-import path from 'path';
+// import fs from 'browserify-fs';
+// import path from 'path';
 import './PoolSummary.scss';
 
-export const PoolSummary = (): JSX.Element => {
+type Props = {
+  id: string;
+};
+
+export const PoolSummary: React.FC<Props> = ({ id }): JSX.Element => {
   const [pool, setPool] = useState<Pool>();
   const [previewLinkImage, setPreviewLinkImage] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
@@ -23,7 +27,7 @@ export const PoolSummary = (): JSX.Element => {
   const { settingsContext } = useSettingsContext();
   const { charts } = useChartsContext();
 
-  const { id } = useParams<{ id: string }>();
+  // const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (pools && pools.length > 0) {
@@ -40,22 +44,24 @@ export const PoolSummary = (): JSX.Element => {
     domtoimage
       .toJpeg(ref)
       .then((dataUrl) => {
-        const data = dataUrl.replace(/^data:image\/png;base64,/, '');
-        const buff = Buffer.from(data, 'base64');
-        const indexPath = path.resolve('./build/assets');
-        fs.mkdir(indexPath, () => {
-          fs.writeFile('./assets/preview-img.png', buff, () => {
-            fs.readFile('./assets/preview-img.png', 'utf-8', (err: any, data: any) => {
-              setPreviewLinkImage(data);
-              // console.log(data);
-            });
-          });
-        });
-        // setPreviewLinkImage(dataUrl);
-        // const link = document.createElement('a');
-        // link.download = 'pool-image.png';
-        // link.href = dataUrl;
-        // link.click();
+        // const data = dataUrl.replace(/^data:image\/png;base64,/, '');
+        // const buff = Buffer.from(data, 'base64');
+        // const indexPath = path.resolve('./build/assets');
+        // fs.mkdir(indexPath, () => {
+        //   fs.writeFile('./assets/preview-img.png', buff, () => {
+        //     fs.readFile('./assets/preview-img.png', 'utf-8', (err: any, data: any) => {
+        //       setPreviewLinkImage(data);
+        //       // console.log(data);
+        //     });
+        //   });
+        // });
+        console.log(dataUrl);
+
+        setPreviewLinkImage(dataUrl);
+        const link = document.createElement('a');
+        link.download = 'pool-image.png';
+        link.href = dataUrl;
+        link.click();
       })
       .catch((err) => {
         console.log(err);
