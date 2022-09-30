@@ -12,6 +12,7 @@ import { Helmet } from 'react-helmet';
 import { ROUTE_PATH_TITLE } from '../../enum/ROUTE_PATH.TITLE';
 // import fs from 'browserify-fs';
 // import path from 'path';
+import axios from 'axios';
 import './PoolSummary.scss';
 
 type Props = {
@@ -20,7 +21,6 @@ type Props = {
 
 export const PoolSummary: React.FC<Props> = ({ id }): JSX.Element => {
   const [pool, setPool] = useState<Pool>();
-  const [previewLinkImage, setPreviewLinkImage] = useState<string>();
   const [ref, setRef] = useState<HTMLDivElement | null>(null);
 
   const { pools } = usePoolContext();
@@ -42,8 +42,8 @@ export const PoolSummary: React.FC<Props> = ({ id }): JSX.Element => {
     }
 
     domtoimage
-      .toJpeg(ref)
-      .then((dataUrl) => {
+      .toPng(ref)
+      .then(async (dataUrl) => {
         // const data = dataUrl.replace(/^data:image\/png;base64,/, '');
         // const buff = Buffer.from(data, 'base64');
         // const indexPath = path.resolve('./build/assets');
@@ -55,18 +55,33 @@ export const PoolSummary: React.FC<Props> = ({ id }): JSX.Element => {
         //     });
         //   });
         // });
-        console.log(dataUrl);
+        // console.log(dataUrl);
 
-        setPreviewLinkImage(dataUrl);
-        const link = document.createElement('a');
-        link.download = 'pool-image.png';
-        link.href = dataUrl;
-        link.click();
+        const data = {
+          poolId: id,
+          image: dataUrl,
+        };
+
+        await axios.post(`http://localhost:8000/image/${id}`, data);
+
+        // setPreviewLinkImage(dataUrl);
+        // const link = document.createElement('a');
+        // link.download = 'pool-image.png';
+        // link.href = dataUrl;
+        // link.click();
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [ref]);
+  }, [id, ref]);
+
+  // const getPreviewImgLink = (poolId: string) => {
+  //   axios.get(`http://localhost:8000/image/${poolId}`).then((data) => {
+  //     console.log(data.data);
+  //   });
+  // };
+
+  // getPreviewImgLink(id);
 
   if (pool === undefined || charts === undefined) {
     return <div className="no-pool-text">Pool couldn't found.</div>;
@@ -84,7 +99,7 @@ export const PoolSummary: React.FC<Props> = ({ id }): JSX.Element => {
           <meta name="keywords" content="Bitmatrix, Liquid Bitcoin, Liquid Network, Create Pool, Add Liquidity"></meta>
           <meta name="robots" content="index, follow" />
           <link type="text/css" href="./Pool.scss" />
-          <meta property="og:image" content={`data:image/jpeg;base64,${previewLinkImage}`} />
+          <meta property="og:image" content={`http://localhost:8000/image/${id}`} />
         </Helmet>
         <div ref={(newRef) => setRef(newRef)} className="pool-summary-container">
           <div className="pool-summary-pooled-asset">
