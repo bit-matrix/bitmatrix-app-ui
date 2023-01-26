@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popover, Whisper } from 'rsuite';
-import { OverlayTriggerInstance } from 'rsuite/esm/Overlay/OverlayTrigger';
+import { OverlayTriggerHandle } from 'rsuite/esm/Overlay/OverlayTrigger';
 import './CustomPopover.scss';
 
 type Placement4 = 'top' | 'bottom' | 'right' | 'left';
@@ -36,7 +36,7 @@ type Props = {
   children: React.ReactElement;
 };
 
-export const CustomPopover = React.forwardRef<OverlayTriggerInstance | null, Props>(
+export const CustomPopover = React.forwardRef<OverlayTriggerHandle | null, Props>(
   ({ trigger, placement, title, content, children }, ref) => {
     const speaker = (
       <Popover className="custom-popover" title={title}>
