@@ -1,3 +1,4 @@
+import { AssetHash, ElementsValue } from 'liquidjs-lib';
 import { useEffect, useRef } from 'react';
 import { esplora } from '@bitmatrix/lib';
 import { BmConfig, Pool, PAsset, CALL_METHOD } from '@bitmatrix/models';
@@ -208,9 +209,34 @@ export const padTo2Digits = (num: number): string => {
   return num.toString().padStart(2, '0');
 };
 
-export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?: string): Promise<ChartData[]> => {
-  if (coins && coins?.length > 0) {
-    const filteredCoins = coins.filter((coin) => coin.asset === assetHash);
+const assetFilter = (assetHash: string) => (coin: Utxo) => {
+  if (coin.blindingData) {
+    return coin.blindingData.asset === assetHash;
+  } 
+  if (coin.witnessUtxo) {
+    const asset = AssetHash.fromBytes(coin.witnessUtxo.asset);
+    if (asset.isConfidential) return false;
+    return asset.hex === assetHash;
+  }
+  
+  return false;
+}
+
+const getCoinValue = (coin: Utxo) => {
+  if (coin.blindingData) {
+    return coin.blindingData.value;
+  }
+  if (coin.witnessUtxo) {
+    const value = ElementsValue.fromBytes(coin.witnessUtxo.value);
+    if (value.isConfidential) return undefined;
+    return value.number;
+  }
+  return undefined;
+}
+
+export const getMyPoolsChartData = async (coins?: Utxo[], assetHash?: string): Promise<ChartData[]> => {
+  if (coins && coins?.length > 0 && assetHash) {
+    const filteredCoins = coins.filter(assetFilter(assetHash));
     const outSpendsPromises = filteredCoins.map((coin) => esplora.txDetailPromise(coin.txid));
     const outSpends = await Promise.all(outSpendsPromises);
 
@@ -234,7 +260,7 @@ export const getMyPoolsChartData = async (coins: Utxo[] | undefined, assetHash?:
 
       const d: ChartData = {
         date: dateTime,
-        close: spent ? (coin.value || 0) * -1 : coin.value || 0,
+        close: spent ? (getCoinValue(coin) || 0) * -1 : getCoinValue(coin) || 0,
       };
 
       return d;
