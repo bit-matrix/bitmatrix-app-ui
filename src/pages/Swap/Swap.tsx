@@ -1,3 +1,5 @@
+import * as ecc from 'tiny-secp256k1';
+import { BIP32Factory } from 'bip32';
 import { useCallback, useEffect, useState } from 'react';
 import Decimal from 'decimal.js';
 import { Button, Content } from 'rsuite';
@@ -327,8 +329,14 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
           setLoading(true);
 
           const addressInformation = await walletContext.marina.getNextChangeAddress();
+          const { masterXPub } = await walletContext.marina.getAccountInfo(addressInformation.accountName);
+ 
 
-          if (addressInformation.publicKey) {
+          if (addressInformation.derivationPath) {
+            const addressPublicKey = BIP32Factory(ecc)
+              .fromBase58(masterXPub)
+              .derivePath(addressInformation.derivationPath.replace('m/', '')).publicKey.toString('hex') // remove m/ from path
+
             // setSwapWay(undefined);
             setSelectedFromAmountPercent(undefined);
 
@@ -342,7 +350,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                   numberToAmount,
                   currentPool,
                   testnetConfig,
-                  addressInformation.publicKey,
+                  addressPublicKey,
                   lbtcAsset.assetHash,
                   true,
                 );
@@ -357,7 +365,7 @@ export const Swap: React.FC<Props> = ({ checkTxStatusWithIds }): JSX.Element => 
                   numberToAmount,
                   currentPool,
                   testnetConfig,
-                  addressInformation.publicKey,
+                  addressPublicKey,
                   lbtcAsset.assetHash,
                   true,
                 );

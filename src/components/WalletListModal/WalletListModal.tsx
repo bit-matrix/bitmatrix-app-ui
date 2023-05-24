@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Loader, Modal } from 'rsuite';
 import { useWalletContext } from '../../context';
-import { UnblindedOutput } from 'ldk';
-import { AddressInterface } from 'marina-provider';
+import { Address, UnblindedOutput } from 'marina-provider';
 import MarinaIcon from '../base/Svg/Icons/Marina';
 import AquaIcon from '../base/Svg/Icons/Aqua';
 import JadeIcon from '../base/Svg/Icons/Jade';
@@ -15,7 +14,7 @@ type Props = {
   wallet?: Wallet;
   // walletOnClick: (walletName: WALLET_NAME) => void;
   close: () => void;
-  setNewAddress?: (newAddress: AddressInterface) => void;
+  setNewAddress?: (newAddress: Address) => void;
   setUtxos?: (utxos: UnblindedOutput[]) => void;
 };
 
